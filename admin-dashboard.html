@@ -24,6 +24,8 @@
                             300: '#CFAD8F',
                             400: '#B88760',
                             500: '#9E6437',
+                            800: '#2E241F',
+                            900: '#241C18',
                         },
                         amberGold: '#F59E0B',
                     },
@@ -46,7 +48,7 @@
         ::-webkit-scrollbar-thumb:hover { background: #F59E0B; }
     </style>
 </head>
-<body class="bg-adminBg text-roast-100 antialiased selection:bg-amberGold selection:text-adminId min-h-screen">
+<body class="bg-adminBg text-roast-100 antialiased selection:bg-amberGold selection:text-adminBg min-h-screen">
 
     <!-- SIDEBAR NAVIGATION -->
     <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-adminCard border-r border-adminBorder transform transition-transform duration-300 flex flex-col justify-between">
@@ -64,7 +66,7 @@
 
             <!-- Navigation Links -->
             <div class="p-4 space-y-1.5 text-xs font-medium">
-                <a href="#" onclick="switchTab('overview', event)" id="nav-overview" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-amberGold text-adminBg font-bold transition-all shadow-md">
+                <a href="#" onclick="switchTab('overview', event)" id="nav-overview" class="flex items-center gap-3 px-4 py-3 rounded-xl text-roast-300 hover:bg-adminCardHover hover:text-white transition-all">
                     <i class="fa-solid fa-chart-pie w-5 text-base shrink-0"></i> <span class="sidebar-text">Overview & Charts</span>
                 </a>
                 <a href="#" onclick="switchTab('orders', event)" id="nav-orders" class="flex items-center gap-3 px-4 py-3 rounded-xl text-roast-300 hover:bg-adminCardHover hover:text-white transition-all">
@@ -73,7 +75,7 @@
                 <a href="#" onclick="switchTab('inventory', event)" id="nav-inventory" class="flex items-center gap-3 px-4 py-3 rounded-xl text-roast-300 hover:bg-adminCardHover hover:text-white transition-all">
                     <i class="fa-solid fa-boxes-stacked w-5 text-base shrink-0"></i> <span class="sidebar-text">Inventory Stock</span>
                 </a>
-                <a href="#" onclick="switchTab('loyalty', event)" id="nav-loyalty" class="flex items-center gap-3 px-4 py-3 rounded-xl text-roast-300 hover:bg-adminCardHover hover:text-white transition-all">
+                <a href="#" onclick="switchTab('loyalty', event)" id="nav-loyalty" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-amberGold text-adminBg font-bold transition-all shadow-md">
                     <i class="fa-solid fa-users w-5 text-base shrink-0"></i> <span class="sidebar-text">Members & Points</span>
                 </a>
             </div>
@@ -83,9 +85,9 @@
         <div class="p-4 border-t border-adminBorder">
             <div class="bg-adminBg p-3 rounded-2xl border border-adminBorder flex items-center justify-between">
                 <div class="flex items-center gap-2.5 truncate sidebar-text">
-                    <div class="w-8 h-8 rounded-full bg-amberGold/20 text-amberGold font-bold flex items-center justify-center text-xs shrink-0">SA</div>
+                    <div class="w-8 h-8 rounded-full bg-amberGold/20 text-amberGold font-bold flex items-center justify-center text-xs shrink-0">NZ</div>
                     <div class="truncate">
-                        <span class="text-xs font-bold text-white block truncate">System Admin</span>
+                        <span class="text-xs font-bold text-white block truncate">Nana Zailani</span>
                         <span class="text-[10px] text-roast-400 block truncate">admin@rumahpanggang.com</span>
                     </div>
                 </div>
@@ -105,16 +107,16 @@
         <!-- TOP HEADER BAR -->
         <header class="sticky top-0 z-30 bg-adminBg/90 backdrop-blur-md border-b border-adminBorder h-24 px-6 sm:px-8 flex items-center justify-between">
             <div class="flex items-center gap-4">
-                <!-- Hamburger Button -->
                 <button onclick="toggleSidebar()" class="w-11 h-11 rounded-xl bg-adminCard hover:bg-adminCardHover border border-adminBorder text-amberGold flex items-center justify-center transition-all shadow" title="Toggle Sidebar">
                     <i class="fa-solid fa-bars text-base"></i>
                 </button>
-                <!-- Tajuk Rumah Panggang -->
                 <h2 id="page-title" class="font-serif text-xl sm:text-2xl font-extrabold text-white tracking-tight">Rumah Panggang</h2>
             </div>
+         
+            <!-- RIGHT HEADER PROFILE BUTTON (Tanpa Sync) -->
             <div class="flex items-center gap-3">
-                <button onclick="triggerSystemSync()" class="px-4 py-2.5 bg-adminCard hover:bg-adminCardHover text-amberGold border border-adminBorder rounded-xl text-xs font-bold transition-all shadow flex items-center gap-2">
-                    <i class="fa-solid fa-rotate"></i> <span class="hidden sm:inline">Sync</span>
+                <button onclick="openEditProfileModal()" class="w-10 h-10 rounded-full bg-roast-900 hover:bg-roast-800 border border-roast-800 text-amberGold flex items-center justify-center transition-all shadow-md" title="Edit Profile">
+                    <i class="fa-solid fa-user text-base"></i>
                 </button>
             </div>
         </header>
@@ -123,8 +125,7 @@
         <main class="p-6 sm:p-8 space-y-8 flex-1">
 
             <!-- TAB 1: OVERVIEW & CHARTS -->
-            <div id="view-overview" class="admin-view space-y-8">
-                <!-- Metrics Grid -->
+            <div id="view-overview" class="admin-view space-y-8 hidden">
                 <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     <div class="bg-adminCard p-6 rounded-3xl border border-adminBorder space-y-3 shadow-xl">
                         <div class="flex justify-between items-start">
@@ -176,12 +177,19 @@
                     </div>
                 </div>
 
-                <!-- Charts Grid -->
                 <div class="grid lg:grid-cols-12 gap-8">
                     <div class="lg:col-span-8 bg-adminCard p-6 sm:p-8 rounded-3xl border border-adminBorder shadow-2xl space-y-6">
-                        <div>
-                            <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Performance</span>
-                            <h3 class="text-2xl font-extrabold text-white font-serif mt-1">Revenue & Sales Trends</h3>
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                            <div>
+                                <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Performance</span>
+                                <h3 class="text-2xl font-extrabold text-white font-serif mt-1">Revenue & Sales Trends</h3>
+                            </div>
+                            <div class="flex bg-adminBg p-1 rounded-xl border border-adminBorder text-xs font-bold">
+                                <button onclick="updateChartFilter('day', event)" id="filter-day" class="px-3 py-1.5 rounded-lg text-roast-300 hover:text-white transition-all">Day</button>
+                                <button onclick="updateChartFilter('week', event)" id="filter-week" class="px-3 py-1.5 rounded-lg text-roast-300 hover:text-white transition-all">Week</button>
+                                <button onclick="updateChartFilter('month', event)" id="filter-month" class="px-3 py-1.5 rounded-lg bg-amberGold text-adminBg shadow transition-all">Month</button>
+                                <button onclick="updateChartFilter('year', event)" id="filter-year" class="px-3 py-1.5 rounded-lg text-roast-300 hover:text-white transition-all">Year</button>
+                            </div>
                         </div>
                         <div class="h-80 relative">
                             <canvas id="revenueChart"></canvas>
@@ -201,44 +209,63 @@
 
             <!-- TAB 2: MANAGE ORDERS -->
             <div id="view-orders" class="admin-view space-y-6 hidden">
-                <div class="flex justify-between items-end">
+                <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
                     <div>
                         <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Fulfillment</span>
                         <h3 class="text-2xl font-extrabold text-white font-serif mt-1">Customer Orders Control</h3>
                     </div>
+                    <div class="flex flex-wrap items-center gap-3">
+                        <div class="relative">
+                            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-roast-400 text-xs"></i>
+                            <input type="text" id="order-search" oninput="filterOrdersTable()" placeholder="Search ID or Customer..." class="bg-adminCard border border-adminBorder text-white text-xs rounded-xl pl-10 pr-4 py-2.5 focus:outline-none focus:border-amberGold w-56">
+                        </div>
+                        <select id="order-status-filter" onchange="filterOrdersTable()" class="bg-adminCard border border-adminBorder text-roast-200 text-xs rounded-xl px-4 py-2.5 focus:outline-none focus:border-amberGold">
+                            <option value="all">All Status</option>
+                            <option value="Awaiting Verification">Awaiting Verification</option>
+                            <option value="Preparing">Preparing</option>
+                            <option value="Shipping">Shipping</option>
+                        </select>
+                    </div>
                 </div>
+
                 <div class="bg-adminCard rounded-3xl border border-adminBorder overflow-hidden shadow-2xl">
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left text-xs">
+                        <table class="w-full text-left text-xs" id="orders-table">
                             <thead class="bg-[#181311] text-roast-300 uppercase tracking-wider border-b border-adminBorder">
                                 <tr>
                                     <th class="p-4 font-bold">Order ID</th>
                                     <th class="p-4 font-bold">Customer</th>
                                     <th class="p-4 font-bold">Items</th>
                                     <th class="p-4 font-bold">Total</th>
-                                    <th class="p-4 font-bold">Status</th>
+                                    <th class="p-4 font-bold">Status & Tracking</th>
                                     <th class="p-4 font-bold text-right">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-adminBorder">
-                                <tr class="hover:bg-adminCardHover">
-                                    <td class="p-4 font-bold text-amberGold">#ORD1001</td>
-                                    <td class="p-4 font-bold text-white">Nana Zailani</td>
+                            <tbody class="divide-y divide-adminBorder" id="orders-tbody">
+                                <tr class="hover:bg-adminCardHover order-row" data-status="Awaiting Verification">
+                                    <td class="p-4 font-bold text-amberGold order-id">#ORD1001</td>
+                                    <td class="p-4 font-bold text-white order-customer">Nana Zailani</td>
                                     <td class="p-4 text-roast-300">3 items (Coffee & Class)</td>
                                     <td class="p-4 font-bold text-amberGold font-serif text-sm">RM 2,040.00</td>
-                                    <td class="p-4"><span class="px-3 py-1 bg-amberGold/20 text-amberGold font-bold rounded-full text-[10px]">Awaiting Verification</span></td>
-                                    <td class="p-4 text-right">
-                                        <button onclick="verifyOrder('#ORD1001')" class="px-3.5 py-2 bg-amberGold text-adminBg font-extrabold rounded-xl shadow">Verify</button>
+                                    <td class="p-4 space-y-1">
+                                        <span class="status-badge px-3 py-1 bg-amberGold/20 text-amberGold font-bold rounded-full text-[10px] inline-block">Awaiting Verification</span>
+                                        <div class="tracking-info text-[11px] text-roast-300 hidden"></div>
+                                    </td>
+                                    <td class="p-4 text-right space-x-2 action-btns">
+                                        <button onclick="prepareOrder(this, '#ORD1001')" class="px-3.5 py-2 bg-amberGold text-adminBg font-extrabold rounded-xl shadow hover:opacity-90">Prepare</button>
                                     </td>
                                 </tr>
-                                <tr class="hover:bg-adminCardHover">
-                                    <td class="p-4 font-bold text-amberGold">#ORD1002</td>
-                                    <td class="p-4 font-bold text-white">Ahmad Zaki</td>
+                                <tr class="hover:bg-adminCardHover order-row" data-status="Preparing">
+                                    <td class="p-4 font-bold text-amberGold order-id">#ORD1002</td>
+                                    <td class="p-4 font-bold text-white order-customer">Ahmad Zaki</td>
                                     <td class="p-4 text-roast-300">1 item (Merah Saga Blend)</td>
                                     <td class="p-4 font-bold text-amberGold font-serif text-sm">RM 45.00</td>
-                                    <td class="p-4"><span class="px-3 py-1 bg-blue-500/20 text-blue-300 font-bold rounded-full text-[10px]">Processing</span></td>
-                                    <td class="p-4 text-right">
-                                        <button onclick="shipOrder('#ORD1002')" class="px-3.5 py-2 bg-adminBg border border-adminBorder text-roast-100 font-bold rounded-xl shadow">Ship</button>
+                                    <td class="p-4 space-y-1">
+                                        <span class="status-badge px-3 py-1 bg-blue-500/20 text-blue-300 font-bold rounded-full text-[10px] inline-block">Preparing</span>
+                                        <div class="tracking-info text-[11px] text-roast-300 hidden"></div>
+                                    </td>
+                                    <td class="p-4 text-right space-x-2 action-btns">
+                                        <button onclick="openShippingModal('#ORD1002', this)" class="px-3.5 py-2 bg-adminBg border border-adminBorder text-roast-100 font-bold rounded-xl shadow hover:bg-adminCardHover">Shipping</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -249,55 +276,235 @@
 
             <!-- TAB 3: INVENTORY STOCK -->
             <div id="view-inventory" class="admin-view space-y-6 hidden">
-                <div class="flex justify-between items-end">
+                <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
                     <div>
                         <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Inventory</span>
                         <h3 class="text-2xl font-extrabold text-white font-serif mt-1">Roastery Stock Control</h3>
                     </div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="openAddProductModal()" class="px-4 py-2.5 bg-amberGold text-adminBg font-extrabold rounded-xl text-xs shadow hover:opacity-90 flex items-center gap-2">
+                            <i class="fa-solid fa-plus"></i> Add Product
+                        </button>
+                    </div>
                 </div>
-                <div class="grid md:grid-cols-3 gap-6">
-                    <div class="bg-adminCard p-6 rounded-3xl border border-adminBorder space-y-3">
-                        <div class="flex justify-between items-center"><span class="text-xs font-bold text-roast-300 uppercase">Colombia Finca Milan</span><span class="px-2.5 py-0.5 bg-green-500/20 text-green-400 font-bold text-[10px] rounded-full">In Stock</span></div>
-                        <div class="text-2xl font-bold text-white font-serif">84 units</div>
-                    </div>
-                    <div class="bg-adminCard p-6 rounded-3xl border border-adminBorder space-y-3">
-                        <div class="flex justify-between items-center"><span class="text-xs font-bold text-roast-300 uppercase">Merah Saga Blend</span><span class="px-2.5 py-0.5 bg-yellow-500/20 text-yellow-400 font-bold text-[10px] rounded-full">Low Stock</span></div>
-                        <div class="text-2xl font-bold text-white font-serif">14 units</div>
-                    </div>
-                    <div class="bg-adminCard p-6 rounded-3xl border border-adminBorder space-y-3">
-                        <div class="flex justify-between items-center"><span class="text-xs font-bold text-roast-300 uppercase">Masterclass Pass</span><span class="px-2.5 py-0.5 bg-blue-500/20 text-blue-400 font-bold text-[10px] rounded-full">Active Slot</span></div>
-                        <div class="text-2xl font-bold text-white font-serif">5 slots left</div>
+
+                <div class="bg-adminCard rounded-3xl border border-adminBorder overflow-hidden shadow-2xl">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs" id="inventory-table">
+                            <thead class="bg-[#181311] text-roast-300 uppercase tracking-wider border-b border-adminBorder">
+                                <tr>
+                                    <th class="p-4 font-bold">Product Name</th>
+                                    <th class="p-4 font-bold">Category</th>
+                                    <th class="p-4 font-bold">Price</th>
+                                    <th class="p-4 font-bold">Stock Units</th>
+                                    <th class="p-4 font-bold">Status</th>
+                                    <th class="p-4 font-bold text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-adminBorder" id="inventory-tbody">
+                                <tr class="hover:bg-adminCardHover inventory-row">
+                                    <td class="p-4 font-bold text-white prod-name">Colombia Finca Milan</td>
+                                    <td class="p-4 text-roast-300 prod-category">Coffee Beans</td>
+                                    <td class="p-4 text-amberGold font-serif prod-price">RM 65.00</td>
+                                    <td class="p-4 font-bold text-white prod-stock">84 units</td>
+                                    <td class="p-4"><span class="px-2.5 py-0.5 bg-green-500/20 text-green-400 font-bold text-[10px] rounded-full">In Stock</span></td>
+                                    <td class="p-4 text-right space-x-2">
+                                        <button onclick="openAddStockModal(this)" class="px-3 py-1.5 bg-adminBg border border-adminBorder text-amberGold font-bold rounded-lg shadow hover:bg-adminCardHover" title="Add Stock"><i class="fa-solid fa-plus"></i> Stock</button>
+                                        <button onclick="openEditProductModal(this)" class="px-3 py-1.5 bg-adminBg border border-adminBorder text-roast-100 font-bold rounded-lg shadow hover:bg-adminCardHover" title="Edit"><i class="fa-solid fa-pen"></i></button>
+                                        <button onclick="deleteInventoryRow(this)" class="px-3 py-1.5 bg-red-500/10 text-red-400 border border-red-500/30 font-bold rounded-lg shadow hover:bg-red-500/20" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-adminCardHover inventory-row">
+                                    <td class="p-4 font-bold text-white prod-name">Merah Saga Blend</td>
+                                    <td class="p-4 text-roast-300 prod-category">Coffee Beans</td>
+                                    <td class="p-4 text-amberGold font-serif prod-price">RM 45.00</td>
+                                    <td class="p-4 font-bold text-white prod-stock">14 units</td>
+                                    <td class="p-4"><span class="px-2.5 py-0.5 bg-yellow-500/20 text-yellow-400 font-bold text-[10px] rounded-full">Low Stock</span></td>
+                                    <td class="p-4 text-right space-x-2">
+                                        <button onclick="openAddStockModal(this)" class="px-3 py-1.5 bg-adminBg border border-adminBorder text-amberGold font-bold rounded-lg shadow hover:bg-adminCardHover" title="Add Stock"><i class="fa-solid fa-plus"></i> Stock</button>
+                                        <button onclick="openEditProductModal(this)" class="px-3 py-1.5 bg-adminBg border border-adminBorder text-roast-100 font-bold rounded-lg shadow hover:bg-adminCardHover" title="Edit"><i class="fa-solid fa-pen"></i></button>
+                                        <button onclick="deleteInventoryRow(this)" class="px-3 py-1.5 bg-red-500/10 text-red-400 border border-red-500/30 font-bold rounded-lg shadow hover:bg-red-500/20" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
 
             <!-- TAB 4: MEMBERS & LOYALTY -->
-            <div id="view-loyalty" class="admin-view space-y-6 hidden">
-                <div class="flex justify-between items-end">
+            <div id="view-loyalty" class="admin-view space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
                     <div>
                         <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Loyalty Program</span>
                         <h3 class="text-2xl font-extrabold text-white font-serif mt-1">Member Points & Tier Control</h3>
                     </div>
+                    <div class="relative">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-roast-400 text-xs"></i>
+                        <input type="text" id="member-search" oninput="filterMembersList()" placeholder="Search member name..." class="bg-adminCard border border-adminBorder text-white text-xs rounded-xl pl-10 pr-4 py-2.5 focus:outline-none focus:border-amberGold w-60">
+                    </div>
                 </div>
-                <div class="bg-adminCard rounded-3xl border border-adminBorder p-6 space-y-4 shadow-xl">
-                    <div class="flex justify-between items-center pb-4 border-b border-adminBorder">
+
+                <div class="bg-adminCard rounded-3xl border border-adminBorder p-6 space-y-4 shadow-xl" id="members-container">
+                    <div class="member-item flex justify-between items-center pb-4 border-b border-adminBorder">
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 rounded-full bg-amberGold/20 text-amberGold font-bold flex items-center justify-center font-serif">NZ</div>
-                            <div><strong class="text-white text-sm block">Nana Zailani</strong><span class="text-xs text-roast-300">Gold Tier</span></div>
+                            <div><strong class="member-name text-white text-sm block">Nana Zailani</strong><span class="text-xs text-roast-300">Gold Tier (350 pts)</span></div>
                         </div>
-                        <button onclick="openPointsModal('Nana Zailani', 350)" class="px-4 py-2 bg-adminBg text-roast-100 font-bold rounded-xl border border-adminBorder text-xs">Adjust Points</button>
+                        <button onclick="openPointsModal('Nana Zailani', 350)" class="px-4 py-2 bg-adminBg text-roast-100 font-bold rounded-xl border border-adminBorder text-xs hover:bg-adminCardHover">Adjust Points</button>
                     </div>
-                    <div class="flex justify-between items-center pt-2">
+                    <div class="member-item flex justify-between items-center pt-2">
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 rounded-full bg-roast-700/40 text-roast-200 font-bold flex items-center justify-center font-serif">AZ</div>
-                            <div><strong class="text-white text-sm block">Ahmad Zaki</strong><span class="text-xs text-roast-300">Silver Tier</span></div>
+                            <div><strong class="member-name text-white text-sm block">Ahmad Zaki</strong><span class="text-xs text-roast-300">Silver Tier (120 pts)</span></div>
                         </div>
-                        <button onclick="openPointsModal('Ahmad Zaki', 120)" class="px-4 py-2 bg-adminBg text-roast-100 font-bold rounded-xl border border-adminBorder text-xs">Adjust Points</button>
+                        <button onclick="openPointsModal('Ahmad Zaki', 120)" class="px-4 py-2 bg-adminBg text-roast-100 font-bold rounded-xl border border-adminBorder text-xs hover:bg-adminCardHover">Adjust Points</button>
                     </div>
                 </div>
             </div>
 
         </main>
+    </div>
+
+    <!-- MODAL: EDIT PROFILE -->
+    <div id="edit-profile-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-adminCard border border-adminBorder rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl relative space-y-6 text-roast-100">
+            <button onclick="closeEditProfileModal()" class="absolute top-5 right-5 text-roast-400 hover:text-white p-2">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div class="text-center space-y-1">
+                <div class="w-14 h-14 rounded-2xl bg-amberGold/20 border border-amberGold/40 text-amberGold flex items-center justify-center mx-auto text-2xl shadow">
+                    <i class="fa-solid fa-user-gear"></i>
+                </div>
+                <h3 class="text-xl font-bold font-serif text-white">Edit Admin Profile</h3>
+                <p class="text-xs text-roast-300">Update your account details below</p>
+            </div>
+            <div class="space-y-4 text-xs">
+                <div>
+                    <label class="block font-semibold text-roast-300 uppercase mb-1">Full Name</label>
+                    <input type="text" id="profile-name" value="Nana Zailani" class="w-full bg-adminBg border border-adminBorder text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                </div>
+                <div>
+                    <label class="block font-semibold text-roast-300 uppercase mb-1">Email Address</label>
+                    <input type="email" id="profile-email" value="admin@rumahpanggang.com" class="w-full bg-adminBg border border-adminBorder text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                </div>
+                <div>
+                    <label class="block font-semibold text-roast-300 uppercase mb-1">New Password (Optional)</label>
+                    <input type="password" id="profile-password" placeholder="Leave blank to keep current" class="w-full bg-adminBg border border-adminBorder text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                </div>
+            </div>
+            <div class="flex gap-3 pt-2">
+                <button onclick="saveProfileChanges()" class="flex-1 py-3 bg-amberGold text-adminBg font-extrabold rounded-xl text-xs shadow hover:opacity-90">Save Changes</button>
+                <button onclick="closeEditProfileModal()" class="px-5 py-3 bg-adminBg text-roast-300 font-bold rounded-xl border border-adminBorder text-xs">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: ADD / EDIT PRODUCT -->
+    <div id="product-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-adminCard border border-adminBorder rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl relative space-y-6 text-roast-100">
+            <button onclick="closeProductModal()" class="absolute top-5 right-5 text-roast-400 hover:text-white p-2">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div class="text-center space-y-1">
+                <div class="w-14 h-14 rounded-2xl bg-amberGold/20 border border-amberGold/40 text-amberGold flex items-center justify-center mx-auto text-2xl shadow">
+                    <i class="fa-solid fa-box-open"></i>
+                </div>
+                <h3 id="product-modal-title" class="text-xl font-bold font-serif text-white">Add New Product</h3>
+                <p class="text-xs text-roast-300">Fill in product details below</p>
+            </div>
+            <div class="space-y-4 text-xs">
+                <input type="hidden" id="edit-row-index" value="">
+                <div>
+                    <label class="block font-semibold text-roast-300 uppercase mb-1">Product Name</label>
+                    <input type="text" id="input-prod-name" placeholder="e.g. Ethiopian Yirgacheffe" class="w-full bg-adminBg border border-adminBorder text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                </div>
+                <div>
+                    <label class="block font-semibold text-roast-300 uppercase mb-1">Category</label>
+                    <select id="input-prod-cat" class="w-full bg-adminBg border border-adminBorder text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                        <option value="Coffee Beans">Coffee Beans</option>
+                        <option value="Masterclass">Masterclass Pass</option>
+                        <option value="Merchandise">Merchandise</option>
+                        <option value="Drip Bags">Drip Bags</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block font-semibold text-roast-300 uppercase mb-1">Price (RM)</label>
+                        <input type="number" step="0.01" id="input-prod-price" placeholder="50.00" class="w-full bg-adminBg border border-adminBorder text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-roast-300 uppercase mb-1">Initial Stock</label>
+                        <input type="number" id="input-prod-stock" placeholder="50" class="w-full bg-adminBg border border-adminBorder text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                    </div>
+                </div>
+            </div>
+            <div class="flex gap-3 pt-2">
+                <button onclick="saveProductData()" class="flex-1 py-3 bg-amberGold text-adminBg font-extrabold rounded-xl text-xs shadow hover:opacity-90">Save Product</button>
+                <button onclick="closeProductModal()" class="px-5 py-3 bg-adminBg text-roast-300 font-bold rounded-xl border border-adminBorder text-xs">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: ADD STOCK -->
+    <div id="stock-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-adminCard border border-adminBorder rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl relative space-y-6 text-roast-100">
+            <button onclick="closeAddStockModal()" class="absolute top-5 right-5 text-roast-400 hover:text-white p-2">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div class="text-center space-y-1">
+                <div class="w-14 h-14 rounded-2xl bg-amberGold/20 border border-amberGold/40 text-amberGold flex items-center justify-center mx-auto text-2xl shadow">
+                    <i class="fa-solid fa-boxes-stacked"></i>
+                </div>
+                <h3 class="text-xl font-bold font-serif text-white">Add Stock Units</h3>
+                <p id="modal-stock-prod-name" class="text-xs text-amberGold font-bold">Product Name</p>
+            </div>
+            <div class="space-y-4 text-xs">
+                <div>
+                    <label class="block font-semibold text-roast-300 uppercase mb-1">Quantity to Add (+)</label>
+                    <input type="number" id="input-add-stock-qty" placeholder="e.g. 20" class="w-full bg-adminBg border border-adminBorder text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                </div>
+            </div>
+            <div class="flex gap-3 pt-2">
+                <button onclick="confirmAddStock()" class="flex-1 py-3 bg-amberGold text-adminBg font-extrabold rounded-xl text-xs shadow hover:opacity-90">Update Stock</button>
+                <button onclick="closeAddStockModal()" class="px-5 py-3 bg-adminBg text-roast-300 font-bold rounded-xl border border-adminBorder text-xs">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SHIPPING MODAL -->
+    <div id="shipping-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-adminCard border border-adminBorder rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl relative space-y-6 text-roast-100">
+            <button onclick="closeShippingModal()" class="absolute top-5 right-5 text-roast-400 hover:text-white p-2">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div class="text-center space-y-1">
+                <div class="w-14 h-14 rounded-2xl bg-amberGold/20 border border-amberGold/40 text-amberGold flex items-center justify-center mx-auto text-2xl shadow">
+                    <i class="fa-solid fa-truck-fast"></i>
+                </div>
+                <h3 class="text-xl font-bold font-serif text-white">Enter Tracking Number</h3>
+                <p id="modal-shipping-id" class="text-xs text-amberGold font-bold">#ORD1002</p>
+            </div>
+            <div class="space-y-4 text-xs">
+                <div>
+                    <label class="block font-semibold text-roast-300 uppercase mb-1">Courier Service</label>
+                    <select id="courier-select" class="w-full bg-adminBg border border-adminBorder text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                        <option value="J&T Express">J&T Express</option>
+                        <option value="Pos Laju">Pos Laju</option>
+                        <option value="DHL eCommerce">DHL eCommerce</option>
+                        <option value="Ninja Van">Ninja Van</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-semibold text-roast-300 uppercase mb-1">Tracking Number</label>
+                    <input type="text" id="tracking-input-val" placeholder="e.g. JT938201948MY" class="w-full bg-adminBg border border-adminBorder text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                </div>
+            </div>
+            <div class="flex gap-3 pt-2">
+                <button onclick="saveShippingTracking()" class="flex-1 py-3 bg-amberGold text-adminBg font-extrabold rounded-xl text-xs shadow hover:opacity-90">Confirm Shipping</button>
+                <button onclick="closeShippingModal()" class="px-5 py-3 bg-adminBg text-roast-300 font-bold rounded-xl border border-adminBorder text-xs">Cancel</button>
+            </div>
+        </div>
     </div>
 
     <!-- POINTS ADJUSTMENT MODAL -->
@@ -350,6 +557,15 @@
     <script>
         let revenueChartInstance = null;
         let productsChartInstance = null;
+        let activeShippingRow = null;
+        let activeStockRow = null;
+
+        const chartDataSets = {
+            day: { labels: ['08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00'], data: [120, 250, 680, 450, 520, 890, 1100, 740] },
+            week: { labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], data: [1200, 1450, 1300, 1600, 2100, 3400, 2900] },
+            month: { labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'], data: [2100, 3400, 4200, 3900, 5600, 6800, 9500, 12840] },
+            year: { labels: ['2023', '2024', '2025', '2026'], data: [45000, 78000, 115000, 154000] }
+        };
 
         document.addEventListener('DOMContentLoaded', () => {
             initCharts();
@@ -397,15 +613,251 @@
             }
         }
 
+        // --- EDIT PROFILE MODAL FUNCTIONS ---
+        function openEditProfileModal() {
+            document.getElementById('edit-profile-modal').classList.remove('hidden');
+        }
+
+        function closeEditProfileModal() {
+            document.getElementById('edit-profile-modal').classList.add('hidden');
+        }
+
+        function saveProfileChanges() {
+            const name = document.getElementById('profile-name').value.trim();
+            if (!name) {
+                alert('Sila masukkan nama penuh.');
+                return;
+            }
+            closeEditProfileModal();
+            showAdminToast('Profile successfully updated.');
+        }
+
+        // --- MEMBERS SEARCH FUNCTION ---
+        function filterMembersList() {
+            const query = document.getElementById('member-search').value.toLowerCase();
+            const members = document.querySelectorAll('.member-item');
+
+            members.forEach(item => {
+                const name = item.querySelector('.member-name').innerText.toLowerCase();
+                if (name.includes(query)) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // --- INVENTORY MANAGEMENT FUNCTIONS ---
+        function openAddProductModal() {
+            document.getElementById('product-modal-title').innerText = "Add New Product";
+            document.getElementById('edit-row-index').value = "";
+            document.getElementById('input-prod-name').value = "";
+            document.getElementById('input-prod-price').value = "";
+            document.getElementById('input-prod-stock').value = "";
+            document.getElementById('product-modal').classList.remove('hidden');
+        }
+
+        function openEditProductModal(btn) {
+            const row = btn.closest('tr');
+            activeStockRow = row;
+
+            const name = row.querySelector('.prod-name').innerText;
+            const category = row.querySelector('.prod-category').innerText;
+            const price = row.querySelector('.prod-price').innerText.replace('RM ', '');
+            const stockText = row.querySelector('.prod-stock').innerText.replace(' units', '');
+
+            document.getElementById('product-modal-title').innerText = "Edit Product";
+            document.getElementById('edit-row-index').value = "edit";
+            document.getElementById('input-prod-name').value = name;
+            document.getElementById('input-prod-cat').value = category;
+            document.getElementById('input-prod-price').value = price;
+            document.getElementById('input-prod-stock').value = stockText;
+            document.getElementById('product-modal').classList.remove('hidden');
+        }
+
+        function closeProductModal() {
+            document.getElementById('product-modal').classList.add('hidden');
+            activeStockRow = null;
+        }
+
+        function saveProductData() {
+            const name = document.getElementById('input-prod-name').value.trim();
+            const category = document.getElementById('input-prod-cat').value;
+            const price = parseFloat(document.getElementById('input-prod-price').value).toFixed(2);
+            const stock = parseInt(document.getElementById('input-prod-stock').value);
+            const isEdit = document.getElementById('edit-row-index').value === "edit";
+
+            if (!name || isNaN(price) || isNaN(stock)) {
+                alert('Sila lengkapkan semua maklumat produk dengan betul.');
+                return;
+            }
+
+            const statusHtml = stock > 20 
+                ? '<span class="px-2.5 py-0.5 bg-green-500/20 text-green-400 font-bold text-[10px] rounded-full">In Stock</span>'
+                : (stock > 0 ? '<span class="px-2.5 py-0.5 bg-yellow-500/20 text-yellow-400 font-bold text-[10px] rounded-full">Low Stock</span>'
+                : '<span class="px-2.5 py-0.5 bg-red-500/20 text-red-400 font-bold text-[10px] rounded-full">Out of Stock</span>');
+
+            if (isEdit && activeStockRow) {
+                activeStockRow.querySelector('.prod-name').innerText = name;
+                activeStockRow.querySelector('.prod-category').innerText = category;
+                activeStockRow.querySelector('.prod-price').innerText = `RM ${price}`;
+                activeStockRow.querySelector('.prod-stock').innerText = `${stock} units`;
+                activeStockRow.querySelector('td:nth-child(5)').innerHTML = statusHtml;
+                showAdminToast(`Product "${name}" successfully updated.`);
+            } else {
+                const tbody = document.getElementById('inventory-tbody');
+                const newRow = document.createElement('tr');
+                newRow.className = "hover:bg-adminCardHover inventory-row";
+                newRow.innerHTML = `
+                    <td class="p-4 font-bold text-white prod-name">${name}</td>
+                    <td class="p-4 text-roast-300 prod-category">${category}</td>
+                    <td class="p-4 text-amberGold font-serif prod-price">RM ${price}</td>
+                    <td class="p-4 font-bold text-white prod-stock">${stock} units</td>
+                    <td class="p-4">${statusHtml}</td>
+                    <td class="p-4 text-right space-x-2">
+                        <button onclick="openAddStockModal(this)" class="px-3 py-1.5 bg-adminBg border border-adminBorder text-amberGold font-bold rounded-lg shadow hover:bg-adminCardHover" title="Add Stock"><i class="fa-solid fa-plus"></i> Stock</button>
+                        <button onclick="openEditProductModal(this)" class="px-3 py-1.5 bg-adminBg border border-adminBorder text-roast-100 font-bold rounded-lg shadow hover:bg-adminCardHover" title="Edit"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="deleteInventoryRow(this)" class="px-3 py-1.5 bg-red-500/10 text-red-400 border border-red-500/30 font-bold rounded-lg shadow hover:bg-red-500/20" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(newRow);
+                showAdminToast(`New product "${name}" successfully added.`);
+            }
+
+            closeProductModal();
+        }
+
+        function openAddStockModal(btn) {
+            activeStockRow = btn.closest('tr');
+            const prodName = activeStockRow.querySelector('.prod-name').innerText;
+            document.getElementById('modal-stock-prod-name').innerText = prodName;
+            document.getElementById('input-add-stock-qty').value = '';
+            document.getElementById('stock-modal').classList.remove('hidden');
+        }
+
+        function closeAddStockModal() {
+            document.getElementById('stock-modal').classList.add('hidden');
+            activeStockRow = null;
+        }
+
+        function confirmAddStock() {
+            const qtyToAdd = parseInt(document.getElementById('input-add-stock-qty').value);
+            if (isNaN(qtyToAdd) || qtyToAdd <= 0) {
+                alert('Sila masukkan kuantiti stok yang sah.');
+                return;
+            }
+
+            if (activeStockRow) {
+                const stockCell = activeStockRow.querySelector('.prod-stock');
+                let currentStock = parseInt(stockCell.innerText);
+                let newStock = currentStock + qtyToAdd;
+
+                stockCell.innerText = `${newStock} units`;
+
+                const statusHtml = newStock > 20 
+                    ? '<span class="px-2.5 py-0.5 bg-green-500/20 text-green-400 font-bold text-[10px] rounded-full">In Stock</span>'
+                    : '<span class="px-2.5 py-0.5 bg-yellow-500/20 text-yellow-400 font-bold text-[10px] rounded-full">Low Stock</span>';
+                
+                activeStockRow.querySelector('td:nth-child(5)').innerHTML = statusHtml;
+                showAdminToast(`Successfully added ${qtyToAdd} units to stock.`);
+            }
+
+            closeAddStockModal();
+        }
+
+        function deleteInventoryRow(btn) {
+            if (confirm('Adakah anda pasti mahu memadam produk ini dari inventori?')) {
+                const row = btn.closest('tr');
+                row.remove();
+                showAdminToast('Product successfully deleted.');
+            }
+        }
+
+        // --- ORDER MANAGEMENT FUNCTIONS ---
+        function filterOrdersTable() {
+            const query = document.getElementById('order-search').value.toLowerCase();
+            const statusFilter = document.getElementById('order-status-filter').value;
+            const rows = document.querySelectorAll('.order-row');
+
+            rows.forEach(row => {
+                const orderId = row.querySelector('.order-id').innerText.toLowerCase();
+                const customer = row.querySelector('.order-customer').innerText.toLowerCase();
+                const rowStatus = row.getAttribute('data-status');
+
+                const matchesQuery = orderId.includes(query) || customer.includes(query);
+                const matchesStatus = (statusFilter === 'all' || rowStatus === statusFilter);
+
+                if (matchesQuery && matchesStatus) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        function prepareOrder(btn, orderId) {
+            const row = btn.closest('tr');
+            row.setAttribute('data-status', 'Preparing');
+            
+            const badge = row.querySelector('.status-badge');
+            badge.className = "status-badge px-3 py-1 bg-blue-500/20 text-blue-300 font-bold rounded-full text-[10px] inline-block";
+            badge.innerText = "Preparing";
+
+            const actionTd = row.querySelector('.action-btns');
+            actionTd.innerHTML = `<button onclick="openShippingModal('${orderId}', this)" class="px-3.5 py-2 bg-adminBg border border-adminBorder text-roast-100 font-bold rounded-xl shadow hover:bg-adminCardHover">Shipping</button>`;
+
+            showAdminToast(`Order ${orderId} is now being prepared.`);
+        }
+
+        function openShippingModal(orderId, btn) {
+            activeShippingRow = btn.closest('tr');
+            document.getElementById('modal-shipping-id').innerText = orderId;
+            document.getElementById('tracking-input-val').value = '';
+            document.getElementById('shipping-modal').classList.remove('hidden');
+        }
+
+        function closeShippingModal() {
+            document.getElementById('shipping-modal').classList.add('hidden');
+            activeShippingRow = null;
+        }
+
+        function saveShippingTracking() {
+            const courier = document.getElementById('courier-select').value;
+            const trackingNo = document.getElementById('tracking-input-val').value.trim();
+
+            if (!trackingNo) {
+                alert('Sila masukkan nombor tracking terlebih dahulu.');
+                return;
+            }
+
+            if (activeShippingRow) {
+                activeShippingRow.setAttribute('data-status', 'Shipping');
+
+                const badge = activeShippingRow.querySelector('.status-badge');
+                badge.className = "status-badge px-3 py-1 bg-green-500/20 text-green-400 font-bold rounded-full text-[10px] inline-block";
+                badge.innerText = "Shipping";
+
+                const trackingDiv = activeShippingRow.querySelector('.tracking-info');
+                trackingDiv.classList.remove('hidden');
+                trackingDiv.innerHTML = `<i class="fa-solid fa-truck text-amberGold mr-1"></i> ${courier}: <strong class="text-white">${trackingNo}</strong>`;
+
+                const actionTd = activeShippingRow.querySelector('.action-btns');
+                actionTd.innerHTML = `<span class="text-[11px] text-green-400 font-bold"><i class="fa-solid fa-circle-check"></i> Shipped</span>`;
+            }
+
+            closeShippingModal();
+            showAdminToast(`Tracking number successfully saved & order marked as Shipping.`);
+        }
+
         function initCharts() {
             const ctxRevenue = document.getElementById('revenueChart').getContext('2d');
             revenueChartInstance = new Chart(ctxRevenue, {
                 type: 'line',
                 data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+                    labels: chartDataSets.month.labels,
                     datasets: [{
                         label: 'Revenue (RM)',
-                        data: [2100, 3400, 4200, 3900, 5600, 6800, 9500, 12840],
+                        data: chartDataSets.month.data,
                         borderColor: '#F59E0B',
                         backgroundColor: 'rgba(245, 158, 11, 0.1)',
                         borderWidth: 3,
@@ -444,20 +896,25 @@
             });
         }
 
+        function updateChartFilter(period, event) {
+            ['day', 'week', 'month', 'year'].forEach(p => {
+                const btn = document.getElementById(`filter-${p}`);
+                if (p === period) {
+                    btn.className = "px-3 py-1.5 rounded-lg bg-amberGold text-adminBg shadow transition-all";
+                } else {
+                    btn.className = "px-3 py-1.5 rounded-lg text-roast-300 hover:text-white transition-all";
+                }
+            });
+
+            if (revenueChartInstance && chartDataSets[period]) {
+                revenueChartInstance.data.labels = chartDataSets[period].labels;
+                revenueChartInstance.data.datasets[0].data = chartDataSets[period].data;
+                revenueChartInstance.update();
+            }
+        }
+
         function logoutAdmin() {
             window.location.href = 'auth.html';
-        }
-
-        function verifyOrder(id) {
-            showAdminToast(`Order ${id} verified successfully.`);
-        }
-
-        function shipOrder(id) {
-            showAdminToast(`Order ${id} marked as Shipped.`);
-        }
-
-        function triggerSystemSync() {
-            showAdminToast(`System database synchronized.`);
         }
 
         function openPointsModal(name, pts) {

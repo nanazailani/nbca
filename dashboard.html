@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Member Dashboard | Rumah Panggang</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -34,11 +33,9 @@
             }
         }
     </script>
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- FontAwesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
@@ -52,11 +49,9 @@
 </head>
 <body class="bg-roast-950 text-roast-100 antialiased selection:bg-amberGold selection:text-white">
 
-    <!-- NAVIGATION BAR -->
     <nav class="fixed top-0 left-0 right-0 z-50 bg-roast-950/90 backdrop-blur-md border-b border-roast-900 transition-all duration-300" id="navbar">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
-                <!-- Brand Logo -->
                 <a href="dashboard.html" class="flex items-center gap-3 group">
                     <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-amberGold to-roast-500 flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
                         <i class="fa-solid me-0 fa-fire-burner text-roast-950 text-lg"></i>
@@ -67,34 +62,27 @@
                     </div>
                 </a>
 
-                <!-- Desktop Menu -->
                 <div class="hidden md:flex items-center space-x-8 text-sm font-medium">
                     <a href="dashboard.html" class="text-amberGold font-bold hover:underline transition-colors">Home</a>
                     <a href="orders.html" class="text-roast-200 hover:text-amberGold transition-colors"><i class="fa-solid fa-box-open me-1"></i> My Orders</a>
                 </div>
 
-                <!-- Right Actions (Membership -> Cart -> Wishlist -> Profile -> Logout) -->
                 <div class="flex items-center gap-2.5">
-                    <!-- 1. Membership Points Button -->
                     <a href="membership.html" class="relative w-10 h-10 rounded-full bg-roast-900 hover:bg-roast-800 border border-roast-800 text-amberGold flex items-center justify-center transition-all shadow-md" title="Membership Points">
                         <i class="fa-solid fa-bag-shopping text-base"></i>
                         <span class="absolute -top-1 -right-1 bg-amberGold text-roast-950 text-[9px] font-extrabold px-1.5 py-0.5 rounded-full shadow">350</span>
                     </a>
-                    <!-- 2. Cart Button -->
                     <button onclick="toggleCart(true)" class="relative w-10 h-10 rounded-full bg-roast-900 hover:bg-roast-800 border border-roast-800 text-amberGold flex items-center justify-center transition-all shadow-md" title="Shopping Cart">
                         <i class="fa-solid fa-cart-shopping text-base"></i>
                         <span id="cart-count" class="absolute -top-1 -right-1 bg-amberGold text-roast-950 text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow">0</span>
                     </button>
-                    <!-- 3. Wishlist Button -->
                     <button onclick="toggleWishlistDrawer()" class="relative w-10 h-10 rounded-full bg-roast-900 hover:bg-roast-800 border border-roast-800 text-amberGold flex items-center justify-center transition-all shadow-md" title="View Wishlist">
                         <i class="fa-solid fa-heart text-base"></i>
                         <span id="wishlist-count" class="absolute -top-1 -right-1 bg-amberGold text-roast-950 text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow">0</span>
                     </button>
-                    <!-- 4. Profile Button -->
-                    <a href="membership.html" class="w-10 h-10 rounded-full bg-roast-900 hover:bg-roast-800 border border-roast-800 text-amberGold flex items-center justify-center transition-all shadow-md" title="Member Profile">
+                    <button onclick="openProfileModal()" class="w-10 h-10 rounded-full bg-roast-900 hover:bg-roast-800 border border-roast-800 text-amberGold flex items-center justify-center transition-all shadow-md" title="Edit Profile">
                         <i class="fa-solid fa-user text-base"></i>
-                    </a>
-                    <!-- Logout Button -->
+                    </button>
                     <button onclick="logoutUser()" class="px-3.5 py-2 rounded-full bg-roast-900 hover:bg-red-950/40 border border-roast-700 text-roast-300 hover:text-red-400 text-xs font-semibold transition-all">
                         <i class="fa-solid fa-right-from-bracket"></i> Logout
                     </button>
@@ -103,7 +91,6 @@
         </div>
     </nav>
 
-    <!-- DASHBOARD WELCOME HERO -->
     <section class="relative pt-36 pb-24 overflow-hidden border-b border-roast-900 flex items-center justify-center">
         <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover z-0">
             <source src="video/background.mp4" type="video/mp4">
@@ -118,7 +105,6 @@
         </div>
     </section>
 
-    <!-- MAIN DASHBOARD CONTENT -->
     <main class="py-20 bg-roast-950">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
             <div>
@@ -127,7 +113,6 @@
             </div>
             
             <div class="grid md:grid-cols-2 gap-8 max-w-4xl">
-                <!-- Kad 1: My Orders & Classes -->
                 <div class="bg-roast-900/80 rounded-2xl p-6 border border-roast-800 space-y-4 hover:border-amberGold/50 transition-all flex flex-col justify-between">
                     <div class="space-y-4">
                         <div class="w-12 h-12 rounded-xl bg-amberGold/20 text-amberGold flex items-center justify-center text-xl">
@@ -139,7 +124,6 @@
                     <a href="orders.html" class="inline-block py-2.5 px-4 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl text-xs transition-all shadow-md text-center">View Orders</a>
                 </div>
 
-                <!-- Kad 2: Membership Points -->
                 <div class="bg-roast-900/80 rounded-2xl p-6 border border-roast-800 space-y-4 hover:border-amberGold/50 transition-all flex flex-col justify-between">
                     <div class="space-y-4">
                         <div class="w-12 h-12 rounded-xl bg-amberGold/20 text-amberGold flex items-center justify-center text-xl">
@@ -154,7 +138,39 @@
         </div>
     </main>
 
-    <!-- MODAL CART DRAWER -->
+    <div id="profile-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-roast-900 border border-roast-800 rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl relative space-y-6 text-roast-100">
+            <button onclick="closeProfileModal()" class="absolute top-5 right-5 text-roast-400 hover:text-white p-2">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div class="text-center space-y-1">
+                <div class="w-14 h-14 rounded-2xl bg-amberGold/25 border border-amberGold/40 text-amberGold flex items-center justify-center mx-auto text-2xl shadow">
+                    <i class="fa-solid fa-user-pen"></i>
+                </div>
+                <h3 class="text-xl font-bold font-serif text-white">Edit Profile</h3>
+                <p class="text-xs text-roast-300">Update your member account details</p>
+            </div>
+            <div class="space-y-4 text-xs">
+                <div>
+                    <label class="block font-semibold text-roast-300 uppercase mb-1">Full Name</label>
+                    <input type="text" id="input-profile-name" placeholder="Your Name" class="w-full bg-roast-950 border border-roast-800 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                </div>
+                <div>
+                    <label class="block font-semibold text-roast-300 uppercase mb-1">Email Address</label>
+                    <input type="email" id="input-profile-email" placeholder="your@email.com" class="w-full bg-roast-950 border border-roast-800 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                </div>
+                <div>
+                    <label class="block font-semibold text-roast-300 uppercase mb-1">New Password (Optional)</label>
+                    <input type="password" id="input-profile-password" placeholder="Leave blank to keep current" class="w-full bg-roast-950 border border-roast-800 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                </div>
+            </div>
+            <div class="flex gap-3 pt-2">
+                <button onclick="saveProfileChanges()" class="flex-1 py-3 bg-amberGold hover:bg-amber-500 text-roast-950 font-extrabold rounded-xl text-xs shadow transition-all">Save Changes</button>
+                <button onclick="closeProfileModal()" class="px-5 py-3 bg-roast-950 text-roast-300 font-bold rounded-xl border border-roast-800 text-xs">Cancel</button>
+            </div>
+        </div>
+    </div>
+
     <div id="cart-drawer" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden transition-opacity">
         <div class="absolute right-0 top-0 bottom-0 w-full max-w-md bg-roast-900 border-l border-roast-800 p-6 flex flex-col justify-between shadow-2xl">
             <div>
@@ -180,7 +196,6 @@
         </div>
     </div>
 
-    <!-- WISHLIST DRAWER MODAL -->
     <div id="wishlist-drawer" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden transition-opacity">
         <div class="absolute right-0 top-0 bottom-0 w-full max-w-md bg-roast-900 border-l border-roast-800 p-6 flex flex-col justify-between shadow-2xl">
             <div>
@@ -200,7 +215,6 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC -->
     <script>
         let cart = [];
         let wishlist = [];
@@ -215,6 +229,8 @@
                 const userData = JSON.parse(user);
                 if(userData && userData.name) {
                     document.getElementById('hero-welcome-title').innerText = `Hello, ${userData.name}!`;
+                    document.getElementById('input-profile-name').value = userData.name || '';
+                    document.getElementById('input-profile-email').value = userData.email || '';
                 }
             } catch(e) {}
             updateCartUI();
@@ -225,6 +241,36 @@
             localStorage.removeItem('rp_user');
             localStorage.removeItem('rp_logged_user');
             window.location.href = 'auth.html';
+        }
+
+        // --- EDIT PROFILE MODAL FUNCTIONS ---
+        function openProfileModal() {
+            document.getElementById('profile-modal').classList.remove('hidden');
+        }
+
+        function closeProfileModal() {
+            document.getElementById('profile-modal').classList.add('hidden');
+        }
+
+        function saveProfileChanges() {
+            const name = document.getElementById('input-profile-name').value.trim();
+            const email = document.getElementById('input-profile-email').value.trim();
+            if(!name || !email) {
+                alert('Sila lengkapkan nama dan emel.');
+                return;
+            }
+            
+            let userStr = localStorage.getItem('rp_user') || localStorage.getItem('rp_logged_user');
+            let userData = userStr ? JSON.parse(userStr) : {};
+            userData.name = name;
+            userData.email = email;
+
+            localStorage.setItem('rp_user', JSON.stringify(userData));
+            localStorage.setItem('rp_logged_user', JSON.stringify(userData));
+
+            document.getElementById('hero-welcome-title').innerText = `Hello, ${name}!`;
+            closeProfileModal();
+            alert('Profil anda berjaya dikemas kini!');
         }
 
         function toggleCart(forceOpen = false) {
