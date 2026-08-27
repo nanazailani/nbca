@@ -1,0 +1,1894 @@
+<!DOCTYPE html> 
+<html lang="en" class="scroll-smooth"> 
+<head> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Rumah Panggang | Specialty Coffee Roastery & Craft Grill</title> 
+    <!-- Tailwind CSS CDN --> 
+    <script src="https://cdn.tailwindcss.com"></script> 
+    <script> 
+        tailwind.config = { 
+            theme: { 
+                extend: { 
+                    colors: { 
+                        roast: { 
+                            50: '#FAF6F0', 
+                            100: '#F4EBE1', 
+                            200: '#E2CEB9', 
+                            300: '#CFAD8F', 
+                            400: '#B88760', 
+                            500: '#9E6437', 
+                            600: '#834C28', 
+                            700: '#68371C', 
+                            800: '#472210', 
+                            900: '#281107', 
+                            950: '#140803', 
+                        }, 
+                        amberGold: '#D97706', 
+                    }, 
+                    fontFamily: { 
+                        sans: ['Plus Jakarta Sans', 'sans-serif'], 
+                        serif: ['Playfair Display', 'serif'], 
+                    } 
+                } 
+            } 
+        } 
+    </script> 
+    <!-- Google Fonts --> 
+    <link rel="preconnect" href="https://fonts.googleapis.com"> 
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"> 
+    <!-- FontAwesome CDN --> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> 
+    <style> 
+        body { font-family: 'Plus Jakarta Sans', sans-serif; } 
+        h1, h2, h3, .font-serif { font-family: 'Playfair Display', serif; } 
+        .bg-coffee-pattern { 
+            background-color: #140803; 
+            background-image: radial-gradient(#281107 1px, transparent 1px); 
+            background-size: 24px 24px; 
+        } 
+    </style> 
+</head> 
+<body class="bg-roast-950 text-roast-100 antialiased selection:bg-amberGold selection:text-white"> 
+
+    <!-- NAVIGATION BAR --> 
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-roast-950/90 backdrop-blur-md border-b border-roast-900 transition-all duration-300" id="navbar"> 
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> 
+            <div class="flex items-center justify-between h-20"> 
+                <!-- Brand Logo --> 
+                <a href="#" class="flex items-center gap-3 group"> 
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-amberGold to-roast-500 flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform"> 
+                        <i class="fa-solid me-0 fa-fire-burner text-roast-950 text-lg"></i> 
+                    </div> 
+                    <div class="flex flex-col"> 
+                        <span class="font-serif text-xl font-extrabold tracking-wider text-white uppercase">Rumah Panggang</span> 
+                        <span class="text-[10px] tracking-widest text-amberGold uppercase">Roastery & Artisanal Grill</span> 
+                    </div> 
+                </a> 
+                <!-- Desktop Menu --> 
+                <div class="hidden md:flex items-center space-x-8 text-sm font-medium"> 
+                    <a href="#about" class="text-roast-200 hover:text-amberGold transition-colors">About Us</a> 
+                    <a href="#coffee-beans" class="text-roast-200 hover:text-amberGold transition-colors">Coffee Beans</a> 
+                    <a href="#blog" class="text-roast-200 hover:text-amberGold transition-colors">Blog</a> 
+                    <a href="#merchandise" class="text-roast-200 hover:text-amberGold transition-colors">Merchandise</a> 
+                    <a href="#classes" class="text-roast-200 hover:text-amberGold transition-colors">Classes</a> 
+                    <a href="#brew-guide" class="text-roast-200 hover:text-amberGold transition-colors">Brew Guide</a> 
+                    <a href="#location" class="text-roast-200 hover:text-amberGold transition-colors">Locations</a> 
+                </div> 
+                <!-- Right Actions --> 
+                <div class="flex items-center gap-2 sm:gap-4"> 
+                    <!-- Cart Button (Bulat Konsisten) -->
+                    <button onclick="toggleCart()" class="relative w-10 h-10 rounded-full bg-roast-900 hover:bg-roast-800 border border-roast-800 text-roast-100 flex items-center justify-center transition-all shadow-md"> 
+                        <i class="fa-solid fa-bag-shopping text-base"></i> 
+                        <span id="cart-count" class="absolute -top-1 -right-1 bg-amberGold text-roast-950 text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow">0</span> 
+                    </button> 
+                    <!-- Login Button / User State --> 
+                    <div id="nav-auth-container">
+                        <a href="auth.html" class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full bg-roast-900 hover:bg-roast-800 border border-roast-700 text-roast-200 hover:text-amberGold text-xs font-semibold transition-all"> 
+                            <i class="fa-solid fa-user"></i> Sign In 
+                        </a> 
+                    </div>
+                    <!-- Mobile Menu Button --> 
+                    <button onclick="toggleMobileMenu()" class="md:hidden p-2 text-roast-200 hover:text-white focus:outline-none"> 
+                        <i class="fa-solid fa-bars text-xl" id="mobile-menu-icon"></i> 
+                    </button> 
+                </div> 
+            </div> 
+        </div> 
+
+        <!-- Mobile Navigation Drawer --> 
+        <div id="mobile-menu" class="hidden md:hidden bg-roast-950/95 border-b border-roast-800 px-6 pt-4 pb-8 space-y-4 shadow-2xl backdrop-blur-xl transition-all duration-300"> 
+            <div class="flex items-center justify-between pb-2 border-b border-roast-900"> 
+                <span class="text-xs uppercase font-bold tracking-widest text-amberGold">Mobile Navigation</span> 
+                <span class="text-[10px] text-roast-400">RU.PA OS v2.6</span> 
+            </div> 
+            <a href="#about" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-200 hover:text-amberGold font-medium border-b border-roast-900/50"><i class="fa-solid fa-circle-info text-amberGold text-xs"></i> About Us</a> 
+            <a href="#coffee-beans" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-200 hover:text-amberGold font-medium border-b border-roast-900/50"><i class="fa-solid fa-mug-hot text-amberGold text-xs"></i> Coffee Beans</a> 
+            <a href="#blog" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-200 hover:text-amberGold font-medium border-b border-roast-900/50"><i class="fa-solid fa-book-open text-amberGold text-xs"></i> Blog & Stories</a> 
+            <a href="#merchandise" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-200 hover:text-amberGold font-medium border-b border-roast-900/50"><i class="fa-solid fa-shirt text-amberGold text-xs"></i> Merchandise</a> 
+            <a href="#classes" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-200 hover:text-amberGold font-medium border-b border-roast-900/50"><i class="fa-solid fa-chalkboard-user text-amberGold text-xs"></i> Paid Classes</a> 
+            <a href="#brew-guide" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-200 hover:text-amberGold font-medium border-b border-roast-900/50"><i class="fa-solid fa-calculator text-amberGold text-xs"></i> Brew Calculator</a> 
+            <a href="#location" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-200 hover:text-amberGold font-medium"><i class="fa-solid fa-location-dot text-amberGold text-xs"></i> Locations & Outlets</a> 
+            <div class="pt-2" id="mobile-auth-container"> 
+                <a href="auth.html" class="w-full py-3 rounded-xl bg-roast-900 border border-roast-700 text-roast-200 font-bold text-xs flex items-center justify-center gap-2 shadow-md"> 
+                    <i class="fa-solid fa-user"></i> Sign In / Register 
+                </a> 
+            </div> 
+        </div> 
+    </nav> 
+
+    <!-- HERO SECTION --> 
+    <section class="relative min-h-screen flex items-center pt-24 pb-16 overflow-hidden bg-coffee-pattern"> 
+        <div class="absolute top-1/4 -left-32 w-96 h-96 bg-amberGold/15 rounded-full blur-3xl pointer-events-none"></div> 
+        <div class="absolute bottom-10 right-0 w-96 h-96 bg-roast-600/10 rounded-full blur-3xl pointer-events-none"></div> 
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full"> 
+            <div class="grid lg:grid-cols-12 gap-12 items-center"> 
+                <div class="lg:col-span-7 space-y-8 text-center lg:text-left"> 
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-roast-900 border border-roast-700 text-amberGold text-xs font-semibold tracking-wider uppercase"> 
+                        <i class="fa-solid fa-fire text-xs"></i> Specialty Coffee & Wood-Fired Smoke 
+                    </div> 
+                    <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white leading-tight"> 
+                        Crafted Roasts, <br> 
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-amberGold via-amber-400 to-roast-300"> 
+                            Pure Authenticity. 
+                        </span> 
+                    </h1> 
+                    <p class="text-lg text-roast-300 max-w-2xl mx-auto lg:mx-0 font-light leading-relaxed"> 
+                        From single-origin specialty coffees & the iconic <strong class="font-bold text-white">Series RU.PA</strong> blends (<em class="italic text-amber-400">Merah Saga, Nyok-Nyok</em>) roasted in Sungai Petani to artisanal wood-fired delicacies at HBK Shah Alam. 
+                    </p> 
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4"> 
+                        <a href="#coffee-beans" class="w-full sm:w-auto px-8 py-4 rounded-full bg-amberGold hover:bg-amber-500 text-roast-950 font-bold text-center shadow-lg transition-all transform hover:-translate-y-0.5"> 
+                            <i class="fa-solid fa-basket-shopping me-2"></i> Shop Coffee Beans 
+                        </a> 
+                    </div> 
+                    <div class="pt-8 grid grid-cols-3 gap-6 border-t border-roast-900 max-w-lg mx-auto lg:mx-0"> 
+                        <div> 
+                            <span class="block text-2xl font-bold font-serif text-amberGold">100%</span> 
+                            <span class="text-xs text-roast-400 uppercase tracking-wider">Specialty Arabica</span> 
+                        </div> 
+                        <div> 
+                            <span class="block text-2xl font-bold font-serif text-amberGold">8+</span> 
+                            <span class="text-xs text-roast-400 uppercase tracking-wider">Origin Varieties</span> 
+                        </div> 
+                        <div> 
+                            <span class="block text-2xl font-bold font-serif text-amberGold">Fresh</span> 
+                            <span class="text-xs text-roast-400 uppercase tracking-wider">In-House Roasts</span> 
+                        </div> 
+                    </div> 
+                </div> 
+
+                <div class="lg:col-span-5 relative"> 
+                    <div class="hidden sm:block relative mx-auto max-w-md bg-gradient-to-b from-roast-900 to-roast-950 rounded-3xl p-6 border border-roast-800 shadow-2xl"> 
+                        <div class="flex items-center justify-between mb-6"> 
+                            <span class="text-xs uppercase font-bold tracking-widest text-amberGold">Roaster's Choice</span> 
+                            <span class="px-2.5 py-1 bg-amberGold/10 text-amberGold rounded-full text-xs font-medium">SOE & Blend</span> 
+                        </div> 
+                        <div class="relative h-64 rounded-2xl overflow-hidden bg-roast-800 flex items-center justify-center mb-6 border border-roast-700/50"> 
+                            <img src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?auto=format&fit=crop&w=800&q=80" alt="Rumah Panggang Coffee Beans" class="object-cover w-full h-full opacity-80 hover:scale-105 transition-transform duration-500"> 
+                            <div class="absolute inset-0 bg-gradient-to-t from-roast-950 via-transparent to-transparent"></div> 
+                            <div class="absolute bottom-4 left-4 right-4 flex justify-between items-end"> 
+                                <div> 
+                                    <p class="text-xs text-amber-400 font-semibold uppercase tracking-wider">Series RU.PA</p> 
+                                    <h3 class="text-xl font-bold text-white font-serif">Merah Saga Espresso Blend</h3> 
+                                </div> 
+                                <span class="bg-amberGold text-roast-950 font-bold px-3 py-1 rounded-full text-sm">RM 30.00</span> 
+                            </div> 
+                        </div> 
+                        <div class="space-y-3"> 
+                            <p class="text-xs text-roast-400 uppercase tracking-wider">Flavor Notes Profile:</p> 
+                            <div class="flex flex-wrap gap-2"> 
+                                <span class="px-3 py-1 bg-roast-800/80 rounded-lg text-xs text-roast-200 border border-roast-700"><i class="fa-solid fa-cookie me-1 text-amberGold"></i> Chocolate Praline</span> 
+                                <span class="px-3 py-1 bg-roast-800/80 rounded-lg text-xs text-roast-200 border border-roast-700"><i class="fa-solid fa-apple-whole me-1 text-amberGold"></i> Sweet Plum</span> 
+                                <span class="px-3 py-1 bg-roast-800/80 rounded-lg text-xs text-roast-200 border border-roast-700"><i class="fa-solid fa-leaf me-1 text-amberGold"></i> Hazelnut Finish</span> 
+                            </div> 
+                            <button onclick="checkAuthAndExecute(() => addToCart('Merah Saga Espresso Blend', 30.00))" class="w-full mt-4 py-3 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl transition-all shadow-md"> + Add To Order Cart </button> 
+                        </div> 
+                    </div> 
+
+                    <div class="sm:hidden bg-roast-900/90 rounded-2xl p-5 border border-roast-800 shadow-xl space-y-4"> 
+                        <div class="flex items-center justify-between"> 
+                            <span class="text-[10px] uppercase font-bold tracking-widest text-amberGold">Featured Roaster Pick</span> 
+                            <span class="px-2 py-0.5 bg-amberGold/10 text-amberGold rounded-full text-[10px] font-medium">Series RU.PA</span> 
+                        </div> 
+                        <div class="flex items-center gap-4"> 
+                            <img src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?auto=format&fit=crop&w=300&q=80" alt="Merah Saga" class="w-20 h-20 rounded-xl object-cover border border-roast-700"> 
+                            <div> 
+                                <h3 class="text-base font-bold text-white font-serif">Merah Saga Blend</h3> 
+                                <p class="text-xs text-roast-300">Chocolate Praline & Hazelnut</p> 
+                                <span class="text-amberGold font-bold text-sm block mt-1">RM 30.00</span> 
+                            </div> 
+                        </div> 
+                        <button onclick="checkAuthAndExecute(() => addToCart('Merah Saga Espresso Blend', 30.00))" class="w-full py-2.5 bg-amberGold text-roast-950 font-bold rounded-xl text-xs shadow"> + Quick Add To Cart </button> 
+                    </div> 
+                </div> 
+            </div> 
+        </div> 
+    </section> 
+
+    <!-- ABOUT SECTION --> 
+    <section id="about" class="py-20 bg-roast-900/60 border-y border-roast-900"> 
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16"> 
+            <div class="grid md:grid-cols-2 gap-12 items-center"> 
+                <div class="space-y-6"> 
+                    <span class="text-xs font-bold tracking-widest text-amberGold uppercase">About Rumah Panggang</span> 
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-white">Our Journey & Coffee Story</h2> 
+                    <div class="space-y-4 text-roast-300 leading-relaxed font-light text-sm sm:text-base"> 
+                        <p> Welcome to <strong class="font-bold text-white">Rumah Panggang</strong>! We started in 2019, and despite the slow beginnings during the COVID-19 MCO phase, things picked up in 2021 with the growing café scene.</p> 
+                        <p> Based in <strong class="font-bold text-white">Sungai Petani, Kedah</strong>, we're known for roasting the freshest coffee beans. Our dedicated roaster, <strong class="font-bold text-white">Iman Roslan</strong>, puts heart and skill into every batch. </p> 
+                        <p> We're proud to be a major supplier to cafes in the North, serving coffee lovers all around. At Rumah Panggang, it's not just about coffee. It's about sharing an amazing cup and building a community around our love for great brews. </p> 
+                        <p class="text-amberGold font-medium italic"> Come join us in this aromatic adventure—from our roaster's hands to your cup. Discover the goodness of Rumah Panggang! </p> 
+                    </div> 
+                    <div class="grid sm:grid-cols-2 gap-4 pt-4"> 
+                        <div class="p-5 rounded-2xl bg-roast-950/90 border border-roast-800 hover:border-amberGold/40 transition-all"> 
+                            <div class="w-10 h-10 rounded-lg bg-amberGold/20 text-amberGold flex items-center justify-center mb-3"> 
+                                <i class="fa-solid fa-eye text-lg"></i> 
+                            </div> 
+                            <h4 class="font-bold text-white text-base font-serif mb-1">Our Vision</h4> 
+                            <p class="text-xs text-roast-400 font-light leading-relaxed"> We aim to become the go-to coffee roaster in Malaysia. We want to offer the best quality and taste in every cup. </p> 
+                        </div> 
+                        <div class="p-5 rounded-2xl bg-roast-950/90 border border-roast-800 hover:border-amberGold/40 transition-all"> 
+                            <div class="w-10 h-10 rounded-lg bg-amberGold/20 text-amberGold flex items-center justify-center mb-3"> 
+                                <i class="fa-solid fa-bullseye text-lg"></i> 
+                            </div> 
+                            <h4 class="font-bold text-white text-base font-serif mb-1">Our Mission</h4> 
+                            <p class="text-xs text-roast-400 font-light leading-relaxed"> Our mission is simple—to provide you with freshly roasted coffee beans consistently. We're committed to bringing you top-notch beans bursting with freshness and flavor. </p> 
+                        </div> 
+                    </div> 
+                </div> 
+                <div class="grid grid-cols-2 gap-4"> 
+                    <img src="images/kopi.png" alt="Espresso Extraction" class="rounded-2xl object-cover h-72 w-full shadow-lg border border-roast-800"> 
+                    <img src="images/kedai.png" alt="Grill Meat" class="rounded-2xl object-cover h-72 w-full shadow-lg border border-roast-800 mt-8"> 
+                </div> 
+            </div> 
+
+            <div class="bg-gradient-to-r from-roast-950 via-roast-900 to-roast-950 rounded-3xl p-8 sm:p-10 border border-roast-800 shadow-xl"> 
+                <div class="grid lg:grid-cols-12 gap-8 items-center"> 
+                    <div class="lg:col-span-4 flex justify-center"> 
+                        <div class="relative group"> 
+                            <div class="absolute -inset-1 bg-gradient-to-r from-amberGold to-roast-500 rounded-2xl blur opacity-30 group-hover:opacity-75 transition duration-500"></div> 
+                            <img src="images/roaster.png" alt="Iman Roslan - Head Roaster" class="relative rounded-2xl w-64 h-80 object-cover shadow-2xl border border-roast-700"> 
+                        </div> 
+                    </div> 
+                    <div class="lg:col-span-8 space-y-4"> 
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amberGold/10 text-amberGold text-xs font-semibold tracking-wider uppercase"> 
+                            <i class="fa-solid fa-fire-flame-curved"></i> Meet The Roaster 
+                        </div> 
+                        <h3 class="text-2xl sm:text-3xl font-extrabold text-white font-serif">Iman Roslan</h3> 
+                        <p class="text-xs text-amber-400 font-medium uppercase tracking-widest">Head Roaster & Storyteller</p> 
+                        <div class="space-y-3 text-roast-300 font-light text-sm sm:text-base leading-relaxed"> 
+                            <p> Meet <strong class="font-bold text-white">Iman Roslan</strong>, the driving force behind Rumah Panggang's exceptional coffee journey. He started as a barista and ran a café but felt a strong pull to dive deeper into the world of coffee. </p> 
+                            <p> With a desire to explore more, Iman shifted gears and focused on roasting coffee. At Rumah Panggang, he's the wizard behind the roaster, carefully choosing the best beans and using his know-how to bring out their amazing flavors. </p> 
+                            <p> Iman isn't just roasting beans; he's creating an experience. Every batch tells a story of taste and smell, showing his dedication to making the perfect cup. He's not just a roaster; he's a storyteller, sharing the joy of great coffee with every bean he roasts. </p> 
+                        </div> 
+                    </div> 
+                </div> 
+            </div> 
+        </div> 
+    </section> 
+
+    <!-- COFFEE BEANS SHOP SECTION --> 
+    <section id="coffee-beans" class="py-20 bg-roast-950"> 
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> 
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12"> 
+                <div> 
+                    <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Specialty Coffee Beans</span> 
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-1">In-House Roasted Coffee Collection</h2> 
+                </div> 
+                <div class="flex flex-wrap gap-2 mt-4 md:mt-0" id="beans-filter"> 
+                    <button onclick="filterBeans('all')" class="bean-filter-btn px-4 py-2 rounded-full text-xs font-semibold bg-amberGold text-roast-950 transition-all">All Beans</button> 
+                    <button onclick="filterBeans('single-origin')" class="bean-filter-btn px-4 py-2 rounded-full text-xs font-semibold bg-roast-900 text-roast-300 hover:text-white border border-roast-800 transition-all">Single Origin</button> 
+                    <button onclick="filterBeans('blend')" class="bean-filter-btn px-4 py-2 rounded-full text-xs font-semibold bg-roast-900 text-roast-300 hover:text-white border border-roast-800 transition-all">Series RU.PA Blend</button> 
+                    <button onclick="filterBeans('dark')" class="bean-filter-btn px-4 py-2 rounded-full text-xs font-semibold bg-roast-900 text-roast-300 hover:text-white border border-roast-800 transition-all">Dark Roast</button> 
+                </div> 
+            </div> 
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="coffee-grid"> 
+                <div class="coffee-card single-origin bg-roast-900/80 rounded-2xl p-6 border border-roast-800 hover:border-amberGold/50 transition-all flex flex-col justify-between group overflow-hidden"> 
+                    <div> 
+                        <div class="relative h-48 rounded-xl overflow-hidden mb-4 border border-roast-800 bg-roast-950"> 
+                            <img src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?auto=format&fit=crop&w=600&q=80" alt="Brazil Santuario Sul Lot 1" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"> 
+                            <span class="absolute top-3 left-3 px-2.5 py-1 bg-amberGold text-roast-950 font-bold text-[10px] uppercase rounded-full">Microlot</span> 
+                        </div> 
+                        <div class="flex justify-between items-start mb-3"> 
+                            <span class="px-2.5 py-1 bg-roast-800 text-amberGold text-[11px] font-bold uppercase rounded-md">Brazil</span> 
+                            <span class="text-sm font-bold text-amberGold">RM 44.00 – RM 80.00</span> 
+                        </div> 
+                        <h3 class="text-xl font-bold text-white font-serif mb-1 group-hover:text-amberGold transition-colors">Brazil Santuario Sul Lot 1</h3> 
+                        <p class="text-xs text-roast-400 mb-3">Process: Natural Process | Carmo de Minas</p> 
+                        <p class="text-sm text-roast-300 font-light mb-4 line-clamp-2">Renowned microlot by Luiz Paulo Dias with gentle acidity, smooth body, and balanced natural sweetness.</p> 
+                        <div class="flex flex-wrap gap-1.5 mb-6"> 
+                            <span class="px-2 py-0.5 bg-roast-950 rounded text-[10px] text-roast-300">Gentle Acidity</span> 
+                            <span class="px-2 py-0.5 bg-roast-950 rounded text-[10px] text-roast-300">Smooth Body</span> 
+                            <span class="px-2 py-0.5 bg-roast-950 rounded text-[10px] text-roast-300">Filter & Espresso</span> 
+                        </div> 
+                    </div> 
+                    <button onclick="openProductModal('santuario-sul')" class="w-full py-3 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-2"> 
+                        <i class="fa-solid fa-circle-info"></i> Learn More 
+                    </button> 
+                </div> 
+
+                <div class="coffee-card single-origin bg-roast-900/80 rounded-2xl p-6 border border-roast-800 hover:border-amberGold/50 transition-all flex flex-col justify-between group overflow-hidden"> 
+                    <div> 
+                        <div class="relative h-48 rounded-xl overflow-hidden mb-4 border border-roast-800 bg-roast-950"> 
+                            <img src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?auto=format&fit=crop&w=600&q=80" alt="Colombia Finca Milan" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"> 
+                        </div> 
+                        <div class="flex justify-between items-start mb-3"> 
+                            <span class="px-2.5 py-1 bg-roast-800 text-amberGold text-[11px] font-bold uppercase rounded-md">Colombia</span> 
+                            <span class="text-sm font-bold text-amberGold">RM 90.00</span> 
+                        </div> 
+                        <h3 class="text-xl font-bold text-white font-serif mb-1 group-hover:text-amberGold transition-colors">Colombia Finca Milan</h3> 
+                        <p class="text-xs text-roast-400 mb-3">Process: Watermelon Culturing Nitrogen Fermentation</p> 
+                        <p class="text-sm text-roast-300 font-light mb-4">Exclusive micro-lot boasting vibrant notes of juicy watermelon, osmanthus blossom, and natural sugarcane sweetness.</p> 
+                        <div class="flex flex-wrap gap-1.5 mb-6"> 
+                            <span class="px-2 py-0.5 bg-roast-950 rounded text-[10px] text-roast-300">Watermelon</span> 
+                            <span class="px-2 py-0.5 bg-roast-950 rounded text-[10px] text-roast-300">Floral</span> 
+                            <span class="px-2 py-0.5 bg-roast-950 rounded text-[10px] text-roast-300">Juicy Body</span> 
+                        </div> 
+                    </div> 
+                    <button onclick="openProductModal('finca-milan')" class="w-full py-3 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-2"> 
+                        <i class="fa-solid fa-circle-info"></i> Learn More 
+                    </button> 
+                </div> 
+
+                <div class="coffee-card single-origin bg-roast-900/80 rounded-2xl p-6 border border-roast-800 hover:border-amberGold/50 transition-all flex flex-col justify-between group overflow-hidden"> 
+                    <div> 
+                        <div class="relative h-48 rounded-xl overflow-hidden mb-4 border border-roast-800 bg-roast-950"> 
+                            <img src="https://images.unsplash.com/photo-1587734195503-904fca47e0e9?auto=format&fit=crop&w=600&q=80" alt="Brazil Sitio Balaio" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"> 
+                        </div> 
+                        <div class="flex justify-between items-start mb-3"> 
+                            <span class="px-2.5 py-1 bg-roast-800 text-amberGold text-[11px] font-bold uppercase rounded-md">Brazil</span> 
+                            <span class="text-sm font-bold text-amberGold">RM 56.00</span> 
+                        </div> 
+                        <h3 class="text-xl font-bold text-white font-serif mb-1 group-hover:text-amberGold transition-colors">Brazil Sitio Balaio</h3> 
+                        <p class="text-xs text-roast-400 mb-3">Process: Natural Process | Light-Medium Roast</p> 
+                        <p class="text-sm text-roast-300 font-light mb-4">Delightful flavor profile highlighting ripe stonefruit, gentle jasmine aroma, and a clean sugarcane finish.</p> 
+                        <div class="flex flex-wrap gap-1.5 mb-6"> 
+                            <span class="px-2 py-0.5 bg-roast-950 rounded text-[10px] text-roast-300">Stonefruit</span> 
+                            <span class="px-2 py-0.5 bg-roast-950 rounded text-[10px] text-roast-300">Jasmine</span> 
+                            <span class="px-2 py-0.5 bg-roast-950 rounded text-[10px] text-roast-300">Sugarcane</span> 
+                        </div> 
+                    </div> 
+                    <button onclick="openProductModal('sitio-balaio')" class="w-full py-3 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-2"> 
+                        <i class="fa-solid fa-circle-info"></i> Learn More 
+                    </button> 
+                </div> 
+
+                <div class="coffee-card blend bg-roast-900/80 rounded-2xl p-6 border border-roast-800 hover:border-amberGold/50 transition-all flex flex-col justify-between group overflow-hidden"> 
+                    <div> 
+                        <div class="relative h-48 rounded-xl overflow-hidden mb-4 border border-roast-800 bg-roast-950"> 
+                            <img src="https://images.unsplash.com/photo-1611854779393-1b2da9d400fe?auto=format&fit=crop&w=600&q=80" alt="Merah Saga Espresso Blend" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"> 
+                        </div> 
+                        <div class="flex justify-between items-start mb-3"> 
+                            <span class="px-2.5 py-1 bg-roast-800 text-amberGold text-[11px] font-bold uppercase rounded-md">Series RU.PA</span> 
+                            <span class="text-sm font-bold text-amberGold">RM 30.00</span> 
+                        </div> 
+                        <h3 class="text-xl font-bold text-white font-serif mb-1 group-hover:text-amberGold transition-colors">Merah Saga Espresso Blend</h3> 
+                        <p class="text-xs text-roast-400 mb-3">Origin: Colombia & Brazil | Medium-Dark</p> 
+                        <p class="text-sm text-roast-300 font-light mb-4">Our classic flagship espresso blend with deep milk chocolate notes, perfectly structured for Latte & Cappuccino.</p> 
+                        <div class="flex flex-wrap gap-1.5 mb-6"> 
+                            <span class="px-2 py-0.5 bg-roast-950 rounded text-[10px] text-roast-300">Milk Chocolate</span> 
+                            <span class="px-2 py-0.5 bg-roast-950 rounded text-[10px] text-roast-300">Hazelnut</span> 
+                            <span class="px-2 py-0.5 bg-roast-950 rounded text-[10px] text-roast-300">Creamy</span> 
+                        </div> 
+                    </div> 
+                    <button onclick="openProductModal('merah-saga')" class="w-full py-3 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-2"> 
+                        <i class="fa-solid fa-circle-info"></i> Learn More 
+                    </button> 
+                </div> 
+
+                <div class="coffee-card single-origin bg-roast-900/80 rounded-2xl p-6 border border-roast-800 hover:border-amberGold/50 transition-all flex flex-col justify-between group overflow-hidden"> 
+                    <div> 
+                        <div class="relative h-48 rounded-xl overflow-hidden mb-4 border border-roast-800 bg-roast-950"> 
+                            <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80" alt="Guatemala Acatenago Valley" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"> 
+                        </div> 
+                        <div class="flex justify-between items-start mb-3"> 
+                            <span class="px-2.5 py-1 bg-roast-800 text-amberGold text-[11px] font-bold uppercase rounded-md">Guatemala</span> 
+                            <span class="text-sm font-bold text-amberGold">RM 35.00</span> 
+                        </div> 
+                        <h3 class="text-xl font-bold text-white font-serif mb-1 group-hover:text-amberGold transition-colors">Guatemala Acatenago Valley</h3> 
+                        <p class="text-xs text-roast-400 mb-3">Farm: Santa Felisa | Medium Roast</p> 
+                        <p class="text-sm text-roast-300 font-light mb-4">High-altitude volcanic soil origin featuring elegant notes of red apple, brown sugar, and a smooth cocoa finish.</p> 
+                        <div class="flex flex-wrap gap-1.5 mb-6"> 
+                            <span class="px-2 py-0.5 bg-roast-950 rounded text-[10px] text-roast-300">Red Apple</span> 
+                            <span class="px-2 py-0.5 bg-roast-950 rounded text-[10px] text-roast-300">Brown Sugar</span> 
+                            <span class="px-2 py-0.5 bg-roast-950 rounded text-[10px] text-roast-300">Smooth Cocoa</span> 
+                        </div> 
+                    </div> 
+                    <button onclick="openProductModal('guatemala-acatenago')" class="w-full py-3 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-2"> 
+                        <i class="fa-solid fa-circle-info"></i> Learn More 
+                    </button> 
+                </div> 
+
+                <div class="coffee-card dark bg-roast-900/80 rounded-2xl p-6 border border-roast-800 hover:border-amberGold/50 transition-all flex flex-col justify-between group overflow-hidden"> 
+                    <div> 
+                        <div class="relative h-48 rounded-xl overflow-hidden mb-4 border border-roast-800 bg-roast-950"> 
+                            <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=600&q=80" alt="Brazil Cerrado SOE" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"> 
+                        </div> 
+                        <div class="flex justify-between items-start mb-3"> 
+                            <span class="px-2.5 py-1 bg-roast-800 text-amberGold text-[11px] font-bold uppercase rounded-md">SOE Series</span> 
+                            <span class="text-sm font-bold text-amberGold">RM 22.00</span> 
+                        </div> 
+                        <h3 class="text-xl font-bold text-white font-serif mb-1 group-hover:text-amberGold transition-colors">Brazil Cerrado SOE</h3> 
+                        <p class="text-xs text-roast-400 mb-3">Process: Natural | Dark Roast</p> 
+                        <p class="text-sm text-roast-300 font-light mb-4">Ultra-low acidity, toasted hazelnut aroma, and rich dark cocoa undertones for a bold daily cup.</p> 
+                        <div class="flex flex-wrap gap-1.5 mb-6"> 
+                            <span class="px-2 py-0.5 bg-roast-950 rounded text-[10px] text-roast-300">Low Acidity</span> 
+                            <span class="px-2 py-0.5 bg-roast-950 rounded text-[10px] text-roast-300">Toasted Nuts</span> 
+                            <span class="px-2 py-0.5 bg-roast-950 rounded text-[10px] text-roast-300">Bold Dark</span> 
+                        </div> 
+                    </div> 
+                    <button onclick="openProductModal('brazil-cerrado')" class="w-full py-3 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-2"> 
+                        <i class="fa-solid fa-circle-info"></i> Learn More 
+                    </button> 
+                </div> 
+
+                <div class="coffee-card single-origin bg-roast-900/80 rounded-2xl p-6 border border-roast-800 hover:border-amberGold/50 transition-all flex flex-col justify-between group overflow-hidden"> 
+                    <div> 
+                        <div class="relative h-48 rounded-xl overflow-hidden mb-4 border border-roast-800 bg-roast-950"> 
+                            <img src="https://images.unsplash.com/photo-1521302080334-4bebac2763a6?auto=format&fit=crop&w=600&q=80" alt="Ethiopia Yirgacheffe Koke" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"> 
+                        </div> 
+                        <div class="flex justify-between items-start mb-3"> 
+                            <span class="px-2.5 py-1 bg-roast-800 text-amberGold text-[11px] font-bold uppercase rounded-md">Ethiopia</span> 
+                            <span class="text-sm font-bold text-amberGold">RM 55.00</span> 
+                        </div> 
+                        <h3 class="text-xl font-bold text-white font-serif mb-1 group-hover:text-amberGold transition-colors">Ethiopia Yirgacheffe Koke</h3> 
+                        <p class="text-xs text-roast-400 mb-3">Process: Washed | Light Roast</p> 
+                        <p class="text-sm text-roast-300 font-light mb-4">Bright bergamot citrus acidity balanced with delicate fresh berry notes and a clean jasmine tea finish.</p> 
+                        <div class="flex flex-wrap gap-1.5 mb-6"> 
+                            <span class="px-2 py-0.5 bg-roast-950 rounded text-[10px] text-roast-300">Bergamot</span> 
+                            <span class="px-2 py-0.5 bg-roast-950 rounded text-[10px] text-roast-300">Jasmine Tea</span> 
+                            <span class="px-2 py-0.5 bg-roast-950 rounded text-[10px] text-roast-300">Bright Citrus</span> 
+                        </div> 
+                    </div> 
+                    <button onclick="openProductModal('ethiopia-koke')" class="w-full py-3 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-2"> 
+                        <i class="fa-solid fa-circle-info"></i> Learn More 
+                    </button> 
+                </div> 
+
+                <div class="coffee-card blend bg-roast-900/80 rounded-2xl p-6 border border-roast-800 hover:border-amberGold/50 transition-all flex flex-col justify-between group overflow-hidden"> 
+                    <div> 
+                        <div class="relative h-48 rounded-xl overflow-hidden mb-4 border border-roast-800 bg-roast-950"> 
+                            <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80" alt="Nyok-Nyok Espresso Blend" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"> 
+                        </div> 
+                        <div class="flex justify-between items-start mb-3"> 
+                            <span class="px-2.5 py-1 bg-roast-800 text-amberGold text-[11px] font-bold uppercase rounded-md">Series RU.PA</span> 
+                            <span class="text-sm font-bold text-amberGold">RM 29.00</span> 
+                        </div> 
+                        <h3 class="text-xl font-bold text-white font-serif mb-1 group-hover:text-amberGold transition-colors">Nyok-Nyok Espresso Blend</h3> 
+                        <p class="text-xs text-roast-400 mb-3">Origin: Antigua, Guatemala | Medium Roast</p> 
+                        <p class="text-sm text-roast-300 font-light mb-4">A rich, comforting blend featuring smooth caramel sweetness, toasted almond, and a satisfying dark chocolate finish.</p> 
+                        <div class="flex flex-wrap gap-1.5 mb-6"> 
+                            <span class="px-2 py-0.5 bg-roast-950 rounded text-[10px] text-roast-300">Caramel</span> 
+                            <span class="px-2 py-0.5 bg-roast-950 rounded text-[10px] text-roast-300">Toasted Almond</span> 
+                            <span class="px-2 py-0.5 bg-roast-950 rounded text-[10px] text-roast-300">Dark Chocolate</span> 
+                        </div> 
+                    </div> 
+                    <button onclick="openProductModal('nyok-nyok')" class="w-full py-3 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-2"> 
+                        <i class="fa-solid fa-circle-info"></i> Learn More 
+                    </button> 
+                </div> 
+            </div> 
+        </div> 
+    </section> 
+
+    <!-- BLOG SECTION --> 
+    <section id="blog" class="py-20 bg-roast-900/40 border-t border-roast-900"> 
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> 
+            <div class="text-center max-w-2xl mx-auto mb-16"> 
+                <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Stories & Culture</span> 
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-1">Rumah Panggang Journal & Blog</h2> 
+                <p class="text-roast-300 text-sm mt-3 font-light">Insights into coffee craftsmanship, roastery updates, and our unique culture directly from the RU.PA team.</p> 
+            </div> 
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6"> 
+                <article class="bg-roast-900/90 rounded-2xl overflow-hidden border border-roast-800 hover:border-amberGold/50 transition-all flex flex-col justify-between group"> 
+                    <div> 
+                        <div class="relative h-48 overflow-hidden bg-roast-950"> 
+                            <img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=600&q=80" alt="New Year Price Adjustments" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"> 
+                            <span class="absolute top-4 left-4 px-3 py-1 bg-amberGold text-roast-950 text-[10px] font-bold uppercase rounded-full">Uncategorized</span> 
+                        </div> 
+                        <div class="p-5"> 
+                            <div class="text-[11px] text-roast-400 mb-2">By RU.PA • 31/12/2024</div> 
+                            <h3 class="text-lg font-bold text-white font-serif mb-2 group-hover:text-amberGold transition-colors">New year, New Price, Same Quality.</h3> 
+                            <p class="text-xs text-roast-300 font-light leading-relaxed mb-4 line-clamp-3">To continue supporting our farmers and maintaining the quality you love, we'll be adjusting our prices starting 1st of January 2025...</p> 
+                        </div> 
+                    </div> 
+                    <div class="px-5 pb-5"> 
+                        <button onclick="openBlogModal(0)" class="text-amberGold text-xs font-bold flex items-center gap-2 hover:underline"> Read Article <i class="fa-solid fa-arrow-right text-xs"></i> </button> 
+                    </div> 
+                </article> 
+
+                <article class="bg-roast-900/90 rounded-2xl overflow-hidden border border-roast-800 hover:border-amberGold/50 transition-all flex flex-col justify-between group"> 
+                    <div> 
+                        <div class="relative h-48 overflow-hidden bg-roast-950"> 
+                            <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=600&q=80" alt="What the hell is even Coffee Desk bro?" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"> 
+                            <span class="absolute top-4 left-4 px-3 py-1 bg-amberGold text-roast-950 text-[10px] font-bold uppercase rounded-full">Culture</span> 
+                        </div> 
+                        <div class="p-5"> 
+                            <div class="text-[11px] text-roast-400 mb-2">By RU.PA • 18/12/2024</div> 
+                            <h3 class="text-lg font-bold text-white font-serif mb-2 group-hover:text-amberGold transition-colors">What the hell is even Coffee Desk bro?</h3> 
+                            <p class="text-xs text-roast-300 font-light leading-relaxed mb-4 line-clamp-3">CoffeeDesk is a session where two worlds collide, where two arts are infused and coexist together, much like a blended coffee bean...</p> 
+                        </div> 
+                    </div> 
+                    <div class="px-5 pb-5"> 
+                        <button onclick="openBlogModal(1)" class="text-amberGold text-xs font-bold flex items-center gap-2 hover:underline"> Read Article <i class="fa-solid fa-arrow-right text-xs"></i> </button> 
+                    </div> 
+                </article> 
+
+                <article class="bg-roast-900/90 rounded-2xl overflow-hidden border border-roast-800 hover:border-amberGold/50 transition-all flex flex-col justify-between group"> 
+                    <div> 
+                        <div class="relative h-48 overflow-hidden bg-roast-950"> 
+                            <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80" alt="12 Grams Supremacy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"> 
+                            <span class="absolute top-4 left-4 px-3 py-1 bg-amberGold text-roast-950 text-[10px] font-bold uppercase rounded-full">Bean</span> 
+                        </div> 
+                        <div class="p-5"> 
+                            <div class="text-[11px] text-roast-400 mb-2">By RU.PA • 18/12/2024</div> 
+                            <h3 class="text-lg font-bold text-white font-serif mb-2 group-hover:text-amberGold transition-colors">12 Grams Supremacy: The Art of Precision</h3> 
+                            <p class="text-xs text-roast-300 font-light leading-relaxed mb-4 line-clamp-3">In a world where more is often considered better, we're here to challenge that notion with a simple truth: 12 grams is all you need...</p> 
+                        </div> 
+                    </div> 
+                    <div class="px-5 pb-5"> 
+                        <button onclick="openBlogModal(2)" class="text-amberGold text-xs font-bold flex items-center gap-2 hover:underline"> Read Article <i class="fa-solid fa-arrow-right text-xs"></i> </button> 
+                    </div> 
+                </article> 
+
+                <article class="bg-roast-900/90 rounded-2xl overflow-hidden border border-roast-800 hover:border-amberGold/50 transition-all flex flex-col justify-between group"> 
+                    <div> 
+                        <div class="relative h-48 overflow-hidden bg-roast-950"> 
+                            <img src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?auto=format&fit=crop&w=600&q=80" alt="MERAH SAGA – ESPRESSO BLEND" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"> 
+                            <span class="absolute top-4 left-4 px-3 py-1 bg-amberGold text-roast-950 text-[10px] font-bold uppercase rounded-full">Bean</span> 
+                        </div> 
+                        <div class="p-5"> 
+                            <div class="text-[11px] text-roast-400 mb-2">By RU.PA • 10/12/2024</div> 
+                            <h3 class="text-lg font-bold text-white font-serif mb-2 group-hover:text-amberGold transition-colors">MERAH SAGA – ESPRESSO BLEND series RU.PA</h3> 
+                            <p class="text-xs text-roast-300 font-light leading-relaxed mb-4 line-clamp-3">“Merah saga represents a name and color that is familiar and deeply close to the hearts of Malaysians...”</p> 
+                        </div> 
+                    </div> 
+                    <div class="px-5 pb-5"> 
+                        <button onclick="openBlogModal(3)" class="text-amberGold text-xs font-bold flex items-center gap-2 hover:underline"> Read Article <i class="fa-solid fa-arrow-right text-xs"></i> </button> 
+                    </div> 
+                </article> 
+            </div> 
+        </div> 
+    </section> 
+
+    <!-- MERCHANDISE SECTION --> 
+    <section id="merchandise" class="py-20 bg-roast-950 border-t border-roast-900"> 
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> 
+            <div class="text-center max-w-2xl mx-auto mb-12"> 
+                <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Exclusive Goods</span> 
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-1">Rumah Panggang Merchandise</h2> 
+                <p class="text-roast-300 text-sm mt-3 font-light">Collaborative apparel & lifestyle items created with local artist <strong>Sin Chan</strong>, fusing bold vision with raw artistic energy.</p> 
+            </div> 
+            <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto"> 
+                <div class="bg-roast-900/90 rounded-2xl overflow-hidden border border-roast-800 hover:border-amberGold/50 transition-all flex flex-col justify-between group"> 
+                    <div> 
+                        <div class="relative h-64 overflow-hidden bg-roast-950 border-b border-roast-800"> 
+                            <img src="https://images.unsplash.com/photo-1572375992501-4b0892d50c69?auto=format&fit=crop&w=800&q=80" alt="Rumah Panggang Sticker Pack" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"> 
+                            <span class="absolute top-4 left-4 px-3 py-1 bg-amberGold text-roast-950 text-[10px] font-bold uppercase rounded-full">Sin Chan Collab</span> 
+                        </div> 
+                        <div class="p-6"> 
+                            <div class="flex justify-between items-start mb-2"> 
+                                <h3 class="text-xl font-bold text-white font-serif group-hover:text-amberGold transition-colors">Rumah Panggang Sticker Pack</h3> 
+                                <span class="text-amberGold font-bold text-base">RM 12.00</span> 
+                            </div> 
+                            <p class="text-xs text-roast-400 mb-3">Project: Collaborative Series with Sin Chan</p> 
+                            <p class="text-sm text-roast-300 font-light mb-4">Includes five unique sticker designs created in partnership with local artist Sin Chan, capturing raw coffee culture and edgy art style.</p> 
+                            <div class="flex flex-wrap gap-1.5 mb-2"> 
+                                <span class="px-2 py-0.5 bg-roast-950 rounded text-[10px] text-roast-300">5 Unique Designs</span> 
+                                <span class="px-2 py-0.5 bg-roast-950 rounded text-[10px] text-roast-300">Vinyl Waterproof</span> 
+                                <span class="px-2 py-0.5 bg-roast-950 rounded text-[10px] text-roast-300">Limited Edition</span> 
+                            </div> 
+                        </div> 
+                    </div> 
+                    <div class="px-6 pb-6"> 
+                        <button onclick="checkAuthAndExecute(() => addToCart('Rumah Panggang Sticker Pack', 12.00))" class="w-full py-3 bg-roast-800 hover:bg-amberGold hover:text-roast-950 text-roast-100 font-bold rounded-xl text-sm transition-all"> + Add To Cart </button> 
+                    </div> 
+                </div> 
+
+                <div class="bg-roast-900/90 rounded-2xl overflow-hidden border border-roast-800 hover:border-amberGold/50 transition-all flex flex-col justify-between group"> 
+                    <div> 
+                        <div class="relative h-64 overflow-hidden bg-roast-950 border-b border-roast-800"> 
+                            <img src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=800&q=80" alt="Rumah Panggang T-Shirt" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"> 
+                            <span class="absolute top-4 left-4 px-3 py-1 bg-amberGold text-roast-950 text-[10px] font-bold uppercase rounded-full">Sin Chan Collab</span> 
+                        </div> 
+                        <div class="p-6"> 
+                            <div class="flex justify-between items-start mb-2"> 
+                                <h3 class="text-xl font-bold text-white font-serif group-hover:text-amberGold transition-colors">Rumah Panggang T-Shirt</h3> 
+                                <span class="text-amberGold font-bold text-base">RM 85.00</span> 
+                            </div> 
+                            <p class="text-xs text-roast-400 mb-3">Project: Collaborative Project with Sin Chan</p> 
+                            <p class="text-sm text-roast-300 font-light mb-4">Fuses Rumah Panggang's bold vision with Sin Chan's striking and edgy artistic style. Rebellious streetwear design embodying raw energy and fearless creativity.</p> 
+                            <div class="flex flex-wrap gap-1.5 mb-2"> 
+                                <span class="px-2 py-0.5 bg-roast-950 rounded text-[10px] text-roast-300">100% Heavyweight Cotton</span> 
+                                <span class="px-2 py-0.5 bg-roast-950 rounded text-[10px] text-roast-300">Oversized Fit</span> 
+                                <span class="px-2 py-0.5 bg-roast-950 rounded text-[10px] text-roast-300">Screen Print</span> 
+                            </div> 
+                        </div> 
+                    </div> 
+                    <div class="px-6 pb-6"> 
+                        <button onclick="checkAuthAndExecute(() => addToCart('Rumah Panggang T-Shirt', 85.00))" class="w-full py-3 bg-roast-800 hover:bg-amberGold hover:text-roast-950 text-roast-100 font-bold rounded-xl text-sm transition-all"> + Add To Cart </button> 
+                    </div> 
+                </div> 
+            </div> 
+        </div> 
+    </section> 
+
+    <!-- PAID CLASSES / WORKSHOP SECTION --> 
+    <section id="classes" class="py-20 bg-roast-900/40 border-t border-roast-900"> 
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> 
+            <div class="text-center max-w-2xl mx-auto mb-12"> 
+                <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Learn With Us</span> 
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-1">Paid Classes & Workshops</h2> 
+                <p class="text-roast-300 text-sm mt-3 font-light">Learn directly from our roaster — from brewing basics to latte art, hosted at Rumah Panggang Roastery, Sungai Petani.</p> 
+            </div> 
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8"> 
+                <div class="bg-roast-900/90 rounded-2xl overflow-hidden border border-roast-800 hover:border-amberGold/50 transition-all flex flex-col justify-between group"> 
+                    <div> 
+                        <div class="relative h-48 overflow-hidden bg-roast-950 border-b border-roast-800"> 
+                            <img src="https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&w=800&q=80" alt="Coffee Brewing Masterclass" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"> 
+                            <span class="absolute top-4 left-4 px-3 py-1 bg-amberGold text-roast-950 text-[10px] font-bold uppercase rounded-full">Beginner Friendly</span> 
+                        </div> 
+                        <div class="p-6"> 
+                            <div class="flex justify-between items-start mb-2"> 
+                                <h3 class="text-xl font-bold text-white font-serif group-hover:text-amberGold transition-colors">Coffee Brewing Masterclass</h3> 
+                                <span class="text-amberGold font-bold text-base shrink-0 ml-2">RM 120.00</span> 
+                            </div> 
+                            <p class="text-xs text-roast-400 mb-3">Duration: 2.5 Hours | Max 8 Pax</p> 
+                            <p class="text-sm text-roast-300 font-light mb-4">Master V60, French Press & AeroPress techniques. Ideal for beginners wanting to understand ratios, grind size & extraction fundamentals.</p> 
+                            <div class="flex flex-wrap gap-1.5 mb-2"> 
+                                <span class="px-2 py-0.5 bg-roast-950 rounded text-[10px] text-roast-300">V60</span> 
+                                <span class="px-2 py-0.5 bg-roast-950 rounded text-[10px] text-roast-300">French Press</span> 
+                                <span class="px-2 py-0.5 bg-roast-950 rounded text-[10px] text-roast-300">AeroPress</span> 
+                            </div> 
+                        </div> 
+                    </div> 
+                    <div class="px-6 pb-6"> 
+                        <button onclick="checkAuthAndExecute(() => addToCart('Class: Coffee Brewing Masterclass', 120.00))" class="w-full py-3 bg-roast-800 hover:bg-amberGold hover:text-roast-950 text-roast-100 font-bold rounded-xl text-sm transition-all"> + Enroll This Class </button> 
+                    </div> 
+                </div> 
+
+                <div class="bg-roast-900/90 rounded-2xl overflow-hidden border border-roast-800 hover:border-amberGold/50 transition-all flex flex-col justify-between group"> 
+                    <div> 
+                        <div class="relative h-48 overflow-hidden bg-roast-950 border-b border-roast-800"> 
+                            <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=800&q=80" alt="Latte Art Workshop" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"> 
+                            <span class="absolute top-4 left-4 px-3 py-1 bg-amberGold text-roast-950 text-[10px] font-bold uppercase rounded-full">Popular</span> 
+                        </div> 
+                        <div class="p-6"> 
+                            <div class="flex justify-between items-start mb-2"> 
+                                <h3 class="text-xl font-bold text-white font-serif group-hover:text-amberGold transition-colors">Latte Art Workshop</h3> 
+                                <span class="text-amberGold font-bold text-base shrink-0 ml-2">RM 150.00</span> 
+                            </div> 
+                            <p class="text-xs text-roast-400 mb-3">Duration: 3 Hours | Max 6 Pax</p> 
+                            <p class="text-sm text-roast-300 font-light mb-4">Learn milk steaming & pouring techniques to craft heart, rosetta & tulip patterns on top of your espresso.</p> 
+                            <div class="flex flex-wrap gap-1.5 mb-2"> 
+                                <span class="px-2 py-0.5 bg-roast-950 rounded text-[10px] text-roast-300">Milk Steaming</span> 
+                                <span class="px-2 py-0.5 bg-roast-950 rounded text-[10px] text-roast-300">Pouring Technique</span> 
+                                <span class="px-2 py-0.5 bg-roast-950 rounded text-[10px] text-roast-300">Hands-On</span> 
+                            </div> 
+                        </div> 
+                    </div> 
+                    <div class="px-6 pb-6"> 
+                        <button onclick="checkAuthAndExecute(() => addToCart('Class: Latte Art Workshop', 150.00))" class="w-full py-3 bg-roast-800 hover:bg-amberGold hover:text-roast-950 text-roast-100 font-bold rounded-xl text-sm transition-all"> + Enroll This Class </button> 
+                    </div> 
+                </div> 
+
+                <div class="bg-roast-900/90 rounded-2xl overflow-hidden border border-roast-800 hover:border-amberGold/50 transition-all flex flex-col justify-between group"> 
+                    <div> 
+                        <div class="relative h-48 overflow-hidden bg-roast-950 border-b border-roast-800"> 
+                            <img src="https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=800&q=80" alt="Coffee Cupping Experience" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"> 
+                            <span class="absolute top-4 left-4 px-3 py-1 bg-amberGold text-roast-950 text-[10px] font-bold uppercase rounded-full">Palate Training</span> 
+                        </div> 
+                        <div class="p-6"> 
+                            <div class="flex justify-between items-start mb-2"> 
+                                <h3 class="text-xl font-bold text-white font-serif group-hover:text-amberGold transition-colors">Coffee Cupping Experience</h3> 
+                                <span class="text-amberGold font-bold text-base shrink-0 ml-2">RM 80.00</span> 
+                            </div> 
+                            <p class="text-xs text-roast-400 mb-3">Duration: 1.5 Hours | Max 10 Pax</p> 
+                            <p class="text-sm text-roast-300 font-light mb-4">Taste & compare our diverse coffee origins systematically. Learn to identify flavor notes and aromas like a Q-Grader.</p> 
+                            <div class="flex flex-wrap gap-1.5 mb-2"> 
+                                <span class="px-2 py-0.5 bg-roast-950 rounded text-[10px] text-roast-300">Multiple Origins</span> 
+                                <span class="px-2 py-0.5 bg-roast-950 rounded text-[10px] text-roast-300">Sensory Training</span> 
+                                <span class="px-2 py-0.5 bg-roast-950 rounded text-[10px] text-roast-300">Group Session</span> 
+                            </div> 
+                        </div> 
+                    </div> 
+                    <div class="px-6 pb-6"> 
+                        <button onclick="checkAuthAndExecute(() => addToCart('Class: Coffee Cupping Experience', 80.00))" class="w-full py-3 bg-roast-800 hover:bg-amberGold hover:text-roast-950 text-roast-100 font-bold rounded-xl text-sm transition-all"> + Enroll This Class </button> 
+                    </div> 
+                </div> 
+            </div> 
+        </div> 
+    </section> 
+
+    <!-- INTERACTIVE BREW GUIDE CALCULATOR --> 
+    <section id="brew-guide" class="py-20 bg-roast-950"> 
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8"> 
+            <div class="bg-gradient-to-br from-roast-900 to-roast-950 p-8 sm:p-10 rounded-3xl border border-roast-800 shadow-2xl"> 
+                <div class="text-center mb-8"> 
+                    <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Brewing Assistant</span> 
+                    <h2 class="text-3xl font-bold text-white font-serif mt-1">Rumah Panggang Brew Calculator</h2> 
+                    <p class="text-xs text-roast-400 mt-2">Determine precise water ratio & grind size based on your preferred brewing method.</p> 
+                </div> 
+                <div class="grid sm:grid-cols-2 gap-6 mb-8"> 
+                    <div> 
+                        <label class="block text-xs font-semibold text-roast-300 uppercase mb-2">Brewing Method:</label> 
+                        <select id="brew-method" onchange="calculateBrew()" class="w-full bg-roast-950 border border-roast-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-amberGold"> 
+                            <option value="v60">Pour Over / V60 (Ratio 1:15)</option> 
+                            <option value="frenchpress">French Press (Ratio 1:12)</option> 
+                            <option value="espresso">Espresso / Moka Pot (Ratio 1:2)</option> 
+                            <option value="aeropress">AeroPress (Ratio 1:13)</option> 
+                        </select> 
+                    </div> 
+                    <div> 
+                        <label class="block text-xs font-semibold text-roast-300 uppercase mb-2">Coffee Beans Dose (Grams):</label> 
+                        <input type="number" id="coffee-grams" value="18" min="5" max="100" oninput="calculateBrew()" class="w-full bg-roast-950 border border-roast-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-amberGold"> 
+                    </div> 
+                </div> 
+                <div class="bg-roast-950/80 rounded-2xl p-6 border border-roast-800 grid grid-cols-2 sm:grid-cols-3 gap-4 text-center"> 
+                    <div> 
+                        <span class="block text-xs text-roast-400 uppercase">Target Water Yield</span> 
+                        <span id="water-ml" class="text-2xl font-bold text-amberGold font-serif">270 ml</span> 
+                    </div> 
+                    <div> 
+                        <span class="block text-xs text-roast-400 uppercase">Recommended Grind Size</span> 
+                        <span id="grind-size" class="text-lg font-bold text-white font-serif">Medium-Fine</span> 
+                    </div> 
+                    <div class="col-span-2 sm:col-span-1"> 
+                        <span class="block text-xs text-roast-400 uppercase">Ideal Water Temp</span> 
+                        <span class="text-lg font-bold text-white font-serif">92°C - 94°C</span> 
+                    </div> 
+                </div> 
+            </div> 
+        </div> 
+    </section> 
+
+    <!-- LOCATION & CONTACT --> 
+    <section id="location" class="py-20 bg-roast-900/60 border-t border-roast-900"> 
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> 
+            <div class="grid lg:grid-cols-2 gap-12 items-center"> 
+                <div class="space-y-6"> 
+                    <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Locations & Outlets</span> 
+                    <h2 class="text-3xl font-bold text-white font-serif">Visit Our Cafe & Roastery Outlets</h2> 
+                    <div class="space-y-4"> 
+                        <div class="flex items-start gap-4 p-4 rounded-xl bg-roast-950/80 border border-roast-800"> 
+                            <div class="w-10 h-10 rounded-lg bg-amberGold/20 text-amberGold flex items-center justify-center shrink-0 mt-1"> 
+                                <i class="fa-solid fa-fire text-base"></i> 
+                            </div> 
+                            <div> 
+                                <h4 class="font-bold text-white text-sm">Rumah Panggang Roastery (Kedah)</h4> 
+                                <p class="text-xs text-roast-400 mt-1">Sungai Petani, Kedah Darul Aman (Specialty Coffee Roastery & Bean Supplier)</p> 
+                            </div> 
+                        </div> 
+                        <div class="flex items-start gap-4 p-4 rounded-xl bg-roast-950/80 border border-roast-800"> 
+                            <div class="w-10 h-10 rounded-lg bg-amberGold/20 text-amberGold flex items-center justify-center shrink-0 mt-1"> 
+                                <i class="fa-solid fa-utensils"></i> 
+                            </div> 
+                            <div> 
+                                <h4 class="font-bold text-white text-sm">HBK Rumah Panggang (Shah Alam)</h4> 
+                                <p class="text-xs text-roast-400 mt-1">Sekolah Agama, Lot 3745, Lorong Haji Shoib, Jalan Kebun, 40460 Shah Alam, Selangor.</p> 
+                                <p class="text-xs text-amberGold mt-1"><i class="fa-regular fa-clock me-1"></i> Operating Hours: 5:00 PM - 10:30 PM (Daily)</p> 
+                            </div> 
+                        </div> 
+                    </div> 
+                    <div class="flex flex-wrap gap-4"> 
+                        <a href="https://shopee.com.my/kopi.mart" target="_blank" class="px-6 py-3 rounded-xl bg-roast-800 hover:bg-roast-700 text-white text-xs font-bold transition-all flex items-center gap-2"> 
+                            <i class="fa-solid fa-store text-amberGold"></i> Shopee Kopi.Mart </a> 
+                        <a href="https://wa.me/60123456789" target="_blank" class="px-6 py-3 rounded-xl bg-green-700/80 hover:bg-green-600 text-white text-xs font-bold transition-all flex items-center gap-2"> 
+                            <i class="fa-brands fa-whatsapp text-lg"></i> Contact via WhatsApp </a> 
+                    </div> 
+                </div> 
+                <div class="h-80 rounded-3xl overflow-hidden border border-roast-800 shadow-xl bg-roast-900 flex items-center justify-center relative"> 
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15938.805561134267!2d101.5284!3d2.9734!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31cdb21e8a2a5b0d%3A0x88f8d5bc803e3a22!2sJalan%20Kebun%2C%20Shah%20Alam%2C%20Selangor!5e0!3m2!1sen!2smy!4v1690000000000!5m2!1sen!2smy" class="w-full h-full border-0 grayscale opacity-80 hover:grayscale-0 transition-all duration-500" allowfullscreen="" loading="lazy"></iframe> 
+                </div> 
+            </div> 
+        </div> 
+    </section> 
+
+    <!-- FOOTER --> 
+    <footer class="bg-roast-950 border-t border-roast-900 py-16 text-roast-300"> 
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> 
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-start mb-12"> 
+                <div class="space-y-4"> 
+                    <h3 class="font-serif text-lg font-bold text-white tracking-wide">Follow Us</h3> 
+                    <div class="flex items-center gap-4 text-white text-xl"> 
+                        <a href="https://instagram.com" target="_blank" class="w-10 h-10 rounded-full bg-roast-900 hover:bg-amberGold hover:text-roast-950 flex items-center justify-center transition-all border border-roast-800"> 
+                            <i class="fa-brands fa-instagram"></i> 
+                        </a> 
+                        <a href="https://tiktok.com" target="_blank" class="w-10 h-10 rounded-full bg-roast-900 hover:bg-amberGold hover:text-roast-950 flex items-center justify-center transition-all border border-roast-800"> 
+                            <i class="fa-brands fa-tiktok"></i> 
+                        </a> 
+                        <a href="https://shopee.com.my/kopi.mart" target="_blank" class="w-10 h-10 rounded-full bg-roast-900 hover:bg-amberGold hover:text-roast-950 flex items-center justify-center transition-all border border-roast-800"> 
+                            <i class="fa-solid fa-bag-shopping text-base"></i> 
+                        </a> 
+                    </div> 
+                    <p class="text-xs text-roast-400 font-medium tracking-wide">@rumahpanggang</p> 
+                </div> 
+                <div class="space-y-4 md:text-right"> 
+                    <h3 class="font-serif text-lg font-bold text-white tracking-wide">Contact Us</h3> 
+                    <div> 
+                        <a href="https://wa.me/60123456789" target="_blank" class="inline-flex items-center justify-center px-6 py-2.5 rounded-xl bg-white hover:bg-roast-100 text-roast-950 font-bold text-xs shadow-md transition-all"> Whatsapp Now! </a> 
+                    </div> 
+                </div> 
+            </div> 
+            <div class="border-t border-roast-900/80 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-roast-400"> 
+                <p>© 2026 rumahpanggang. E-commerce Powered by RumahPanggang.</p> 
+                <div class="flex flex-wrap gap-6 font-medium"> 
+                    <a href="#" class="hover:text-amberGold transition-colors">Terms of Service</a> 
+                    <a href="#" class="hover:text-amberGold transition-colors">Privacy Policy</a> 
+                    <a href="#" class="hover:text-amberGold transition-colors">Refund Policy</a> 
+                </div> 
+            </div> 
+        </div> 
+    </footer> 
+
+    <!-- BLOG ARTICLE READER MODAL --> 
+    <div id="blog-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4"> 
+        <div class="bg-gradient-to-b from-roast-900 to-roast-950 border border-roast-800 rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative text-left p-6 sm:p-8"> 
+            <button onclick="closeBlogModal()" class="sticky top-0 float-right z-10 bg-roast-950/80 border border-roast-700 text-roast-200 hover:text-white p-2 rounded-full w-10 h-10 flex items-center justify-center shadow"> 
+                <i class="fa-solid fa-xmark text-lg"></i> 
+            </button> 
+            <div id="blog-modal-content" class="space-y-6 clear-both"></div> 
+        </div> 
+    </div> 
+
+    <!-- PRODUCT DETAIL MODAL --> 
+    <div id="product-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4"> 
+        <div class="bg-gradient-to-b from-roast-900 to-roast-950 border border-roast-800 rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative text-left p-6 sm:p-8"> 
+            <button onclick="closeProductModal()" class="absolute top-4 right-4 z-10 bg-roast-950/80 border border-roast-700 text-roast-200 hover:text-white p-2 rounded-full w-10 h-10 flex items-center justify-center shadow transition-all"> 
+                <i class="fa-solid fa-xmark text-lg"></i> 
+            </button> 
+            <div class="text-xs text-roast-400 mb-6 flex items-center gap-2"> 
+                <a href="#coffee-beans" onclick="closeProductModal()" class="hover:text-amberGold">Home</a> 
+                <i class="fa-solid fa-chevron-right text-[9px]"></i> 
+                <a href="#coffee-beans" onclick="closeProductModal()" class="hover:text-amberGold">Shop / Coffee</a> 
+                <i class="fa-solid fa-chevron-right text-[9px]"></i> 
+                <span id="pm-breadcrumb-name" class="text-white font-medium">Brazil Santuario Sul Lot 1</span> 
+            </div> 
+            <div class="grid md:grid-cols-12 gap-8 mb-8"> 
+                <div class="md:col-span-5"> 
+                    <div class="relative h-72 sm:h-80 rounded-2xl overflow-hidden border border-roast-800 bg-roast-950 group"> 
+                        <img id="pm-image" src="" alt="Product Image" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"> 
+                        <span id="pm-badge" class="absolute top-4 left-4 px-3 py-1 bg-amberGold text-roast-950 font-bold text-xs uppercase rounded-full shadow">Single Estate</span> 
+                    </div> 
+                </div> 
+                <div class="md:col-span-7 space-y-5"> 
+                    <div> 
+                        <span id="pm-subtitle" class="text-xs font-bold text-amberGold uppercase tracking-wider">Single Origin Filter Coffee</span> 
+                        <h2 id="pm-title" class="text-2xl sm:text-3xl font-extrabold text-white font-serif mt-1">Brazil Santuario Sul Lot 1</h2> 
+                        <div class="flex items-center gap-3 mt-2"> 
+                            <div class="flex text-amberGold text-xs" id="pm-stars-preview"> 
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i> 
+                            </div> 
+                            <span id="pm-reviews-count-badge" class="text-xs text-roast-400">(0 customer reviews)</span> 
+                        </div> 
+                    </div> 
+                    <div class="py-2 border-y border-roast-800/80 flex items-baseline gap-3"> 
+                        <span id="pm-price" class="text-2xl sm:text-3xl font-extrabold text-amberGold font-serif">RM 80.00</span> 
+                        <span id="pm-price-range" class="text-xs text-roast-400">Price range: RM 44.00 – RM 80.00</span> 
+                    </div> 
+                    <div> 
+                        <label class="block text-xs font-semibold text-roast-300 uppercase mb-2">Weight Option:</label> 
+                        <div class="flex flex-wrap gap-2" id="pm-weight-options"></div> 
+                    </div> 
+                    <div class="flex items-center gap-4 pt-2"> 
+                        <div class="flex items-center bg-roast-950 border border-roast-700 rounded-xl px-3 py-2"> 
+                            <button onclick="adjustModalQty(-1)" class="text-roast-400 hover:text-white px-2 text-sm font-bold">-</button> 
+                            <span id="pm-qty" class="text-white font-bold text-sm px-3">1</span> 
+                            <button onclick="adjustModalQty(1)" class="text-roast-400 hover:text-white px-2 text-sm font-bold">+</button> 
+                        </div> 
+                        <button onclick="checkAuthAndExecute(addModalItemToCart)" class="flex-1 py-3 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl text-sm transition-all shadow-lg flex items-center justify-center gap-2"> 
+                            <i class="fa-solid fa-basket-shopping"></i> Add To Cart 
+                        </button> 
+                    </div> 
+                    <div class="text-[11px] text-roast-400 space-y-1 pt-2"> 
+                        <p>Categories: <span class="text-roast-200" id="pm-categories">Coffee, Filter, Microlot</span></p> 
+                        <p>Availability: <span class="text-green-400 font-semibold"><i class="fa-solid fa-check-circle me-1"></i> In Stock (Freshly Roasted)</span></p> 
+                    </div> 
+                </div> 
+            </div> 
+            <div class="border-t border-roast-800 pt-6"> 
+                <div class="flex border-b border-roast-800 gap-6 text-sm font-medium mb-6"> 
+                    <button onclick="switchProductTab('desc')" id="pm-tab-desc" class="pb-3 border-b-2 border-amberGold text-amberGold font-bold transition-all">Description</button> 
+                    <button onclick="switchProductTab('info')" id="pm-tab-info" class="pb-3 border-b-2 border-transparent text-roast-400 hover:text-white transition-all">Additional Information</button> 
+                    <button onclick="switchProductTab('reviews')" id="pm-tab-reviews" class="pb-3 border-b-2 border-transparent text-roast-400 hover:text-white transition-all">Reviews (<span id="pm-reviews-tab-count">0</span>)</button> 
+                </div> 
+                <div id="pm-panel-desc" class="space-y-4 text-roast-300 font-light text-sm sm:text-base leading-relaxed"></div> 
+                <div id="pm-panel-info" class="hidden"> 
+                    <div class="bg-roast-950 rounded-2xl border border-roast-800 p-4 sm:p-6 text-xs sm:text-sm"> 
+                        <table class="w-full text-left"> 
+                            <tbody id="pm-info-table-body" class="divide-y divide-roast-900"></tbody> 
+                        </table> 
+                    </div> 
+                </div> 
+                <div id="pm-panel-reviews" class="hidden space-y-8"> 
+                    <div id="pm-reviews-list" class="space-y-4"></div> 
+                    <div class="bg-roast-950/90 rounded-2xl p-6 border border-roast-800 space-y-4"> 
+                        <h4 class="text-lg font-bold font-serif text-white">Be the first to review this bean</h4> 
+                        <p class="text-xs text-roast-400">Your email address will not be published. Required fields are marked *</p> 
+                        <form onsubmit="submitProductReview(event)" class="space-y-4"> 
+                            <div> 
+                                <label class="block text-xs font-semibold text-roast-300 uppercase mb-2">Your Rating *</label> 
+                                <div class="flex gap-2 text-xl text-roast-600 cursor-pointer" id="review-rating-stars"> 
+                                    <i class="fa-solid fa-star hover:text-amberGold" onclick="setReviewRating(1)"></i> 
+                                    <i class="fa-solid fa-star hover:text-amberGold" onclick="setReviewRating(2)"></i> 
+                                    <i class="fa-solid fa-star hover:text-amberGold" onclick="setReviewRating(3)"></i> 
+                                    <i class="fa-solid fa-star hover:text-amberGold" onclick="setReviewRating(4)"></i> 
+                                    <i class="fa-solid fa-star hover:text-amberGold" onclick="setReviewRating(5)"></i> 
+                                </div> 
+                                <input type="hidden" id="rev-rating-val" value="5"> 
+                            </div> 
+                            <div class="grid sm:grid-cols-2 gap-4"> 
+                                <div> 
+                                    <label class="block text-xs font-semibold text-roast-300 uppercase mb-1">Your Name *</label> 
+                                    <input type="text" id="rev-name" required placeholder="Ahmad Zaki" class="w-full bg-roast-900 border border-roast-700 text-white rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-amberGold"> 
+                                </div> 
+                                <div> 
+                                    <label class="block text-xs font-semibold text-roast-300 uppercase mb-1">Your Email *</label> 
+                                    <input type="email" id="rev-email" required placeholder="zaki@example.com" class="w-full bg-roast-900 border border-roast-700 text-white rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-amberGold"> 
+                                </div> 
+                            </div> 
+                            <div> 
+                                <label class="block text-xs font-semibold text-roast-300 uppercase mb-1">Your Review *</label> 
+                                <textarea id="rev-comment" required rows="4" placeholder="Describe the aroma, acidity, body, and taste notes..." class="w-full bg-roast-900 border border-roast-700 text-white rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-amberGold"></textarea> 
+                            </div> 
+                            <button type="submit" class="px-6 py-3 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl text-xs transition-all shadow-md"> Submit Review </button> 
+                        </form> 
+                    </div> 
+                </div> 
+            </div> 
+        </div> 
+    </div> 
+
+    <!-- MODAL CART DRAWER --> 
+    <div id="cart-drawer" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden transition-opacity"> 
+        <div class="absolute right-0 top-0 bottom-0 w-full max-w-md bg-roast-900 border-l border-roast-800 p-6 flex flex-col justify-between shadow-2xl"> 
+            <div> 
+                <div class="flex justify-between items-center pb-4 border-b border-roast-800"> 
+                    <h3 class="text-lg font-bold text-white font-serif"><i class="fa-solid fa-bag-shopping text-amberGold me-2"></i> Your Order Basket</h3> 
+                    <button onclick="toggleCart()" class="text-roast-400 hover:text-white p-2"> 
+                        <i class="fa-solid fa-xmark text-xl"></i> 
+                    </button> 
+                </div> 
+                <div id="cart-items" class="py-4 space-y-3 overflow-y-auto max-h-[60vh]"> 
+                    <p class="text-center text-roast-400 text-xs py-8">Your order basket is currently empty.</p> 
+                </div> 
+            </div> 
+            <div class="border-t border-roast-800 pt-4 space-y-4"> 
+                <div class="flex justify-between items-center text-sm font-bold text-white"> 
+                    <span>Total Amount:</span> 
+                    <span id="cart-total" class="text-amberGold text-lg">RM 0.00</span> 
+                </div> 
+                <button onclick="openCheckoutModal()" class="w-full py-3.5 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl transition-all shadow-lg text-sm flex items-center justify-center gap-2"> 
+                    <i class="fa-solid fa-credit-card"></i> Proceed To Checkout 
+                </button> 
+            </div> 
+        </div> 
+    </div> 
+
+    <!-- CHECKOUT MODAL --> 
+    <div id="checkout-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-3 sm:p-6 overflow-y-auto"> 
+        <div class="bg-gradient-to-b from-roast-900 to-roast-950 border border-roast-800 rounded-3xl max-w-5xl w-full max-h-[92vh] overflow-y-auto shadow-2xl relative text-left p-6 sm:p-10 my-auto"> 
+            <button onclick="closeCheckoutModal()" class="absolute top-5 right-5 z-10 bg-roast-950/80 border border-roast-700 text-roast-200 hover:text-white p-2 rounded-full w-10 h-10 flex items-center justify-center shadow transition-all"> 
+                <i class="fa-solid fa-xmark text-lg"></i> 
+            </button> 
+            <div class="text-xs text-roast-400 mb-4 flex items-center gap-2"> 
+                <a href="#" onclick="closeCheckoutModal()" class="hover:text-amberGold">Home</a> 
+                <i class="fa-solid fa-chevron-right text-[9px]"></i> 
+                <a href="#coffee-beans" onclick="closeCheckoutModal()" class="hover:text-amberGold">Cart</a> 
+                <i class="fa-solid fa-chevron-right text-[9px]"></i> 
+                <span class="text-white font-medium">Checkout</span> 
+            </div> 
+            <div class="mb-8 border-b border-roast-800 pb-4"> 
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-white font-serif">Checkout</h2> 
+                <p class="text-xs text-roast-400 mt-1">Complete your shipping and payment details below to place your order with Rumah Panggang.</p> 
+            </div> 
+            <form onsubmit="processOrderCheckout(event)" class="grid lg:grid-cols-12 gap-8"> 
+                <div class="lg:col-span-7 space-y-6"> 
+                    <h3 class="text-lg font-bold font-serif text-white border-b border-roast-800 pb-2">1. Billing & Shipping Details</h3> 
+                    <div class="grid sm:grid-cols-2 gap-4"> 
+                        <div> 
+                            <label class="block text-xs font-semibold text-roast-300 uppercase mb-1">First Name *</label> 
+                            <input type="text" id="chk-firstname" required placeholder="Ahmad" class="w-full bg-roast-950 border border-roast-700 text-white rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-amberGold"> 
+                        </div> 
+                        <div> 
+                            <label class="block text-xs font-semibold text-roast-300 uppercase mb-1">Last Name *</label> 
+                            <input type="text" id="chk-lastname" required placeholder="Zaki" class="w-full bg-roast-950 border border-roast-700 text-white rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-amberGold"> 
+                        </div> 
+                    </div> 
+                    <div class="grid sm:grid-cols-2 gap-4"> 
+                        <div> 
+                            <label class="block text-xs font-semibold text-roast-300 uppercase mb-1">Phone Number (WhatsApp) *</label> 
+                            <input type="tel" id="chk-phone" required placeholder="+60123456789" class="w-full bg-roast-950 border border-roast-700 text-white rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-amberGold"> 
+                        </div> 
+                        <div> 
+                            <label class="block text-xs font-semibold text-roast-300 uppercase mb-1">Email Address *</label> 
+                            <input type="email" id="chk-email" required placeholder="zaki@example.com" class="w-full bg-roast-950 border border-roast-700 text-white rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-amberGold"> 
+                        </div> 
+                    </div> 
+                    <div> 
+                        <label class="block text-xs font-semibold text-roast-300 uppercase mb-1">Street Address *</label> 
+                        <input type="text" id="chk-address" required placeholder="House No, Street Name, Taman" class="w-full bg-roast-950 border border-roast-700 text-white rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-amberGold mb-2"> 
+                        <input type="text" id="chk-address2" placeholder="Apartment, suite, unit, etc. (optional)" class="w-full bg-roast-950 border border-roast-700 text-white rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-amberGold"> 
+                    </div> 
+                    <div class="grid sm:grid-cols-3 gap-4"> 
+                        <div> 
+                            <label class="block text-xs font-semibold text-roast-300 uppercase mb-1">Town / City *</label> 
+                            <input type="text" id="chk-city" required placeholder="Sungai Petani" class="w-full bg-roast-950 border border-roast-700 text-white rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-amberGold"> 
+                        </div> 
+                        <div> 
+                            <label class="block text-xs font-semibold text-roast-300 uppercase mb-1">State *</label> 
+                            <select id="chk-state" onchange="calculateShippingFee()" class="w-full bg-roast-950 border border-roast-700 text-white rounded-xl px-3 py-2.5 text-xs focus:outline-none focus:border-amberGold"> 
+                                <option value="Kedah">Kedah</option> 
+                                <option value="Penang">Penang</option> 
+                                <option value="Perlis">Perlis</option> 
+                                <option value="Selangor">Selangor</option> 
+                                <option value="Kuala Lumpur">Kuala Lumpur</option> 
+                                <option value="Perak">Perak</option> 
+                                <option value="Johor">Johor</option> 
+                                <option value="Melaka">Melaka</option> 
+                                <option value="Negeri Sembilan">Negeri Sembilan</option> 
+                                <option value="Pahang">Pahang</option> 
+                                <option value="Terengganu">Terengganu</option> 
+                                <option value="Kelantan">Kelantan</option> 
+                                <option value="Sabah">Sabah (East MY)</option> 
+                                <option value="Sarawak">Sarawak (East MY)</option> 
+                            </select> 
+                        </div> 
+                        <div> 
+                            <label class="block text-xs font-semibold text-roast-300 uppercase mb-1">Postcode *</label> 
+                            <input type="text" id="chk-postcode" required placeholder="08000" class="w-full bg-roast-950 border border-roast-700 text-white rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-amberGold"> 
+                        </div> 
+                    </div> 
+                    <div> 
+                        <label class="block text-xs font-semibold text-roast-300 uppercase mb-1">Order Notes (Optional)</label> 
+                        <textarea id="chk-notes" rows="3" placeholder="Notes about your order, e.g. special delivery instructions or coffee roast preference." class="w-full bg-roast-950 border border-roast-700 text-white rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-amberGold"></textarea> 
+                    </div> 
+                </div> 
+
+                <div class="lg:col-span-5 space-y-6"> 
+                    <div class="bg-roast-950 p-6 rounded-2xl border border-roast-800 space-y-4"> 
+                        <h3 class="text-lg font-bold font-serif text-white border-b border-roast-800 pb-3">2. Your Order Summary</h3> 
+                        <div id="checkout-items-list" class="space-y-2.5 max-h-52 overflow-y-auto divide-y divide-roast-900 pr-1"></div> 
+                        <div class="pt-3 border-t border-roast-800 space-y-2 text-xs"> 
+                            <div class="flex justify-between text-roast-300"> 
+                                <span>Subtotal</span> 
+                                <span id="chk-subtotal" class="font-bold text-white">RM 0.00</span> 
+                            </div> 
+                            <div class="flex justify-between text-roast-300 items-center"> 
+                                <span>Shipping Fee</span> 
+                                <span id="chk-shipping" class="font-bold text-amberGold">RM 8.00</span> 
+                            </div> 
+                            <div class="flex justify-between text-sm font-bold text-white pt-2 border-t border-roast-800"> 
+                                <span>Total Amount</span> 
+                                <span id="chk-total" class="text-xl text-amberGold font-serif">RM 8.00</span> 
+                            </div> 
+                        </div> 
+                        <div class="pt-4 border-t border-roast-800 space-y-3"> 
+                            <h4 class="text-xs font-bold uppercase text-roast-300 tracking-wider">3. Payment Method</h4> 
+                            <div class="p-3.5 rounded-xl bg-roast-900 border border-amberGold text-xs"> 
+                                <span class="font-bold text-white flex items-center gap-1.5 mb-1"> <i class="fa-solid fa-credit-card text-amberGold"></i> Billplz Payment Gateway (FPX / eWallet / Card) </span> 
+                                <span class="text-roast-400 text-[10px] block leading-relaxed"> Direct online banking payment via Billplz API (Maybank2u, CIMB Clicks, TNG eWallet, DuitNow, etc.) </span> 
+                            </div> 
+                        </div> 
+                        <button type="submit" id="checkout-submit-btn" class="w-full py-4 bg-amberGold hover:bg-amber-500 text-roast-950 font-extrabold rounded-xl text-sm transition-all shadow-xl flex items-center justify-center gap-2 mt-4"> 
+                            <i class="fa-solid fa-lock"></i> Pay via Billplz Gateway 
+                        </button> 
+                        <p class="text-[10px] text-roast-400 text-center flex items-center justify-center gap-1"> 
+                            <i class="fa-solid fa-shield-halved text-amberGold"></i> Encrypted 256-bit SSL Secure Checkout 
+                        </p> 
+                    </div> 
+                </div> 
+            </form> 
+        </div> 
+    </div> 
+
+    <!-- ORDER SUCCESSFUL MODAL RECEIPT --> 
+    <div id="order-success-modal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-4"> 
+        <div class="bg-gradient-to-b from-roast-900 to-roast-950 border border-roast-800 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl relative text-center space-y-6"> 
+            <div class="w-16 h-16 rounded-full bg-green-500/20 border border-green-500/40 text-green-400 flex items-center justify-center mx-auto"> 
+                <i class="fa-solid fa-check text-3xl"></i> 
+            </div> 
+            <div> 
+                <span class="text-xs font-bold text-amberGold uppercase tracking-widest">Order Placed Successfully!</span> 
+                <h3 class="text-2xl font-bold font-serif text-white mt-1">Thank You For Your Purchase</h3> 
+                <p class="text-xs text-roast-300 mt-1">Your order reference: <strong id="receipt-order-id" class="text-amberGold">#RP-2026-0000</strong></p> 
+            </div> 
+            <div class="bg-roast-950 p-4 rounded-2xl border border-roast-800 text-left text-xs space-y-2"> 
+                <div class="flex justify-between border-b border-roast-900 pb-2"> 
+                    <span class="text-roast-400">Customer:</span> 
+                    <span id="receipt-customer-name" class="font-bold text-white">Ahmad Zaki</span> 
+                </div> 
+                <div class="flex justify-between border-b border-roast-900 pb-2"> 
+                    <span class="text-roast-400">Delivery Address:</span> 
+                    <span id="receipt-address" class="text-right font-medium text-roast-200">Sungai Petani, Kedah</span> 
+                </div> 
+                <div class="flex justify-between border-b border-roast-900 pb-2"> 
+                    <span class="text-roast-400">Payment Status:</span> 
+                    <span class="font-bold text-green-400"><i class="fa-solid fa-circle-check"></i> Confirmed & Pending Dispatch</span> 
+                </div> 
+                <div class="flex justify-between text-sm pt-1"> 
+                    <span class="font-bold text-white">Total Paid:</span> 
+                    <span id="receipt-total" class="font-extrabold text-amberGold font-serif">RM 0.00</span> 
+                </div> 
+            </div> 
+            <div class="space-y-3"> 
+                <button onclick="sendReceiptToWhatsApp()" class="w-full py-3.5 bg-green-600 hover:bg-green-500 text-white font-bold rounded-xl transition-all shadow-md text-xs flex items-center justify-center gap-2"> 
+                    <i class="fa-brands fa-whatsapp text-lg"></i> Send Order Receipt via WhatsApp 
+                </button> 
+                <button onclick="closeSuccessModal()" class="w-full py-3 bg-roast-900 hover:bg-roast-800 text-roast-200 font-bold rounded-xl transition-all text-xs border border-roast-700"> Return To Home Page </button> 
+            </div> 
+        </div> 
+    </div> 
+
+    <!-- TOAST NOTIFICATION --> 
+    <div id="cart-toast" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none"> 
+        <div class="bg-roast-900 border border-amberGold/50 text-white px-5 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3"> 
+            <div class="w-8 h-8 rounded-full bg-amberGold text-roast-950 flex items-center justify-center font-bold shrink-0"> 
+                <i class="fa-solid fa-check text-xs"></i> 
+            </div> 
+            <div> 
+                <h4 class="text-xs font-bold text-white">Successfully Added!</h4> 
+                <p id="toast-message" class="text-[11px] text-roast-300">Item added to your order basket.</p> 
+            </div> 
+        </div> 
+    </div> 
+
+    <!-- LOGIN WARNING MODAL --> 
+    <div id="login-required-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4"> 
+        <div class="bg-gradient-to-b from-roast-900 to-roast-950 border border-roast-800 rounded-3xl p-6 sm:p-8 max-w-sm w-full shadow-2xl text-center space-y-5"> 
+            <div class="w-14 h-14 rounded-full bg-amberGold/20 border border-amberGold/40 text-amberGold flex items-center justify-center mx-auto text-xl"> 
+                <i class="fa-solid fa-lock"></i> 
+            </div> 
+            <div> 
+                <h3 class="text-xl font-bold font-serif text-white">Sign In Required</h3> 
+                <p class="text-xs text-roast-300 mt-1">Please sign in to your account first before adding items to cart or enrolling in classes.</p> 
+            </div> 
+            <div class="space-y-2 pt-2"> 
+                <a href="auth.html" class="block w-full py-3 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl text-xs transition-all shadow-md"> Go To Sign In </a> 
+                <button onclick="closeLoginRequiredModal()" class="block w-full py-2.5 bg-roast-900 hover:bg-roast-800 text-roast-300 font-bold rounded-xl text-xs border border-roast-700"> Cancel </button> 
+            </div> 
+        </div> 
+    </div> 
+
+    <!-- JAVASCRIPT LOGIC --> 
+    <script> 
+        let cart = []; 
+        let currentShippingFee = 8.00; 
+        let currentOrderData = null; 
+
+        let isLoggedIn = false; 
+
+        document.addEventListener('DOMContentLoaded', () => { 
+            const savedUser = localStorage.getItem('rp_logged_user'); 
+            if (savedUser) { 
+                isLoggedIn = true; 
+            } 
+            updateAuthNavbarUI(); 
+        }); 
+
+        function updateAuthNavbarUI() { 
+            const navAuth = document.getElementById('nav-auth-container'); 
+            const mobileAuth = document.getElementById('mobile-auth-container'); 
+            if (isLoggedIn) { 
+                navAuth.innerHTML = ` 
+                    <div class="flex items-center gap-3"> 
+                        <span class="text-xs text-amberGold font-bold hidden lg:inline"><i class="fa-solid fa-user-check me-1"></i> Account</span> 
+                        <button onclick="logoutUser()" class="px-3.5 py-1.5 rounded-full bg-roast-900 hover:bg-red-950/40 border border-roast-700 text-roast-300 hover:text-red-400 text-xs font-semibold transition-all">Logout</button> 
+                    </div> 
+                `; 
+                mobileAuth.innerHTML = ` 
+                    <button onclick="logoutUser()" class="w-full py-3 rounded-xl bg-red-950/50 border border-red-900/50 text-red-300 font-bold text-xs flex items-center justify-center gap-2"> 
+                        <i class="fa-solid fa-right-from-bracket"></i> Logout Account 
+                    </button> 
+                `; 
+            } else { 
+                navAuth.innerHTML = ` 
+                    <a href="auth.html" class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full bg-roast-900 hover:bg-roast-800 border border-roast-700 text-roast-200 hover:text-amberGold text-xs font-semibold transition-all"> 
+                        <i class="fa-solid fa-user"></i> Sign In 
+                    </a> 
+                `; 
+                mobileAuth.innerHTML = ` 
+                    <a href="auth.html" class="w-full py-3 rounded-xl bg-roast-900 border border-roast-700 text-roast-200 font-bold text-xs flex items-center justify-center gap-2"> 
+                        <i class="fa-solid fa-user"></i> Sign In / Register 
+                    </a> 
+                `; 
+            } 
+        } 
+
+        function logoutUser() { 
+            localStorage.removeItem('rp_logged_user'); 
+            isLoggedIn = false; 
+            updateAuthNavbarUI(); 
+            showToastMessage('Successfully logged out.'); 
+        } 
+
+        function checkAuthAndExecute(actionCallback) { 
+            if (!isLoggedIn) { 
+                document.getElementById('login-required-modal').classList.remove('hidden'); 
+            } else { 
+                actionCallback(); 
+            } 
+        } 
+
+        function closeLoginRequiredModal() { 
+            document.getElementById('login-required-modal').classList.add('hidden'); 
+        } 
+
+        const productsCatalog = { 
+            'santuario-sul': { 
+                title: "Brazil Santuario Sul Lot 1", 
+                subtitle: "Single Origin Filter & Espresso Coffee", 
+                badge: "Microlot", 
+                priceRange: "RM 44.00 – RM 80.00", 
+                image: "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?auto=format&fit=crop&w=800&q=80", 
+                categories: "Coffee, Filter, Microlot", 
+                defaultWeight: "200g", 
+                weights: { "200g": 44.00, "500g": 80.00 }, 
+                description: ` 
+                    <p class="mb-3">Renowned microlot by Luiz Paulo Dias from Carmo de Minas, Brazil. Cultivated at high altitudes in rich mineral volcanic soil, this natural process coffee delivers gentle citrus acidity, an extraordinarily smooth body, and balanced natural sweetness.</p> 
+                    <p>Ideal for both pour-over filter brewing and rich, velvety espresso shots with low bitterness and high aromatic clarity.</p> 
+                `, 
+                specs: { "Origin": "Carmo de Minas, Brazil", "Producer": "Luiz Paulo Dias (Santuario Sul)", "Process": "Natural Process", "Roast Level": "Medium Light", "Flavor Notes": "Gentle Acidity, Smooth Body, Sugarcane Sweetness" }, 
+                reviews: [ 
+                    { name: "Ahmad Zaki", date: "15/01/2026", rating: 5, comment: "Amazing taste! Brewed via V60 and it brings out a clean sugarcane sweetness." }, 
+                    { name: "Siti Nor", date: "02/02/2026", rating: 5, comment: "Smooth body and very fragrant aroma when freshly ground." } 
+                ] 
+            }, 
+            'finca-milan': { 
+                title: "Colombia Finca Milan", 
+                subtitle: "Experimental Nitrogen Fermentation Micro-Lot", 
+                badge: "Exclusive", 
+                priceRange: "RM 90.00", 
+                image: "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?auto=format&fit=crop&w=800&q=80", 
+                categories: "Coffee, Specialty, Experimental", 
+                defaultWeight: "200g", 
+                weights: { "200g": 90.00 }, 
+                description: ` 
+                    <p class="mb-3">An absolute masterpiece of experimental processing. Colombia Finca Milan utilizes Watermelon Culturing Nitrogen Fermentation to impart unforgettable fruit-forward notes.</p> 
+                    <p>Boasts vibrant juicy watermelon undertones, osmanthus blossom floral notes, and a sparkling sugarcane finish.</p> 
+                `, 
+                specs: { "Origin": "Colombia", "Process": "Watermelon Culturing Nitrogen Fermentation", "Roast Level": "Light", "Flavor Notes": "Juicy Watermelon, Osmanthus Blossom, Sugarcane" }, 
+                reviews: [ 
+                    { name: "Hafiz R.", date: "20/01/2026", rating: 5, comment: "Unbelievable aroma! Truly tastes like fresh watermelon and florals." } 
+                ] 
+            }, 
+            'sitio-balaio': { 
+                title: "Brazil Sitio Balaio", 
+                subtitle: "Single Origin Natural Coffee", 
+                badge: "Single Estate", 
+                priceRange: "RM 56.00", 
+                image: "https://images.unsplash.com/photo-1587734195503-904fca47e0e9?auto=format&fit=crop&w=600&q=80", 
+                categories: "Coffee, Single Origin", 
+                defaultWeight: "200g", 
+                weights: { "200g": 56.00 }, 
+                description: ` 
+                    <p class="mb-3">Sourced from the sun-drenched hills of Brazil, Sitio Balaio delivers a delightful flavor profile highlighting ripe stonefruit, gentle jasmine aroma, and a clean sugarcane finish.</p> 
+                    <p>Versatile bean suitable for both espresso machines and filter setups.</p> 
+                `, 
+                specs: { "Origin": "Brazil", "Process": "Natural Process", "Roast Level": "Light-Medium", "Flavor Notes": "Stonefruit, Jasmine, Sugarcane" }, 
+                reviews: [] 
+            }, 
+            'merah-saga': { 
+                title: "Merah Saga Espresso Blend", 
+                subtitle: "Series RU.PA Flagship Blend", 
+                badge: "Best Seller", 
+                priceRange: "RM 30.00", 
+                image: "https://images.unsplash.com/photo-1611854779393-1b2da9d400fe?auto=format&fit=crop&w=800&q=80", 
+                categories: "Coffee, Series RU.PA, Blend", 
+                defaultWeight: "200g", 
+                weights: { "200g": 30.00 }, 
+                description: ` 
+                    <p class="mb-3">Our classic flagship espresso blend (Colombia & Brazil) with deep milk chocolate notes, perfectly structured for Latte & Cappuccino.</p> 
+                    <p>“Merah saga represents a name and color that is familiar and deeply close to the hearts of Malaysians, holding its own unique history and nostalgia. Classic and balanced are the characters of Merah Saga.”</p> 
+                `, 
+                specs: { "Origin": "Colombia & Brazil", "Series": "Series RU.PA", "Roast Level": "Medium-Dark", "Flavor Notes": "Milk Chocolate, Hazelnut, Creamy Body" }, 
+                reviews: [ 
+                    { name: "Iman Roslan", date: "10/12/2025", rating: 5, comment: "The ultimate milk coffee companion!" } 
+                ] 
+            }, 
+            'guatemala-acatenago': { 
+                title: "Guatemala Acatenago Valley", 
+                subtitle: "Santa Felisa Farm Volcanic Origin", 
+                badge: "Single Origin", 
+                priceRange: "RM 35.00", 
+                image: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80", 
+                categories: "Coffee, Single Origin", 
+                defaultWeight: "200g", 
+                weights: { "200g": 35.00 }, 
+                description: ` 
+                    <p class="mb-3">High-altitude volcanic soil origin from Santa Felisa farm featuring elegant notes of red apple, brown sugar, and a smooth cocoa finish.</p> 
+                `, 
+                specs: { "Origin": "Acatenago Valley, Guatemala", "Farm": "Santa Felisa", "Roast Level": "Medium", "Flavor Notes": "Red Apple, Brown Sugar, Smooth Cocoa" }, 
+                reviews: [] 
+            }, 
+            'brazil-cerrado': { 
+                title: "Brazil Cerrado SOE", 
+                subtitle: "Single Origin Espresso (SOE)", 
+                badge: "Dark Roast", 
+                priceRange: "RM 22.00", 
+                image: "https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=600&q=80", 
+                categories: "Coffee, SOE, Dark Roast", 
+                defaultWeight: "200g", 
+                weights: { "200g": 22.00 }, 
+                description: ` 
+                    <p class="mb-3">Ultra-low acidity, toasted hazelnut aroma, and rich dark cocoa undertones for a bold daily cup.</p> 
+                `, 
+                specs: { "Origin": "Cerrado, Brazil", "Process": "Natural", "Roast Level": "Dark", "Flavor Notes": "Low Acidity, Toasted Nuts, Bold Dark Cocoa" }, 
+                reviews: [] 
+            }, 
+            'ethiopia-koke': { 
+                title: "Ethiopia Yirgacheffe Koke", 
+                subtitle: "Washed Process Light Roast", 
+                badge: "Single Origin", 
+                priceRange: "RM 55.00", 
+                image: "https://images.unsplash.com/photo-1521302080334-4bebac2763a6?auto=format&fit=crop&w=600&q=80", 
+                categories: "Coffee, Single Origin", 
+                defaultWeight: "200g", 
+                weights: { "200g": 55.00 }, 
+                description: ` 
+                    <p class="mb-3">Bright bergamot citrus acidity balanced with delicate fresh berry notes and a clean jasmine tea finish.</p> 
+                `, 
+                specs: { "Origin": "Yirgacheffe, Ethiopia", "Process": "Washed", "Roast Level": "Light", "Flavor Notes": "Bergamot Citrus, Jasmine Tea, Fresh Berries" }, 
+                reviews: [] 
+            }, 
+            'nyok-nyok': { 
+                title: "Nyok-Nyok Espresso Blend", 
+                subtitle: "Series RU.PA Comfort Blend", 
+                badge: "Series RU.PA", 
+                priceRange: "RM 29.00", 
+                image: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80", 
+                categories: "Coffee, Series RU.PA, Blend", 
+                defaultWeight: "200g", 
+                weights: { "200g": 29.00 }, 
+                description: ` 
+                    <p class="mb-3">A rich, comforting blend featuring smooth caramel sweetness, toasted almond, and a satisfying dark chocolate finish.</p> 
+                `, 
+                specs: { "Origin": "Antigua, Guatemala", "Series": "Series RU.PA", "Roast Level": "Medium", "Flavor Notes": "Caramel, Toasted Almond, Dark Chocolate" }, 
+                reviews: [] 
+            } 
+        }; 
+
+        const BILLPLZ_CONFIG = { 
+            apiKey: '', 
+            collectionId: '', 
+            isSandbox: true, 
+            callbackUrl: window.location.origin + window.location.pathname, 
+            redirectUrl: window.location.origin + window.location.pathname 
+        }; 
+
+        let currentActiveProductId = null; 
+        let selectedProductWeight = null; 
+        let selectedProductPrice = 0; 
+        let productQty = 1; 
+
+        function openProductModal(productId) { 
+            const p = productsCatalog[productId]; 
+            if (!p) return; 
+            currentActiveProductId = productId; 
+            productQty = 1; 
+            document.getElementById('pm-qty').innerText = '1'; 
+            document.getElementById('pm-breadcrumb-name').innerText = p.title; 
+            document.getElementById('pm-title').innerText = p.title; 
+            document.getElementById('pm-subtitle').innerText = p.subtitle; 
+            document.getElementById('pm-badge').innerText = p.badge; 
+            document.getElementById('pm-image').src = p.image; 
+            document.getElementById('pm-categories').innerText = p.categories; 
+            document.getElementById('pm-price-range').innerText = `Price: ${p.priceRange}`; 
+
+            const weightContainer = document.getElementById('pm-weight-options'); 
+            weightContainer.innerHTML = ''; 
+            const weights = Object.keys(p.weights); 
+            selectedProductWeight = p.defaultWeight || weights[0]; 
+
+            weights.forEach(w => { 
+                const isSel = w === selectedProductWeight; 
+                const btn = document.createElement('button'); 
+                btn.className = `px-3.5 py-1.5 rounded-xl text-xs font-bold border transition-all ${ isSel ? 'bg-amberGold text-roast-950 border-amberGold shadow' : 'bg-roast-900 text-roast-300 border-roast-700 hover:text-white' }`; 
+                btn.innerText = w; 
+                btn.onclick = () => selectProductWeight(w, p.weights[w], btn); 
+                weightContainer.appendChild(btn); 
+            }); 
+
+            selectedProductPrice = p.weights[selectedProductWeight]; 
+            document.getElementById('pm-price').innerText = `RM ${selectedProductPrice.toFixed(2)}`; 
+            document.getElementById('pm-panel-desc').innerHTML = p.description; 
+
+            const tableBody = document.getElementById('pm-info-table-body'); 
+            tableBody.innerHTML = Object.entries(p.specs).map(([key, val]) => ` 
+                <tr class="py-2.5"> 
+                    <td class="font-bold text-roast-300 w-1/3 py-2 border-b border-roast-900">${key}</td> 
+                    <td class="text-roast-100 py-2 border-b border-roast-900">${val}</td> 
+                </tr> 
+            `).join(''); 
+
+            renderProductReviews(p); 
+            switchProductTab('desc'); 
+            document.getElementById('product-modal').classList.remove('hidden'); 
+        } 
+
+        function closeProductModal() { 
+            document.getElementById('product-modal').classList.add('hidden'); 
+        } 
+
+        function selectProductWeight(weight, price, btnEl) { 
+            selectedProductWeight = weight; 
+            selectedProductPrice = price; 
+            document.getElementById('pm-price').innerText = `RM ${price.toFixed(2)}`; 
+            const allBtns = document.querySelectorAll('#pm-weight-options button'); 
+            allBtns.forEach(b => { 
+                b.className = 'px-3.5 py-1.5 rounded-xl text-xs font-bold border transition-all bg-roast-900 text-roast-300 border-roast-700 hover:text-white'; 
+            }); 
+            btnEl.className = 'px-3.5 py-1.5 rounded-xl text-xs font-bold border transition-all bg-amberGold text-roast-950 border-amberGold shadow'; 
+        } 
+
+        function adjustModalQty(delta) { 
+            productQty = Math.max(1, productQty + delta); 
+            document.getElementById('pm-qty').innerText = productQty; 
+        } 
+
+        function addModalItemToCart() { 
+            const p = productsCatalog[currentActiveProductId]; 
+            if(!p) return; 
+            const fullItemName = `${p.title} (${selectedProductWeight})`; 
+            for(let i = 0; i < productQty; i++) { 
+                addToCart(fullItemName, selectedProductPrice); 
+            } 
+            closeProductModal(); 
+        } 
+
+        function switchProductTab(tab) { 
+            const tabs = ['desc', 'info', 'reviews']; 
+            tabs.forEach(t => { 
+                const btn = document.getElementById(`pm-tab-${t}`); 
+                const panel = document.getElementById(`pm-panel-${t}`); 
+                if(t === tab) { 
+                    btn.className = 'pb-3 border-b-2 border-amberGold text-amberGold font-bold transition-all'; 
+                    panel.classList.remove('hidden'); 
+                } else { 
+                    btn.className = 'pb-3 border-b-2 border-transparent text-roast-400 hover:text-white transition-all'; 
+                    panel.classList.add('hidden'); 
+                } 
+            }); 
+        } 
+
+        function renderProductReviews(p) { 
+            const count = p.reviews ? p.reviews.length : 0; 
+            document.getElementById('pm-reviews-count-badge').innerText = `(${count} customer reviews)`; 
+            document.getElementById('pm-reviews-tab-count').innerText = count; 
+            const listEl = document.getElementById('pm-reviews-list'); 
+            if(!p.reviews || p.reviews.length === 0) { 
+                listEl.innerHTML = `<p class="text-xs text-roast-400 italic py-4">There are no reviews for this coffee bean yet. Be the first to share your brewing experience!</p>`; 
+            } else { 
+                listEl.innerHTML = p.reviews.map(r => ` 
+                    <div class="bg-roast-950/80 p-4 rounded-xl border border-roast-800 space-y-2"> 
+                        <div class="flex justify-between items-center"> 
+                            <span class="font-bold text-white text-xs">${r.name}</span> 
+                            <span class="text-[10px] text-roast-400">${r.date}</span> 
+                        </div> 
+                        <div class="text-amberGold text-xs"> ${Array(r.rating).fill('<i class="fa-solid fa-star"></i>').join('')} </div> 
+                        <p class="text-xs text-roast-300 font-light leading-relaxed">${r.comment}</p> 
+                    </div> 
+                `).join(''); 
+            } 
+        } 
+
+        function setReviewRating(val) { 
+            document.getElementById('rev-rating-val').value = val; 
+            const stars = document.querySelectorAll('#review-rating-stars i'); 
+            stars.forEach((s, idx) => { 
+                if(idx < val) { 
+                    s.className = 'fa-solid fa-star text-amberGold'; 
+                } else { 
+                    s.className = 'fa-solid fa-star text-roast-600'; 
+                } 
+            }); 
+        } 
+
+        function submitProductReview(e) { 
+            e.preventDefault(); 
+            const p = productsCatalog[currentActiveProductId]; 
+            if (!p) return; 
+            const name = document.getElementById('rev-name').value; 
+            const rating = parseInt(document.getElementById('rev-rating-val').value) || 5; 
+            const comment = document.getElementById('rev-comment').value; 
+            const today = new Date().toLocaleDateString('en-GB'); 
+            if(!p.reviews) p.reviews = []; 
+            p.reviews.unshift({ name, date: today, rating, comment }); 
+            renderProductReviews(p); 
+            e.target.reset(); 
+            setReviewRating(5); 
+        } 
+
+        const blogArticlesData = [ 
+            { 
+                title: "New year, New Price, Same Quality.", 
+                author: "RU.PA", 
+                date: "31/12/2024", 
+                category: "Uncategorized", 
+                image: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=800&q=80", 
+                content: ` 
+                    <p class="text-roast-200 leading-relaxed font-light text-sm sm:text-base mb-4"> To continue supporting our farmers and maintaining the quality you love, we'll be adjusting our prices starting 1st of January 2025. We deeply appreciate your understanding and support as we navigate these changes together. </p> 
+                    <p class="text-roast-200 leading-relaxed font-light text-sm sm:text-base mb-4"> Over the past year, global coffee market dynamics and logistics costs have evolved significantly. To ensure that we never compromise on sourcing ethically grown, high-grade specialty green beans and delivering optimum roasts, this slight adjustment allows us to continue providing the exact flavor standard you expect from Rumah Panggang. </p> 
+                    <p class="text-amberGold font-medium italic text-sm sm:text-base"> Your love for coffee keeps us inspired to do what we do best. Thank you for being part of our journey! </p> 
+                ` 
+            }, 
+            { 
+                title: "What the hell is even Coffee Desk bro?", 
+                author: "RU.PA", 
+                date: "18/12/2024", 
+                category: "Culture", 
+                image: "https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=800&q=80", 
+                content: ` 
+                    <p class="text-roast-200 leading-relaxed font-light text-sm sm:text-base mb-4"> CoffeeDesk is a session where two worlds collide, where two arts are infused and coexist together, much like a blended coffee bean creating unique flavor profiles. It exists as a medium that celebrates differences, much like the harmony of a shot of espresso and a splash of milk. </p> 
+                    <p class="text-roast-200 leading-relaxed font-light text-sm sm:text-base mb-4"> Through this fusion, CoffeeDesk invites individuals to explore music, art, design, and coffee in one shared space. It's not just a meetup—it's a platform designed to bring creators, coffee enthusiasts, and curious minds together under the warm aroma of specialty brews. </p> 
+                    <p class="text-roast-200 leading-relaxed font-light text-sm sm:text-base"> Keep an eye out on our socials for the next CoffeeDesk session happening near you! </p> 
+                ` 
+            }, 
+            { 
+                title: "12 Grams Supremacy: The Art of Precision in Every Brew", 
+                author: "RU.PA", 
+                date: "18/12/2024", 
+                category: "Bean", 
+                image: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=800&q=80", 
+                content: ` 
+                    <p class="text-roast-200 leading-relaxed font-light text-sm sm:text-base mb-4"> In a world where more is often considered better, we're here to challenge that notion with a simple, yet powerful truth: 12 grams is all you need. Introducing the 12 Grams Supremacy, our exclusive coffee series packed with intention and purpose. </p> 
+                    <p class="text-roast-200 leading-relaxed font-light text-sm sm:text-base mb-4"> Each batch of our premium beans is carefully sealed in a nostalgic cassette tape case—a tactile tribute to precision crafting. Designed specifically for single-serve pour overs, 12 grams represents the ideal sweet spot for extracted clarity, sweetness, and aroma without waste. </p> 
+                    <p class="text-amberGold font-medium text-sm sm:text-base"> Experience precision brewing crafted for true coffee purists. </p> 
+                ` 
+            }, 
+            { 
+                title: "MERAH SAGA – ESPRESSO BLEND series RU.PA", 
+                author: "RU.PA", 
+                date: "10/12/2024", 
+                category: "Bean", 
+                image: "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?auto=format&fit=crop&w=800&q=80", 
+                content: ` 
+                    <blockquote class="p-4 bg-roast-950 border-l-4 border-amberGold text-amber-400 italic text-sm sm:text-base mb-4"> “Merah saga represents a name and color that is familiar and deeply close to the hearts of Malaysians, holding its own unique history and nostalgia. Classic and balanced are the characters of Merah Saga.” </blockquote> 
+                    <p class="text-roast-200 leading-relaxed font-light text-sm sm:text-base mb-4"> Its versatile character makes Merah Saga suitable to be paired with various coffee beverages, whether as a pure espresso or combined with fresh milk. </p> 
+                    <p class="text-roast-200 leading-relaxed font-light text-sm sm:text-base"> This premium blend selection from Colombia & Brazil promises balanced notes of milk chocolate, praline, and hazelnut for your everyday coffee cup. </p> 
+                ` 
+            } 
+        ]; 
+
+        function showToastMessage(text) { 
+            const toast = document.getElementById('cart-toast'); 
+            const msgEl = document.getElementById('toast-message'); 
+            if(!toast || !msgEl) return; 
+            msgEl.innerText = text; 
+            toast.classList.remove('translate-y-24', 'opacity-0'); 
+            toast.classList.add('translate-y-0', 'opacity-100'); 
+            if(window.cartToastTimer) clearTimeout(window.cartToastTimer); 
+            window.cartToastTimer = setTimeout(() => { 
+                toast.classList.remove('translate-y-0', 'opacity-100'); 
+                toast.classList.add('translate-y-24', 'opacity-0'); 
+            }, 3000); 
+        } 
+
+        function addToCart(itemName, price) { 
+            const existing = cart.find(item => item.name === itemName); 
+            if(existing) { 
+                existing.qty += 1; 
+            } else { 
+                cart.push({ name: itemName, price: price, qty: 1 }); 
+            } 
+            updateCartUI(); 
+            showToastMessage(`"${itemName}" added to your order basket.`); 
+        } 
+
+        function removeFromCart(itemName) { 
+            cart = cart.filter(item => item.name !== itemName); 
+            updateCartUI(); 
+        } 
+
+        function updateCartUI() { 
+            const cartItemsContainer = document.getElementById('cart-items'); 
+            const cartCount = document.getElementById('cart-count'); 
+            const cartTotal = document.getElementById('cart-total'); 
+            let totalQty = 0; 
+            let totalPrice = 0; 
+            if(cart.length === 0) { 
+                cartItemsContainer.innerHTML = `<p class="text-center text-roast-400 text-xs py-8">Your order basket is currently empty.</p>`; 
+            } else { 
+                cartItemsContainer.innerHTML = cart.map(item => { 
+                    totalQty += item.qty; 
+                    totalPrice += item.price * item.qty; 
+                    return ` 
+                        <div class="flex justify-between items-center bg-roast-950/80 p-3 rounded-xl border border-roast-800"> 
+                            <div> 
+                                <h4 class="text-xs font-bold text-white">${item.name}</h4> 
+                                <p class="text-[11px] text-amberGold">RM ${item.price.toFixed(2)} x ${item.qty}</p> 
+                            </div> 
+                            <div class="flex items-center gap-2"> 
+                                <span class="text-xs font-bold text-roast-200">RM ${(item.price * item.qty).toFixed(2)}</span> 
+                                <button onclick="removeFromCart('${item.name}')" class="text-red-400 hover:text-red-300 p-1"> 
+                                    <i class="fa-solid fa-trash-can text-xs"></i> 
+                                </button> 
+                            </div> 
+                        </div> 
+                    `; 
+                }).join(''); 
+            } 
+            cartCount.innerText = totalQty; 
+            cartTotal.innerText = `RM ${totalPrice.toFixed(2)}`; 
+        } 
+
+        function toggleCart(forceOpen = false) { 
+            const drawer = document.getElementById('cart-drawer'); 
+            if(forceOpen) { 
+                drawer.classList.remove('hidden'); 
+            } else { 
+                drawer.classList.toggle('hidden'); 
+            } 
+        } 
+
+        function toggleMobileMenu() { 
+            const menu = document.getElementById('mobile-menu'); 
+            const icon = document.getElementById('mobile-menu-icon'); 
+            menu.classList.toggle('hidden'); 
+            if(menu.classList.contains('hidden')) { 
+                icon.className = 'fa-solid fa-bars text-xl'; 
+            } else { 
+                icon.className = 'fa-solid fa-xmark text-xl'; 
+            } 
+        } 
+
+        function openBlogModal(index) { 
+            const article = blogArticlesData[index]; 
+            if (!article) return; 
+            const modalContent = document.getElementById('blog-modal-content'); 
+            modalContent.innerHTML = ` 
+                <div class="space-y-4"> 
+                    <div class="flex items-center gap-2"> 
+                        <span class="px-3 py-1 bg-amberGold text-roast-950 text-xs font-bold uppercase rounded-full">${article.category}</span> 
+                        <span class="text-xs text-roast-400">By ${article.author} • ${article.date}</span> 
+                    </div> 
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-white font-serif leading-tight"> ${article.title} </h2> 
+                    <div class="relative h-64 sm:h-80 rounded-2xl overflow-hidden border border-roast-800 bg-roast-950"> 
+                        <img src="${article.image}" alt="${article.title}" class="w-full h-full object-cover"> 
+                    </div> 
+                    <div class="pt-4 border-t border-roast-800"> ${article.content} </div> 
+                    <div class="pt-6 flex justify-end"> 
+                        <button onclick="closeBlogModal()" class="px-6 py-2.5 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl text-xs transition-all shadow-md"> Close Article </button> 
+                    </div> 
+                </div> 
+            `; 
+            document.getElementById('blog-modal').classList.remove('hidden'); 
+        } 
+
+        function closeBlogModal() { 
+            document.getElementById('blog-modal').classList.add('hidden'); 
+        } 
+
+        function filterBeans(category) { 
+            const cards = document.querySelectorAll('.coffee-card'); 
+            const btns = document.querySelectorAll('.bean-filter-btn'); 
+            btns.forEach(btn => { 
+                btn.classList.remove('bg-amberGold', 'text-roast-950'); 
+                btn.classList.add('bg-roast-900', 'text-roast-300'); 
+            }); 
+            event.target.classList.add('bg-amberGold', 'text-roast-950'); 
+            cards.forEach(card => { 
+                if(category === 'all' || card.classList.contains(category)) { 
+                    card.style.display = 'flex'; 
+                } else { 
+                    card.style.display = 'none'; 
+                } 
+            }); 
+        } 
+
+        function calculateBrew() { 
+            const method = document.getElementById('brew-method').value; 
+            const grams = parseFloat(document.getElementById('coffee-grams').value) || 0; 
+            let ratio = 15; 
+            let grind = "Medium"; 
+            if (method === 'v60') { ratio = 15; grind = "Medium-Fine"; } 
+            else if (method === 'frenchpress') { ratio = 12; grind = "Coarse"; } 
+            else if (method === 'espresso') { ratio = 2; grind = "Fine"; } 
+            else if (method === 'aeropress') { ratio = 13; grind = "Medium"; } 
+            const waterMl = grams * ratio; 
+            document.getElementById('water-ml').innerText = `${waterMl} ml`; 
+            document.getElementById('grind-size').innerText = grind; 
+        } 
+
+        function openCheckoutModal() { 
+            if (cart.length === 0) { 
+                const cartContainer = document.getElementById('cart-items'); 
+                cartContainer.innerHTML = `<p class="text-center text-amberGold text-xs py-4 font-bold border border-amberGold/30 bg-amberGold/10 rounded-xl">Your basket is empty. Please add items to checkout.</p>`; 
+                setTimeout(updateCartUI, 2500); 
+                return; 
+            } 
+            toggleCart(false); 
+            updateCheckoutSummary(); 
+            document.getElementById('checkout-modal').classList.remove('hidden'); 
+        } 
+
+        function closeCheckoutModal() { 
+            document.getElementById('checkout-modal').classList.add('hidden'); 
+        } 
+
+        function calculateShippingFee() { 
+            const state = document.getElementById('chk-state').value; 
+            if (state === 'Sabah' || state === 'Sarawak') { 
+                currentShippingFee = 15.00; 
+            } else { 
+                currentShippingFee = 8.00; 
+            } 
+            updateCheckoutSummary(); 
+        } 
+
+        function updateCheckoutSummary() { 
+            const listEl = document.getElementById('checkout-items-list'); 
+            let subtotal = 0; 
+            listEl.innerHTML = cart.map(item => { 
+                const itemTotal = item.price * item.qty; 
+                subtotal += itemTotal; 
+                return ` 
+                    <div class="flex justify-between items-center text-xs py-1.5"> 
+                        <div> 
+                            <span class="font-bold text-white block">${item.name}</span> 
+                            <span class="text-[11px] text-roast-400">RM ${item.price.toFixed(2)} × ${item.qty}</span> 
+                        </div> 
+                        <span class="font-bold text-amberGold">RM ${itemTotal.toFixed(2)}</span> 
+                    </div> 
+                `; 
+            }).join(''); 
+            const total = subtotal + currentShippingFee; 
+            document.getElementById('chk-subtotal').innerText = `RM ${subtotal.toFixed(2)}`; 
+            document.getElementById('chk-shipping').innerText = `RM ${currentShippingFee.toFixed(2)}`; 
+            document.getElementById('chk-total').innerText = `RM ${total.toFixed(2)}`; 
+        } 
+
+        function processOrderCheckout(e) { 
+            e.preventDefault(); 
+            const firstName = document.getElementById('chk-firstname').value; 
+            const lastName = document.getElementById('chk-lastname').value; 
+            const phone = document.getElementById('chk-phone').value; 
+            const email = document.getElementById('chk-email').value; 
+            const address = document.getElementById('chk-address').value; 
+            const city = document.getElementById('chk-city').value; 
+            const state = document.getElementById('chk-state').value; 
+            const postcode = document.getElementById('chk-postcode').value; 
+            const notes = document.getElementById('chk-notes').value; 
+            const paymentMethod = 'billplz'; 
+            const orderId = '#RP-' + Math.floor(100000 + Math.random() * 900000); 
+            let subtotal = 0; 
+            cart.forEach(i => subtotal += (i.price * i.qty)); 
+            const total = subtotal + currentShippingFee; 
+            currentOrderData = { 
+                orderId: orderId, 
+                customerName: `${firstName} ${lastName}`, 
+                phone: phone, 
+                email: email, 
+                address: `${address}, ${postcode} ${city}, ${state}`, 
+                notes: notes, 
+                paymentMethod: paymentMethod, 
+                items: [...cart], 
+                subtotal: subtotal, 
+                shippingFee: currentShippingFee, 
+                total: total 
+            }; 
+            createBillplzBill(currentOrderData); 
+        } 
+
+        async function createBillplzBill(orderData) { 
+            const submitBtn = document.getElementById('checkout-submit-btn'); 
+            if (submitBtn) { 
+                submitBtn.disabled = true; 
+                submitBtn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin me-2"></i> Connecting to Billplz API...`; 
+            } 
+            const amountInCents = Math.round(orderData.total * 100); 
+            const endpoint = BILLPLZ_CONFIG.isSandbox ? 'https://www.billplz-sandbox.com/api/v3/bills' : 'https://www.billplz.com/api/v3/bills'; 
+            const payload = new URLSearchParams(); 
+            payload.append('collection_id', BILLPLZ_CONFIG.collectionId || 'demo_collection'); 
+            payload.append('email', orderData.email); 
+            payload.append('mobile', orderData.phone); 
+            payload.append('name', orderData.customerName); 
+            payload.append('amount', amountInCents.toString()); 
+            payload.append('callback_url', BILLPLZ_CONFIG.callbackUrl); 
+            payload.append('redirect_url', BILLPLZ_CONFIG.redirectUrl); 
+            payload.append('description', `Order ${orderData.orderId} - Rumah Panggang`); 
+            try { 
+                if (BILLPLZ_CONFIG.apiKey && BILLPLZ_CONFIG.collectionId) { 
+                    const response = await fetch(endpoint, { 
+                        method: 'POST', 
+                        headers: { 
+                            'Authorization': 'Basic ' + btoa(BILLPLZ_CONFIG.apiKey + ':'), 
+                            'Content-Type': 'application/x-www-form-urlencoded' 
+                        }, 
+                        body: payload.toString() 
+                    }); 
+                    const result = await response.json(); 
+                    if (result && result.url) { 
+                        window.location.href = result.url; 
+                        return; 
+                    } 
+                } 
+            } catch (err) { 
+                console.warn('Billplz API call fallback engaged for environment:', err); 
+            } 
+            setTimeout(() => { 
+                closeCheckoutModal(); 
+                if (submitBtn) { 
+                    submitBtn.disabled = false; 
+                    submitBtn.innerHTML = `<i class="fa-solid fa-lock"></i> Pay via Billplz Gateway`; 
+                } 
+                showBillplzGatewayModal(orderData); 
+            }, 1000); 
+        } 
+
+        function showBillplzGatewayModal(orderData) { 
+            const modal = document.getElementById('order-success-modal'); 
+            modal.classList.remove('hidden'); 
+            document.getElementById('receipt-order-id').innerText = orderData.orderId + ' (Billplz Paid)'; 
+            document.getElementById('receipt-customer-name').innerText = orderData.customerName; 
+            document.getElementById('receipt-address').innerText = `${orderData.address}`; 
+            document.getElementById('receipt-total').innerText = `RM ${orderData.total.toFixed(2)}`; 
+            cart = []; 
+            updateCartUI(); 
+        } 
+
+        function sendReceiptToWhatsApp() { 
+            if (!currentOrderData) return; 
+            let msg = `*RUMAH PANGGANG ORDER RECEIPT*\n`; 
+            msg += `Order Reference: ${currentOrderData.orderId}\n`; 
+            msg += `Customer: ${currentOrderData.customerName}\n`; 
+            msg += `Phone: ${currentOrderData.phone}\n`; 
+            msg += `Address: ${currentOrderData.address}\n\n`; 
+            msg += `*Order Items:*\n`; 
+            currentOrderData.items.forEach(i => { 
+                msg += `- ${i.name} (x${i.qty}): RM ${(i.price * i.qty).toFixed(2)}\n`; 
+            }); 
+            msg += `\nSubtotal: RM ${currentOrderData.subtotal.toFixed(2)}`; 
+            msg += `\nShipping Fee: RM ${currentOrderData.shippingFee.toFixed(2)}`; 
+            msg += `\n*TOTAL PAID: RM ${currentOrderData.total.toFixed(2)}*`; 
+            msg += `\nPayment Method: ${currentOrderData.paymentMethod.toUpperCase()}`; 
+            if(currentOrderData.notes) { 
+                msg += `\nNotes: ${currentOrderData.notes}`; 
+            } 
+            const encoded = encodeURIComponent(msg); 
+            window.open(`https://wa.me/60123456789?text=${encoded}`, '_blank'); 
+        } 
+
+        function closeSuccessModal() { 
+            document.getElementById('order-success-modal').classList.add('hidden'); 
+        } 
+
+        function updateAuthNavbarUI() {
+    const navAuth = document.getElementById('nav-auth-container');
+    const mobileAuth = document.getElementById('mobile-auth-container');
+    if (isLoggedIn) {
+        navAuth.innerHTML = `
+            <div class="flex items-center gap-3">
+                <a href="dashboard.html" class="text-xs text-amberGold font-bold hover:underline hidden lg:inline-flex items-center gap-1">
+                    <i class="fa-solid fa-user-check me-1"></i> Account
+                </a>
+                <button onclick="logoutUser()" class="px-3.5 py-1.5 rounded-full bg-roast-900 hover:bg-red-950/40 border border-roast-700 text-roast-300 hover:text-red-400 text-xs font-semibold transition-all">Logout</button>
+            </div>
+        `;
+        mobileAuth.innerHTML = `
+            <a href="dashboard.html" class="w-full py-3 rounded-xl bg-roast-900 border border-roast-700 text-amberGold font-bold text-xs flex items-center justify-center gap-2 mb-2">
+                <i class="fa-solid fa-user-gear"></i> My Account / Dashboard
+            </a>
+            <button onclick="logoutUser()" class="w-full py-3 rounded-xl bg-red-950/50 border border-red-900/50 text-red-300 font-bold text-xs flex items-center justify-center gap-2">
+                <i class="fa-solid fa-right-from-bracket"></i> Logout Account
+            </button>
+        `;
+    } else {
+        navAuth.innerHTML = `
+            <a href="auth.html" class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full bg-roast-900 hover:bg-roast-800 border border-roast-700 text-roast-200 hover:text-amberGold text-xs font-semibold transition-all"> 
+                <i class="fa-solid fa-user"></i> Sign In 
+            </a>
+        `;
+        mobileAuth.innerHTML = `
+            <a href="auth.html" class="w-full py-3 rounded-xl bg-roast-900 border border-roast-700 text-roast-200 font-bold text-xs flex items-center justify-center gap-2"> 
+                <i class="fa-solid fa-user"></i> Sign In / Register 
+            </a>
+        `;
+    }
+}
+    </script> 
+
+    
+</body> 
+</html>

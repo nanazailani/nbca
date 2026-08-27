@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Membership & Points | Rumah Panggang</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        roast: {
+                            50: '#FAF6F0',
+                            100: '#F4EBE1',
+                            200: '#E2CEB9',
+                            300: '#CFAD8F',
+                            400: '#B88760',
+                            500: '#9E6437',
+                            600: '#834C28',
+                            700: '#68371C',
+                            800: '#472210',
+                            900: '#281107',
+                            950: '#140803',
+                        },
+                        amberGold: '#D97706',
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        h1, h2, h3, .font-serif { font-family: 'Playfair Display', serif; }
+    </style>
+</head>
+<body class="bg-roast-950 text-roast-100 antialiased selection:bg-amberGold selection:text-white">
+
+    <!-- NAVIGATION BAR -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-roast-950/90 backdrop-blur-md border-b border-roast-900 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Brand Logo -->
+                <a href="dashboard.html" class="flex items-center gap-3 group">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-amberGold to-roast-500 flex items-center justify-center shadow-lg">
+                        <i class="fa-solid fa-fire-burner text-roast-950 text-lg"></i>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="font-serif text-xl font-extrabold tracking-wider text-white uppercase">Rumah Panggang</span>
+                        <span class="text-[10px] tracking-widest text-amberGold uppercase">Member Portal</span>
+                    </div>
+                </a>
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8 text-sm font-medium">
+                    <a href="dashboard.html" class="text-roast-200 hover:text-amberGold transition-colors">Home</a>
+                    <a href="orders.html" class="text-roast-200 hover:text-amberGold transition-colors"><i class="fa-solid fa-box-open me-1"></i> My Orders</a>
+                </div>
+                <div class="flex items-center gap-2.5">
+                    <!-- 1. Membership Points Button -->
+                    <a href="membership.html" class="relative w-10 h-10 rounded-full bg-roast-900 hover:bg-roast-800 border border-roast-800 text-amberGold flex items-center justify-center transition-all shadow-md" title="Membership Points">
+                        <i class="fa-solid fa-bag-shopping text-base"></i>
+                        <span class="absolute -top-1 -right-1 bg-amberGold text-roast-950 text-[9px] font-extrabold px-1.5 py-0.5 rounded-full shadow">350</span>
+                    </a>
+                    <!-- 2. Cart Button -->
+                    <button onclick="toggleCart(true)" class="relative w-10 h-10 rounded-full bg-roast-900 hover:bg-roast-800 border border-roast-800 text-amberGold flex items-center justify-center transition-all shadow-md" title="Shopping Cart">
+                        <i class="fa-solid fa-cart-shopping text-base"></i>
+                        <span id="cart-count" class="absolute -top-1 -right-1 bg-amberGold text-roast-950 text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow">0</span>
+                    </button>
+                    <!-- 3. Wishlist Button -->
+                    <button onclick="toggleWishlistDrawer()" class="relative w-10 h-10 rounded-full bg-roast-900 hover:bg-roast-800 border border-roast-800 text-amberGold flex items-center justify-center transition-all shadow-md" title="View Wishlist">
+                        <i class="fa-solid fa-heart text-base"></i>
+                        <span id="wishlist-count" class="absolute -top-1 -right-1 bg-amberGold text-roast-950 text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow">0</span>
+                    </button>
+                    <!-- 4. Profile Button -->
+                    <a href="membership.html" class="w-10 h-10 rounded-full bg-roast-900 hover:bg-roast-800 border border-roast-800 text-amberGold flex items-center justify-center transition-all shadow-md" title="Member Profile">
+                        <i class="fa-solid fa-user text-base"></i>
+                    </a>
+                    <!-- Logout Button -->
+                    <button onclick="logoutUser()" class="px-3.5 py-2 rounded-full bg-roast-900 hover:bg-red-950/40 border border-roast-700 text-roast-300 hover:text-red-400 text-xs font-semibold transition-all">
+                        <i class="fa-solid fa-right-from-bracket"></i> Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="relative pt-36 pb-20 bg-gradient-to-b from-roast-900 to-roast-950 border-b border-roast-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-12 gap-8 items-center">
+                <div class="md:col-span-7 space-y-4">
+                    <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Exclusive Rewards</span>
+                    <h1 class="text-3xl sm:text-5xl font-extrabold text-white font-serif">Membership & Points</h1>
+                    <p class="text-xs sm:text-sm text-roast-300 font-light">Kumpul mata ganjaran setiap kali anda membeli biji kopi atau menyertai kelas, dan tebus pelbagai keistimewaan eksklusif.</p>
+                </div>
+                <div class="md:col-span-5">
+                    <!-- Membership Card Preview -->
+                    <div class="bg-gradient-to-br from-roast-800 via-roast-900 to-roast-950 p-6 rounded-3xl border border-amberGold/40 shadow-2xl space-y-6 relative overflow-hidden">
+                        <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-amberGold/10 rounded-full blur-2xl"></div>
+                        <div class="flex justify-between items-center">
+                            <span class="font-serif font-extrabold text-white uppercase text-sm">Rumah Panggang Pass</span>
+                            <span class="px-3 py-1 bg-amberGold text-roast-950 text-[10px] font-bold rounded-full uppercase">Gold Tier</span>
+                        </div>
+                        <div>
+                            <span class="text-[10px] uppercase text-roast-400 tracking-wider">Available Balance</span>
+                            <div class="text-3xl sm:text-4xl font-extrabold text-amberGold font-serif mt-1">350 Points</div>
+                        </div>
+                        <div class="flex justify-between items-end pt-2 border-t border-roast-800 text-xs">
+                            <div>
+                                <span class="text-roast-400 block text-[10px]">MEMBER NAME</span>
+                                <strong id="card-member-name" class="text-white">Nana Zailani</strong>
+                            </div>
+                            <span class="text-[10px] text-amberGold font-mono">#RP-GOLD-882</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAIN CONTENT -->
+    <main class="py-16 bg-roast-950">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+            
+            <!-- Rewards Redemption Grid -->
+            <div class="space-y-6">
+                <div class="flex justify-between items-end">
+                    <div>
+                        <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Redeem Rewards</span>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-white mt-1">Available Vouchers</h2>
+                    </div>
+                </div>
+                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-roast-900/90 p-6 rounded-3xl border border-roast-800 space-y-4 flex flex-col justify-between">
+                        <div class="space-y-2">
+                            <span class="px-3 py-1 bg-amberGold/10 text-amberGold text-[10px] font-bold rounded-full">RM 10 OFF</span>
+                            <h3 class="text-lg font-bold text-white font-serif">Coffee Beans Discount Voucher</h3>
+                            <p class="text-xs text-roast-300 font-light">Gunakan baucar diskaun RM10 untuk pembelian mana-mana beg kopi single origin.</p>
+                        </div>
+                        <div class="pt-4 border-t border-roast-800 flex justify-between items-center">
+                            <span class="text-amberGold font-bold text-sm">150 Points</span>
+                            <button onclick="redeemVoucher('RM 10 Coffee Voucher', 150)" class="px-4 py-2 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl text-xs transition-all shadow">Redeem</button>
+                        </div>
+                    </div>
+
+                    <div class="bg-roast-900/90 p-6 rounded-3xl border border-roast-800 space-y-4 flex flex-col justify-between">
+                        <div class="space-y-2">
+                            <span class="px-3 py-1 bg-amberGold/10 text-amberGold text-[10px] font-bold rounded-full">FREE SHIPPING</span>
+                            <h3 class="text-lg font-bold text-white font-serif">Free Delivery Voucher</h3>
+                            <p class="text-xs text-roast-300 font-light">Nikmati penghantaran percuma untuk pesanan bernilai melebihi RM50.</p>
+                        </div>
+                        <div class="pt-4 border-t border-roast-800 flex justify-between items-center">
+                            <span class="text-amberGold font-bold text-sm">200 Points</span>
+                            <button onclick="redeemVoucher('Free Delivery Voucher', 200)" class="px-4 py-2 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl text-xs transition-all shadow">Redeem</button>
+                        </div>
+                    </div>
+
+                    <div class="bg-roast-900/90 p-6 rounded-3xl border border-roast-800 space-y-4 flex flex-col justify-between">
+                        <div class="space-y-2">
+                            <span class="px-3 py-1 bg-amberGold/10 text-amberGold text-[10px] font-bold rounded-full">CLASS PASS</span>
+                            <h3 class="text-lg font-bold text-white font-serif">50% Off Roasting Workshop</h3>
+                            <p class="text-xs text-roast-300 font-light">Dapatkan diskaun 50% untuk penyertaan kelas pembuatan kopi profesional.</p>
+                        </div>
+                        <div class="pt-4 border-t border-roast-800 flex justify-between items-center">
+                            <span class="text-amberGold font-bold text-sm">500 Points</span>
+                            <button onclick="redeemVoucher('50% Off Workshop', 500)" class="px-4 py-2 bg-roast-800 hover:bg-roast-700 text-roast-300 font-bold rounded-xl text-xs transition-all border border-roast-700 cursor-not-allowed" disabled>Not Enough Points</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Points History -->
+            <div class="space-y-6 pt-6">
+                <div>
+                    <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Activity Log</span>
+                    <h2 class="text-2xl font-extrabold text-white mt-1">Points History</h2>
+                </div>
+                <div class="bg-roast-900/90 rounded-3xl border border-roast-800 p-6 space-y-4">
+                    <div class="flex justify-between items-center pb-3 border-b border-roast-800 text-xs">
+                        <div>
+                            <strong class="text-white block text-sm font-serif">Order #RP-2026-9081</strong>
+                            <span class="text-roast-400">Purchased Merah Saga Blend (2x)</span>
+                        </div>
+                        <span class="text-green-400 font-bold text-sm">+120 Points</span>
+                    </div>
+                    <div class="flex justify-between items-center pb-3 border-b border-roast-800 text-xs">
+                        <div>
+                            <strong class="text-white block text-sm font-serif">Coffee Brewing Masterclass</strong>
+                            <span class="text-roast-400">Enrolled Workshop Ticket</span>
+                        </div>
+                        <span class="text-green-400 font-bold text-sm">+180 Points</span>
+                    </div>
+                    <div class="flex justify-between items-center text-xs">
+                        <div>
+                            <strong class="text-white block text-sm font-serif">Welcome Bonus</strong>
+                            <span class="text-roast-400">Account Registration</span>
+                        </div>
+                        <span class="text-green-400 font-bold text-sm">+50 Points</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="app-toast" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="bg-roast-900 border border-amberGold/50 text-white px-5 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-amberGold text-roast-950 flex items-center justify-center font-bold shrink-0">
+                <i class="fa-solid fa-check text-xs"></i>
+            </div>
+            <div>
+                <h4 class="text-xs font-bold text-white">Success</h4>
+                <p id="toast-msg" class="text-[11px] text-roast-300">Voucher redeemed successfully.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPT -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = JSON.parse(localStorage.getItem('rp_user') || localStorage.getItem('rp_logged_user') || '{}');
+            if (user && user.name) {
+                document.getElementById('card-member-name').innerText = user.name;
+            }
+        });
+
+        function logoutUser() {
+            localStorage.removeItem('rp_user');
+            localStorage.removeItem('rp_logged_user');
+            window.location.href = 'auth.html';
+        }
+
+        function redeemVoucher(title, cost) {
+            showToast(`Successfully redeemed "${title}" for ${cost} points!`);
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('app-toast');
+            const msgEl = document.getElementById('toast-msg');
+            msgEl.innerText = message;
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-24', 'opacity-0');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

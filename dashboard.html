@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Dashboard | Rumah Panggang</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        roast: {
+                            50: '#FAF6F0',
+                            100: '#F4EBE1',
+                            200: '#E2CEB9',
+                            300: '#CFAD8F',
+                            400: '#B88760',
+                            500: '#9E6437',
+                            600: '#834C28',
+                            700: '#68371C',
+                            800: '#472210',
+                            900: '#281107',
+                            950: '#140803',
+                        },
+                        amberGold: '#D97706',
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        h1, h2, h3, .font-serif { font-family: 'Playfair Display', serif; }
+        .bg-coffee-pattern {
+            background-color: #140803;
+            background-image: radial-gradient(#281107 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+    </style>
+</head>
+<body class="bg-roast-950 text-roast-100 antialiased selection:bg-amberGold selection:text-white">
+
+    <!-- NAVIGATION BAR -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-roast-950/90 backdrop-blur-md border-b border-roast-900 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Brand Logo -->
+                <a href="dashboard.html" class="flex items-center gap-3 group">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-amberGold to-roast-500 flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
+                        <i class="fa-solid me-0 fa-fire-burner text-roast-950 text-lg"></i>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="font-serif text-xl font-extrabold tracking-wider text-white uppercase">Rumah Panggang</span>
+                        <span class="text-[10px] tracking-widest text-amberGold uppercase">Member Portal</span>
+                    </div>
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8 text-sm font-medium">
+                    <a href="dashboard.html" class="text-amberGold font-bold hover:underline transition-colors">Home</a>
+                    <a href="orders.html" class="text-roast-200 hover:text-amberGold transition-colors"><i class="fa-solid fa-box-open me-1"></i> My Orders</a>
+                </div>
+
+                <!-- Right Actions (Membership -> Cart -> Wishlist -> Profile -> Logout) -->
+                <div class="flex items-center gap-2.5">
+                    <!-- 1. Membership Points Button -->
+                    <a href="membership.html" class="relative w-10 h-10 rounded-full bg-roast-900 hover:bg-roast-800 border border-roast-800 text-amberGold flex items-center justify-center transition-all shadow-md" title="Membership Points">
+                        <i class="fa-solid fa-bag-shopping text-base"></i>
+                        <span class="absolute -top-1 -right-1 bg-amberGold text-roast-950 text-[9px] font-extrabold px-1.5 py-0.5 rounded-full shadow">350</span>
+                    </a>
+                    <!-- 2. Cart Button -->
+                    <button onclick="toggleCart(true)" class="relative w-10 h-10 rounded-full bg-roast-900 hover:bg-roast-800 border border-roast-800 text-amberGold flex items-center justify-center transition-all shadow-md" title="Shopping Cart">
+                        <i class="fa-solid fa-cart-shopping text-base"></i>
+                        <span id="cart-count" class="absolute -top-1 -right-1 bg-amberGold text-roast-950 text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow">0</span>
+                    </button>
+                    <!-- 3. Wishlist Button -->
+                    <button onclick="toggleWishlistDrawer()" class="relative w-10 h-10 rounded-full bg-roast-900 hover:bg-roast-800 border border-roast-800 text-amberGold flex items-center justify-center transition-all shadow-md" title="View Wishlist">
+                        <i class="fa-solid fa-heart text-base"></i>
+                        <span id="wishlist-count" class="absolute -top-1 -right-1 bg-amberGold text-roast-950 text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow">0</span>
+                    </button>
+                    <!-- 4. Profile Button -->
+                    <a href="membership.html" class="w-10 h-10 rounded-full bg-roast-900 hover:bg-roast-800 border border-roast-800 text-amberGold flex items-center justify-center transition-all shadow-md" title="Member Profile">
+                        <i class="fa-solid fa-user text-base"></i>
+                    </a>
+                    <!-- Logout Button -->
+                    <button onclick="logoutUser()" class="px-3.5 py-2 rounded-full bg-roast-900 hover:bg-red-950/40 border border-roast-700 text-roast-300 hover:text-red-400 text-xs font-semibold transition-all">
+                        <i class="fa-solid fa-right-from-bracket"></i> Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- DASHBOARD WELCOME HERO -->
+    <section class="relative pt-36 pb-24 overflow-hidden border-b border-roast-900 flex items-center justify-center">
+        <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover z-0">
+            <source src="video/background.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="absolute inset-0 bg-roast-950/75 z-10"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 w-full text-center md:text-left">
+            <div class="space-y-3">
+                <h1 id="hero-welcome-title" class="text-3xl sm:text-5xl font-extrabold text-white font-serif">Hello, Member!</h1>
+                <p class="text-xs sm:text-sm text-roast-300 font-light max-w-xl">Welcome back to your portal. Browse our signature coffee beans, exclusive merchandise, and professional roasting classes below.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAIN DASHBOARD CONTENT -->
+    <main class="py-20 bg-roast-950">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+            <div>
+                <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Member Portal Hub</span>
+                <h2 class="text-3xl font-extrabold text-white mt-1">Your Dashboard Activities</h2>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-8 max-w-4xl">
+                <!-- Kad 1: My Orders & Classes -->
+                <div class="bg-roast-900/80 rounded-2xl p-6 border border-roast-800 space-y-4 hover:border-amberGold/50 transition-all flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="w-12 h-12 rounded-xl bg-amberGold/20 text-amberGold flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-box-open"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white font-serif">My Orders & Classes</h3>
+                        <p class="text-xs text-roast-300 font-light">Track your product shipments, view invoices, and manage your booked roasting workshops.</p>
+                    </div>
+                    <a href="orders.html" class="inline-block py-2.5 px-4 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl text-xs transition-all shadow-md text-center">View Orders</a>
+                </div>
+
+                <!-- Kad 2: Membership Points -->
+                <div class="bg-roast-900/80 rounded-2xl p-6 border border-roast-800 space-y-4 hover:border-amberGold/50 transition-all flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="w-12 h-12 rounded-xl bg-amberGold/20 text-amberGold flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-coins"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white font-serif">Membership Points</h3>
+                        <p class="text-xs text-roast-300 font-light">Semak baki mata ganjaran anda, tahap keahlian (Tier), dan tebus baucar diskaun menarik.</p>
+                    </div>
+                    <a href="membership.html" class="inline-block py-2.5 px-4 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl text-xs transition-all shadow-md text-center">View Points</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- MODAL CART DRAWER -->
+    <div id="cart-drawer" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden transition-opacity">
+        <div class="absolute right-0 top-0 bottom-0 w-full max-w-md bg-roast-900 border-l border-roast-800 p-6 flex flex-col justify-between shadow-2xl">
+            <div>
+                <div class="flex justify-between items-center pb-4 border-b border-roast-800">
+                    <h3 class="text-lg font-bold text-white font-serif"><i class="fa-solid fa-cart-shopping text-amberGold me-2"></i> Your Order Basket</h3>
+                    <button onclick="toggleCart()" class="text-roast-400 hover:text-white p-2">
+                        <i class="fa-solid fa-xmark text-xl"></i>
+                    </button>
+                </div>
+                <div id="cart-items" class="py-4 space-y-3 overflow-y-auto max-h-[60vh]">
+                    <p class="text-center text-roast-400 text-xs py-8">Your order basket is currently empty.</p>
+                </div>
+            </div>
+            <div class="border-t border-roast-800 pt-4 space-y-4">
+                <div class="flex justify-between items-center text-sm font-bold text-white">
+                    <span>Total Amount:</span>
+                    <span id="cart-total" class="text-amberGold text-lg">RM 0.00</span>
+                </div>
+                <button onclick="toggleCart()" class="w-full py-3.5 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl transition-all shadow-lg text-sm flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-credit-card"></i> Close Cart
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- WISHLIST DRAWER MODAL -->
+    <div id="wishlist-drawer" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden transition-opacity">
+        <div class="absolute right-0 top-0 bottom-0 w-full max-w-md bg-roast-900 border-l border-roast-800 p-6 flex flex-col justify-between shadow-2xl">
+            <div>
+                <div class="flex justify-between items-center pb-4 border-b border-roast-800">
+                    <h3 class="text-lg font-bold text-white font-serif"><i class="fa-solid fa-heart text-amberGold me-2"></i> My Wishlist</h3>
+                    <button onclick="toggleWishlistDrawer()" class="text-roast-400 hover:text-white p-2">
+                        <i class="fa-solid fa-xmark text-xl"></i>
+                    </button>
+                </div>
+                <div id="wishlist-items" class="py-4 space-y-3 overflow-y-auto max-h-[65vh]">
+                    <p class="text-center text-roast-400 text-xs py-8">Your wishlist is currently empty.</p>
+                </div>
+            </div>
+            <div class="border-t border-roast-800 pt-4">
+                <button onclick="toggleWishlistDrawer()" class="w-full py-3 bg-roast-800 hover:bg-roast-700 text-roast-100 font-bold rounded-xl transition-all text-xs"> Close Wishlist </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        let cart = [];
+        let wishlist = [];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = localStorage.getItem('rp_user') || localStorage.getItem('rp_logged_user');
+            if (!user) {
+                window.location.href = 'auth.html';
+                return;
+            }
+            try {
+                const userData = JSON.parse(user);
+                if(userData && userData.name) {
+                    document.getElementById('hero-welcome-title').innerText = `Hello, ${userData.name}!`;
+                }
+            } catch(e) {}
+            updateCartUI();
+            updateWishlistUI();
+        });
+
+        function logoutUser() {
+            localStorage.removeItem('rp_user');
+            localStorage.removeItem('rp_logged_user');
+            window.location.href = 'auth.html';
+        }
+
+        function toggleCart(forceOpen = false) {
+            const drawer = document.getElementById('cart-drawer');
+            if(forceOpen) {
+                drawer.classList.remove('hidden');
+            } else {
+                drawer.classList.toggle('hidden');
+            }
+        }
+
+        function updateCartUI() {
+            const cartCount = document.getElementById('cart-count');
+            if(cartCount) cartCount.innerText = cart.length;
+        }
+
+        function updateWishlistUI() {
+            const badge = document.getElementById('wishlist-count');
+            if(badge) badge.innerText = wishlist.length;
+        }
+
+        function toggleWishlistDrawer() {
+            document.getElementById('wishlist-drawer').classList.toggle('hidden');
+        }
+    </script>
+</body>
+</html>

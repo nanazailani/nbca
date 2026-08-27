@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Command Center | Rumah Panggang</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        adminBg: '#181311',
+                        adminCard: '#241C18',
+                        adminCardHover: '#2E241F',
+                        adminBorder: '#42332B',
+                        roast: {
+                            50: '#FAF6F0',
+                            100: '#F4EBE1',
+                            200: '#E2CEB9',
+                            300: '#CFAD8F',
+                            400: '#B88760',
+                            500: '#9E6437',
+                        },
+                        amberGold: '#F59E0B',
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        h1, h2, h3, .font-serif { font-family: 'Playfair Display', serif; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #181311; }
+        ::-webkit-scrollbar-thumb { background: #42332B; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #F59E0B; }
+    </style>
+</head>
+<body class="bg-adminBg text-roast-100 antialiased selection:bg-amberGold selection:text-adminId min-h-screen">
+
+    <!-- SIDEBAR NAVIGATION -->
+    <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-adminCard border-r border-adminBorder transform transition-transform duration-300 flex flex-col justify-between">
+        <div>
+            <!-- Sidebar Header / Logo -->
+            <div class="h-24 flex items-center px-6 border-b border-adminBorder gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amberGold to-yellow-600 flex items-center justify-center shadow-lg shadow-amberGold/10 border border-amberGold/40 shrink-0">
+                    <i class="fa-solid fa-shield-halved text-adminBg text-base font-bold"></i>
+                </div>
+                <div class="sidebar-text truncate">
+                    <span class="font-serif text-xl font-extrabold tracking-wider text-white uppercase block leading-tight truncate">Menu</span>
+                    <span class="text-[9px] tracking-widest text-amberGold uppercase font-bold">Admin Portal</span>
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <div class="p-4 space-y-1.5 text-xs font-medium">
+                <a href="#" onclick="switchTab('overview', event)" id="nav-overview" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-amberGold text-adminBg font-bold transition-all shadow-md">
+                    <i class="fa-solid fa-chart-pie w-5 text-base shrink-0"></i> <span class="sidebar-text">Overview & Charts</span>
+                </a>
+                <a href="#" onclick="switchTab('orders', event)" id="nav-orders" class="flex items-center gap-3 px-4 py-3 rounded-xl text-roast-300 hover:bg-adminCardHover hover:text-white transition-all">
+                    <i class="fa-solid fa-bag-shopping w-5 text-base shrink-0"></i> <span class="sidebar-text">Manage Orders</span>
+                </a>
+                <a href="#" onclick="switchTab('inventory', event)" id="nav-inventory" class="flex items-center gap-3 px-4 py-3 rounded-xl text-roast-300 hover:bg-adminCardHover hover:text-white transition-all">
+                    <i class="fa-solid fa-boxes-stacked w-5 text-base shrink-0"></i> <span class="sidebar-text">Inventory Stock</span>
+                </a>
+                <a href="#" onclick="switchTab('loyalty', event)" id="nav-loyalty" class="flex items-center gap-3 px-4 py-3 rounded-xl text-roast-300 hover:bg-adminCardHover hover:text-white transition-all">
+                    <i class="fa-solid fa-users w-5 text-base shrink-0"></i> <span class="sidebar-text">Members & Points</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Sidebar Footer / Admin Info -->
+        <div class="p-4 border-t border-adminBorder">
+            <div class="bg-adminBg p-3 rounded-2xl border border-adminBorder flex items-center justify-between">
+                <div class="flex items-center gap-2.5 truncate sidebar-text">
+                    <div class="w-8 h-8 rounded-full bg-amberGold/20 text-amberGold font-bold flex items-center justify-center text-xs shrink-0">SA</div>
+                    <div class="truncate">
+                        <span class="text-xs font-bold text-white block truncate">System Admin</span>
+                        <span class="text-[10px] text-roast-400 block truncate">admin@rumahpanggang.com</span>
+                    </div>
+                </div>
+                <button onclick="logoutAdmin()" class="text-roast-400 hover:text-red-400 p-2 transition-colors shrink-0" title="Logout">
+                    <i class="fa-solid fa-right-from-bracket text-sm"></i>
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- SIDEBAR BACKDROP (Mobile) -->
+    <div id="sidebar-backdrop" onclick="toggleSidebar()" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 hidden transition-opacity"></div>
+
+    <!-- MAIN CONTENT WRAPPER -->
+    <div id="main-content" class="flex-1 flex flex-col min-w-0 ml-64 transition-all duration-300 min-h-screen">
+        
+        <!-- TOP HEADER BAR -->
+        <header class="sticky top-0 z-30 bg-adminBg/90 backdrop-blur-md border-b border-adminBorder h-24 px-6 sm:px-8 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <!-- Hamburger Button -->
+                <button onclick="toggleSidebar()" class="w-11 h-11 rounded-xl bg-adminCard hover:bg-adminCardHover border border-adminBorder text-amberGold flex items-center justify-center transition-all shadow" title="Toggle Sidebar">
+                    <i class="fa-solid fa-bars text-base"></i>
+                </button>
+                <!-- Tajuk Rumah Panggang -->
+                <h2 id="page-title" class="font-serif text-xl sm:text-2xl font-extrabold text-white tracking-tight">Rumah Panggang</h2>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="triggerSystemSync()" class="px-4 py-2.5 bg-adminCard hover:bg-adminCardHover text-amberGold border border-adminBorder rounded-xl text-xs font-bold transition-all shadow flex items-center gap-2">
+                    <i class="fa-solid fa-rotate"></i> <span class="hidden sm:inline">Sync</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- DYNAMIC CONTENT AREA -->
+        <main class="p-6 sm:p-8 space-y-8 flex-1">
+
+            <!-- TAB 1: OVERVIEW & CHARTS -->
+            <div id="view-overview" class="admin-view space-y-8">
+                <!-- Metrics Grid -->
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-adminCard p-6 rounded-3xl border border-adminBorder space-y-3 shadow-xl">
+                        <div class="flex justify-between items-start">
+                            <div class="w-12 h-12 rounded-2xl bg-amberGold/20 text-amberGold flex items-center justify-center text-xl">
+                                <i class="fa-solid fa-bag-shopping"></i>
+                            </div>
+                            <span class="px-2.5 py-1 bg-green-500/15 text-green-400 font-bold text-[10px] rounded-full">+14.2%</span>
+                        </div>
+                        <div>
+                            <span class="text-xs text-roast-300 font-medium block">Total Orders</span>
+                            <div class="text-3xl font-bold font-serif text-white mt-1">24</div>
+                        </div>
+                    </div>
+                    <div class="bg-adminCard p-6 rounded-3xl border border-adminBorder space-y-3 shadow-xl">
+                        <div class="flex justify-between items-start">
+                            <div class="w-12 h-12 rounded-2xl bg-amberGold/20 text-amberGold flex items-center justify-center text-xl">
+                                <i class="fa-solid fa-users"></i>
+                            </div>
+                            <span class="px-2.5 py-1 bg-green-500/15 text-green-400 font-bold text-[10px] rounded-full">+8 new</span>
+                        </div>
+                        <div>
+                            <span class="text-xs text-roast-300 font-medium block">Active Members</span>
+                            <div class="text-3xl font-bold font-serif text-white mt-1">142</div>
+                        </div>
+                    </div>
+                    <div class="bg-adminCard p-6 rounded-3xl border border-adminBorder space-y-3 shadow-xl">
+                        <div class="flex justify-between items-start">
+                            <div class="w-12 h-12 rounded-2xl bg-green-500/20 text-green-400 flex items-center justify-center text-xl">
+                                <i class="fa-solid fa-wallet"></i>
+                            </div>
+                            <span class="px-2.5 py-1 bg-green-500/15 text-green-400 font-bold text-[10px] rounded-full">Verified</span>
+                        </div>
+                        <div>
+                            <span class="text-xs text-roast-300 font-medium block">Total Revenue</span>
+                            <div class="text-3xl font-bold font-serif text-white mt-1">RM 12,840</div>
+                        </div>
+                    </div>
+                    <div class="bg-adminCard p-6 rounded-3xl border border-adminBorder space-y-3 shadow-xl">
+                        <div class="flex justify-between items-start">
+                            <div class="w-12 h-12 rounded-2xl bg-blue-500/20 text-blue-400 flex items-center justify-center text-xl">
+                                <i class="fa-solid fa-chalkboard-user"></i>
+                            </div>
+                            <span class="px-2.5 py-1 bg-blue-500/15 text-blue-300 font-bold text-[10px] rounded-full">Booked</span>
+                        </div>
+                        <div>
+                            <span class="text-xs text-roast-300 font-medium block">Active Workshops</span>
+                            <div class="text-3xl font-bold font-serif text-white mt-1">3 Classes</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Grid -->
+                <div class="grid lg:grid-cols-12 gap-8">
+                    <div class="lg:col-span-8 bg-adminCard p-6 sm:p-8 rounded-3xl border border-adminBorder shadow-2xl space-y-6">
+                        <div>
+                            <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Performance</span>
+                            <h3 class="text-2xl font-extrabold text-white font-serif mt-1">Revenue & Sales Trends</h3>
+                        </div>
+                        <div class="h-80 relative">
+                            <canvas id="revenueChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-4 bg-adminCard p-6 sm:p-8 rounded-3xl border border-adminBorder shadow-2xl space-y-6 flex flex-col justify-between">
+                        <div>
+                            <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Breakdown</span>
+                            <h3 class="text-2xl font-extrabold text-white font-serif mt-1">Top Selling Items</h3>
+                        </div>
+                        <div class="h-60 relative flex items-center justify-center">
+                            <canvas id="productsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: MANAGE ORDERS -->
+            <div id="view-orders" class="admin-view space-y-6 hidden">
+                <div class="flex justify-between items-end">
+                    <div>
+                        <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Fulfillment</span>
+                        <h3 class="text-2xl font-extrabold text-white font-serif mt-1">Customer Orders Control</h3>
+                    </div>
+                </div>
+                <div class="bg-adminCard rounded-3xl border border-adminBorder overflow-hidden shadow-2xl">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-[#181311] text-roast-300 uppercase tracking-wider border-b border-adminBorder">
+                                <tr>
+                                    <th class="p-4 font-bold">Order ID</th>
+                                    <th class="p-4 font-bold">Customer</th>
+                                    <th class="p-4 font-bold">Items</th>
+                                    <th class="p-4 font-bold">Total</th>
+                                    <th class="p-4 font-bold">Status</th>
+                                    <th class="p-4 font-bold text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-adminBorder">
+                                <tr class="hover:bg-adminCardHover">
+                                    <td class="p-4 font-bold text-amberGold">#ORD1001</td>
+                                    <td class="p-4 font-bold text-white">Nana Zailani</td>
+                                    <td class="p-4 text-roast-300">3 items (Coffee & Class)</td>
+                                    <td class="p-4 font-bold text-amberGold font-serif text-sm">RM 2,040.00</td>
+                                    <td class="p-4"><span class="px-3 py-1 bg-amberGold/20 text-amberGold font-bold rounded-full text-[10px]">Awaiting Verification</span></td>
+                                    <td class="p-4 text-right">
+                                        <button onclick="verifyOrder('#ORD1001')" class="px-3.5 py-2 bg-amberGold text-adminBg font-extrabold rounded-xl shadow">Verify</button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-adminCardHover">
+                                    <td class="p-4 font-bold text-amberGold">#ORD1002</td>
+                                    <td class="p-4 font-bold text-white">Ahmad Zaki</td>
+                                    <td class="p-4 text-roast-300">1 item (Merah Saga Blend)</td>
+                                    <td class="p-4 font-bold text-amberGold font-serif text-sm">RM 45.00</td>
+                                    <td class="p-4"><span class="px-3 py-1 bg-blue-500/20 text-blue-300 font-bold rounded-full text-[10px]">Processing</span></td>
+                                    <td class="p-4 text-right">
+                                        <button onclick="shipOrder('#ORD1002')" class="px-3.5 py-2 bg-adminBg border border-adminBorder text-roast-100 font-bold rounded-xl shadow">Ship</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 3: INVENTORY STOCK -->
+            <div id="view-inventory" class="admin-view space-y-6 hidden">
+                <div class="flex justify-between items-end">
+                    <div>
+                        <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Inventory</span>
+                        <h3 class="text-2xl font-extrabold text-white font-serif mt-1">Roastery Stock Control</h3>
+                    </div>
+                </div>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="bg-adminCard p-6 rounded-3xl border border-adminBorder space-y-3">
+                        <div class="flex justify-between items-center"><span class="text-xs font-bold text-roast-300 uppercase">Colombia Finca Milan</span><span class="px-2.5 py-0.5 bg-green-500/20 text-green-400 font-bold text-[10px] rounded-full">In Stock</span></div>
+                        <div class="text-2xl font-bold text-white font-serif">84 units</div>
+                    </div>
+                    <div class="bg-adminCard p-6 rounded-3xl border border-adminBorder space-y-3">
+                        <div class="flex justify-between items-center"><span class="text-xs font-bold text-roast-300 uppercase">Merah Saga Blend</span><span class="px-2.5 py-0.5 bg-yellow-500/20 text-yellow-400 font-bold text-[10px] rounded-full">Low Stock</span></div>
+                        <div class="text-2xl font-bold text-white font-serif">14 units</div>
+                    </div>
+                    <div class="bg-adminCard p-6 rounded-3xl border border-adminBorder space-y-3">
+                        <div class="flex justify-between items-center"><span class="text-xs font-bold text-roast-300 uppercase">Masterclass Pass</span><span class="px-2.5 py-0.5 bg-blue-500/20 text-blue-400 font-bold text-[10px] rounded-full">Active Slot</span></div>
+                        <div class="text-2xl font-bold text-white font-serif">5 slots left</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 4: MEMBERS & LOYALTY -->
+            <div id="view-loyalty" class="admin-view space-y-6 hidden">
+                <div class="flex justify-between items-end">
+                    <div>
+                        <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Loyalty Program</span>
+                        <h3 class="text-2xl font-extrabold text-white font-serif mt-1">Member Points & Tier Control</h3>
+                    </div>
+                </div>
+                <div class="bg-adminCard rounded-3xl border border-adminBorder p-6 space-y-4 shadow-xl">
+                    <div class="flex justify-between items-center pb-4 border-b border-adminBorder">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-amberGold/20 text-amberGold font-bold flex items-center justify-center font-serif">NZ</div>
+                            <div><strong class="text-white text-sm block">Nana Zailani</strong><span class="text-xs text-roast-300">Gold Tier</span></div>
+                        </div>
+                        <button onclick="openPointsModal('Nana Zailani', 350)" class="px-4 py-2 bg-adminBg text-roast-100 font-bold rounded-xl border border-adminBorder text-xs">Adjust Points</button>
+                    </div>
+                    <div class="flex justify-between items-center pt-2">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-roast-700/40 text-roast-200 font-bold flex items-center justify-center font-serif">AZ</div>
+                            <div><strong class="text-white text-sm block">Ahmad Zaki</strong><span class="text-xs text-roast-300">Silver Tier</span></div>
+                        </div>
+                        <button onclick="openPointsModal('Ahmad Zaki', 120)" class="px-4 py-2 bg-adminBg text-roast-100 font-bold rounded-xl border border-adminBorder text-xs">Adjust Points</button>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- POINTS ADJUSTMENT MODAL -->
+    <div id="points-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-adminCard border border-adminBorder rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl relative space-y-6 text-roast-100">
+            <button onclick="closePointsModal()" class="absolute top-5 right-5 text-roast-400 hover:text-white p-2">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div class="text-center space-y-1">
+                <div class="w-14 h-14 rounded-2xl bg-amberGold/20 border border-amberGold/40 text-amberGold flex items-center justify-center mx-auto text-2xl shadow">
+                    <i class="fa-solid fa-coins"></i>
+                </div>
+                <h3 class="text-xl font-bold font-serif text-white">Adjust Member Points</h3>
+                <p id="modal-member-name" class="text-xs text-amberGold font-bold">Nana Zailani</p>
+            </div>
+            <div class="space-y-4 text-xs">
+                <div>
+                    <label class="block font-semibold text-roast-300 uppercase mb-1">Action Type</label>
+                    <select id="points-action-type" class="w-full bg-adminBg border border-adminBorder text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                        <option value="add">Add Points (+)</option>
+                        <option value="deduct">Deduct Points (-)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-semibold text-roast-300 uppercase mb-1">Points Value</label>
+                    <input type="number" id="points-input-val" placeholder="e.g. 50" class="w-full bg-adminBg border border-adminBorder text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                </div>
+            </div>
+            <div class="flex gap-3 pt-2">
+                <button onclick="savePointsAdjustment()" class="flex-1 py-3 bg-amberGold text-adminBg font-extrabold rounded-xl text-xs shadow">Confirm Update</button>
+                <button onclick="closePointsModal()" class="px-5 py-3 bg-adminBg text-roast-300 font-bold rounded-xl border border-adminBorder text-xs">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="admin-toast" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="bg-adminCard border border-amberGold/50 text-white px-5 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-amberGold text-adminBg flex items-center justify-center font-bold shrink-0">
+                <i class="fa-solid fa-check text-xs"></i>
+            </div>
+            <div>
+                <h4 class="text-xs font-bold text-white">Admin Command Center</h4>
+                <p id="admin-toast-msg" class="text-[11px] text-roast-200">Action completed successfully.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPT LOGIC -->
+    <script>
+        let revenueChartInstance = null;
+        let productsChartInstance = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initCharts();
+        });
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('main-content');
+            const backdrop = document.getElementById('sidebar-backdrop');
+            
+            sidebar.classList.toggle('-translate-x-full');
+            
+            if (window.innerWidth >= 1024) {
+                if (sidebar.classList.contains('-translate-x-full')) {
+                    mainContent.classList.remove('ml-64');
+                    mainContent.classList.add('ml-0');
+                } else {
+                    mainContent.classList.remove('ml-0');
+                    mainContent.classList.add('ml-64');
+                }
+            } else {
+                backdrop.classList.toggle('hidden');
+            }
+        }
+
+        function switchTab(tabId, event) {
+            if(event) event.preventDefault();
+            
+            document.querySelectorAll('.admin-view').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`view-${tabId}`).classList.remove('hidden');
+
+            ['overview', 'orders', 'inventory', 'loyalty'].forEach(t => {
+                const navBtn = document.getElementById(`nav-${t}`);
+                if(t === tabId) {
+                    navBtn.className = "flex items-center gap-3 px-4 py-3 rounded-xl bg-amberGold text-adminBg font-bold transition-all shadow-md";
+                } else {
+                    navBtn.className = "flex items-center gap-3 px-4 py-3 rounded-xl text-roast-300 hover:bg-adminCardHover hover:text-white transition-all";
+                }
+            });
+
+            document.getElementById('page-title').innerText = 'Rumah Panggang';
+
+            if(window.innerWidth < 1024) {
+                toggleSidebar();
+            }
+        }
+
+        function initCharts() {
+            const ctxRevenue = document.getElementById('revenueChart').getContext('2d');
+            revenueChartInstance = new Chart(ctxRevenue, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+                    datasets: [{
+                        label: 'Revenue (RM)',
+                        data: [2100, 3400, 4200, 3900, 5600, 6800, 9500, 12840],
+                        borderColor: '#F59E0B',
+                        backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { grid: { color: 'rgba(66, 51, 43, 0.4)' }, ticks: { color: '#CFAD8F', font: { size: 10 } } },
+                        y: { grid: { color: 'rgba(66, 51, 43, 0.4)' }, ticks: { color: '#CFAD8F', font: { size: 10 } } }
+                    }
+                }
+            });
+
+            const ctxProducts = document.getElementById('productsChart').getContext('2d');
+            productsChartInstance = new Chart(ctxProducts, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Coffee Beans', 'Masterclass', 'Merchandise', 'Drip Bags'],
+                    datasets: [{
+                        data: [55, 25, 12, 8],
+                        backgroundColor: ['#F59E0B', '#3B82F6', '#10B981', '#8B5CF6'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    cutout: '70%'
+                }
+            });
+        }
+
+        function logoutAdmin() {
+            window.location.href = 'auth.html';
+        }
+
+        function verifyOrder(id) {
+            showAdminToast(`Order ${id} verified successfully.`);
+        }
+
+        function shipOrder(id) {
+            showAdminToast(`Order ${id} marked as Shipped.`);
+        }
+
+        function triggerSystemSync() {
+            showAdminToast(`System database synchronized.`);
+        }
+
+        function openPointsModal(name, pts) {
+            document.getElementById('modal-member-name').innerText = `${name} (Current: ${pts} pts)`;
+            document.getElementById('points-input-val').value = '';
+            document.getElementById('points-modal').classList.remove('hidden');
+        }
+
+        function closePointsModal() {
+            document.getElementById('points-modal').classList.add('hidden');
+        }
+
+        function savePointsAdjustment() {
+            closePointsModal();
+            showAdminToast(`Member points successfully updated.`);
+        }
+
+        function showAdminToast(msg) {
+            const toast = document.getElementById('admin-toast');
+            document.getElementById('admin-toast-msg').innerText = msg;
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-24', 'opacity-0');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
