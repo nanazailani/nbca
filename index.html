@@ -48,6 +48,125 @@
             background-image: radial-gradient(#281107 1px, transparent 1px); 
             background-size: 24px 24px; 
         } 
+
+        /* ===================== ANIMATIONS ===================== */
+
+        /* Scroll reveal */
+        .reveal-up { 
+            opacity: 0; 
+            transform: translateY(28px); 
+            transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1); 
+            will-change: opacity, transform; 
+        } 
+        .reveal-up.is-visible { 
+            opacity: 1; 
+            transform: translateY(0); 
+        } 
+        .reveal-stagger > * { 
+            opacity: 0; 
+            transform: translateY(24px); 
+            transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.6s cubic-bezier(0.22, 1, 0.36, 1); 
+        } 
+        .reveal-stagger.is-visible > *:nth-child(1) { transition-delay: 0.04s; } 
+        .reveal-stagger.is-visible > *:nth-child(2) { transition-delay: 0.11s; } 
+        .reveal-stagger.is-visible > *:nth-child(3) { transition-delay: 0.18s; } 
+        .reveal-stagger.is-visible > *:nth-child(4) { transition-delay: 0.25s; } 
+        .reveal-stagger.is-visible > *:nth-child(5) { transition-delay: 0.32s; } 
+        .reveal-stagger.is-visible > *:nth-child(6) { transition-delay: 0.39s; } 
+        .reveal-stagger.is-visible > *:nth-child(7) { transition-delay: 0.46s; } 
+        .reveal-stagger.is-visible > *:nth-child(8) { transition-delay: 0.53s; } 
+        .reveal-stagger.is-visible > * { 
+            opacity: 1; 
+            transform: translateY(0); 
+        } 
+
+        /* Hero entrance */
+        @keyframes heroFadeUp { 
+            from { opacity: 0; transform: translateY(22px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        } 
+        .hero-anim-1 { animation: heroFadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.05s both; } 
+        .hero-anim-2 { animation: heroFadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.18s both; } 
+        .hero-anim-3 { animation: heroFadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.30s both; } 
+        .hero-anim-4 { animation: heroFadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.42s both; } 
+        .hero-anim-5 { animation: heroFadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.55s both; } 
+        .hero-card-anim { animation: heroFadeUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.35s both; } 
+
+        /* Ambient blobs float */
+        @keyframes floatBlob { 
+            0%, 100% { transform: translate(0, 0) scale(1); } 
+            50% { transform: translate(18px, -22px) scale(1.06); } 
+        } 
+        .blob-float-a { animation: floatBlob 12s ease-in-out infinite; } 
+        .blob-float-b { animation: floatBlob 14s ease-in-out infinite reverse; } 
+
+        /* Modal open/close transition */
+        .modal-overlay { 
+            transition: opacity 0.28s ease; 
+            opacity: 0; 
+        } 
+        .modal-overlay.modal-open { opacity: 1; } 
+        .modal-panel { 
+            transition: opacity 0.32s cubic-bezier(0.22, 1, 0.36, 1), transform 0.32s cubic-bezier(0.22, 1, 0.36, 1); 
+            opacity: 0; 
+            transform: translateY(24px) scale(0.97); 
+        } 
+        .modal-open .modal-panel { 
+            opacity: 1; 
+            transform: translateY(0) scale(1); 
+        } 
+
+        /* Cart drawer slide */
+        .drawer-overlay { transition: opacity 0.3s ease; opacity: 0; } 
+        .drawer-overlay.drawer-open { opacity: 1; } 
+        .drawer-panel { transition: transform 0.36s cubic-bezier(0.22, 1, 0.36, 1); transform: translateX(100%); } 
+        .drawer-open .drawer-panel { transform: translateX(0); } 
+
+        /* Button micro-interactions */
+        .btn-anim { transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease; } 
+        .btn-anim:hover { transform: translateY(-2px); } 
+        .btn-anim:active { transform: translateY(0) scale(0.97); } 
+
+        /* Card hover lift */
+        .card-lift { transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease, border-color 0.35s ease; } 
+        .card-lift:hover { transform: translateY(-6px); box-shadow: 0 20px 40px -12px rgba(0,0,0,0.55); } 
+
+        /* Cart badge pulse when item added */
+        @keyframes cartPulse { 
+            0% { transform: scale(1); } 
+            30% { transform: scale(1.35); } 
+            60% { transform: scale(0.92); } 
+            100% { transform: scale(1); } 
+        } 
+        .cart-pulse { animation: cartPulse 0.45s cubic-bezier(0.34, 1.56, 0.64, 1); } 
+
+        /* Toast slide */
+        #cart-toast { transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s ease; } 
+
+        /* Fade-in for tab panel switching */
+        @keyframes tabFadeIn { 
+            from { opacity: 0; transform: translateY(6px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        } 
+        .tab-fade-in { animation: tabFadeIn 0.35s ease both; } 
+
+        /* Toast icon check bounce */
+        @keyframes checkPop { 
+            0% { transform: scale(0); } 
+            60% { transform: scale(1.2); } 
+            100% { transform: scale(1); } 
+        } 
+        .check-pop { animation: checkPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both; } 
+
+        /* Respect reduced motion preference */
+        @media (prefers-reduced-motion: reduce) { 
+            .reveal-up, .reveal-stagger > *, .hero-anim-1, .hero-anim-2, .hero-anim-3, .hero-anim-4, .hero-anim-5, .hero-card-anim, .blob-float-a, .blob-float-b { 
+                animation: none !important; 
+                transition: none !important; 
+                opacity: 1 !important; 
+                transform: none !important; 
+            } 
+        } 
     </style> 
 </head> 
 <body class="bg-roast-950 text-roast-100 antialiased selection:bg-amberGold selection:text-white"> 
@@ -120,29 +239,29 @@
 
     <!-- HERO SECTION --> 
     <section class="relative min-h-screen flex items-center pt-24 pb-16 overflow-hidden bg-coffee-pattern"> 
-        <div class="absolute top-1/4 -left-32 w-96 h-96 bg-amberGold/15 rounded-full blur-3xl pointer-events-none"></div> 
-        <div class="absolute bottom-10 right-0 w-96 h-96 bg-roast-600/10 rounded-full blur-3xl pointer-events-none"></div> 
+        <div class="absolute top-1/4 -left-32 w-96 h-96 bg-amberGold/15 rounded-full blur-3xl pointer-events-none blob-float-a"></div> 
+        <div class="absolute bottom-10 right-0 w-96 h-96 bg-roast-600/10 rounded-full blur-3xl pointer-events-none blob-float-b"></div> 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full"> 
             <div class="grid lg:grid-cols-12 gap-12 items-center"> 
                 <div class="lg:col-span-7 space-y-8 text-center lg:text-left"> 
-                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-roast-900 border border-roast-700 text-amberGold text-xs font-semibold tracking-wider uppercase"> 
+                    <div class="hero-anim-1 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-roast-900 border border-roast-700 text-amberGold text-xs font-semibold tracking-wider uppercase"> 
                         <i class="fa-solid fa-fire text-xs"></i> Specialty Coffee & Wood-Fired Smoke 
                     </div> 
-                    <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white leading-tight"> 
+                    <h1 class="hero-anim-2 text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white leading-tight"> 
                         Crafted Roasts, <br> 
                         <span class="text-transparent bg-clip-text bg-gradient-to-r from-amberGold via-amber-400 to-roast-300"> 
                             Pure Authenticity. 
                         </span> 
                     </h1> 
-                    <p class="text-lg text-roast-300 max-w-2xl mx-auto lg:mx-0 font-light leading-relaxed"> 
+                    <p class="hero-anim-3 text-lg text-roast-300 max-w-2xl mx-auto lg:mx-0 font-light leading-relaxed"> 
                         From single-origin specialty coffees & the iconic <strong class="font-bold text-white">Series RU.PA</strong> blends (<em class="italic text-amber-400">Merah Saga, Nyok-Nyok</em>) roasted in Sungai Petani to artisanal wood-fired delicacies at HBK Shah Alam. 
                     </p> 
-                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4"> 
-                        <a href="#coffee-beans" class="w-full sm:w-auto px-8 py-4 rounded-full bg-amberGold hover:bg-amber-500 text-roast-950 font-bold text-center shadow-lg transition-all transform hover:-translate-y-0.5"> 
+                    <div class="hero-anim-4 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4"> 
+                        <a href="#coffee-beans" class="btn-anim w-full sm:w-auto px-8 py-4 rounded-full bg-amberGold hover:bg-amber-500 text-roast-950 font-bold text-center shadow-lg"> 
                             <i class="fa-solid fa-basket-shopping me-2"></i> Shop Coffee Beans 
                         </a> 
                     </div> 
-                    <div class="pt-8 grid grid-cols-3 gap-6 border-t border-roast-900 max-w-lg mx-auto lg:mx-0"> 
+                    <div class="hero-anim-5 pt-8 grid grid-cols-3 gap-6 border-t border-roast-900 max-w-lg mx-auto lg:mx-0"> 
                         <div> 
                             <span class="block text-2xl font-bold font-serif text-amberGold">100%</span> 
                             <span class="text-xs text-roast-400 uppercase tracking-wider">Specialty Arabica</span> 
@@ -159,7 +278,7 @@
                 </div> 
 
                 <div class="lg:col-span-5 relative"> 
-                    <div class="hidden sm:block relative mx-auto max-w-md bg-gradient-to-b from-roast-900 to-roast-950 rounded-3xl p-6 border border-roast-800 shadow-2xl"> 
+                    <div class="hero-card-anim hidden sm:block relative mx-auto max-w-md bg-gradient-to-b from-roast-900 to-roast-950 rounded-3xl p-6 border border-roast-800 shadow-2xl"> 
                         <div class="flex items-center justify-between mb-6"> 
                             <span class="text-xs uppercase font-bold tracking-widest text-amberGold">Roaster's Choice</span> 
                             <span class="px-2.5 py-1 bg-amberGold/10 text-amberGold rounded-full text-xs font-medium">SOE & Blend</span> 
@@ -210,7 +329,7 @@
     <section id="about" class="py-20 bg-roast-900/60 border-y border-roast-900"> 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16"> 
             <div class="grid md:grid-cols-2 gap-12 items-center"> 
-                <div class="space-y-6"> 
+                <div class="reveal-up space-y-6"> 
                     <span class="text-xs font-bold tracking-widest text-amberGold uppercase">About Rumah Panggang</span> 
                     <h2 class="text-3xl sm:text-4xl font-extrabold text-white">Our Journey & Coffee Story</h2> 
                     <div class="space-y-4 text-roast-300 leading-relaxed font-light text-sm sm:text-base"> 
@@ -236,13 +355,13 @@
                         </div> 
                     </div> 
                 </div> 
-                <div class="grid grid-cols-2 gap-4"> 
+                <div class="reveal-up grid grid-cols-2 gap-4"> 
                     <img src="images/kopi.png" alt="Espresso Extraction" class="rounded-2xl object-cover h-72 w-full shadow-lg border border-roast-800"> 
                     <img src="images/kedai.png" alt="Grill Meat" class="rounded-2xl object-cover h-72 w-full shadow-lg border border-roast-800 mt-8"> 
                 </div> 
             </div> 
 
-            <div class="bg-gradient-to-r from-roast-950 via-roast-900 to-roast-950 rounded-3xl p-8 sm:p-10 border border-roast-800 shadow-xl"> 
+            <div class="reveal-up bg-gradient-to-r from-roast-950 via-roast-900 to-roast-950 rounded-3xl p-8 sm:p-10 border border-roast-800 shadow-xl"> 
                 <div class="grid lg:grid-cols-12 gap-8 items-center"> 
                     <div class="lg:col-span-4 flex justify-center"> 
                         <div class="relative group"> 
@@ -270,7 +389,7 @@
     <!-- COFFEE BEANS SHOP SECTION --> 
     <section id="coffee-beans" class="py-20 bg-roast-950"> 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> 
-            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12"> 
+            <div class="reveal-up flex flex-col md:flex-row md:items-end justify-between mb-12"> 
                 <div> 
                     <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Specialty Coffee Beans</span> 
                     <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-1">In-House Roasted Coffee Collection</h2> 
@@ -283,8 +402,8 @@
                 </div> 
             </div> 
 
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="coffee-grid"> 
-                <div class="coffee-card single-origin bg-roast-900/80 rounded-2xl p-6 border border-roast-800 hover:border-amberGold/50 transition-all flex flex-col justify-between group overflow-hidden"> 
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 reveal-stagger" id="coffee-grid"> 
+                <div class="coffee-card single-origin card-lift bg-roast-900/80 rounded-2xl p-6 border border-roast-800 hover:border-amberGold/50 flex flex-col justify-between group overflow-hidden"> 
                     <div> 
                         <div class="relative h-48 rounded-xl overflow-hidden mb-4 border border-roast-800 bg-roast-950"> 
                             <img src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?auto=format&fit=crop&w=600&q=80" alt="Brazil Santuario Sul Lot 1" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"> 
@@ -303,12 +422,12 @@
                             <span class="px-2 py-0.5 bg-roast-950 rounded text-[10px] text-roast-300">Filter & Espresso</span> 
                         </div> 
                     </div> 
-                    <button onclick="openProductModal('santuario-sul')" class="w-full py-3 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-2"> 
+                    <button onclick="openProductModal('santuario-sul')" class="btn-anim w-full py-3 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-2"> 
                         <i class="fa-solid fa-circle-info"></i> Learn More 
                     </button> 
                 </div> 
 
-                <div class="coffee-card single-origin bg-roast-900/80 rounded-2xl p-6 border border-roast-800 hover:border-amberGold/50 transition-all flex flex-col justify-between group overflow-hidden"> 
+                <div class="coffee-card single-origin card-lift bg-roast-900/80 rounded-2xl p-6 border border-roast-800 hover:border-amberGold/50 flex flex-col justify-between group overflow-hidden"> 
                     <div> 
                         <div class="relative h-48 rounded-xl overflow-hidden mb-4 border border-roast-800 bg-roast-950"> 
                             <img src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?auto=format&fit=crop&w=600&q=80" alt="Colombia Finca Milan" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"> 
@@ -326,12 +445,12 @@
                             <span class="px-2 py-0.5 bg-roast-950 rounded text-[10px] text-roast-300">Juicy Body</span> 
                         </div> 
                     </div> 
-                    <button onclick="openProductModal('finca-milan')" class="w-full py-3 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-2"> 
+                    <button onclick="openProductModal('finca-milan')" class="btn-anim w-full py-3 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-2"> 
                         <i class="fa-solid fa-circle-info"></i> Learn More 
                     </button> 
                 </div> 
 
-                <div class="coffee-card single-origin bg-roast-900/80 rounded-2xl p-6 border border-roast-800 hover:border-amberGold/50 transition-all flex flex-col justify-between group overflow-hidden"> 
+                <div class="coffee-card single-origin card-lift bg-roast-900/80 rounded-2xl p-6 border border-roast-800 hover:border-amberGold/50 flex flex-col justify-between group overflow-hidden"> 
                     <div> 
                         <div class="relative h-48 rounded-xl overflow-hidden mb-4 border border-roast-800 bg-roast-950"> 
                             <img src="https://images.unsplash.com/photo-1587734195503-904fca47e0e9?auto=format&fit=crop&w=600&q=80" alt="Brazil Sitio Balaio" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"> 
@@ -349,12 +468,12 @@
                             <span class="px-2 py-0.5 bg-roast-950 rounded text-[10px] text-roast-300">Sugarcane</span> 
                         </div> 
                     </div> 
-                    <button onclick="openProductModal('sitio-balaio')" class="w-full py-3 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-2"> 
+                    <button onclick="openProductModal('sitio-balaio')" class="btn-anim w-full py-3 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-2"> 
                         <i class="fa-solid fa-circle-info"></i> Learn More 
                     </button> 
                 </div> 
 
-                <div class="coffee-card blend bg-roast-900/80 rounded-2xl p-6 border border-roast-800 hover:border-amberGold/50 transition-all flex flex-col justify-between group overflow-hidden"> 
+                <div class="coffee-card blend card-lift bg-roast-900/80 rounded-2xl p-6 border border-roast-800 hover:border-amberGold/50 flex flex-col justify-between group overflow-hidden"> 
                     <div> 
                         <div class="relative h-48 rounded-xl overflow-hidden mb-4 border border-roast-800 bg-roast-950"> 
                             <img src="https://images.unsplash.com/photo-1611854779393-1b2da9d400fe?auto=format&fit=crop&w=600&q=80" alt="Merah Saga Espresso Blend" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"> 
@@ -372,12 +491,12 @@
                             <span class="px-2 py-0.5 bg-roast-950 rounded text-[10px] text-roast-300">Creamy</span> 
                         </div> 
                     </div> 
-                    <button onclick="openProductModal('merah-saga')" class="w-full py-3 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-2"> 
+                    <button onclick="openProductModal('merah-saga')" class="btn-anim w-full py-3 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-2"> 
                         <i class="fa-solid fa-circle-info"></i> Learn More 
                     </button> 
                 </div> 
 
-                <div class="coffee-card single-origin bg-roast-900/80 rounded-2xl p-6 border border-roast-800 hover:border-amberGold/50 transition-all flex flex-col justify-between group overflow-hidden"> 
+                <div class="coffee-card single-origin card-lift bg-roast-900/80 rounded-2xl p-6 border border-roast-800 hover:border-amberGold/50 flex flex-col justify-between group overflow-hidden"> 
                     <div> 
                         <div class="relative h-48 rounded-xl overflow-hidden mb-4 border border-roast-800 bg-roast-950"> 
                             <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80" alt="Guatemala Acatenago Valley" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"> 
@@ -395,12 +514,12 @@
                             <span class="px-2 py-0.5 bg-roast-950 rounded text-[10px] text-roast-300">Smooth Cocoa</span> 
                         </div> 
                     </div> 
-                    <button onclick="openProductModal('guatemala-acatenago')" class="w-full py-3 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-2"> 
+                    <button onclick="openProductModal('guatemala-acatenago')" class="btn-anim w-full py-3 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-2"> 
                         <i class="fa-solid fa-circle-info"></i> Learn More 
                     </button> 
                 </div> 
 
-                <div class="coffee-card dark bg-roast-900/80 rounded-2xl p-6 border border-roast-800 hover:border-amberGold/50 transition-all flex flex-col justify-between group overflow-hidden"> 
+                <div class="coffee-card dark card-lift bg-roast-900/80 rounded-2xl p-6 border border-roast-800 hover:border-amberGold/50 flex flex-col justify-between group overflow-hidden"> 
                     <div> 
                         <div class="relative h-48 rounded-xl overflow-hidden mb-4 border border-roast-800 bg-roast-950"> 
                             <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=600&q=80" alt="Brazil Cerrado SOE" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"> 
@@ -418,12 +537,12 @@
                             <span class="px-2 py-0.5 bg-roast-950 rounded text-[10px] text-roast-300">Bold Dark</span> 
                         </div> 
                     </div> 
-                    <button onclick="openProductModal('brazil-cerrado')" class="w-full py-3 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-2"> 
+                    <button onclick="openProductModal('brazil-cerrado')" class="btn-anim w-full py-3 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-2"> 
                         <i class="fa-solid fa-circle-info"></i> Learn More 
                     </button> 
                 </div> 
 
-                <div class="coffee-card single-origin bg-roast-900/80 rounded-2xl p-6 border border-roast-800 hover:border-amberGold/50 transition-all flex flex-col justify-between group overflow-hidden"> 
+                <div class="coffee-card single-origin card-lift bg-roast-900/80 rounded-2xl p-6 border border-roast-800 hover:border-amberGold/50 flex flex-col justify-between group overflow-hidden"> 
                     <div> 
                         <div class="relative h-48 rounded-xl overflow-hidden mb-4 border border-roast-800 bg-roast-950"> 
                             <img src="https://images.unsplash.com/photo-1521302080334-4bebac2763a6?auto=format&fit=crop&w=600&q=80" alt="Ethiopia Yirgacheffe Koke" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"> 
@@ -441,12 +560,12 @@
                             <span class="px-2 py-0.5 bg-roast-950 rounded text-[10px] text-roast-300">Bright Citrus</span> 
                         </div> 
                     </div> 
-                    <button onclick="openProductModal('ethiopia-koke')" class="w-full py-3 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-2"> 
+                    <button onclick="openProductModal('ethiopia-koke')" class="btn-anim w-full py-3 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-2"> 
                         <i class="fa-solid fa-circle-info"></i> Learn More 
                     </button> 
                 </div> 
 
-                <div class="coffee-card blend bg-roast-900/80 rounded-2xl p-6 border border-roast-800 hover:border-amberGold/50 transition-all flex flex-col justify-between group overflow-hidden"> 
+                <div class="coffee-card blend card-lift bg-roast-900/80 rounded-2xl p-6 border border-roast-800 hover:border-amberGold/50 flex flex-col justify-between group overflow-hidden"> 
                     <div> 
                         <div class="relative h-48 rounded-xl overflow-hidden mb-4 border border-roast-800 bg-roast-950"> 
                             <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80" alt="Nyok-Nyok Espresso Blend" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"> 
@@ -464,7 +583,7 @@
                             <span class="px-2 py-0.5 bg-roast-950 rounded text-[10px] text-roast-300">Dark Chocolate</span> 
                         </div> 
                     </div> 
-                    <button onclick="openProductModal('nyok-nyok')" class="w-full py-3 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-2"> 
+                    <button onclick="openProductModal('nyok-nyok')" class="btn-anim w-full py-3 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-2"> 
                         <i class="fa-solid fa-circle-info"></i> Learn More 
                     </button> 
                 </div> 
@@ -475,13 +594,13 @@
     <!-- BLOG SECTION --> 
     <section id="blog" class="py-20 bg-roast-900/40 border-t border-roast-900"> 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> 
-            <div class="text-center max-w-2xl mx-auto mb-16"> 
+            <div class="reveal-up text-center max-w-2xl mx-auto mb-16"> 
                 <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Stories & Culture</span> 
                 <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-1">Rumah Panggang Journal & Blog</h2> 
                 <p class="text-roast-300 text-sm mt-3 font-light">Insights into coffee craftsmanship, roastery updates, and our unique culture directly from the RU.PA team.</p> 
             </div> 
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6"> 
-                <article class="bg-roast-900/90 rounded-2xl overflow-hidden border border-roast-800 hover:border-amberGold/50 transition-all flex flex-col justify-between group"> 
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 reveal-stagger"> 
+                <article class="card-lift bg-roast-900/90 rounded-2xl overflow-hidden border border-roast-800 hover:border-amberGold/50 flex flex-col justify-between group"> 
                     <div> 
                         <div class="relative h-48 overflow-hidden bg-roast-950"> 
                             <img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=600&q=80" alt="New Year Price Adjustments" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"> 
@@ -498,7 +617,7 @@
                     </div> 
                 </article> 
 
-                <article class="bg-roast-900/90 rounded-2xl overflow-hidden border border-roast-800 hover:border-amberGold/50 transition-all flex flex-col justify-between group"> 
+                <article class="card-lift bg-roast-900/90 rounded-2xl overflow-hidden border border-roast-800 hover:border-amberGold/50 flex flex-col justify-between group"> 
                     <div> 
                         <div class="relative h-48 overflow-hidden bg-roast-950"> 
                             <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=600&q=80" alt="What the hell is even Coffee Desk bro?" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"> 
@@ -515,7 +634,7 @@
                     </div> 
                 </article> 
 
-                <article class="bg-roast-900/90 rounded-2xl overflow-hidden border border-roast-800 hover:border-amberGold/50 transition-all flex flex-col justify-between group"> 
+                <article class="card-lift bg-roast-900/90 rounded-2xl overflow-hidden border border-roast-800 hover:border-amberGold/50 flex flex-col justify-between group"> 
                     <div> 
                         <div class="relative h-48 overflow-hidden bg-roast-950"> 
                             <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80" alt="12 Grams Supremacy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"> 
@@ -532,7 +651,7 @@
                     </div> 
                 </article> 
 
-                <article class="bg-roast-900/90 rounded-2xl overflow-hidden border border-roast-800 hover:border-amberGold/50 transition-all flex flex-col justify-between group"> 
+                <article class="card-lift bg-roast-900/90 rounded-2xl overflow-hidden border border-roast-800 hover:border-amberGold/50 flex flex-col justify-between group"> 
                     <div> 
                         <div class="relative h-48 overflow-hidden bg-roast-950"> 
                             <img src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?auto=format&fit=crop&w=600&q=80" alt="MERAH SAGA – ESPRESSO BLEND" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"> 
@@ -555,13 +674,13 @@
     <!-- MERCHANDISE SECTION --> 
     <section id="merchandise" class="py-20 bg-roast-950 border-t border-roast-900"> 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> 
-            <div class="text-center max-w-2xl mx-auto mb-12"> 
+            <div class="reveal-up text-center max-w-2xl mx-auto mb-12"> 
                 <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Exclusive Goods</span> 
                 <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-1">Rumah Panggang Merchandise</h2> 
                 <p class="text-roast-300 text-sm mt-3 font-light">Collaborative apparel & lifestyle items created with local artist <strong>Sin Chan</strong>, fusing bold vision with raw artistic energy.</p> 
             </div> 
-            <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto"> 
-                <div class="bg-roast-900/90 rounded-2xl overflow-hidden border border-roast-800 hover:border-amberGold/50 transition-all flex flex-col justify-between group"> 
+            <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto reveal-stagger"> 
+                <div class="card-lift bg-roast-900/90 rounded-2xl overflow-hidden border border-roast-800 hover:border-amberGold/50 flex flex-col justify-between group"> 
                     <div> 
                         <div class="relative h-64 overflow-hidden bg-roast-950 border-b border-roast-800"> 
                             <img src="https://images.unsplash.com/photo-1572375992501-4b0892d50c69?auto=format&fit=crop&w=800&q=80" alt="Rumah Panggang Sticker Pack" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"> 
@@ -582,11 +701,11 @@
                         </div> 
                     </div> 
                     <div class="px-6 pb-6"> 
-                        <button onclick="checkAuthAndExecute(() => addToCart('Rumah Panggang Sticker Pack', 12.00))" class="w-full py-3 bg-roast-800 hover:bg-amberGold hover:text-roast-950 text-roast-100 font-bold rounded-xl text-sm transition-all"> + Add To Cart </button> 
+                        <button onclick="checkAuthAndExecute(() => addToCart('Rumah Panggang Sticker Pack', 12.00))" class="btn-anim w-full py-3 bg-roast-800 hover:bg-amberGold hover:text-roast-950 text-roast-100 font-bold rounded-xl text-sm transition-all"> + Add To Cart </button> 
                     </div> 
                 </div> 
 
-                <div class="bg-roast-900/90 rounded-2xl overflow-hidden border border-roast-800 hover:border-amberGold/50 transition-all flex flex-col justify-between group"> 
+                <div class="card-lift bg-roast-900/90 rounded-2xl overflow-hidden border border-roast-800 hover:border-amberGold/50 flex flex-col justify-between group"> 
                     <div> 
                         <div class="relative h-64 overflow-hidden bg-roast-950 border-b border-roast-800"> 
                             <img src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=800&q=80" alt="Rumah Panggang T-Shirt" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"> 
@@ -607,7 +726,7 @@
                         </div> 
                     </div> 
                     <div class="px-6 pb-6"> 
-                        <button onclick="checkAuthAndExecute(() => addToCart('Rumah Panggang T-Shirt', 85.00))" class="w-full py-3 bg-roast-800 hover:bg-amberGold hover:text-roast-950 text-roast-100 font-bold rounded-xl text-sm transition-all"> + Add To Cart </button> 
+                        <button onclick="checkAuthAndExecute(() => addToCart('Rumah Panggang T-Shirt', 85.00))" class="btn-anim w-full py-3 bg-roast-800 hover:bg-amberGold hover:text-roast-950 text-roast-100 font-bold rounded-xl text-sm transition-all"> + Add To Cart </button> 
                     </div> 
                 </div> 
             </div> 
@@ -617,13 +736,13 @@
     <!-- PAID CLASSES / WORKSHOP SECTION --> 
     <section id="classes" class="py-20 bg-roast-900/40 border-t border-roast-900"> 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> 
-            <div class="text-center max-w-2xl mx-auto mb-12"> 
+            <div class="reveal-up text-center max-w-2xl mx-auto mb-12"> 
                 <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Learn With Us</span> 
                 <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-1">Paid Classes & Workshops</h2> 
                 <p class="text-roast-300 text-sm mt-3 font-light">Learn directly from our roaster — from brewing basics to latte art, hosted at Rumah Panggang Roastery, Sungai Petani.</p> 
             </div> 
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8"> 
-                <div class="bg-roast-900/90 rounded-2xl overflow-hidden border border-roast-800 hover:border-amberGold/50 transition-all flex flex-col justify-between group"> 
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 reveal-stagger"> 
+                <div class="card-lift bg-roast-900/90 rounded-2xl overflow-hidden border border-roast-800 hover:border-amberGold/50 flex flex-col justify-between group"> 
                     <div> 
                         <div class="relative h-48 overflow-hidden bg-roast-950 border-b border-roast-800"> 
                             <img src="https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&w=800&q=80" alt="Coffee Brewing Masterclass" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"> 
@@ -644,11 +763,13 @@
                         </div> 
                     </div> 
                     <div class="px-6 pb-6"> 
-                        <button onclick="checkAuthAndExecute(() => addToCart('Class: Coffee Brewing Masterclass', 120.00))" class="w-full py-3 bg-roast-800 hover:bg-amberGold hover:text-roast-950 text-roast-100 font-bold rounded-xl text-sm transition-all"> + Enroll This Class </button> 
+                        <button onclick="openClassModal('brewing-masterclass')" class="btn-anim w-full py-3 bg-roast-800 hover:bg-amberGold hover:text-roast-950 text-roast-100 font-bold rounded-xl text-sm transition-all flex items-center justify-center gap-2"> 
+                            <i class="fa-solid fa-circle-info"></i> Learn More 
+                        </button> 
                     </div> 
                 </div> 
 
-                <div class="bg-roast-900/90 rounded-2xl overflow-hidden border border-roast-800 hover:border-amberGold/50 transition-all flex flex-col justify-between group"> 
+                <div class="card-lift bg-roast-900/90 rounded-2xl overflow-hidden border border-roast-800 hover:border-amberGold/50 flex flex-col justify-between group"> 
                     <div> 
                         <div class="relative h-48 overflow-hidden bg-roast-950 border-b border-roast-800"> 
                             <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=800&q=80" alt="Latte Art Workshop" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"> 
@@ -669,11 +790,13 @@
                         </div> 
                     </div> 
                     <div class="px-6 pb-6"> 
-                        <button onclick="checkAuthAndExecute(() => addToCart('Class: Latte Art Workshop', 150.00))" class="w-full py-3 bg-roast-800 hover:bg-amberGold hover:text-roast-950 text-roast-100 font-bold rounded-xl text-sm transition-all"> + Enroll This Class </button> 
+                        <button onclick="openClassModal('latte-art')" class="btn-anim w-full py-3 bg-roast-800 hover:bg-amberGold hover:text-roast-950 text-roast-100 font-bold rounded-xl text-sm transition-all flex items-center justify-center gap-2"> 
+                            <i class="fa-solid fa-circle-info"></i> Learn More 
+                        </button> 
                     </div> 
                 </div> 
 
-                <div class="bg-roast-900/90 rounded-2xl overflow-hidden border border-roast-800 hover:border-amberGold/50 transition-all flex flex-col justify-between group"> 
+                <div class="card-lift bg-roast-900/90 rounded-2xl overflow-hidden border border-roast-800 hover:border-amberGold/50 flex flex-col justify-between group"> 
                     <div> 
                         <div class="relative h-48 overflow-hidden bg-roast-950 border-b border-roast-800"> 
                             <img src="https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=800&q=80" alt="Coffee Cupping Experience" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"> 
@@ -694,7 +817,9 @@
                         </div> 
                     </div> 
                     <div class="px-6 pb-6"> 
-                        <button onclick="checkAuthAndExecute(() => addToCart('Class: Coffee Cupping Experience', 80.00))" class="w-full py-3 bg-roast-800 hover:bg-amberGold hover:text-roast-950 text-roast-100 font-bold rounded-xl text-sm transition-all"> + Enroll This Class </button> 
+                        <button onclick="openClassModal('cupping-experience')" class="btn-anim w-full py-3 bg-roast-800 hover:bg-amberGold hover:text-roast-950 text-roast-100 font-bold rounded-xl text-sm transition-all flex items-center justify-center gap-2"> 
+                            <i class="fa-solid fa-circle-info"></i> Learn More 
+                        </button> 
                     </div> 
                 </div> 
             </div> 
@@ -704,7 +829,7 @@
     <!-- INTERACTIVE BREW GUIDE CALCULATOR --> 
     <section id="brew-guide" class="py-20 bg-roast-950"> 
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8"> 
-            <div class="bg-gradient-to-br from-roast-900 to-roast-950 p-8 sm:p-10 rounded-3xl border border-roast-800 shadow-2xl"> 
+            <div class="reveal-up bg-gradient-to-br from-roast-900 to-roast-950 p-8 sm:p-10 rounded-3xl border border-roast-800 shadow-2xl"> 
                 <div class="text-center mb-8"> 
                     <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Brewing Assistant</span> 
                     <h2 class="text-3xl font-bold text-white font-serif mt-1">Rumah Panggang Brew Calculator</h2> 
@@ -747,7 +872,7 @@
     <section id="location" class="py-20 bg-roast-900/60 border-t border-roast-900"> 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> 
             <div class="grid lg:grid-cols-2 gap-12 items-center"> 
-                <div class="space-y-6"> 
+                <div class="reveal-up space-y-6"> 
                     <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Locations & Outlets</span> 
                     <h2 class="text-3xl font-bold text-white font-serif">Visit Our Cafe & Roastery Outlets</h2> 
                     <div class="space-y-4"> 
@@ -778,7 +903,7 @@
                             <i class="fa-brands fa-whatsapp text-lg"></i> Contact via WhatsApp </a> 
                     </div> 
                 </div> 
-                <div class="h-80 rounded-3xl overflow-hidden border border-roast-800 shadow-xl bg-roast-900 flex items-center justify-center relative"> 
+                <div class="reveal-up h-80 rounded-3xl overflow-hidden border border-roast-800 shadow-xl bg-roast-900 flex items-center justify-center relative"> 
                     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15938.805561134267!2d101.5284!3d2.9734!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31cdb21e8a2a5b0d%3A0x88f8d5bc803e3a22!2sJalan%20Kebun%2C%20Shah%20Alam%2C%20Selangor!5e0!3m2!1sen!2smy!4v1690000000000!5m2!1sen!2smy" class="w-full h-full border-0 grayscale opacity-80 hover:grayscale-0 transition-all duration-500" allowfullscreen="" loading="lazy"></iframe> 
                 </div> 
             </div> 
@@ -823,8 +948,8 @@
     </footer> 
 
     <!-- BLOG ARTICLE READER MODAL --> 
-    <div id="blog-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4"> 
-        <div class="bg-gradient-to-b from-roast-900 to-roast-950 border border-roast-800 rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative text-left p-6 sm:p-8"> 
+    <div id="blog-modal" class="modal-overlay fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4"> 
+        <div class="modal-panel bg-gradient-to-b from-roast-900 to-roast-950 border border-roast-800 rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative text-left p-6 sm:p-8"> 
             <button onclick="closeBlogModal()" class="sticky top-0 float-right z-10 bg-roast-950/80 border border-roast-700 text-roast-200 hover:text-white p-2 rounded-full w-10 h-10 flex items-center justify-center shadow"> 
                 <i class="fa-solid fa-xmark text-lg"></i> 
             </button> 
@@ -833,8 +958,8 @@
     </div> 
 
     <!-- PRODUCT DETAIL MODAL --> 
-    <div id="product-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4"> 
-        <div class="bg-gradient-to-b from-roast-900 to-roast-950 border border-roast-800 rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative text-left p-6 sm:p-8"> 
+    <div id="product-modal" class="modal-overlay fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4"> 
+        <div class="modal-panel bg-gradient-to-b from-roast-900 to-roast-950 border border-roast-800 rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative text-left p-6 sm:p-8"> 
             <button onclick="closeProductModal()" class="absolute top-4 right-4 z-10 bg-roast-950/80 border border-roast-700 text-roast-200 hover:text-white p-2 rounded-full w-10 h-10 flex items-center justify-center shadow transition-all"> 
                 <i class="fa-solid fa-xmark text-lg"></i> 
             </button> 
@@ -877,7 +1002,7 @@
                             <span id="pm-qty" class="text-white font-bold text-sm px-3">1</span> 
                             <button onclick="adjustModalQty(1)" class="text-roast-400 hover:text-white px-2 text-sm font-bold">+</button> 
                         </div> 
-                        <button onclick="checkAuthAndExecute(addModalItemToCart)" class="flex-1 py-3 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl text-sm transition-all shadow-lg flex items-center justify-center gap-2"> 
+                        <button onclick="checkAuthAndExecute(addModalItemToCart)" class="btn-anim flex-1 py-3 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl text-sm transition-all shadow-lg flex items-center justify-center gap-2"> 
                             <i class="fa-solid fa-basket-shopping"></i> Add To Cart 
                         </button> 
                     </div> 
@@ -932,7 +1057,7 @@
                                 <label class="block text-xs font-semibold text-roast-300 uppercase mb-1">Your Review *</label> 
                                 <textarea id="rev-comment" required rows="4" placeholder="Describe the aroma, acidity, body, and taste notes..." class="w-full bg-roast-900 border border-roast-700 text-white rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-amberGold"></textarea> 
                             </div> 
-                            <button type="submit" class="px-6 py-3 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl text-xs transition-all shadow-md"> Submit Review </button> 
+                            <button type="submit" class="btn-anim px-6 py-3 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl text-xs transition-all shadow-md"> Submit Review </button> 
                         </form> 
                     </div> 
                 </div> 
@@ -941,8 +1066,8 @@
     </div> 
 
     <!-- MODAL CART DRAWER --> 
-    <div id="cart-drawer" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden transition-opacity"> 
-        <div class="absolute right-0 top-0 bottom-0 w-full max-w-md bg-roast-900 border-l border-roast-800 p-6 flex flex-col justify-between shadow-2xl"> 
+    <div id="cart-drawer" class="drawer-overlay fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden"> 
+        <div class="drawer-panel absolute right-0 top-0 bottom-0 w-full max-w-md bg-roast-900 border-l border-roast-800 p-6 flex flex-col justify-between shadow-2xl"> 
             <div> 
                 <div class="flex justify-between items-center pb-4 border-b border-roast-800"> 
                     <h3 class="text-lg font-bold text-white font-serif"><i class="fa-solid fa-bag-shopping text-amberGold me-2"></i> Your Order Basket</h3> 
@@ -959,7 +1084,7 @@
                     <span>Total Amount:</span> 
                     <span id="cart-total" class="text-amberGold text-lg">RM 0.00</span> 
                 </div> 
-                <button onclick="openCheckoutModal()" class="w-full py-3.5 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl transition-all shadow-lg text-sm flex items-center justify-center gap-2"> 
+                <button onclick="openCheckoutModal()" class="btn-anim w-full py-3.5 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl transition-all shadow-lg text-sm flex items-center justify-center gap-2"> 
                     <i class="fa-solid fa-credit-card"></i> Proceed To Checkout 
                 </button> 
             </div> 
@@ -967,8 +1092,8 @@
     </div> 
 
     <!-- CHECKOUT MODAL --> 
-    <div id="checkout-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-3 sm:p-6 overflow-y-auto"> 
-        <div class="bg-gradient-to-b from-roast-900 to-roast-950 border border-roast-800 rounded-3xl max-w-5xl w-full max-h-[92vh] overflow-y-auto shadow-2xl relative text-left p-6 sm:p-10 my-auto"> 
+    <div id="checkout-modal" class="modal-overlay fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-3 sm:p-6 overflow-y-auto"> 
+        <div class="modal-panel bg-gradient-to-b from-roast-900 to-roast-950 border border-roast-800 rounded-3xl max-w-5xl w-full max-h-[92vh] overflow-y-auto shadow-2xl relative text-left p-6 sm:p-10 my-auto"> 
             <button onclick="closeCheckoutModal()" class="absolute top-5 right-5 z-10 bg-roast-950/80 border border-roast-700 text-roast-200 hover:text-white p-2 rounded-full w-10 h-10 flex items-center justify-center shadow transition-all"> 
                 <i class="fa-solid fa-xmark text-lg"></i> 
             </button> 
@@ -1071,7 +1196,7 @@
                                 <span class="text-roast-400 text-[10px] block leading-relaxed"> Direct online banking payment via Billplz API (Maybank2u, CIMB Clicks, TNG eWallet, DuitNow, etc.) </span> 
                             </div> 
                         </div> 
-                        <button type="submit" id="checkout-submit-btn" class="w-full py-4 bg-amberGold hover:bg-amber-500 text-roast-950 font-extrabold rounded-xl text-sm transition-all shadow-xl flex items-center justify-center gap-2 mt-4"> 
+                        <button type="submit" id="checkout-submit-btn" class="btn-anim w-full py-4 bg-amberGold hover:bg-amber-500 text-roast-950 font-extrabold rounded-xl text-sm transition-all shadow-xl flex items-center justify-center gap-2 mt-4"> 
                             <i class="fa-solid fa-lock"></i> Pay via Billplz Gateway 
                         </button> 
                         <p class="text-[10px] text-roast-400 text-center flex items-center justify-center gap-1"> 
@@ -1083,9 +1208,78 @@
         </div> 
     </div> 
 
+    <!-- CLASS DETAIL / SLOT BOOKING MODAL --> 
+    <div id="class-modal" class="modal-overlay fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4"> 
+        <div class="modal-panel bg-gradient-to-b from-roast-900 to-roast-950 border border-roast-800 rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative text-left p-6 sm:p-8"> 
+            <button onclick="closeClassModal()" class="absolute top-4 right-4 z-10 bg-roast-950/80 border border-roast-700 text-roast-200 hover:text-white p-2 rounded-full w-10 h-10 flex items-center justify-center shadow transition-all"> 
+                <i class="fa-solid fa-xmark text-lg"></i> 
+            </button> 
+            <div class="text-xs text-roast-400 mb-6 flex items-center gap-2"> 
+                <a href="#classes" onclick="closeClassModal()" class="hover:text-amberGold">Home</a> 
+                <i class="fa-solid fa-chevron-right text-[9px]"></i> 
+                <a href="#classes" onclick="closeClassModal()" class="hover:text-amberGold">Classes</a> 
+                <i class="fa-solid fa-chevron-right text-[9px]"></i> 
+                <span id="cm-breadcrumb-name" class="text-white font-medium">Class Name</span> 
+            </div> 
+
+            <div class="grid md:grid-cols-12 gap-8 mb-8"> 
+                <div class="md:col-span-5"> 
+                    <div class="relative h-64 md:h-full rounded-2xl overflow-hidden border border-roast-800 bg-roast-950 group"> 
+                        <img id="cm-image" src="" alt="Class Image" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"> 
+                        <span id="cm-badge" class="absolute top-4 left-4 px-3 py-1 bg-amberGold text-roast-950 font-bold text-xs uppercase rounded-full shadow">Beginner Friendly</span> 
+                    </div> 
+                </div> 
+                <div class="md:col-span-7 space-y-5"> 
+                    <div> 
+                        <span id="cm-subtitle" class="text-xs font-bold text-amberGold uppercase tracking-wider">Duration • Max Pax</span> 
+                        <h2 id="cm-title" class="text-2xl sm:text-3xl font-extrabold text-white font-serif mt-1">Class Name</h2> 
+                    </div> 
+                    <p id="cm-description" class="text-sm text-roast-300 font-light leading-relaxed"></p> 
+                    <div class="py-2 border-y border-roast-800/80 flex items-baseline gap-3"> 
+                        <span id="cm-price" class="text-2xl sm:text-3xl font-extrabold text-amberGold font-serif">RM 0.00</span> 
+                        <span class="text-xs text-roast-400">per pax</span> 
+                    </div> 
+
+                    <!-- Mode Selection --> 
+                    <div> 
+                        <label class="block text-xs font-semibold text-roast-300 uppercase mb-2">Class Format:</label> 
+                        <div class="grid grid-cols-2 gap-2" id="cm-mode-options"></div> 
+                        <p id="cm-mode-note" class="text-[11px] text-roast-400 mt-2"></p> 
+                    </div> 
+
+                    <!-- Slot Selection --> 
+                    <div> 
+                        <label class="block text-xs font-semibold text-roast-300 uppercase mb-2">Available Slots:</label> 
+                        <div class="flex flex-wrap gap-2" id="cm-slot-options"></div> 
+                    </div> 
+
+                    <div class="flex items-center gap-4 pt-2"> 
+                        <div class="flex items-center bg-roast-950 border border-roast-700 rounded-xl px-3 py-2"> 
+                            <button onclick="adjustClassQty(-1)" class="text-roast-400 hover:text-white px-2 text-sm font-bold">-</button> 
+                            <span id="cm-qty" class="text-white font-bold text-sm px-3">1</span> 
+                            <button onclick="adjustClassQty(1)" class="text-roast-400 hover:text-white px-2 text-sm font-bold">+</button> 
+                        </div> 
+                        <button onclick="checkAuthAndExecute(addClassModalItemToCart)" class="btn-anim flex-1 py-3 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl text-sm transition-all shadow-lg flex items-center justify-center gap-2"> 
+                            <i class="fa-solid fa-calendar-check"></i> Enroll This Slot 
+                        </button> 
+                    </div> 
+                    <div class="text-[11px] text-roast-400 space-y-1 pt-2"> 
+                        <p>Location: <span id="cm-location" class="text-roast-200">Rumah Panggang Roastery, Sungai Petani, Kedah</span></p> 
+                        <p>Availability: <span class="text-green-400 font-semibold"><i class="fa-solid fa-check-circle me-1"></i> Open For Booking</span></p> 
+                    </div> 
+                </div> 
+            </div> 
+
+            <div class="border-t border-roast-800 pt-6 space-y-3"> 
+                <h4 class="text-sm font-bold font-serif text-white">What You'll Learn</h4> 
+                <ul id="cm-highlights" class="grid sm:grid-cols-2 gap-2 text-xs text-roast-300 font-light"></ul> 
+            </div> 
+        </div> 
+    </div> 
+
     <!-- ORDER SUCCESSFUL MODAL RECEIPT --> 
-    <div id="order-success-modal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-4"> 
-        <div class="bg-gradient-to-b from-roast-900 to-roast-950 border border-roast-800 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl relative text-center space-y-6"> 
+    <div id="order-success-modal" class="modal-overlay fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-4"> 
+        <div class="modal-panel bg-gradient-to-b from-roast-900 to-roast-950 border border-roast-800 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl relative text-center space-y-6"> 
             <div class="w-16 h-16 rounded-full bg-green-500/20 border border-green-500/40 text-green-400 flex items-center justify-center mx-auto"> 
                 <i class="fa-solid fa-check text-3xl"></i> 
             </div> 
@@ -1113,7 +1307,7 @@
                 </div> 
             </div> 
             <div class="space-y-3"> 
-                <button onclick="sendReceiptToWhatsApp()" class="w-full py-3.5 bg-green-600 hover:bg-green-500 text-white font-bold rounded-xl transition-all shadow-md text-xs flex items-center justify-center gap-2"> 
+                <button onclick="sendReceiptToWhatsApp()" class="btn-anim w-full py-3.5 bg-green-600 hover:bg-green-500 text-white font-bold rounded-xl transition-all shadow-md text-xs flex items-center justify-center gap-2"> 
                     <i class="fa-brands fa-whatsapp text-lg"></i> Send Order Receipt via WhatsApp 
                 </button> 
                 <button onclick="closeSuccessModal()" class="w-full py-3 bg-roast-900 hover:bg-roast-800 text-roast-200 font-bold rounded-xl transition-all text-xs border border-roast-700"> Return To Home Page </button> 
@@ -1135,8 +1329,8 @@
     </div> 
 
     <!-- LOGIN WARNING MODAL --> 
-    <div id="login-required-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4"> 
-        <div class="bg-gradient-to-b from-roast-900 to-roast-950 border border-roast-800 rounded-3xl p-6 sm:p-8 max-w-sm w-full shadow-2xl text-center space-y-5"> 
+    <div id="login-required-modal" class="modal-overlay fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4"> 
+        <div class="modal-panel bg-gradient-to-b from-roast-900 to-roast-950 border border-roast-800 rounded-3xl p-6 sm:p-8 max-w-sm w-full shadow-2xl text-center space-y-5"> 
             <div class="w-14 h-14 rounded-full bg-amberGold/20 border border-amberGold/40 text-amberGold flex items-center justify-center mx-auto text-xl"> 
                 <i class="fa-solid fa-lock"></i> 
             </div> 
@@ -1165,35 +1359,57 @@
                 isLoggedIn = true; 
             } 
             updateAuthNavbarUI(); 
+            initScrollReveal(); 
         }); 
 
-        function updateAuthNavbarUI() { 
-            const navAuth = document.getElementById('nav-auth-container'); 
-            const mobileAuth = document.getElementById('mobile-auth-container'); 
-            if (isLoggedIn) { 
-                navAuth.innerHTML = ` 
-                    <div class="flex items-center gap-3"> 
-                        <span class="text-xs text-amberGold font-bold hidden lg:inline"><i class="fa-solid fa-user-check me-1"></i> Account</span> 
-                        <button onclick="logoutUser()" class="px-3.5 py-1.5 rounded-full bg-roast-900 hover:bg-red-950/40 border border-roast-700 text-roast-300 hover:text-red-400 text-xs font-semibold transition-all">Logout</button> 
-                    </div> 
-                `; 
-                mobileAuth.innerHTML = ` 
-                    <button onclick="logoutUser()" class="w-full py-3 rounded-xl bg-red-950/50 border border-red-900/50 text-red-300 font-bold text-xs flex items-center justify-center gap-2"> 
-                        <i class="fa-solid fa-right-from-bracket"></i> Logout Account 
-                    </button> 
-                `; 
-            } else { 
-                navAuth.innerHTML = ` 
-                    <a href="auth.html" class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full bg-roast-900 hover:bg-roast-800 border border-roast-700 text-roast-200 hover:text-amberGold text-xs font-semibold transition-all"> 
-                        <i class="fa-solid fa-user"></i> Sign In 
-                    </a> 
-                `; 
-                mobileAuth.innerHTML = ` 
-                    <a href="auth.html" class="w-full py-3 rounded-xl bg-roast-900 border border-roast-700 text-roast-200 font-bold text-xs flex items-center justify-center gap-2"> 
-                        <i class="fa-solid fa-user"></i> Sign In / Register 
-                    </a> 
-                `; 
+        // ===================== SCROLL REVEAL ===================== 
+        function initScrollReveal() { 
+            const targets = document.querySelectorAll('.reveal-up, .reveal-stagger'); 
+            if (!('IntersectionObserver' in window) || targets.length === 0) { 
+                targets.forEach(el => el.classList.add('is-visible')); 
+                return; 
             } 
+            const observer = new IntersectionObserver((entries) => { 
+                entries.forEach(entry => { 
+                    if (entry.isIntersecting) { 
+                        entry.target.classList.add('is-visible'); 
+                        observer.unobserve(entry.target); 
+                    } 
+                }); 
+            }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' }); 
+            targets.forEach(el => observer.observe(el)); 
+        } 
+
+        // ===================== GENERIC MODAL / DRAWER OPEN-CLOSE HELPERS ===================== 
+        function openModal(id) { 
+            const el = document.getElementById(id); 
+            if (!el) return; 
+            el.classList.remove('hidden'); 
+            // Force reflow so the transition actually plays after unhiding 
+            void el.offsetWidth; 
+            requestAnimationFrame(() => el.classList.add('modal-open')); 
+        } 
+
+        function closeModal(id) { 
+            const el = document.getElementById(id); 
+            if (!el) return; 
+            el.classList.remove('modal-open'); 
+            setTimeout(() => el.classList.add('hidden'), 300); 
+        } 
+
+        function openDrawer(id) { 
+            const el = document.getElementById(id); 
+            if (!el) return; 
+            el.classList.remove('hidden'); 
+            void el.offsetWidth; 
+            requestAnimationFrame(() => el.classList.add('drawer-open')); 
+        } 
+
+        function closeDrawer(id) { 
+            const el = document.getElementById(id); 
+            if (!el) return; 
+            el.classList.remove('drawer-open'); 
+            setTimeout(() => el.classList.add('hidden'), 360); 
         } 
 
         function logoutUser() { 
@@ -1205,14 +1421,14 @@
 
         function checkAuthAndExecute(actionCallback) { 
             if (!isLoggedIn) { 
-                document.getElementById('login-required-modal').classList.remove('hidden'); 
+                openModal('login-required-modal'); 
             } else { 
                 actionCallback(); 
             } 
         } 
 
         function closeLoginRequiredModal() { 
-            document.getElementById('login-required-modal').classList.add('hidden'); 
+            closeModal('login-required-modal'); 
         } 
 
         const productsCatalog = { 
@@ -1404,11 +1620,11 @@
 
             renderProductReviews(p); 
             switchProductTab('desc'); 
-            document.getElementById('product-modal').classList.remove('hidden'); 
+            openModal('product-modal'); 
         } 
 
         function closeProductModal() { 
-            document.getElementById('product-modal').classList.add('hidden'); 
+            closeModal('product-modal'); 
         } 
 
         function selectProductWeight(weight, price, btnEl) { 
@@ -1445,6 +1661,9 @@
                 if(t === tab) { 
                     btn.className = 'pb-3 border-b-2 border-amberGold text-amberGold font-bold transition-all'; 
                     panel.classList.remove('hidden'); 
+                    panel.classList.remove('tab-fade-in'); 
+                    void panel.offsetWidth; 
+                    panel.classList.add('tab-fade-in'); 
                 } else { 
                     btn.className = 'pb-3 border-b-2 border-transparent text-roast-400 hover:text-white transition-all'; 
                     panel.classList.add('hidden'); 
@@ -1499,6 +1718,172 @@
             e.target.reset(); 
             setReviewRating(5); 
         } 
+
+        // ===================== CLASSES CATALOG & MODAL LOGIC ===================== 
+        const classesCatalog = { 
+            'brewing-masterclass': { 
+                title: "Coffee Brewing Masterclass", 
+                subtitle: "Duration: 2.5 Hours • Max 8 Pax", 
+                badge: "Beginner Friendly", 
+                image: "https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&w=800&q=80", 
+                price: 120.00, 
+                description: "Master V60, French Press & AeroPress techniques. Ideal for beginners wanting to understand ratios, grind size & extraction fundamentals.", 
+                highlights: ["Water-to-coffee ratios", "Grind size fundamentals", "V60 pour-over technique", "French Press & AeroPress brewing"], 
+                modes: { 
+                    "face-to-face": { label: "Face-to-Face", note: "Hosted at Rumah Panggang Roastery, Sungai Petani, Kedah.", location: "Rumah Panggang Roastery, Sungai Petani, Kedah" }, 
+                    "online": { label: "Online (Live Zoom)", note: "Live guided session via Zoom. Brewing kit list will be sent after booking.", location: "Online via Zoom (link sent after booking)" } 
+                }, 
+                slots: { 
+                    "face-to-face": ["Sat, 6 Sep 2026 — 10:00 AM", "Sat, 13 Sep 2026 — 10:00 AM", "Sun, 21 Sep 2026 — 2:00 PM"], 
+                    "online": ["Fri, 5 Sep 2026 — 8:30 PM", "Fri, 12 Sep 2026 — 8:30 PM", "Wed, 17 Sep 2026 — 8:30 PM"] 
+                } 
+            }, 
+            'latte-art': { 
+                title: "Latte Art Workshop", 
+                subtitle: "Duration: 3 Hours • Max 6 Pax", 
+                badge: "Popular", 
+                image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=800&q=80", 
+                price: 150.00, 
+                description: "Learn milk steaming & pouring techniques to craft heart, rosetta & tulip patterns on top of your espresso.", 
+                highlights: ["Milk steaming technique", "Microfoam texturing", "Heart & rosetta pouring", "Tulip pattern layering"], 
+                modes: { 
+                    "face-to-face": { label: "Face-to-Face", note: "Hands-on session with espresso machine at Rumah Panggang Roastery. Online option is not available for this workshop since it requires hands-on milk steaming practice.", location: "Rumah Panggang Roastery, Sungai Petani, Kedah" } 
+                }, 
+                slots: { 
+                    "face-to-face": ["Sat, 6 Sep 2026 — 2:00 PM", "Sun, 14 Sep 2026 — 10:00 AM", "Sat, 20 Sep 2026 — 2:00 PM"] 
+                } 
+            }, 
+            'cupping-experience': { 
+                title: "Coffee Cupping Experience", 
+                subtitle: "Duration: 1.5 Hours • Max 10 Pax", 
+                badge: "Palate Training", 
+                image: "https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=800&q=80", 
+                price: 80.00, 
+                description: "Taste & compare our diverse coffee origins systematically. Learn to identify flavor notes and aromas like a Q-Grader.", 
+                highlights: ["Cupping protocol basics", "Aroma & flavor identification", "Comparing multiple origins", "Scoring like a Q-Grader"], 
+                modes: { 
+                    "face-to-face": { label: "Face-to-Face", note: "In-person tasting session with fresh cupping bowls at the roastery.", location: "Rumah Panggang Roastery, Sungai Petani, Kedah" }, 
+                    "online": { label: "Online (Guided Tasting)", note: "A cupping sample kit will be shipped to you before the live guided session.", location: "Online via Zoom (cupping kit shipped beforehand)" } 
+                }, 
+                slots: { 
+                    "face-to-face": ["Sun, 7 Sep 2026 — 11:00 AM", "Sun, 14 Sep 2026 — 11:00 AM"], 
+                    "online": ["Thu, 11 Sep 2026 — 8:00 PM", "Thu, 18 Sep 2026 — 8:00 PM"] 
+                } 
+            } 
+        }; 
+
+        let currentActiveClassId = null; 
+        let selectedClassMode = null; 
+        let selectedClassSlot = null; 
+        let classQty = 1; 
+
+        function openClassModal(classId) { 
+            const c = classesCatalog[classId]; 
+            if (!c) return; 
+            currentActiveClassId = classId; 
+            classQty = 1; 
+            document.getElementById('cm-qty').innerText = '1'; 
+            document.getElementById('cm-breadcrumb-name').innerText = c.title; 
+            document.getElementById('cm-title').innerText = c.title; 
+            document.getElementById('cm-subtitle').innerText = c.subtitle; 
+            document.getElementById('cm-badge').innerText = c.badge; 
+            document.getElementById('cm-image').src = c.image; 
+            document.getElementById('cm-description').innerText = c.description; 
+            document.getElementById('cm-price').innerText = `RM ${c.price.toFixed(2)}`; 
+
+            document.getElementById('cm-highlights').innerHTML = c.highlights.map(h => ` 
+                <li class="flex items-center gap-2"> 
+                    <i class="fa-solid fa-check text-amberGold text-[10px]"></i> ${h} 
+                </li> 
+            `).join(''); 
+
+            const modeKeys = Object.keys(c.modes); 
+            selectedClassMode = modeKeys[0]; 
+            renderClassModeOptions(c); 
+            renderClassSlotOptions(c); 
+
+            openModal('class-modal'); 
+        } 
+
+        function closeClassModal() { 
+            closeModal('class-modal'); 
+        } 
+
+        function renderClassModeOptions(c) { 
+            const modeContainer = document.getElementById('cm-mode-options'); 
+            const modeKeys = Object.keys(c.modes); 
+            modeContainer.innerHTML = ''; 
+            modeKeys.forEach(key => { 
+                const isSel = key === selectedClassMode; 
+                const btn = document.createElement('button'); 
+                btn.type = 'button'; 
+                btn.className = `px-3.5 py-2.5 rounded-xl text-xs font-bold border transition-all flex items-center justify-center gap-2 ${ isSel ? 'bg-amberGold text-roast-950 border-amberGold shadow' : 'bg-roast-900 text-roast-300 border-roast-700 hover:text-white' }`; 
+                const icon = key === 'online' ? 'fa-video' : 'fa-people-roof'; 
+                btn.innerHTML = `<i class="fa-solid ${icon}"></i> ${c.modes[key].label}`; 
+                btn.onclick = () => selectClassMode(key); 
+                modeContainer.appendChild(btn); 
+            }); 
+            document.getElementById('cm-mode-note').innerText = c.modes[selectedClassMode].note; 
+            document.getElementById('cm-location').innerText = c.modes[selectedClassMode].location; 
+        } 
+
+        function selectClassMode(modeKey) { 
+            const c = classesCatalog[currentActiveClassId]; 
+            if (!c || !c.modes[modeKey]) return; 
+            selectedClassMode = modeKey; 
+            renderClassModeOptions(c); 
+            renderClassSlotOptions(c); 
+        } 
+
+        function renderClassSlotOptions(c) { 
+            const slotContainer = document.getElementById('cm-slot-options'); 
+            const slots = c.slots[selectedClassMode] || []; 
+            selectedClassSlot = slots[0] || null; 
+            slotContainer.innerHTML = ''; 
+            if (slots.length === 0) { 
+                slotContainer.innerHTML = `<p class="text-xs text-roast-400 italic">No open slots for this format yet. Please check back soon.</p>`; 
+                return; 
+            } 
+            slots.forEach(slot => { 
+                const isSel = slot === selectedClassSlot; 
+                const btn = document.createElement('button'); 
+                btn.type = 'button'; 
+                btn.className = `px-3.5 py-1.5 rounded-xl text-xs font-bold border transition-all ${ isSel ? 'bg-amberGold text-roast-950 border-amberGold shadow' : 'bg-roast-900 text-roast-300 border-roast-700 hover:text-white' }`; 
+                btn.innerText = slot; 
+                btn.onclick = () => selectClassSlot(slot, btn); 
+                slotContainer.appendChild(btn); 
+            }); 
+        } 
+
+        function selectClassSlot(slot, btnEl) { 
+            selectedClassSlot = slot; 
+            const allBtns = document.querySelectorAll('#cm-slot-options button'); 
+            allBtns.forEach(b => { 
+                b.className = 'px-3.5 py-1.5 rounded-xl text-xs font-bold border transition-all bg-roast-900 text-roast-300 border-roast-700 hover:text-white'; 
+            }); 
+            btnEl.className = 'px-3.5 py-1.5 rounded-xl text-xs font-bold border transition-all bg-amberGold text-roast-950 border-amberGold shadow'; 
+        } 
+
+        function adjustClassQty(delta) { 
+            classQty = Math.max(1, classQty + delta); 
+            document.getElementById('cm-qty').innerText = classQty; 
+        } 
+
+        function addClassModalItemToCart() { 
+            const c = classesCatalog[currentActiveClassId]; 
+            if (!c) return; 
+            if (!selectedClassSlot) { 
+                showToastMessage('Please select an available slot first.'); 
+                return; 
+            } 
+            const modeLabel = c.modes[selectedClassMode].label; 
+            const fullItemName = `Class: ${c.title} — ${modeLabel} (${selectedClassSlot})`; 
+            for (let i = 0; i < classQty; i++) { 
+                addToCart(fullItemName, c.price); 
+            } 
+            closeClassModal(); 
+        } 
+        // ===================== END CLASSES LOGIC ===================== 
 
         const blogArticlesData = [ 
             { 
@@ -1574,6 +1959,12 @@
             } 
             updateCartUI(); 
             showToastMessage(`"${itemName}" added to your order basket.`); 
+            const badge = document.getElementById('cart-count'); 
+            if (badge) { 
+                badge.classList.remove('cart-pulse'); 
+                void badge.offsetWidth; 
+                badge.classList.add('cart-pulse'); 
+            } 
         } 
 
         function removeFromCart(itemName) { 
@@ -1615,10 +2006,11 @@
 
         function toggleCart(forceOpen = false) { 
             const drawer = document.getElementById('cart-drawer'); 
-            if(forceOpen) { 
-                drawer.classList.remove('hidden'); 
+            const isHidden = drawer.classList.contains('hidden'); 
+            if (forceOpen || isHidden) { 
+                openDrawer('cart-drawer'); 
             } else { 
-                drawer.classList.toggle('hidden'); 
+                closeDrawer('cart-drawer'); 
             } 
         } 
 
@@ -1653,11 +2045,11 @@
                     </div> 
                 </div> 
             `; 
-            document.getElementById('blog-modal').classList.remove('hidden'); 
+            openModal('blog-modal'); 
         } 
 
         function closeBlogModal() { 
-            document.getElementById('blog-modal').classList.add('hidden'); 
+            closeModal('blog-modal'); 
         } 
 
         function filterBeans(category) { 
@@ -1700,11 +2092,11 @@
             } 
             toggleCart(false); 
             updateCheckoutSummary(); 
-            document.getElementById('checkout-modal').classList.remove('hidden'); 
+            openModal('checkout-modal'); 
         } 
 
         function closeCheckoutModal() { 
-            document.getElementById('checkout-modal').classList.add('hidden'); 
+            closeModal('checkout-modal'); 
         } 
 
         function calculateShippingFee() { 
@@ -1818,8 +2210,7 @@
         } 
 
         function showBillplzGatewayModal(orderData) { 
-            const modal = document.getElementById('order-success-modal'); 
-            modal.classList.remove('hidden'); 
+            openModal('order-success-modal'); 
             document.getElementById('receipt-order-id').innerText = orderData.orderId + ' (Billplz Paid)'; 
             document.getElementById('receipt-customer-name').innerText = orderData.customerName; 
             document.getElementById('receipt-address').innerText = `${orderData.address}`; 
@@ -1851,7 +2242,7 @@
         } 
 
         function closeSuccessModal() { 
-            document.getElementById('order-success-modal').classList.add('hidden'); 
+            closeModal('order-success-modal'); 
         } 
 
         function updateAuthNavbarUI() {

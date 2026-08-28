@@ -4,7 +4,6 @@
     <meta charset="UTF-8"> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
     <title>My Orders & Enrolled Classes | Rumah Panggang</title> 
-    <!-- Tailwind CSS CDN --> 
     <script src="https://cdn.tailwindcss.com"></script> 
     <script> 
         tailwind.config = { 
@@ -40,11 +39,9 @@
 </head> 
 <body class="bg-roast-950 text-roast-100 antialiased selection:bg-amberGold selection:text-white"> 
 
-    <!-- NAVIGATION BAR --> 
     <nav class="fixed top-0 left-0 right-0 z-50 bg-roast-950/90 backdrop-blur-md border-b border-roast-900 transition-all duration-300"> 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> 
             <div class="flex items-center justify-between h-20"> 
-                <!-- Brand Logo --> 
                 <a href="dashboard.html" class="flex items-center gap-3 group"> 
                     <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-amberGold to-roast-500 flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform"> 
                         <i class="fa-solid me-0 fa-fire-burner text-roast-950 text-lg"></i> 
@@ -54,32 +51,26 @@
                         <span class="text-[10px] tracking-widest text-amberGold uppercase">Member Portal</span> 
                     </div> 
                 </a> 
-                <!-- Desktop Menu --> 
                 <div class="hidden md:flex items-center space-x-8 text-sm font-medium"> 
                     <a href="dashboard.html" class="text-roast-200 hover:text-amberGold transition-colors">Home</a> 
                     <a href="orders.html" class="text-amberGold font-bold hover:underline transition-colors"><i class="fa-solid fa-box-open me-1"></i> My Orders</a> 
                 </div> 
                 <div class="flex items-center gap-2.5">
-                    <!-- 1. Membership Points Button -->
                     <a href="membership.html" class="relative w-10 h-10 rounded-full bg-roast-900 hover:bg-roast-800 border border-roast-800 text-amberGold flex items-center justify-center transition-all shadow-md" title="Membership Points">
                         <i class="fa-solid fa-bag-shopping text-base"></i>
                         <span class="absolute -top-1 -right-1 bg-amberGold text-roast-950 text-[9px] font-extrabold px-1.5 py-0.5 rounded-full shadow">350</span>
                     </a>
-                    <!-- 2. Cart Button -->
                     <button onclick="toggleCart(true)" class="relative w-10 h-10 rounded-full bg-roast-900 hover:bg-roast-800 border border-roast-800 text-amberGold flex items-center justify-center transition-all shadow-md" title="Shopping Cart">
                         <i class="fa-solid fa-cart-shopping text-base"></i>
                         <span id="cart-count" class="absolute -top-1 -right-1 bg-amberGold text-roast-950 text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow">0</span>
                     </button>
-                    <!-- 3. Wishlist Button -->
                     <button onclick="toggleWishlistDrawer()" class="relative w-10 h-10 rounded-full bg-roast-900 hover:bg-roast-800 border border-roast-800 text-amberGold flex items-center justify-center transition-all shadow-md" title="View Wishlist">
                         <i class="fa-solid fa-heart text-base"></i>
                         <span id="wishlist-count" class="absolute -top-1 -right-1 bg-amberGold text-roast-950 text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow">0</span>
                     </button>
-                    <!-- 4. Profile Button -->
-                    <a href="membership.html" class="w-10 h-10 rounded-full bg-roast-900 hover:bg-roast-800 border border-roast-800 text-amberGold flex items-center justify-center transition-all shadow-md" title="Member Profile">
+                    <button onclick="openProfileModal()" class="w-10 h-10 rounded-full bg-roast-900 hover:bg-roast-800 border border-roast-800 text-amberGold flex items-center justify-center transition-all shadow-md" title="Edit Profile">
                         <i class="fa-solid fa-user text-base"></i>
-                    </a>
-                    <!-- Logout Button -->
+                    </button>
                     <button onclick="logoutUser()" class="px-3.5 py-2 rounded-full bg-roast-900 hover:bg-red-950/40 border border-roast-700 text-roast-300 hover:text-red-400 text-xs font-semibold transition-all">
                         <i class="fa-solid fa-right-from-bracket"></i> Logout
                     </button>
@@ -88,16 +79,12 @@
         </div> 
     </nav> 
 
-    <!-- ORDERS HERO SECTION -->
     <section class="relative pt-36 pb-24 overflow-hidden border-b border-roast-900 flex items-center justify-center">
-        <!-- Full-Width Video Background -->
         <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover z-0">
             <source src="video/background-order.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
-        <!-- Dark Overlay -->
         <div class="absolute inset-0 bg-roast-950/75 z-10"></div>
-        <!-- Content -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 w-full text-center md:text-left">
             <div class="space-y-3">
                 <h1 class="text-3xl sm:text-5xl font-extrabold text-white font-serif">My Orders & Enrolled Classes</h1>
@@ -106,11 +93,9 @@
         </div>
     </section>
 
-    <!-- MAIN ORDERS & ENROLLED CLASSES CONTENT --> 
     <section class="py-16 bg-roast-950"> 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12"> 
             
-            <!-- SECTION 1: ORDER TRACKING & HISTORY -->
             <div class="space-y-6"> 
                 <div class="flex flex-col md:flex-row md:items-end justify-between"> 
                     <div> 
@@ -120,7 +105,6 @@
                     <p class="text-xs text-roast-400 mt-2 md:mt-0">Review shipment statuses and purchase records.</p> 
                 </div> 
 
-                <!-- Order Card 1: ORD1001 -->
                 <div class="bg-roast-900/90 text-roast-100 rounded-3xl p-6 sm:p-8 shadow-2xl border border-roast-800 space-y-6"> 
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4 border-b border-roast-800"> 
                         <div> 
@@ -132,7 +116,6 @@
                         </button> 
                     </div> 
 
-                    <!-- Visual Step Progress Tracker -->
                     <div class="py-4 px-2 overflow-x-auto">
                         <div class="min-w-[550px] flex items-center justify-between relative">
                             <div class="flex flex-col items-center text-center relative z-10 space-y-2">
@@ -165,7 +148,6 @@
                         </div>
                     </div>
 
-                    <!-- Tracking Info -->
                     <div class="bg-roast-950 border border-roast-800 rounded-xl p-3.5 flex items-center gap-3 text-xs font-medium text-roast-300">
                         <i class="fa-solid fa-truck text-amberGold text-base"></i>
                         <div>
@@ -174,7 +156,6 @@
                         </div>
                     </div>
 
-                    <!-- Collapsible Timeline -->
                     <div class="space-y-3 pt-2">
                         <button onclick="toggleTimeline()" class="w-full text-xs font-bold text-amberGold uppercase tracking-wider flex items-center justify-between bg-roast-950 hover:bg-roast-950/80 p-3.5 rounded-xl border border-roast-800 transition-all cursor-pointer">
                             <span class="flex items-center gap-2">
@@ -204,7 +185,6 @@
                 </div> 
             </div>
 
-            <!-- SECTION 2: ENROLLED CLASSES -->
             <div class="space-y-6 pt-6"> 
                 <div class="flex flex-col md:flex-row md:items-end justify-between"> 
                     <div> 
@@ -215,7 +195,6 @@
                 </div> 
 
                 <div class="grid md:grid-cols-2 gap-6">
-                    <!-- Class Item 1 -->
                     <div class="bg-roast-900/90 rounded-3xl p-6 border border-roast-800 space-y-4 flex flex-col justify-between">
                         <div class="space-y-2">
                             <div class="flex justify-between items-center">
@@ -235,7 +214,6 @@
                         </button>
                     </div>
 
-                    <!-- Class Item 2 -->
                     <div class="bg-roast-900/90 rounded-3xl p-6 border border-roast-800 space-y-4 flex flex-col justify-between">
                         <div class="space-y-2">
                             <div class="flex justify-between items-center">
@@ -260,7 +238,6 @@
         </div> 
     </section> 
 
-    <!-- EDIT PROFILE & PASSWORD MODAL --> 
     <div id="profile-modal" class="fixed inset-0 bg-black/75 backdrop-blur-md z-50 hidden flex items-center justify-center p-4"> 
         <div class="bg-gradient-to-b from-roast-900 to-roast-950 border border-roast-800 rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl relative space-y-6"> 
             <button onclick="closeProfileModal()" class="absolute top-5 right-5 text-roast-400 hover:text-white p-2"> 
@@ -298,7 +275,6 @@
         </div> 
     </div> 
 
-    <!-- VIEW RECEIPT MODAL -->
     <div id="receipt-modal" class="fixed inset-0 bg-black/75 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="bg-roast-900 border border-roast-800 rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl relative space-y-6 text-roast-100">
             <button onclick="closeReceiptModal()" class="absolute top-5 right-5 text-roast-400 hover:text-white p-2">
@@ -342,13 +318,12 @@
         </div>
     </div>
 
-    <!-- CART DRAWER MODAL --> 
     <div id="cart-drawer" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden transition-opacity"> 
         <div class="absolute right-0 top-0 bottom-0 w-full max-w-md bg-roast-900 border-l border-roast-800 p-6 flex flex-col justify-between shadow-2xl"> 
             <div> 
                 <div class="flex justify-between items-center pb-4 border-b border-roast-800"> 
                     <h3 class="text-lg font-bold text-white font-serif"><i class="fa-solid fa-bag-shopping text-amberGold me-2"></i> Your Order Cart</h3> 
-                    <button onclick="toggleCartDrawer()" class="text-roast-400 hover:text-white p-2"> 
+                    <button onclick="toggleCart()" class="text-roast-400 hover:text-white p-2"> 
                         <i class="fa-solid fa-xmark text-xl"></i> 
                     </button> 
                 </div> 
@@ -368,7 +343,6 @@
         </div> 
     </div> 
 
-    <!-- WISHLIST DRAWER MODAL --> 
     <div id="wishlist-drawer" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden transition-opacity"> 
         <div class="absolute right-0 top-0 bottom-0 w-full max-w-md bg-roast-900 border-l border-roast-800 p-6 flex flex-col justify-between shadow-2xl"> 
             <div> 
@@ -390,7 +364,6 @@
         </div> 
     </div> 
 
-    <!-- TOAST NOTIFICATION --> 
     <div id="app-toast" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none"> 
         <div class="bg-roast-900 border border-amberGold/50 text-white px-5 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3"> 
             <div class="w-8 h-8 rounded-full bg-amberGold text-roast-950 flex items-center justify-center font-bold shrink-0"> 
@@ -403,12 +376,10 @@
         </div> 
     </div> 
 
-    <!-- FOOTER --> 
     <footer class="bg-roast-950 border-t border-roast-900 py-12 text-center text-xs text-roast-400"> 
         <p>© 2026 Rumah Panggang Member Portal. All rights reserved.</p> 
     </footer> 
 
-    <!-- JAVASCRIPT LOGIC --> 
     <script> 
         let cart = [];
         let wishlist = [];
@@ -419,6 +390,8 @@
                 window.location.href = 'auth.html'; 
                 return; 
             } 
+            updateCartUI();
+            updateWishlistUI();
         }); 
 
         function logoutUser() { 
@@ -473,8 +446,23 @@
             showToast("Profile & security details updated successfully!");
         }
 
-        function toggleCartDrawer() {
-            document.getElementById('cart-drawer').classList.toggle('hidden');
+        function toggleCart(forceOpen = false) {
+            const drawer = document.getElementById('cart-drawer');
+            if(forceOpen) {
+                drawer.classList.remove('hidden');
+            } else {
+                drawer.classList.toggle('hidden');
+            }
+        }
+
+        function updateCartUI() {
+            const cartCount = document.getElementById('cart-count');
+            if(cartCount) cartCount.innerText = cart.length;
+        }
+
+        function updateWishlistUI() {
+            const badge = document.getElementById('wishlist-count');
+            if(badge) badge.innerText = wishlist.length;
         }
 
         function toggleWishlistDrawer() {

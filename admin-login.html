@@ -31,120 +31,158 @@
     <style> 
         body { font-family: 'Plus Jakarta Sans', sans-serif; } 
         h1, h2, h3, .font-serif { font-family: 'Playfair Display', serif; } 
+
+        @keyframes fadeUp { 
+            from { opacity: 0; transform: translateY(16px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        } 
+        .anim-fade-up { animation: fadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both; } 
+        .btn-anim { transition: transform 0.18s ease, box-shadow 0.18s ease; } 
+        .btn-anim:hover { transform: translateY(-2px); } 
+        .btn-anim:active { transform: translateY(0) scale(0.97); } 
+
+        @media (prefers-reduced-motion: reduce) { 
+            .anim-fade-up { animation: none !important; opacity: 1 !important; transform: none !important; } 
+        } 
     </style> 
 </head> 
-<body class="bg-roast-950 text-roast-100 antialiased min-h-screen flex items-center justify-center p-0 selection:bg-amberGold selection:text-white"> 
+<body class="bg-roast-950 text-roast-100 antialiased min-h-screen selection:bg-amberGold selection:text-white"> 
 
-    <div class="w-full min-h-screen grid lg:grid-cols-2">
-        
-        <!-- LEFT COLUMN: Aesthetic Image & Admin Showcase -->
-        <div class="relative hidden lg:flex flex-col justify-between p-12 bg-roast-900 overflow-hidden border-r border-roast-800">
-            <!-- Background Image with Dark Gradient Overlay -->
-            <div class="absolute inset-0 z-0">
-                <img src="https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&w=1200&q=80" alt="Admin Coffee Roastery" class="w-full h-full object-cover opacity-35 scale-105 transform hover:scale-100 transition-transform duration-1000">
-                <div class="absolute inset-0 bg-gradient-to-t from-roast-950 via-roast-950/60 to-transparent"></div>
-            </div>
+    <div class="w-full min-h-screen grid lg:grid-cols-2 relative"> 
 
-            <!-- Top Brand Logo -->
-            <div class="relative z-10 flex items-center gap-3">
+        <!-- ============================================================ -->
+        <!-- MOBILE-ONLY HERO BANNER — visible only below the lg breakpoint --> 
+        <!-- ============================================================ -->
+        <div class="lg:hidden relative h-64 sm:h-72 w-full overflow-hidden"> 
+            <img src="https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&w=1200&q=80" alt="Admin Coffee Roastery" class="absolute inset-0 w-full h-full object-cover opacity-45"> 
+            <div class="absolute inset-0 bg-gradient-to-t from-roast-950 via-roast-950/55 to-roast-950/15"></div> 
+
+            <!-- Top bar: logo + back to member portal --> 
+            <div class="relative z-10 flex items-center justify-between p-5"> 
+                <div class="flex items-center gap-2.5"> 
+                    <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-amberGold to-roast-500 flex items-center justify-center shadow-lg"> 
+                        <i class="fa-solid fa-fire-burner text-roast-950 text-sm"></i> 
+                    </div> 
+                    <span class="font-serif text-base font-extrabold tracking-wider text-white uppercase">Rumah Panggang</span> 
+                </div> 
+                <a href="auth.html" class="w-9 h-9 rounded-full bg-roast-950/60 hover:bg-roast-950 border border-roast-700/60 text-roast-300 hover:text-amberGold text-xs flex items-center justify-center transition-all backdrop-blur-sm"> 
+                    <i class="fa-solid fa-arrow-left"></i> 
+                </a> 
+            </div> 
+
+            <!-- Bottom quote text --> 
+            <div class="absolute bottom-5 left-5 right-5 z-10 space-y-1.5"> 
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-amberGold/15 text-amberGold rounded-full text-[10px] font-semibold uppercase tracking-wider border border-amberGold/25"> 
+                    <i class="fa-solid fa-shield-halved"></i> Management Console 
+                </span> 
+                <h1 class="text-xl sm:text-2xl font-extrabold text-white font-serif leading-tight">Administrative Control Center</h1> 
+            </div> 
+        </div> 
+
+        <!-- ============================================================ -->
+        <!-- DESKTOP-ONLY LEFT COLUMN — visible only at lg breakpoint and up --> 
+        <!-- ============================================================ -->
+        <div class="relative hidden lg:flex flex-col justify-between p-12 bg-roast-900 overflow-hidden border-r border-roast-800"> 
+            <!-- Background Image with Dark Gradient Overlay --> 
+            <div class="absolute inset-0 z-0"> 
+                <img src="https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&w=1200&q=80" alt="Admin Coffee Roastery" class="w-full h-full object-cover opacity-35 scale-105 transform hover:scale-100 transition-transform duration-1000"> 
+                <div class="absolute inset-0 bg-gradient-to-t from-roast-950 via-roast-950/60 to-transparent"></div> 
+            </div> 
+
+            <!-- Top Brand Logo --> 
+            <div class="relative z-10 flex items-center gap-3"> 
                 <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-amberGold to-roast-500 flex items-center justify-center shadow-lg"> 
                     <i class="fa-solid fa-fire-burner text-roast-950 text-lg"></i> 
-                </div>
-                <span class="font-serif text-xl font-extrabold tracking-wider text-white uppercase">Rumah Panggang</span>
-            </div>
+                </div> 
+                <span class="font-serif text-xl font-extrabold tracking-wider text-white uppercase">Rumah Panggang</span> 
+            </div> 
 
-            <!-- Middle Quote / Welcome Text -->
-            <div class="relative z-10 space-y-4 max-w-lg my-auto">
-                <span class="px-3.5 py-1 bg-amberGold/10 text-amberGold rounded-full text-xs font-semibold uppercase tracking-wider border border-amberGold/20 inline-flex items-center gap-1.5">
-                    <i class="fa-solid fa-shield-halved"></i> Management Console
-                </span>
-                <h1 class="text-4xl sm:text-5xl font-extrabold text-white font-serif leading-tight">Administrative Control Center</h1>
-                <p class="text-xs text-roast-300 font-light leading-relaxed">Manage member orders, update payment verifications, monitor workshop schedules, and oversee operations securely.</p>
-            </div>
+            <!-- Middle Quote / Welcome Text --> 
+            <div class="relative z-10 space-y-4 max-w-lg my-auto"> 
+                <span class="px-3.5 py-1 bg-amberGold/10 text-amberGold rounded-full text-xs font-semibold uppercase tracking-wider border border-amberGold/20 inline-flex items-center gap-1.5"> 
+                    <i class="fa-solid fa-shield-halved"></i> Management Console 
+                </span> 
+                <h1 class="text-4xl sm:text-5xl font-extrabold text-white font-serif leading-tight">Administrative Control Center</h1> 
+                <p class="text-xs text-roast-300 font-light leading-relaxed">Manage member orders, update payment verifications, monitor workshop schedules, and oversee operations securely.</p> 
+            </div> 
 
-            <!-- Footer Copyright -->
-            <div class="relative z-10 text-xs text-roast-400">
-                <p>© 2026 Rumah Panggang. All rights reserved.</p>
-            </div>
-        </div>
+            <!-- Footer Copyright --> 
+            <div class="relative z-10 text-xs text-roast-400"> 
+                <p>© 2026 Rumah Panggang. All rights reserved.</p> 
+            </div> 
+        </div> 
 
-        <!-- RIGHT COLUMN: Admin Login Form -->
-        <div class="flex flex-col justify-center items-center p-6 sm:p-12 bg-roast-950 relative">
-            <div class="w-full max-w-md space-y-6">
+        <!-- ============================================================ -->
+        <!-- RIGHT COLUMN — the admin login form card, shared by both mobile & desktop --> 
+        <!-- ============================================================ -->
+        <div class="flex flex-col justify-center items-center px-6 sm:px-12 pb-10 pt-6 lg:pt-12 bg-roast-950 relative -mt-6 lg:mt-0 rounded-t-[28px] lg:rounded-none border-t border-roast-900 lg:border-t-0 z-10 anim-fade-up"> 
+            <div class="w-full max-w-md space-y-6 pt-6 lg:pt-0"> 
 
-                <!-- Mobile Brand Header (Visible on small screens only) -->
-                <div class="lg:hidden text-center space-y-2 mb-4">
-                    <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-amberGold to-roast-500 flex items-center justify-center mx-auto shadow-lg"> 
-                        <i class="fa-solid fa-shield-halved text-roast-950 text-base"></i> 
-                    </div>
-                    <h2 class="text-xl font-extrabold text-white font-serif uppercase">Admin Portal</h2>
-                </div>
+                <!-- Form Header --> 
+                <div class="space-y-1"> 
+                    <div class="inline-block px-3 py-1 bg-amberGold/10 text-amberGold text-[10px] font-bold rounded-full uppercase tracking-wider mb-2">Restricted Access</div> 
+                    <h2 class="text-2xl font-bold font-serif text-white">Admin Login</h2> 
+                    <p class="text-xs text-roast-400">Enter your authorized credentials to access the management dashboard.</p> 
+                </div> 
 
-                <!-- Form Header -->
-                <div class="space-y-1">
-                    <div class="inline-block px-3 py-1 bg-amberGold/10 text-amberGold text-[10px] font-bold rounded-full uppercase tracking-wider mb-2">Restricted Access</div>
-                    <h2 class="text-2xl font-bold font-serif text-white">Admin Login</h2>
-                    <p class="text-xs text-roast-400">Enter your authorized credentials to access the management dashboard.</p>
-                </div>
+                <!-- ALERT BOX --> 
+                <div id="error-alert" class="hidden text-xs p-3.5 rounded-xl flex items-center gap-2.5 bg-red-950/60 border border-red-800/60 text-red-300"> 
+                    <i class="fa-solid fa-circle-exclamation text-sm shrink-0"></i> 
+                    <span id="error-msg">Invalid administrator credentials.</span> 
+                </div> 
 
-                <!-- ALERT BOX -->
-                <div id="error-alert" class="hidden text-xs p-3.5 rounded-xl flex items-center gap-2.5 bg-red-950/60 border border-red-800/60 text-red-300">
-                    <i class="fa-solid fa-circle-exclamation text-sm shrink-0"></i>
-                    <span id="error-msg">Invalid administrator credentials.</span>
-                </div>
+                <!-- ADMIN LOGIN FORM --> 
+                <form onsubmit="handleAdminLogin(event)" class="space-y-4"> 
+                    <div> 
+                        <label class="block text-xs font-semibold text-roast-300 uppercase mb-1">Admin Email / Username</label> 
+                        <div class="relative"> 
+                            <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-roast-400"><i class="fa-solid fa-user-shield text-xs"></i></span> 
+                            <input type="text" id="admin-email" required placeholder="admin@rumahpanggang.com" class="w-full bg-roast-900/90 border border-roast-800 text-white rounded-xl pl-10 pr-4 py-3 text-xs focus:outline-none focus:border-amberGold transition-all"> 
+                        </div> 
+                    </div> 
+                    <div> 
+                        <label class="block text-xs font-semibold text-roast-300 uppercase mb-1">Password</label> 
+                        <div class="relative"> 
+                            <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-roast-400"><i class="fa-solid fa-lock text-xs"></i></span> 
+                            <input type="password" id="admin-password" required placeholder="••••••••" class="w-full bg-roast-900/90 border border-roast-800 text-white rounded-xl pl-10 pr-4 py-3 text-xs focus:outline-none focus:border-amberGold transition-all"> 
+                        </div> 
+                    </div> 
+                    <button type="submit" class="btn-anim w-full py-3.5 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl text-xs transition-all shadow-lg uppercase tracking-wider flex items-center justify-center gap-2"> 
+                        <i class="fa-solid fa-right-to-bracket"></i> Login as Administrator 
+                    </button> 
+                </form> 
 
-                <!-- ADMIN LOGIN FORM -->
-                <form onsubmit="handleAdminLogin(event)" class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-roast-300 uppercase mb-1">Admin Email / Username</label>
-                        <div class="relative">
-                            <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-roast-400"><i class="fa-solid fa-user-shield text-xs"></i></span>
-                            <input type="text" id="admin-email" required placeholder="admin@rumahpanggang.com" class="w-full bg-roast-900/90 border border-roast-800 text-white rounded-xl pl-10 pr-4 py-3 text-xs focus:outline-none focus:border-amberGold transition-all">
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-roast-300 uppercase mb-1">Password</label>
-                        <div class="relative">
-                            <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-roast-400"><i class="fa-solid fa-lock text-xs"></i></span>
-                            <input type="password" id="admin-password" required placeholder="••••••••" class="w-full bg-roast-900/90 border border-roast-800 text-white rounded-xl pl-10 pr-4 py-3 text-xs focus:outline-none focus:border-amberGold transition-all">
-                        </div>
-                    </div>
-                    <button type="submit" class="w-full py-3.5 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl text-xs transition-all shadow-lg uppercase tracking-wider flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-right-to-bracket"></i> Login as Administrator
-                    </button>
-                </form>
+                <!-- Back to Member Portal Link --> 
+                <div class="text-center pt-4 border-t border-roast-900"> 
+                    <a href="auth.html" class="text-xs text-roast-400 hover:text-amberGold transition-colors flex items-center justify-center gap-1.5"> 
+                        <i class="fa-solid fa-arrow-left"></i> Back to Member Portal 
+                    </a> 
+                </div> 
 
-                <!-- Back to Member Portal Link -->
-                <div class="text-center pt-4 border-t border-roast-900">
-                    <a href="auth.html" class="text-xs text-roast-400 hover:text-amberGold transition-colors flex items-center justify-center gap-1.5">
-                        <i class="fa-solid fa-arrow-left"></i> Back to Member Portal
-                    </a>
-                </div>
+            </div> 
+        </div> 
 
-            </div>
-        </div>
+    </div> 
 
-    </div>
-
-    <!-- JAVASCRIPT LOGIC -->
-    <script>
+    <!-- JAVASCRIPT LOGIC --> 
+    <script> 
         function handleAdminLogin(e) { 
             e.preventDefault(); 
             const email = document.getElementById('admin-email').value.trim(); 
             const password = document.getElementById('admin-password').value.trim(); 
 
-            // Credential rujukan ujian (Test credentials)
+            // Credential rujukan ujian (Test credentials) 
             if (email === 'admin@rumahpanggang.com' && password === 'admin123') { 
-                const adminData = { name: 'Super Admin', email: email, role: 'admin' };
-                localStorage.setItem('rp_admin', JSON.stringify(adminData));
-                
-                // Redirect ke dashboard admin (jika ada, atau ubah ikut fail admin anda)
+                const adminData = { name: 'Super Admin', email: email, role: 'admin' }; 
+                localStorage.setItem('rp_admin', JSON.stringify(adminData)); 
+
+                // Redirect ke dashboard admin (jika ada, atau ubah ikut fail admin anda) 
                 window.location.href = 'admin-dashboard.html'; 
             } else { 
-                const alertBox = document.getElementById('error-alert');
-                const msgBox = document.getElementById('error-msg');
-                msgBox.innerText = 'Access denied. Use admin@rumahpanggang.com / admin123';
-                alertBox.classList.remove('hidden');
+                const alertBox = document.getElementById('error-alert'); 
+                const msgBox = document.getElementById('error-msg'); 
+                msgBox.innerText = 'Access denied. Use admin@rumahpanggang.com / admin123'; 
+                alertBox.classList.remove('hidden'); 
             } 
         } 
     </script> 

@@ -31,244 +31,273 @@
     <style> 
         body { font-family: 'Plus Jakarta Sans', sans-serif; } 
         h1, h2, h3, .font-serif { font-family: 'Playfair Display', serif; } 
+
+        @keyframes fadeUp { 
+            from { opacity: 0; transform: translateY(16px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        } 
+        .anim-fade-up { animation: fadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both; } 
+        .btn-anim { transition: transform 0.18s ease, box-shadow 0.18s ease; } 
+        .btn-anim:hover { transform: translateY(-2px); } 
+        .btn-anim:active { transform: translateY(0) scale(0.97); } 
+
+        @media (prefers-reduced-motion: reduce) { 
+            .anim-fade-up { animation: none !important; opacity: 1 !important; transform: none !important; } 
+        } 
     </style> 
 </head> 
-<body class="bg-roast-950 text-roast-100 antialiased min-h-screen flex items-center justify-center p-0 selection:bg-amberGold selection:text-white"> 
+<body class="bg-roast-950 text-roast-100 antialiased min-h-screen selection:bg-amberGold selection:text-white"> 
 
-    <div class="w-full min-h-screen grid lg:grid-cols-2 relative">
-        
-        <!-- LEFT COLUMN: Aesthetic Image & Brand Showcase -->
-        <div class="relative hidden lg:flex flex-col justify-between p-12 bg-roast-900 overflow-hidden border-r border-roast-800">
-            <!-- Background Image with Dark Gradient Overlay -->
-            <div class="absolute inset-0 z-0">
-                <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1200&q=80" alt="Coffee Roastery" class="w-full h-full object-cover opacity-40 scale-105 transform hover:scale-100 transition-transform duration-1000">
-                <div class="absolute inset-0 bg-gradient-to-t from-roast-950 via-roast-950/60 to-transparent"></div>
-            </div>
+    <div class="w-full min-h-screen grid lg:grid-cols-2 relative"> 
 
-            <!-- Top Brand Logo & Back to Home Link -->
-            <div class="relative z-10 flex items-center justify-between">
-                <a href="index.html" class="flex items-center gap-3 group">
+        <!-- ============================================================ -->
+        <!-- MOBILE-ONLY HERO BANNER — visible only below the lg breakpoint --> 
+        <!-- ============================================================ -->
+        <div class="lg:hidden relative h-64 sm:h-72 w-full overflow-hidden"> 
+            <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1200&q=80" alt="Coffee Roastery" class="absolute inset-0 w-full h-full object-cover opacity-50"> 
+            <div class="absolute inset-0 bg-gradient-to-t from-roast-950 via-roast-950/50 to-roast-950/10"></div> 
+
+            <!-- Top bar: logo + home button --> 
+            <div class="relative z-10 flex items-center justify-between p-5"> 
+                <a href="index.html" class="flex items-center gap-2.5 group"> 
+                    <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-amberGold to-roast-500 flex items-center justify-center shadow-lg"> 
+                        <i class="fa-solid fa-fire-burner text-roast-950 text-sm"></i> 
+                    </div> 
+                    <span class="font-serif text-base font-extrabold tracking-wider text-white uppercase">Rumah Panggang</span> 
+                </a> 
+                <a href="index.html" class="w-9 h-9 rounded-full bg-roast-950/60 hover:bg-roast-950 border border-roast-700/60 text-roast-300 hover:text-amberGold text-xs flex items-center justify-center transition-all backdrop-blur-sm"> 
+                    <i class="fa-solid fa-house"></i> 
+                </a> 
+            </div> 
+
+            <!-- Bottom quote text --> 
+            <div class="absolute bottom-5 left-5 right-5 z-10 space-y-1.5"> 
+                <span class="inline-block px-2.5 py-1 bg-amberGold/15 text-amberGold rounded-full text-[10px] font-semibold uppercase tracking-wider border border-amberGold/25">Artisanal Roastery</span> 
+                <h1 class="text-xl sm:text-2xl font-extrabold text-white font-serif leading-tight">Crafted with passion, roasted to perfection.</h1> 
+            </div> 
+        </div> 
+
+        <!-- ============================================================ -->
+        <!-- DESKTOP-ONLY LEFT COLUMN — visible only at lg breakpoint and up --> 
+        <!-- ============================================================ -->
+        <div class="relative hidden lg:flex flex-col justify-between p-12 bg-roast-900 overflow-hidden border-r border-roast-800"> 
+            <!-- Background Image with Dark Gradient Overlay --> 
+            <div class="absolute inset-0 z-0"> 
+                <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1200&q=80" alt="Coffee Roastery" class="w-full h-full object-cover opacity-40 scale-105 transform hover:scale-100 transition-transform duration-1000"> 
+                <div class="absolute inset-0 bg-gradient-to-t from-roast-950 via-roast-950/60 to-transparent"></div> 
+            </div> 
+
+            <!-- Top Brand Logo & Back to Home Link --> 
+            <div class="relative z-10 flex items-center justify-between"> 
+                <a href="index.html" class="flex items-center gap-3 group"> 
                     <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-amberGold to-roast-500 flex items-center justify-center shadow-lg"> 
                         <i class="fa-solid fa-fire-burner text-roast-950 text-lg"></i> 
-                    </div>
-                    <span class="font-serif text-xl font-extrabold tracking-wider text-white uppercase">Rumah Panggang</span>
-                </a>
-                <a href="index.html" class="px-3.5 py-2 rounded-xl bg-roast-950/60 hover:bg-roast-950 border border-roast-700/60 text-roast-300 hover:text-amberGold text-xs font-semibold transition-all flex items-center gap-2 backdrop-blur-sm">
-                    <i class="fa-solid fa-house"></i> Home
-                </a>
-            </div>
+                    </div> 
+                    <span class="font-serif text-xl font-extrabold tracking-wider text-white uppercase">Rumah Panggang</span> 
+                </a> 
+                <a href="index.html" class="px-3.5 py-2 rounded-xl bg-roast-950/60 hover:bg-roast-950 border border-roast-700/60 text-roast-300 hover:text-amberGold text-xs font-semibold transition-all flex items-center gap-2 backdrop-blur-sm"> 
+                    <i class="fa-solid fa-house"></i> Home 
+                </a> 
+            </div> 
 
-            <!-- Middle Quote / Welcome Text -->
-            <div class="relative z-10 space-y-4 max-w-lg my-auto">
-                <span class="px-3 py-1 bg-amberGold/10 text-amberGold rounded-full text-xs font-semibold uppercase tracking-wider border border-amberGold/20">Artisanal Roastery</span>
-                <h1 class="text-4xl sm:text-5xl font-extrabold text-white font-serif leading-tight">Crafted with passion, roasted to perfection.</h1>
-                <p class="text-xs text-roast-300 font-light leading-relaxed">Join our exclusive member portal to track your artisanal coffee orders, secure merchandise, and book professional masterclasses in Sungai Petani.</p>
-            </div>
+            <!-- Middle Quote / Welcome Text --> 
+            <div class="relative z-10 space-y-4 max-w-lg my-auto"> 
+                <span class="px-3 py-1 bg-amberGold/10 text-amberGold rounded-full text-xs font-semibold uppercase tracking-wider border border-amberGold/20">Artisanal Roastery</span> 
+                <h1 class="text-4xl sm:text-5xl font-extrabold text-white font-serif leading-tight">Crafted with passion, roasted to perfection.</h1> 
+                <p class="text-xs text-roast-300 font-light leading-relaxed">Join our exclusive member portal to track your artisanal coffee orders, secure merchandise, and book professional masterclasses in Sungai Petani.</p> 
+            </div> 
 
-            <!-- Footer Copyright -->
-            <div class="relative z-10 text-xs text-roast-400">
-                <p>© 2026 Rumah Panggang. All rights reserved.</p>
-            </div>
-        </div>
+            <!-- Footer Copyright --> 
+            <div class="relative z-10 text-xs text-roast-400"> 
+                <p>© 2026 Rumah Panggang. All rights reserved.</p> 
+            </div> 
+        </div> 
 
-        <!-- RIGHT COLUMN: Interactive Login & Register Forms -->
-        <div class="flex flex-col justify-center items-center p-6 sm:p-12 bg-roast-950 relative">
-            
-            <!-- Mobile Back to Home Button (Visible on small screens only) -->
-            <div class="absolute top-6 left-6 lg:hidden">
-                <a href="index.html" class="px-3.5 py-2 rounded-xl bg-roast-900 border border-roast-800 text-roast-300 hover:text-amberGold text-xs font-semibold transition-all flex items-center gap-2">
-                    <i class="fa-solid fa-house"></i> Home
-                </a>
-            </div>
+        <!-- ============================================================ -->
+        <!-- RIGHT COLUMN — the login/register form card, shared by both mobile & desktop --> 
+        <!-- ============================================================ -->
+        <div class="flex flex-col justify-center items-center px-6 sm:px-12 pb-10 pt-6 lg:pt-12 bg-roast-950 relative -mt-6 lg:mt-0 rounded-t-[28px] lg:rounded-none border-t border-roast-900 lg:border-t-0 z-10 anim-fade-up"> 
 
-            <div class="w-full max-w-md space-y-6 pt-12 lg:pt-0">
+            <div class="w-full max-w-md space-y-6 pt-6 lg:pt-0"> 
 
-                <!-- Mobile Brand Header -->
-                <div class="lg:hidden text-center space-y-2 mb-4">
-                    <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-amberGold to-roast-500 flex items-center justify-center mx-auto shadow-lg"> 
-                        <i class="fa-solid fa-fire-burner text-roast-950 text-base"></i> 
-                    </div>
-                    <h2 class="text-xl font-extrabold text-white font-serif uppercase">Rumah Panggang</h2>
-                </div>
+                <!-- Tab Switcher Header --> 
+                <div class="flex bg-roast-900/80 p-1.5 rounded-2xl border border-roast-800"> 
+                    <button onclick="switchTab('login')" id="tab-login" class="flex-1 py-2.5 rounded-xl text-xs font-bold transition-all bg-amberGold text-roast-950 shadow"> 
+                        Member Login 
+                    </button> 
+                    <button onclick="switchTab('register')" id="tab-register" class="flex-1 py-2.5 rounded-xl text-xs font-bold transition-all text-roast-300 hover:text-white"> 
+                        Create Account 
+                    </button> 
+                </div> 
 
-                <!-- Tab Switcher Header -->
-                <div class="flex bg-roast-900/80 p-1.5 rounded-2xl border border-roast-800">
-                    <button onclick="switchTab('login')" id="tab-login" class="flex-1 py-2.5 rounded-xl text-xs font-bold transition-all bg-amberGold text-roast-950 shadow">
-                        Member Login
-                    </button>
-                    <button onclick="switchTab('register')" id="tab-register" class="flex-1 py-2.5 rounded-xl text-xs font-bold transition-all text-roast-300 hover:text-white">
-                        Create Account
-                    </button>
-                </div>
+                <!-- ALERT BOX --> 
+                <div id="auth-alert" class="hidden text-xs p-3.5 rounded-xl flex items-center gap-2.5"> 
+                    <i id="auth-alert-icon" class="fa-solid text-sm shrink-0"></i> 
+                    <span id="auth-alert-msg">Notification message.</span> 
+                </div> 
 
-                <!-- ALERT BOX -->
-                <div id="auth-alert" class="hidden text-xs p-3.5 rounded-xl flex items-center gap-2.5">
-                    <i id="auth-alert-icon" class="fa-solid text-sm shrink-0"></i>
-                    <span id="auth-alert-msg">Notification message.</span>
-                </div>
+                <!-- LOGIN FORM --> 
+                <div id="form-login-container" class="space-y-4"> 
+                    <div class="space-y-1"> 
+                        <h2 class="text-2xl font-bold font-serif text-white">Welcome Back</h2> 
+                        <p class="text-xs text-roast-400">Please enter your credentials to access your portal.</p> 
+                    </div> 
 
-                <!-- LOGIN FORM -->
-                <div id="form-login-container" class="space-y-4">
-                    <div class="space-y-1">
-                        <h2 class="text-2xl font-bold font-serif text-white">Welcome Back</h2>
-                        <p class="text-xs text-roast-400">Please enter your credentials to access your portal.</p>
-                    </div>
+                    <form onsubmit="handleLogin(event)" class="space-y-4"> 
+                        <div> 
+                            <label class="block text-xs font-semibold text-roast-300 uppercase mb-1">Email Address</label> 
+                            <div class="relative"> 
+                                <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-roast-400"><i class="fa-solid fa-envelope text-xs"></i></span> 
+                                <input type="email" id="login-email" required placeholder="name@example.com" class="w-full bg-roast-900/90 border border-roast-800 text-white rounded-xl pl-10 pr-4 py-3 text-xs focus:outline-none focus:border-amberGold transition-all"> 
+                            </div> 
+                        </div> 
+                        <div> 
+                            <label class="block text-xs font-semibold text-roast-300 uppercase mb-1">Password</label> 
+                            <div class="relative"> 
+                                <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-roast-400"><i class="fa-solid fa-lock text-xs"></i></span> 
+                                <input type="password" id="login-password" required placeholder="••••••••" class="w-full bg-roast-900/90 border border-roast-800 text-white rounded-xl pl-10 pr-4 py-3 text-xs focus:outline-none focus:border-amberGold transition-all"> 
+                            </div> 
+                        </div> 
+                        <button type="submit" class="btn-anim w-full py-3.5 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl text-xs transition-all shadow-lg uppercase tracking-wider"> 
+                            Login to Portal 
+                        </button> 
+                    </form> 
+                </div> 
 
-                    <form onsubmit="handleLogin(event)" class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-semibold text-roast-300 uppercase mb-1">Email Address</label>
-                            <div class="relative">
-                                <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-roast-400"><i class="fa-solid fa-envelope text-xs"></i></span>
-                                <input type="email" id="login-email" required placeholder="name@example.com" class="w-full bg-roast-900/90 border border-roast-800 text-white rounded-xl pl-10 pr-4 py-3 text-xs focus:outline-none focus:border-amberGold transition-all">
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-roast-300 uppercase mb-1">Password</label>
-                            <div class="relative">
-                                <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-roast-400"><i class="fa-solid fa-lock text-xs"></i></span>
-                                <input type="password" id="login-password" required placeholder="••••••••" class="w-full bg-roast-900/90 border border-roast-800 text-white rounded-xl pl-10 pr-4 py-3 text-xs focus:outline-none focus:border-amberGold transition-all">
-                            </div>
-                        </div>
-                        <button type="submit" class="w-full py-3.5 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl text-xs transition-all shadow-lg uppercase tracking-wider">
-                            Login to Portal
-                        </button>
-                    </form>
-                </div>
+                <!-- REGISTER FORM --> 
+                <div id="form-register-container" class="space-y-4 hidden"> 
+                    <div class="space-y-1"> 
+                        <h2 class="text-2xl font-bold font-serif text-white">Join Our Community</h2> 
+                        <p class="text-xs text-roast-400">Create your member account to begin ordering coffee & classes.</p> 
+                    </div> 
 
-                <!-- REGISTER FORM -->
-                <div id="form-register-container" class="space-y-4 hidden">
-                    <div class="space-y-1">
-                        <h2 class="text-2xl font-bold font-serif text-white">Join Our Community</h2>
-                        <p class="text-xs text-roast-400">Create your member account to begin ordering coffee & classes.</p>
-                    </div>
+                    <form onsubmit="handleRegister(event)" class="space-y-4"> 
+                        <div> 
+                            <label class="block text-xs font-semibold text-roast-300 uppercase mb-1">Full Name</label> 
+                            <div class="relative"> 
+                                <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-roast-400"><i class="fa-solid fa-user text-xs"></i></span> 
+                                <input type="text" id="reg-name" required placeholder="Nana Zailani" class="w-full bg-roast-900/90 border border-roast-800 text-white rounded-xl pl-10 pr-4 py-3 text-xs focus:outline-none focus:border-amberGold transition-all"> 
+                            </div> 
+                        </div> 
+                        <div> 
+                            <label class="block text-xs font-semibold text-roast-300 uppercase mb-1">Email Address</label> 
+                            <div class="relative"> 
+                                <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-roast-400"><i class="fa-solid fa-envelope text-xs"></i></span> 
+                                <input type="email" id="reg-email" required placeholder="name@example.com" class="w-full bg-roast-900/90 border border-roast-800 text-white rounded-xl pl-10 pr-4 py-3 text-xs focus:outline-none focus:border-amberGold transition-all"> 
+                            </div> 
+                        </div> 
+                        <div> 
+                            <label class="block text-xs font-semibold text-roast-300 uppercase mb-1">Password</label> 
+                            <div class="relative"> 
+                                <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-roast-400"><i class="fa-solid fa-lock text-xs"></i></span> 
+                                <input type="password" id="reg-password" required placeholder="••••••••" class="w-full bg-roast-900/90 border border-roast-800 text-white rounded-xl pl-10 pr-4 py-3 text-xs focus:outline-none focus:border-amberGold transition-all"> 
+                            </div> 
+                        </div> 
+                        <button type="submit" class="btn-anim w-full py-3.5 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl text-xs transition-all shadow-lg uppercase tracking-wider"> 
+                            Register Account 
+                        </button> 
+                    </form> 
+                </div> 
 
-                    <form onsubmit="handleRegister(event)" class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-semibold text-roast-300 uppercase mb-1">Full Name</label>
-                            <div class="relative">
-                                <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-roast-400"><i class="fa-solid fa-user text-xs"></i></span>
-                                <input type="text" id="reg-name" required placeholder="Nana Zailani" class="w-full bg-roast-900/90 border border-roast-800 text-white rounded-xl pl-10 pr-4 py-3 text-xs focus:outline-none focus:border-amberGold transition-all">
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-roast-300 uppercase mb-1">Email Address</label>
-                            <div class="relative">
-                                <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-roast-400"><i class="fa-solid fa-envelope text-xs"></i></span>
-                                <input type="email" id="reg-email" required placeholder="name@example.com" class="w-full bg-roast-900/90 border border-roast-800 text-white rounded-xl pl-10 pr-4 py-3 text-xs focus:outline-none focus:border-amberGold transition-all">
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-roast-300 uppercase mb-1">Password</label>
-                            <div class="relative">
-                                <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-roast-400"><i class="fa-solid fa-lock text-xs"></i></span>
-                                <input type="password" id="reg-password" required placeholder="••••••••" class="w-full bg-roast-900/90 border border-roast-800 text-white rounded-xl pl-10 pr-4 py-3 text-xs focus:outline-none focus:border-amberGold transition-all">
-                            </div>
-                        </div>
-                        <button type="submit" class="w-full py-3.5 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl text-xs transition-all shadow-lg uppercase tracking-wider">
-                            Register Account
-                        </button>
-                    </form>
-                </div>
+                <!-- Admin Link Shortcut --> 
+                <div class="text-center pt-4 border-t border-roast-900"> 
+                    <a href="admin-login.html" class="text-xs text-roast-400 hover:text-amberGold transition-colors flex items-center justify-center gap-1.5"> 
+                        <i class="fa-solid fa-shield-halved"></i> Administrator Login Portal 
+                    </a> 
+                </div> 
 
-                <!-- Admin Link Shortcut -->
-                <div class="text-center pt-4 border-t border-roast-900">
-                    <a href="admin-login.html" class="text-xs text-roast-400 hover:text-amberGold transition-colors flex items-center justify-center gap-1.5">
-                        <i class="fa-solid fa-shield-halved"></i> Administrator Login Portal
-                    </a>
-                </div>
+            </div> 
+        </div> 
 
-            </div>
-        </div>
+    </div> 
 
-    </div>
+    <!-- JAVASCRIPT LOGIC --> 
+    <script> 
+        function switchTab(tab) { 
+            const loginContainer = document.getElementById('form-login-container'); 
+            const registerContainer = document.getElementById('form-register-container'); 
+            const tabLogin = document.getElementById('tab-login'); 
+            const tabRegister = document.getElementById('tab-register'); 
+            hideAlert(); 
 
-    <!-- JAVASCRIPT LOGIC -->
-    <script>
-        function switchTab(tab) {
-            const loginContainer = document.getElementById('form-login-container');
-            const registerContainer = document.getElementById('form-register-container');
-            const tabLogin = document.getElementById('tab-login');
-            const tabRegister = document.getElementById('tab-register');
-            hideAlert();
+            if (tab === 'login') { 
+                loginContainer.classList.remove('hidden'); 
+                registerContainer.classList.add('hidden'); 
+                tabLogin.className = "flex-1 py-2.5 rounded-xl text-xs font-bold transition-all bg-amberGold text-roast-950 shadow"; 
+                tabRegister.className = "flex-1 py-2.5 rounded-xl text-xs font-bold transition-all text-roast-300 hover:text-white"; 
+            } else { 
+                loginContainer.classList.add('hidden'); 
+                registerContainer.classList.remove('hidden'); 
+                tabRegister.className = "flex-1 py-2.5 rounded-xl text-xs font-bold transition-all bg-amberGold text-roast-950 shadow"; 
+                tabLogin.className = "flex-1 py-2.5 rounded-xl text-xs font-bold transition-all text-roast-300 hover:text-white"; 
+            } 
+        } 
 
-            if (tab === 'login') {
-                loginContainer.classList.remove('hidden');
-                registerContainer.classList.add('hidden');
-                tabLogin.className = "flex-1 py-2.5 rounded-xl text-xs font-bold transition-all bg-amberGold text-roast-950 shadow";
-                tabRegister.className = "flex-1 py-2.5 rounded-xl text-xs font-bold transition-all text-roast-300 hover:text-white";
-            } else {
-                loginContainer.classList.add('hidden');
-                registerContainer.classList.remove('hidden');
-                tabRegister.className = "flex-1 py-2.5 rounded-xl text-xs font-bold transition-all bg-amberGold text-roast-950 shadow";
-                tabLogin.className = "flex-1 py-2.5 rounded-xl text-xs font-bold transition-all text-roast-300 hover:text-white";
-            }
-        }
+        function showAlert(message, isError = true) { 
+            const alertBox = document.getElementById('auth-alert'); 
+            const msgEl = document.getElementById('auth-alert-msg'); 
+            const iconEl = document.getElementById('auth-alert-icon'); 
 
-        function showAlert(message, isError = true) {
-            const alertBox = document.getElementById('auth-alert');
-            const msgEl = document.getElementById('auth-alert-msg');
-            const iconEl = document.getElementById('auth-alert-icon');
-            
-            msgEl.innerText = message;
-            if (isError) {
-                alertBox.className = "text-xs p-3.5 rounded-xl flex items-center gap-2.5 bg-red-950/60 border border-red-800/60 text-red-300";
-                iconEl.className = "fa-solid fa-circle-exclamation text-sm shrink-0";
-            } else {
-                alertBox.className = "text-xs p-3.5 rounded-xl flex items-center gap-2.5 bg-emerald-950/60 border border-emerald-800/60 text-emerald-300";
-                iconEl.className = "fa-solid fa-circle-check text-sm shrink-0";
-            }
-            alertBox.classList.remove('hidden');
-        }
+            msgEl.innerText = message; 
+            if (isError) { 
+                alertBox.className = "text-xs p-3.5 rounded-xl flex items-center gap-2.5 bg-red-950/60 border border-red-800/60 text-red-300"; 
+                iconEl.className = "fa-solid fa-circle-exclamation text-sm shrink-0"; 
+            } else { 
+                alertBox.className = "text-xs p-3.5 rounded-xl flex items-center gap-2.5 bg-emerald-950/60 border border-emerald-800/60 text-emerald-300"; 
+                iconEl.className = "fa-solid fa-circle-check text-sm shrink-0"; 
+            } 
+            alertBox.classList.remove('hidden'); 
+        } 
 
-        function hideAlert() {
-            document.getElementById('auth-alert').classList.add('hidden');
-        }
+        function hideAlert() { 
+            document.getElementById('auth-alert').classList.add('hidden'); 
+        } 
 
-        function handleRegister(e) {
-            e.preventDefault();
-            const name = document.getElementById('reg-name').value.trim();
-            const email = document.getElementById('reg-email').value.trim();
-            const password = document.getElementById('reg-password').value.trim();
+        function handleRegister(e) { 
+            e.preventDefault(); 
+            const name = document.getElementById('reg-name').value.trim(); 
+            const email = document.getElementById('reg-email').value.trim(); 
+            const password = document.getElementById('reg-password').value.trim(); 
 
-            if (!name || !email || !password) {
-                showAlert('Please fill in all registration fields.');
-                return;
-            }
+            if (!name || !email || !password) { 
+                showAlert('Please fill in all registration fields.'); 
+                return; 
+            } 
 
-            const userData = { name, email, password };
-            localStorage.setItem('rp_user', JSON.stringify(userData));
-            showAlert('Registration successful! You can now log in.', false);
-            
-            setTimeout(() => {
-                switchTab('login');
-                document.getElementById('login-email').value = email;
-            }, 1500);
-        }
+            const userData = { name, email, password }; 
+            localStorage.setItem('rp_user', JSON.stringify(userData)); 
+            showAlert('Registration successful! You can now log in.', false); 
 
-        function handleLogin(e) {
-            e.preventDefault();
-            const email = document.getElementById('login-email').value.trim();
-            const password = document.getElementById('login-password').value.trim();
+            setTimeout(() => { 
+                switchTab('login'); 
+                document.getElementById('login-email').value = email; 
+            }, 1500); 
+        } 
 
-            const savedUser = JSON.parse(localStorage.getItem('rp_user'));
+        function handleLogin(e) { 
+            e.preventDefault(); 
+            const email = document.getElementById('login-email').value.trim(); 
+            const password = document.getElementById('login-password').value.trim(); 
 
-            if (savedUser && savedUser.email === email && savedUser.password === password) {
-                localStorage.setItem('rp_logged_user', JSON.stringify(savedUser));
-                showAlert('Login successful! Redirecting to dashboard...', false);
-                setTimeout(() => {
-                    window.location.href = 'dashboard.html';
-                }, 1000);
-            } else {
-                if (!savedUser && email === 'member@rumahpanggang.com' && password === '123456') {
-                    const demoUser = { name: 'Nana Zailani', email: email };
-                    localStorage.setItem('rp_user', JSON.stringify(demoUser));
-                    localStorage.setItem('rp_logged_user', JSON.stringify(demoUser));
-                    window.location.href = 'dashboard.html';
-                } else {
-                    showAlert('Invalid email or password. Please check your details or register an account.');
-                }
-            }
-        }
+            const savedUser = JSON.parse(localStorage.getItem('rp_user')); 
+
+            if (savedUser && savedUser.email === email && savedUser.password === password) { 
+                localStorage.setItem('rp_logged_user', JSON.stringify(savedUser)); 
+                showAlert('Login successful! Redirecting to dashboard...', false); 
+                setTimeout(() => { 
+                    window.location.href = 'dashboard.html'; 
+                }, 1000); 
+            } else { 
+                if (!savedUser && email === 'member@rumahpanggang.com' && password === '123456') { 
+                    const demoUser = { name: 'Nana Zailani', email: email }; 
+                    localStorage.setItem('rp_user', JSON.stringify(demoUser)); 
+                    localStorage.setItem('rp_logged_user', JSON.stringify(demoUser)); 
+                    window.location.href = 'dashboard.html'; 
+                } else { 
+                    showAlert('Invalid email or password. Please check your details or register an account.'); 
+                } 
+            } 
+        } 
     </script> 
 </body> 
 </html>

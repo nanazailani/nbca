@@ -66,7 +66,7 @@
 
             <!-- Navigation Links -->
             <div class="p-4 space-y-1.5 text-xs font-medium">
-                <a href="#" onclick="switchTab('overview', event)" id="nav-overview" class="flex items-center gap-3 px-4 py-3 rounded-xl text-roast-300 hover:bg-adminCardHover hover:text-white transition-all">
+                <a href="#" onclick="switchTab('overview', event)" id="nav-overview" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-amberGold text-adminBg font-bold transition-all shadow-md">
                     <i class="fa-solid fa-chart-pie w-5 text-base shrink-0"></i> <span class="sidebar-text">Overview & Charts</span>
                 </a>
                 <a href="#" onclick="switchTab('orders', event)" id="nav-orders" class="flex items-center gap-3 px-4 py-3 rounded-xl text-roast-300 hover:bg-adminCardHover hover:text-white transition-all">
@@ -75,7 +75,10 @@
                 <a href="#" onclick="switchTab('inventory', event)" id="nav-inventory" class="flex items-center gap-3 px-4 py-3 rounded-xl text-roast-300 hover:bg-adminCardHover hover:text-white transition-all">
                     <i class="fa-solid fa-boxes-stacked w-5 text-base shrink-0"></i> <span class="sidebar-text">Inventory Stock</span>
                 </a>
-                <a href="#" onclick="switchTab('loyalty', event)" id="nav-loyalty" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-amberGold text-adminBg font-bold transition-all shadow-md">
+                <a href="#" onclick="switchTab('classes', event)" id="nav-classes" class="flex items-center gap-3 px-4 py-3 rounded-xl text-roast-300 hover:bg-adminCardHover hover:text-white transition-all">
+                    <i class="fa-solid fa-chalkboard-user w-5 text-base shrink-0"></i> <span class="sidebar-text">Manage Classes</span>
+                </a>
+                <a href="#" onclick="switchTab('loyalty', event)" id="nav-loyalty" class="flex items-center gap-3 px-4 py-3 rounded-xl text-roast-300 hover:bg-adminCardHover hover:text-white transition-all">
                     <i class="fa-solid fa-users w-5 text-base shrink-0"></i> <span class="sidebar-text">Members & Points</span>
                 </a>
             </div>
@@ -99,7 +102,7 @@
     </aside>
 
     <!-- SIDEBAR BACKDROP (Mobile) -->
-    <div id="sidebar-backdrop" onclick="toggleSidebar()" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 hidden transition-opacity"></div>
+    <div id="sidebar-backdrop" onclick="closeSidebar()" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 hidden transition-opacity"></div>
 
     <!-- MAIN CONTENT WRAPPER -->
     <div id="main-content" class="flex-1 flex flex-col min-w-0 ml-64 transition-all duration-300 min-h-screen">
@@ -125,7 +128,7 @@
         <main class="p-6 sm:p-8 space-y-8 flex-1">
 
             <!-- TAB 1: OVERVIEW & CHARTS -->
-            <div id="view-overview" class="admin-view space-y-8 hidden">
+            <div id="view-overview" class="admin-view space-y-8">
                 <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     <div class="bg-adminCard p-6 rounded-3xl border border-adminBorder space-y-3 shadow-xl">
                         <div class="flex justify-between items-start">
@@ -200,8 +203,234 @@
                             <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Breakdown</span>
                             <h3 class="text-2xl font-extrabold text-white font-serif mt-1">Top Selling Items</h3>
                         </div>
-                        <div class="h-60 relative flex items-center justify-center">
+                        <div class="h-48 relative flex items-center justify-center">
                             <canvas id="productsChart"></canvas>
+                        </div>
+                        <div class="grid grid-cols-2 gap-x-2 gap-y-3 text-[11px]">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:#F59E0B"></span>
+                                <span class="text-roast-300 truncate">Coffee Beans</span>
+                                <span class="text-white font-bold ml-auto">55%</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:#3B82F6"></span>
+                                <span class="text-roast-300 truncate">Masterclass</span>
+                                <span class="text-white font-bold ml-auto">25%</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:#10B981"></span>
+                                <span class="text-roast-300 truncate">Merchandise</span>
+                                <span class="text-white font-bold ml-auto">12%</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:#8B5CF6"></span>
+                                <span class="text-roast-300 truncate">Drip Bags</span>
+                                <span class="text-white font-bold ml-auto">8%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECOND KPI ROW: DEEPER BUSINESS METRICS -->
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-adminCard p-6 rounded-3xl border border-adminBorder space-y-3 shadow-xl">
+                        <div class="flex justify-between items-start">
+                            <div class="w-12 h-12 rounded-2xl bg-amberGold/20 text-amberGold flex items-center justify-center text-xl">
+                                <i class="fa-solid fa-receipt"></i>
+                            </div>
+                            <span class="px-2.5 py-1 bg-green-500/15 text-green-400 font-bold text-[10px] rounded-full">+6.1%</span>
+                        </div>
+                        <div>
+                            <span class="text-xs text-roast-300 font-medium block">Avg. Order Value</span>
+                            <div class="text-3xl font-bold font-serif text-white mt-1">RM 535.00</div>
+                        </div>
+                    </div>
+                    <div class="bg-adminCard p-6 rounded-3xl border border-adminBorder space-y-3 shadow-xl">
+                        <div class="flex justify-between items-start">
+                            <div class="w-12 h-12 rounded-2xl bg-red-500/20 text-red-400 flex items-center justify-center text-xl">
+                                <i class="fa-solid fa-hourglass-half"></i>
+                            </div>
+                            <span class="px-2.5 py-1 bg-red-500/15 text-red-300 font-bold text-[10px] rounded-full">5 orders</span>
+                        </div>
+                        <div>
+                            <span class="text-xs text-roast-300 font-medium block">Pending Payments</span>
+                            <div class="text-3xl font-bold font-serif text-white mt-1">RM 1,240.00</div>
+                        </div>
+                    </div>
+                    <div class="bg-adminCard p-6 rounded-3xl border border-adminBorder space-y-3 shadow-xl">
+                        <div class="flex justify-between items-start">
+                            <div class="w-12 h-12 rounded-2xl bg-yellow-500/20 text-yellow-400 flex items-center justify-center text-xl">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                            </div>
+                            <span class="px-2.5 py-1 bg-yellow-500/15 text-yellow-300 font-bold text-[10px] rounded-full">Restock</span>
+                        </div>
+                        <div>
+                            <span class="text-xs text-roast-300 font-medium block">Low Stock Alerts</span>
+                            <div class="text-3xl font-bold font-serif text-white mt-1">1 Item</div>
+                        </div>
+                    </div>
+                    <div class="bg-adminCard p-6 rounded-3xl border border-adminBorder space-y-3 shadow-xl">
+                        <div class="flex justify-between items-start">
+                            <div class="w-12 h-12 rounded-2xl bg-blue-500/20 text-blue-400 flex items-center justify-center text-xl">
+                                <i class="fa-solid fa-chair"></i>
+                            </div>
+                            <span class="px-2.5 py-1 bg-blue-500/15 text-blue-300 font-bold text-[10px] rounded-full">13 / 18 seats</span>
+                        </div>
+                        <div>
+                            <span class="text-xs text-roast-300 font-medium block">Class Occupancy</span>
+                            <div class="text-3xl font-bold font-serif text-white mt-1">72%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- THIRD ROW: OPERATIONAL BREAKDOWNS -->
+                <div class="grid lg:grid-cols-12 gap-8">
+                    <!-- Order Status Breakdown -->
+                    <div class="lg:col-span-4 bg-adminCard p-6 sm:p-8 rounded-3xl border border-adminBorder shadow-2xl space-y-6">
+                        <div>
+                            <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Fulfillment</span>
+                            <h3 class="text-xl font-extrabold text-white font-serif mt-1">Order Status Breakdown</h3>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="space-y-1.5">
+                                <div class="flex justify-between text-xs">
+                                    <span class="text-roast-300 font-medium">Awaiting Verification</span>
+                                    <span class="text-white font-bold">5 orders</span>
+                                </div>
+                                <div class="w-full h-2 rounded-full bg-adminBg overflow-hidden">
+                                    <div class="h-full bg-amberGold rounded-full" style="width: 21%"></div>
+                                </div>
+                            </div>
+                            <div class="space-y-1.5">
+                                <div class="flex justify-between text-xs">
+                                    <span class="text-roast-300 font-medium">Preparing</span>
+                                    <span class="text-white font-bold">9 orders</span>
+                                </div>
+                                <div class="w-full h-2 rounded-full bg-adminBg overflow-hidden">
+                                    <div class="h-full bg-blue-400 rounded-full" style="width: 38%"></div>
+                                </div>
+                            </div>
+                            <div class="space-y-1.5">
+                                <div class="flex justify-between text-xs">
+                                    <span class="text-roast-300 font-medium">Shipping</span>
+                                    <span class="text-white font-bold">7 orders</span>
+                                </div>
+                                <div class="w-full h-2 rounded-full bg-adminBg overflow-hidden">
+                                    <div class="h-full bg-green-400 rounded-full" style="width: 29%"></div>
+                                </div>
+                            </div>
+                            <div class="space-y-1.5">
+                                <div class="flex justify-between text-xs">
+                                    <span class="text-roast-300 font-medium">Completed</span>
+                                    <span class="text-white font-bold">3 orders</span>
+                                </div>
+                                <div class="w-full h-2 rounded-full bg-adminBg overflow-hidden">
+                                    <div class="h-full bg-roast-400 rounded-full" style="width: 13%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Member Tier Distribution -->
+                    <div class="lg:col-span-4 bg-adminCard p-6 sm:p-8 rounded-3xl border border-adminBorder shadow-2xl space-y-6 flex flex-col justify-between">
+                        <div>
+                            <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Loyalty</span>
+                            <h3 class="text-xl font-extrabold text-white font-serif mt-1">Member Tier Distribution</h3>
+                        </div>
+                        <div class="h-44 relative flex items-center justify-center">
+                            <canvas id="memberTierChart"></canvas>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2 text-center text-[11px]">
+                            <div>
+                                <span class="block w-2.5 h-2.5 rounded-full bg-amberGold mx-auto mb-1"></span>
+                                <span class="text-white font-bold block">28</span>
+                                <span class="text-roast-400">Gold</span>
+                            </div>
+                            <div>
+                                <span class="block w-2.5 h-2.5 rounded-full bg-roast-300 mx-auto mb-1"></span>
+                                <span class="text-white font-bold block">64</span>
+                                <span class="text-roast-400">Silver</span>
+                            </div>
+                            <div>
+                                <span class="block w-2.5 h-2.5 rounded-full bg-roast-500 mx-auto mb-1"></span>
+                                <span class="text-white font-bold block">50</span>
+                                <span class="text-roast-400">Bronze</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Low Stock Alerts Detail -->
+                    <div class="lg:col-span-4 bg-adminCard p-6 sm:p-8 rounded-3xl border border-adminBorder shadow-2xl space-y-6">
+                        <div>
+                            <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Inventory</span>
+                            <h3 class="text-xl font-extrabold text-white font-serif mt-1">Restock Recommended</h3>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between p-3.5 rounded-2xl bg-adminBg border border-yellow-500/20">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-9 h-9 rounded-xl bg-yellow-500/15 text-yellow-400 flex items-center justify-center text-sm shrink-0">
+                                        <i class="fa-solid fa-mug-hot"></i>
+                                    </div>
+                                    <div>
+                                        <span class="text-xs font-bold text-white block">Merah Saga Blend</span>
+                                        <span class="text-[10px] text-roast-400">Coffee Beans</span>
+                                    </div>
+                                </div>
+                                <span class="text-xs font-bold text-yellow-400 shrink-0">14 units left</span>
+                            </div>
+                            <p class="text-[11px] text-roast-400 leading-relaxed">Items shown here fall below the 20-unit restock threshold. Head to <strong class="text-roast-200">Inventory Stock</strong> to top up.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FOURTH ROW: UPCOMING CLASS SCHEDULE -->
+                <div class="bg-adminCard p-6 sm:p-8 rounded-3xl border border-adminBorder shadow-2xl space-y-6">
+                    <div>
+                        <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Workshops</span>
+                        <h3 class="text-xl font-extrabold text-white font-serif mt-1">Upcoming Class Schedule & Seat Fill Rate</h3>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-4 p-4 rounded-2xl bg-adminBg border border-adminBorder">
+                            <div class="flex items-center gap-3 sm:w-64 shrink-0">
+                                <div class="w-10 h-10 rounded-xl bg-blue-500/15 text-blue-300 flex items-center justify-center text-sm shrink-0">
+                                    <i class="fa-solid fa-people-roof"></i>
+                                </div>
+                                <div>
+                                    <span class="text-xs font-bold text-white block">Coffee Brewing Masterclass</span>
+                                    <span class="text-[10px] text-roast-400">Sat, 6 Sep 2026 — 10:00 AM</span>
+                                </div>
+                            </div>
+                            <div class="flex-1 space-y-1.5">
+                                <div class="flex justify-between text-[11px]">
+                                    <span class="text-roast-300">Seats Filled</span>
+                                    <span class="text-white font-bold">6 / 8 pax</span>
+                                </div>
+                                <div class="w-full h-2 rounded-full bg-adminCard overflow-hidden">
+                                    <div class="h-full bg-blue-400 rounded-full" style="width: 75%"></div>
+                                </div>
+                            </div>
+                            <span class="px-3 py-1 bg-blue-500/15 text-blue-300 font-bold text-[10px] rounded-full shrink-0 self-start sm:self-center">75% Full</span>
+                        </div>
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-4 p-4 rounded-2xl bg-adminBg border border-adminBorder">
+                            <div class="flex items-center gap-3 sm:w-64 shrink-0">
+                                <div class="w-10 h-10 rounded-xl bg-purple-500/15 text-purple-300 flex items-center justify-center text-sm shrink-0">
+                                    <i class="fa-solid fa-video"></i>
+                                </div>
+                                <div>
+                                    <span class="text-xs font-bold text-white block">Coffee Cupping Experience</span>
+                                    <span class="text-[10px] text-roast-400">Thu, 11 Sep 2026 — 8:00 PM</span>
+                                </div>
+                            </div>
+                            <div class="flex-1 space-y-1.5">
+                                <div class="flex justify-between text-[11px]">
+                                    <span class="text-roast-300">Seats Filled</span>
+                                    <span class="text-white font-bold">7 / 10 pax</span>
+                                </div>
+                                <div class="w-full h-2 rounded-full bg-adminCard overflow-hidden">
+                                    <div class="h-full bg-purple-400 rounded-full" style="width: 70%"></div>
+                                </div>
+                            </div>
+                            <span class="px-3 py-1 bg-purple-500/15 text-purple-300 font-bold text-[10px] rounded-full shrink-0 self-start sm:self-center">70% Full</span>
                         </div>
                     </div>
                 </div>
@@ -230,7 +459,7 @@
 
                 <div class="bg-adminCard rounded-3xl border border-adminBorder overflow-hidden shadow-2xl">
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left text-xs" id="orders-table">
+                        <table class="w-full min-w-[820px] text-left text-xs" id="orders-table">
                             <thead class="bg-[#181311] text-roast-300 uppercase tracking-wider border-b border-adminBorder">
                                 <tr>
                                     <th class="p-4 font-bold">Order ID</th>
@@ -290,7 +519,7 @@
 
                 <div class="bg-adminCard rounded-3xl border border-adminBorder overflow-hidden shadow-2xl">
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left text-xs" id="inventory-table">
+                        <table class="w-full min-w-[820px] text-left text-xs" id="inventory-table">
                             <thead class="bg-[#181311] text-roast-300 uppercase tracking-wider border-b border-adminBorder">
                                 <tr>
                                     <th class="p-4 font-bold">Product Name</th>
@@ -332,8 +561,67 @@
                 </div>
             </div>
 
-            <!-- TAB 4: MEMBERS & LOYALTY -->
-            <div id="view-loyalty" class="admin-view space-y-6">
+            <!-- TAB 4: MANAGE CLASSES -->
+            <div id="view-classes" class="admin-view space-y-6 hidden">
+                <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+                    <div>
+                        <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Workshops & Masterclasses</span>
+                        <h3 class="text-2xl font-extrabold text-white font-serif mt-1">Class Slot Management</h3>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="openAddClassModal()" class="px-4 py-2.5 bg-amberGold text-adminBg font-extrabold rounded-xl text-xs shadow hover:opacity-90 flex items-center gap-2">
+                            <i class="fa-solid fa-plus"></i> Add Class Slot
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-adminCard rounded-3xl border border-adminBorder overflow-hidden shadow-2xl">
+                    <div class="overflow-x-auto">
+                        <table class="w-full min-w-[960px] text-left text-xs" id="classes-table">
+                            <thead class="bg-[#181311] text-roast-300 uppercase tracking-wider border-b border-adminBorder">
+                                <tr>
+                                    <th class="p-4 font-bold">Class Name</th>
+                                    <th class="p-4 font-bold">Format</th>
+                                    <th class="p-4 font-bold">Schedule</th>
+                                    <th class="p-4 font-bold">Price</th>
+                                    <th class="p-4 font-bold">Location / Meeting Link</th>
+                                    <th class="p-4 font-bold">Max Pax</th>
+                                    <th class="p-4 font-bold text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-adminBorder" id="classes-tbody">
+                                <tr class="hover:bg-adminCardHover class-row">
+                                    <td class="p-4 font-bold text-white class-name">Coffee Brewing Masterclass</td>
+                                    <td class="p-4 whitespace-nowrap class-format"><span class="whitespace-nowrap inline-flex items-center px-2.5 py-0.5 bg-blue-500/20 text-blue-300 font-bold text-[10px] rounded-full"><i class="fa-solid fa-people-roof mr-1"></i>Face-to-Face</span></td>
+                                    <td class="p-4 text-roast-300 whitespace-nowrap class-schedule">Sat, 6 Sep 2026 — 10:00 AM</td>
+                                    <td class="p-4 text-amberGold font-serif class-price">RM 120.00</td>
+                                    <td class="p-4 text-roast-300 class-location">Rumah Panggang Roastery, Sungai Petani, Kedah</td>
+                                    <td class="p-4 font-bold text-white class-pax">8 pax</td>
+                                    <td class="p-4 text-right space-x-2">
+                                        <button onclick="openEditClassModal(this)" class="px-3 py-1.5 bg-adminBg border border-adminBorder text-roast-100 font-bold rounded-lg shadow hover:bg-adminCardHover" title="Edit"><i class="fa-solid fa-pen"></i></button>
+                                        <button onclick="deleteClassRow(this)" class="px-3 py-1.5 bg-red-500/10 text-red-400 border border-red-500/30 font-bold rounded-lg shadow hover:bg-red-500/20" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-adminCardHover class-row">
+                                    <td class="p-4 font-bold text-white class-name">Coffee Cupping Experience</td>
+                                    <td class="p-4 whitespace-nowrap class-format"><span class="whitespace-nowrap inline-flex items-center px-2.5 py-0.5 bg-purple-500/20 text-purple-300 font-bold text-[10px] rounded-full"><i class="fa-solid fa-video mr-1"></i>Online</span></td>
+                                    <td class="p-4 text-roast-300 whitespace-nowrap class-schedule">Thu, 11 Sep 2026 — 8:00 PM</td>
+                                    <td class="p-4 text-amberGold font-serif class-price">RM 80.00</td>
+                                    <td class="p-4 text-roast-300 class-location"><a href="#" class="text-amberGold hover:underline break-all">https://zoom.us/j/1234567890</a></td>
+                                    <td class="p-4 font-bold text-white class-pax">10 pax</td>
+                                    <td class="p-4 text-right space-x-2">
+                                        <button onclick="openEditClassModal(this)" class="px-3 py-1.5 bg-adminBg border border-adminBorder text-roast-100 font-bold rounded-lg shadow hover:bg-adminCardHover" title="Edit"><i class="fa-solid fa-pen"></i></button>
+                                        <button onclick="deleteClassRow(this)" class="px-3 py-1.5 bg-red-500/10 text-red-400 border border-red-500/30 font-bold rounded-lg shadow hover:bg-red-500/20" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 5: MEMBERS & LOYALTY -->
+            <div id="view-loyalty" class="admin-view space-y-6 hidden">
                 <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
                     <div>
                         <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Loyalty Program</span>
@@ -540,6 +828,74 @@
         </div>
     </div>
 
+    <!-- MODAL: ADD / EDIT CLASS SLOT -->
+    <div id="class-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-adminCard border border-adminBorder rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl relative space-y-6 text-roast-100 my-8">
+            <button onclick="closeClassModal()" class="absolute top-5 right-5 text-roast-400 hover:text-white p-2">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div class="text-center space-y-1">
+                <div class="w-14 h-14 rounded-2xl bg-amberGold/20 border border-amberGold/40 text-amberGold flex items-center justify-center mx-auto text-2xl shadow">
+                    <i class="fa-solid fa-chalkboard-user"></i>
+                </div>
+                <h3 id="class-modal-title" class="text-xl font-bold font-serif text-white">Add Class Slot</h3>
+                <p class="text-xs text-roast-300">Fill in the class & slot details below</p>
+            </div>
+            <div class="space-y-4 text-xs">
+                <input type="hidden" id="edit-class-index" value="">
+                <div>
+                    <label class="block font-semibold text-roast-300 uppercase mb-1">Class Name</label>
+                    <input type="text" id="input-class-name" list="class-name-suggestions" placeholder="e.g. Latte Art Workshop" class="w-full bg-adminBg border border-adminBorder text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                    <datalist id="class-name-suggestions">
+                        <option value="Coffee Brewing Masterclass">
+                        <option value="Latte Art Workshop">
+                        <option value="Coffee Cupping Experience">
+                    </datalist>
+                </div>
+
+                <div>
+                    <label class="block font-semibold text-roast-300 uppercase mb-1">Class Format</label>
+                    <select id="input-class-format" onchange="toggleClassLocationField()" class="w-full bg-adminBg border border-adminBorder text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                        <option value="face-to-face">Face-to-Face</option>
+                        <option value="online">Online</option>
+                    </select>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block font-semibold text-roast-300 uppercase mb-1">Price (RM)</label>
+                        <input type="number" step="0.01" id="input-class-price" placeholder="120.00" class="w-full bg-adminBg border border-adminBorder text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-roast-300 uppercase mb-1">Max Pax</label>
+                        <input type="number" id="input-class-pax" placeholder="8" class="w-full bg-adminBg border border-adminBorder text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block font-semibold text-roast-300 uppercase mb-1">Slot Date & Time</label>
+                    <input type="text" id="input-class-schedule" placeholder="e.g. Sat, 6 Sep 2026 — 10:00 AM" class="w-full bg-adminBg border border-adminBorder text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                </div>
+
+                <!-- Face-to-Face: Location field -->
+                <div id="field-class-location">
+                    <label class="block font-semibold text-roast-300 uppercase mb-1">Location</label>
+                    <input type="text" id="input-class-location-val" placeholder="e.g. Rumah Panggang Roastery, Sungai Petani, Kedah" class="w-full bg-adminBg border border-adminBorder text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                </div>
+
+                <!-- Online: Meeting Link field -->
+                <div id="field-class-link" class="hidden">
+                    <label class="block font-semibold text-roast-300 uppercase mb-1">Meeting Link</label>
+                    <input type="url" id="input-class-link-val" placeholder="e.g. https://zoom.us/j/1234567890" class="w-full bg-adminBg border border-adminBorder text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                </div>
+            </div>
+            <div class="flex gap-3 pt-2">
+                <button onclick="saveClassData()" class="flex-1 py-3 bg-amberGold text-adminBg font-extrabold rounded-xl text-xs shadow hover:opacity-90">Save Slot</button>
+                <button onclick="closeClassModal()" class="px-5 py-3 bg-adminBg text-roast-300 font-bold rounded-xl border border-adminBorder text-xs">Cancel</button>
+            </div>
+        </div>
+    </div>
+
     <!-- TOAST NOTIFICATION -->
     <div id="admin-toast" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none">
         <div class="bg-adminCard border border-amberGold/50 text-white px-5 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3">
@@ -557,6 +913,7 @@
     <script>
         let revenueChartInstance = null;
         let productsChartInstance = null;
+        let memberTierChartInstance = null;
         let activeShippingRow = null;
         let activeStockRow = null;
 
@@ -569,25 +926,55 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             initCharts();
+            applySidebarResponsiveState();
+            window.addEventListener('resize', applySidebarResponsiveState);
         });
 
-        function toggleSidebar() {
+        // Sets the correct default sidebar/content state for the current viewport width. 
+        // Runs on load and on window resize so the layout never gets stuck in a broken state. 
+        function applySidebarResponsiveState() {
+            if (window.innerWidth >= 1024) { 
+                openSidebar(); 
+            } else { 
+                closeSidebar(); 
+            } 
+        }
+
+        function openSidebar() {
             const sidebar = document.getElementById('sidebar');
             const mainContent = document.getElementById('main-content');
             const backdrop = document.getElementById('sidebar-backdrop');
-            
-            sidebar.classList.toggle('-translate-x-full');
-            
+
+            sidebar.classList.remove('-translate-x-full');
+
             if (window.innerWidth >= 1024) {
-                if (sidebar.classList.contains('-translate-x-full')) {
-                    mainContent.classList.remove('ml-64');
-                    mainContent.classList.add('ml-0');
-                } else {
-                    mainContent.classList.remove('ml-0');
-                    mainContent.classList.add('ml-64');
-                }
+                mainContent.classList.remove('ml-0');
+                mainContent.classList.add('ml-64');
+                backdrop.classList.add('hidden');
             } else {
-                backdrop.classList.toggle('hidden');
+                mainContent.classList.remove('ml-64');
+                mainContent.classList.add('ml-0');
+                backdrop.classList.remove('hidden');
+            }
+        }
+
+        function closeSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('main-content');
+            const backdrop = document.getElementById('sidebar-backdrop');
+
+            sidebar.classList.add('-translate-x-full');
+            mainContent.classList.remove('ml-64');
+            mainContent.classList.add('ml-0');
+            backdrop.classList.add('hidden');
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar.classList.contains('-translate-x-full')) {
+                openSidebar();
+            } else {
+                closeSidebar();
             }
         }
 
@@ -597,7 +984,7 @@
             document.querySelectorAll('.admin-view').forEach(el => el.classList.add('hidden'));
             document.getElementById(`view-${tabId}`).classList.remove('hidden');
 
-            ['overview', 'orders', 'inventory', 'loyalty'].forEach(t => {
+            ['overview', 'orders', 'inventory', 'classes', 'loyalty'].forEach(t => {
                 const navBtn = document.getElementById(`nav-${t}`);
                 if(t === tabId) {
                     navBtn.className = "flex items-center gap-3 px-4 py-3 rounded-xl bg-amberGold text-adminBg font-bold transition-all shadow-md";
@@ -608,8 +995,10 @@
 
             document.getElementById('page-title').innerText = 'Rumah Panggang';
 
+            // On mobile/tablet, close the drawer after picking a tab. Always close (never blind-toggle) 
+            // so this can never accidentally re-open an already-closed sidebar. 
             if(window.innerWidth < 1024) {
-                toggleSidebar();
+                closeSidebar();
             }
         }
 
@@ -773,6 +1162,148 @@
             }
         }
 
+        // --- CLASS SLOT MANAGEMENT FUNCTIONS ---
+        let activeClassRow = null;
+
+        function toggleClassLocationField() {
+            const format = document.getElementById('input-class-format').value;
+            const locationField = document.getElementById('field-class-location');
+            const linkField = document.getElementById('field-class-link');
+
+            if (format === 'online') {
+                locationField.classList.add('hidden');
+                linkField.classList.remove('hidden');
+            } else {
+                locationField.classList.remove('hidden');
+                linkField.classList.add('hidden');
+            }
+        }
+
+        function openAddClassModal() {
+            activeClassRow = null;
+            document.getElementById('class-modal-title').innerText = "Add Class Slot";
+            document.getElementById('edit-class-index').value = "";
+            document.getElementById('input-class-name').value = "";
+            document.getElementById('input-class-format').value = "face-to-face";
+            document.getElementById('input-class-price').value = "";
+            document.getElementById('input-class-pax').value = "";
+            document.getElementById('input-class-schedule').value = "";
+            document.getElementById('input-class-location-val').value = "";
+            document.getElementById('input-class-link-val').value = "";
+            toggleClassLocationField();
+            document.getElementById('class-modal').classList.remove('hidden');
+        }
+
+        function openEditClassModal(btn) {
+            const row = btn.closest('tr');
+            activeClassRow = row;
+
+            const name = row.querySelector('.class-name').innerText;
+            const formatBadge = row.querySelector('.class-format').innerText.trim();
+            const isOnline = formatBadge.toLowerCase().includes('online');
+            const schedule = row.querySelector('.class-schedule').innerText;
+            const price = row.querySelector('.class-price').innerText.replace('RM ', '');
+            const pax = row.querySelector('.class-pax').innerText.replace(' pax', '');
+            const locationCell = row.querySelector('.class-location');
+            const linkEl = locationCell.querySelector('a');
+            const locationValue = linkEl ? linkEl.getAttribute('href') : locationCell.innerText.trim();
+
+            document.getElementById('class-modal-title').innerText = "Edit Class Slot";
+            document.getElementById('edit-class-index').value = "edit";
+            document.getElementById('input-class-name').value = name;
+            document.getElementById('input-class-format').value = isOnline ? 'online' : 'face-to-face';
+            document.getElementById('input-class-price').value = price;
+            document.getElementById('input-class-pax').value = pax;
+            document.getElementById('input-class-schedule').value = schedule;
+
+            if (isOnline) {
+                document.getElementById('input-class-link-val').value = locationValue;
+                document.getElementById('input-class-location-val').value = "";
+            } else {
+                document.getElementById('input-class-location-val').value = locationValue;
+                document.getElementById('input-class-link-val').value = "";
+            }
+
+            toggleClassLocationField();
+            document.getElementById('class-modal').classList.remove('hidden');
+        }
+
+        function closeClassModal() {
+            document.getElementById('class-modal').classList.add('hidden');
+            activeClassRow = null;
+        }
+
+        function saveClassData() {
+            const name = document.getElementById('input-class-name').value.trim();
+            const format = document.getElementById('input-class-format').value;
+            const price = parseFloat(document.getElementById('input-class-price').value).toFixed(2);
+            const pax = parseInt(document.getElementById('input-class-pax').value);
+            const schedule = document.getElementById('input-class-schedule').value.trim();
+            const isEdit = document.getElementById('edit-class-index').value === "edit";
+
+            const locationVal = document.getElementById('input-class-location-val').value.trim();
+            const linkVal = document.getElementById('input-class-link-val').value.trim();
+
+            if (!name || !schedule || isNaN(price) || isNaN(pax)) {
+                alert('Sila lengkapkan semua maklumat kelas dengan betul.');
+                return;
+            }
+            if (format === 'online' && !linkVal) {
+                alert('Sila masukkan meeting link untuk kelas online.');
+                return;
+            }
+            if (format === 'face-to-face' && !locationVal) {
+                alert('Sila masukkan lokasi untuk kelas face-to-face.');
+                return;
+            }
+
+            const formatHtml = format === 'online'
+                ? '<span class="whitespace-nowrap inline-flex items-center px-2.5 py-0.5 bg-purple-500/20 text-purple-300 font-bold text-[10px] rounded-full"><i class="fa-solid fa-video mr-1"></i>Online</span>'
+                : '<span class="whitespace-nowrap inline-flex items-center px-2.5 py-0.5 bg-blue-500/20 text-blue-300 font-bold text-[10px] rounded-full"><i class="fa-solid fa-people-roof mr-1"></i>Face-to-Face</span>';
+
+            const locationHtml = format === 'online'
+                ? `<a href="${linkVal}" target="_blank" class="text-amberGold hover:underline break-all">${linkVal}</a>`
+                : `${locationVal}`;
+
+            if (isEdit && activeClassRow) {
+                activeClassRow.querySelector('.class-name').innerText = name;
+                activeClassRow.querySelector('.class-format').innerHTML = formatHtml;
+                activeClassRow.querySelector('.class-schedule').innerText = schedule;
+                activeClassRow.querySelector('.class-price').innerText = `RM ${price}`;
+                activeClassRow.querySelector('.class-location').innerHTML = locationHtml;
+                activeClassRow.querySelector('.class-pax').innerText = `${pax} pax`;
+                showAdminToast(`Class slot for "${name}" successfully updated.`);
+            } else {
+                const tbody = document.getElementById('classes-tbody');
+                const newRow = document.createElement('tr');
+                newRow.className = "hover:bg-adminCardHover class-row";
+                newRow.innerHTML = `
+                    <td class="p-4 font-bold text-white class-name">${name}</td>
+                    <td class="p-4 whitespace-nowrap class-format">${formatHtml}</td>
+                    <td class="p-4 text-roast-300 whitespace-nowrap class-schedule">${schedule}</td>
+                    <td class="p-4 text-amberGold font-serif class-price">RM ${price}</td>
+                    <td class="p-4 text-roast-300 class-location">${locationHtml}</td>
+                    <td class="p-4 font-bold text-white class-pax">${pax} pax</td>
+                    <td class="p-4 text-right space-x-2">
+                        <button onclick="openEditClassModal(this)" class="px-3 py-1.5 bg-adminBg border border-adminBorder text-roast-100 font-bold rounded-lg shadow hover:bg-adminCardHover" title="Edit"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="deleteClassRow(this)" class="px-3 py-1.5 bg-red-500/10 text-red-400 border border-red-500/30 font-bold rounded-lg shadow hover:bg-red-500/20" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(newRow);
+                showAdminToast(`New class slot for "${name}" successfully added.`);
+            }
+
+            closeClassModal();
+        }
+
+        function deleteClassRow(btn) {
+            if (confirm('Adakah anda pasti mahu memadam slot kelas ini?')) {
+                const row = btn.closest('tr');
+                row.remove();
+                showAdminToast('Class slot successfully deleted.');
+            }
+        }
+
         // --- ORDER MANAGEMENT FUNCTIONS ---
         function filterOrdersTable() {
             const query = document.getElementById('order-search').value.toLowerCase();
@@ -892,6 +1423,25 @@
                     maintainAspectRatio: false,
                     plugins: { legend: { display: false } },
                     cutout: '70%'
+                }
+            });
+
+            const ctxMemberTier = document.getElementById('memberTierChart').getContext('2d');
+            memberTierChartInstance = new Chart(ctxMemberTier, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Gold', 'Silver', 'Bronze'],
+                    datasets: [{
+                        data: [28, 64, 50],
+                        backgroundColor: ['#F59E0B', '#CFAD8F', '#9E6437'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    cutout: '65%'
                 }
             });
         }
