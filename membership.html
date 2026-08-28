@@ -58,28 +58,62 @@
                     <a href="dashboard.html" class="text-roast-200 hover:text-amberGold transition-colors">Home</a>
                     <a href="orders.html" class="text-roast-200 hover:text-amberGold transition-colors"><i class="fa-solid fa-box-open me-1"></i> My Orders</a>
                 </div>
+
+                <!-- On mobile only Profile + Logout stay here; Membership/Cart/Wishlist move to the bottom nav bar. -->
                 <div class="flex items-center gap-2.5">
-                    <a href="membership.html" class="relative w-10 h-10 rounded-full bg-roast-900 hover:bg-roast-800 border border-roast-800 text-amberGold flex items-center justify-center transition-all shadow-md" title="Membership Points">
+                    <a href="membership.html" class="hidden md:flex relative w-10 h-10 rounded-full bg-roast-900 hover:bg-roast-800 border border-roast-800 text-amberGold items-center justify-center transition-all shadow-md" title="Membership Points">
                         <i class="fa-solid fa-bag-shopping text-base"></i>
                         <span class="absolute -top-1 -right-1 bg-amberGold text-roast-950 text-[9px] font-extrabold px-1.5 py-0.5 rounded-full shadow">350</span>
                     </a>
-                    <button onclick="toggleCart(true)" class="relative w-10 h-10 rounded-full bg-roast-900 hover:bg-roast-800 border border-roast-800 text-amberGold flex items-center justify-center transition-all shadow-md" title="Shopping Cart">
+                    <button onclick="toggleCart(true)" class="hidden md:flex relative w-10 h-10 rounded-full bg-roast-900 hover:bg-roast-800 border border-roast-800 text-amberGold items-center justify-center transition-all shadow-md" title="Shopping Cart">
                         <i class="fa-solid fa-cart-shopping text-base"></i>
                         <span id="cart-count" class="absolute -top-1 -right-1 bg-amberGold text-roast-950 text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow">0</span>
                     </button>
-                    <button onclick="toggleWishlistDrawer()" class="relative w-10 h-10 rounded-full bg-roast-900 hover:bg-roast-800 border border-roast-800 text-amberGold flex items-center justify-center transition-all shadow-md" title="View Wishlist">
+                    <button onclick="toggleWishlistDrawer()" class="hidden md:flex relative w-10 h-10 rounded-full bg-roast-900 hover:bg-roast-800 border border-roast-800 text-amberGold items-center justify-center transition-all shadow-md" title="View Wishlist">
                         <i class="fa-solid fa-heart text-base"></i>
                         <span id="wishlist-count" class="absolute -top-1 -right-1 bg-amberGold text-roast-950 text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow">0</span>
                     </button>
                     <button onclick="openProfileModal()" class="w-10 h-10 rounded-full bg-roast-900 hover:bg-roast-800 border border-roast-800 text-amberGold flex items-center justify-center transition-all shadow-md" title="Edit Profile">
                         <i class="fa-solid fa-user text-base"></i>
                     </button>
-                    <button onclick="logoutUser()" class="px-3.5 py-2 rounded-full bg-roast-900 hover:bg-red-950/40 border border-roast-700 text-roast-300 hover:text-red-400 text-xs font-semibold transition-all">
-                        <i class="fa-solid fa-right-from-bracket"></i> Logout
+                    <button onclick="logoutUser()" class="px-3 sm:px-3.5 py-2 rounded-full bg-roast-900 hover:bg-red-950/40 border border-roast-700 text-roast-300 hover:text-red-400 text-xs font-semibold transition-all">
+                        <i class="fa-solid fa-right-from-bracket"></i> <span class="hidden sm:inline">Logout</span>
                     </button>
                 </div>
             </div>
         </div>
+    </nav>
+
+    <!-- ============================================================ -->
+    <!-- BOTTOM NAVIGATION (Mobile & Tablet only) -->
+    <!-- ============================================================ -->
+    <nav id="bottom-nav" class="md:hidden fixed bottom-0 inset-x-0 z-50 bg-roast-950 border-t border-roast-900 flex items-stretch justify-around shadow-[0_-8px_24px_rgba(0,0,0,0.35)]" style="padding-bottom: env(safe-area-inset-bottom);">
+        <a href="dashboard.html" class="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-roast-400 transition-all">
+            <i class="fa-solid fa-house text-base"></i>
+            <span class="text-[10px] font-bold">Home</span>
+        </a>
+        <a href="orders.html" class="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-roast-400 transition-all">
+            <i class="fa-solid fa-box-open text-base"></i>
+            <span class="text-[10px] font-bold">Orders</span>
+        </a>
+        <a href="membership.html" class="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-amberGold transition-all">
+            <i class="fa-solid fa-coins text-base"></i>
+            <span class="text-[10px] font-bold">Points</span>
+        </a>
+        <button onclick="toggleWishlistDrawer()" class="relative flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-roast-400 transition-all">
+            <span class="relative">
+                <i class="fa-solid fa-heart text-base"></i>
+                <span id="bottomnav-wishlist-count" class="absolute -top-1.5 -right-2.5 bg-amberGold text-roast-950 text-[9px] font-extrabold w-4 h-4 rounded-full flex items-center justify-center shadow">0</span>
+            </span>
+            <span class="text-[10px] font-bold">Wishlist</span>
+        </button>
+        <button onclick="toggleCart(true)" class="relative flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-roast-400 transition-all">
+            <span class="relative">
+                <i class="fa-solid fa-cart-shopping text-base"></i>
+                <span id="bottomnav-cart-count" class="absolute -top-1.5 -right-2.5 bg-amberGold text-roast-950 text-[9px] font-extrabold w-4 h-4 rounded-full flex items-center justify-center shadow">0</span>
+            </span>
+            <span class="text-[10px] font-bold">Cart</span>
+        </button>
     </nav>
 
     <section class="relative pt-36 pb-20 bg-gradient-to-b from-roast-900 to-roast-950 border-b border-roast-900">
@@ -114,7 +148,7 @@
         </div>
     </section>
 
-    <main class="py-16 bg-roast-950">
+    <main class="pt-16 pb-32 md:pb-16 bg-roast-950">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
             
             <div class="space-y-6">
@@ -365,12 +399,16 @@
 
         function updateCartUI() {
             const cartCount = document.getElementById('cart-count');
+            const bottomCartCount = document.getElementById('bottomnav-cart-count');
             if(cartCount) cartCount.innerText = cart.length;
+            if(bottomCartCount) bottomCartCount.innerText = cart.length;
         }
 
         function updateWishlistUI() {
             const badge = document.getElementById('wishlist-count');
+            const bottomBadge = document.getElementById('bottomnav-wishlist-count');
             if(badge) badge.innerText = wishlist.length;
+            if(bottomBadge) bottomBadge.innerText = wishlist.length;
         }
 
         function toggleWishlistDrawer() {

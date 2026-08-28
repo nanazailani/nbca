@@ -60,7 +60,8 @@
                 border: 1px solid #42332B;
                 border-radius: 1.1rem;
                 padding: 0.9rem 1rem;
-                background: #181311;
+                background: #2E241F;
+                box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
             }
             .responsive-table tbody tr:last-child { margin-bottom: 0; }
             .responsive-table td {
@@ -115,6 +116,9 @@
                 <a href="#" onclick="switchTab('classes', event)" id="nav-classes" class="flex items-center gap-3 px-4 py-3 rounded-xl text-roast-300 hover:bg-adminCardHover hover:text-white transition-all">
                     <i class="fa-solid fa-chalkboard-user w-5 text-base shrink-0"></i> <span class="sidebar-text">Manage Classes</span>
                 </a>
+                <a href="#" onclick="switchTab('blog', event)" id="nav-blog" class="flex items-center gap-3 px-4 py-3 rounded-xl text-roast-300 hover:bg-adminCardHover hover:text-white transition-all">
+                    <i class="fa-solid fa-newspaper w-5 text-base shrink-0"></i> <span class="sidebar-text">Manage Blog</span>
+                </a>
                 <a href="#" onclick="switchTab('loyalty', event)" id="nav-loyalty" class="flex items-center gap-3 px-4 py-3 rounded-xl text-roast-300 hover:bg-adminCardHover hover:text-white transition-all">
                     <i class="fa-solid fa-users w-5 text-base shrink-0"></i> <span class="sidebar-text">Members & Points</span>
                 </a>
@@ -156,6 +160,10 @@
             <i class="fa-solid fa-chalkboard-user text-base"></i>
             <span class="text-[10px] font-bold">Classes</span>
         </button>
+        <button onclick="switchTab('blog', event)" id="bottomnav-blog" class="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-roast-400 transition-all">
+            <i class="fa-solid fa-newspaper text-base"></i>
+            <span class="text-[10px] font-bold">Blog</span>
+        </button>
         <button onclick="switchTab('loyalty', event)" id="bottomnav-loyalty" class="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-roast-400 transition-all">
             <i class="fa-solid fa-users text-base"></i>
             <span class="text-[10px] font-bold">Members</span>
@@ -190,17 +198,45 @@
 
             <!-- TAB 1: OVERVIEW & CHARTS -->
             <div id="view-overview" class="admin-view space-y-8">
+                <!-- GLOBAL PERIOD FILTER: controls every metric on this tab -->
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <div>
+                        <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Business Snapshot</span>
+                        <h3 class="text-xl font-extrabold text-white font-serif mt-1">Viewing data for: <span id="period-label" class="text-amberGold">This Month</span></h3>
+                    </div>
+                    <div class="flex bg-adminCard p-1 rounded-xl border border-adminBorder text-xs font-bold shadow flex-wrap">
+                        <button onclick="updatePeriodFilter('day', event)" id="filter-day" class="px-3 py-1.5 rounded-lg text-roast-300 hover:text-white transition-all">Day</button>
+                        <button onclick="updatePeriodFilter('week', event)" id="filter-week" class="px-3 py-1.5 rounded-lg text-roast-300 hover:text-white transition-all">Week</button>
+                        <button onclick="updatePeriodFilter('month', event)" id="filter-month" class="px-3 py-1.5 rounded-lg bg-amberGold text-adminBg shadow transition-all">Month</button>
+                        <button onclick="updatePeriodFilter('year', event)" id="filter-year" class="px-3 py-1.5 rounded-lg text-roast-300 hover:text-white transition-all">Year</button>
+                        <button onclick="toggleCustomDatePicker(event)" id="filter-custom" class="px-3 py-1.5 rounded-lg text-roast-300 hover:text-white transition-all flex items-center gap-1.5"><i class="fa-solid fa-calendar-days text-[11px]"></i> Custom</button>
+                    </div>
+                </div>
+
+                <!-- Custom date range picker (hidden until "Custom" is clicked) -->
+                <div id="custom-date-picker" class="hidden flex flex-col sm:flex-row sm:items-end gap-3 bg-adminCard p-4 rounded-2xl border border-adminBorder">
+                    <div class="flex-1">
+                        <label class="block text-[10px] font-bold text-roast-300 uppercase mb-1">From</label>
+                        <input type="date" id="custom-date-from" class="w-full bg-adminBg border border-adminBorder text-white text-xs rounded-xl px-3 py-2.5 focus:outline-none focus:border-amberGold">
+                    </div>
+                    <div class="flex-1">
+                        <label class="block text-[10px] font-bold text-roast-300 uppercase mb-1">To</label>
+                        <input type="date" id="custom-date-to" class="w-full bg-adminBg border border-adminBorder text-white text-xs rounded-xl px-3 py-2.5 focus:outline-none focus:border-amberGold">
+                    </div>
+                    <button onclick="applyCustomDateFilter()" class="px-5 py-2.5 bg-amberGold text-adminBg font-extrabold rounded-xl text-xs shadow hover:opacity-90 whitespace-nowrap">Apply Range</button>
+                </div>
+
                 <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     <div class="bg-adminCard p-6 rounded-3xl border border-adminBorder space-y-3 shadow-xl">
                         <div class="flex justify-between items-start">
                             <div class="w-12 h-12 rounded-2xl bg-amberGold/20 text-amberGold flex items-center justify-center text-xl">
                                 <i class="fa-solid fa-bag-shopping"></i>
                             </div>
-                            <span class="px-2.5 py-1 bg-green-500/15 text-green-400 font-bold text-[10px] rounded-full">+14.2%</span>
+                            <span id="kpi-orders-growth" class="px-2.5 py-1 bg-green-500/15 text-green-400 font-bold text-[10px] rounded-full">+14.2%</span>
                         </div>
                         <div>
                             <span class="text-xs text-roast-300 font-medium block">Total Orders</span>
-                            <div class="text-3xl font-bold font-serif text-white mt-1">24</div>
+                            <div id="kpi-total-orders" class="text-3xl font-bold font-serif text-white mt-1">24</div>
                         </div>
                     </div>
                     <div class="bg-adminCard p-6 rounded-3xl border border-adminBorder space-y-3 shadow-xl">
@@ -208,7 +244,7 @@
                             <div class="w-12 h-12 rounded-2xl bg-amberGold/20 text-amberGold flex items-center justify-center text-xl">
                                 <i class="fa-solid fa-users"></i>
                             </div>
-                            <span class="px-2.5 py-1 bg-green-500/15 text-green-400 font-bold text-[10px] rounded-full">+8 new</span>
+                            <span id="kpi-members-growth" class="px-2.5 py-1 bg-green-500/15 text-green-400 font-bold text-[10px] rounded-full">+8 new</span>
                         </div>
                         <div>
                             <span class="text-xs text-roast-300 font-medium block">Active Members</span>
@@ -224,7 +260,7 @@
                         </div>
                         <div>
                             <span class="text-xs text-roast-300 font-medium block">Total Revenue</span>
-                            <div class="text-3xl font-bold font-serif text-white mt-1">RM 12,840</div>
+                            <div id="kpi-total-revenue" class="text-3xl font-bold font-serif text-white mt-1">RM 12,840</div>
                         </div>
                     </div>
                     <div class="bg-adminCard p-6 rounded-3xl border border-adminBorder space-y-3 shadow-xl">
@@ -232,28 +268,20 @@
                             <div class="w-12 h-12 rounded-2xl bg-blue-500/20 text-blue-400 flex items-center justify-center text-xl">
                                 <i class="fa-solid fa-chalkboard-user"></i>
                             </div>
-                            <span class="px-2.5 py-1 bg-blue-500/15 text-blue-300 font-bold text-[10px] rounded-full">Booked</span>
+                            <span id="kpi-workshops-badge" class="px-2.5 py-1 bg-blue-500/15 text-blue-300 font-bold text-[10px] rounded-full">Booked</span>
                         </div>
                         <div>
                             <span class="text-xs text-roast-300 font-medium block">Active Workshops</span>
-                            <div class="text-3xl font-bold font-serif text-white mt-1">3 Classes</div>
+                            <div id="kpi-workshops" class="text-3xl font-bold font-serif text-white mt-1">3 Classes</div>
                         </div>
                     </div>
                 </div>
 
                 <div class="grid lg:grid-cols-12 gap-8">
                     <div class="lg:col-span-8 bg-adminCard p-6 sm:p-8 rounded-3xl border border-adminBorder shadow-2xl space-y-6">
-                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                            <div>
-                                <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Performance</span>
-                                <h3 class="text-2xl font-extrabold text-white font-serif mt-1">Revenue & Sales Trends</h3>
-                            </div>
-                            <div class="flex bg-adminBg p-1 rounded-xl border border-adminBorder text-xs font-bold">
-                                <button onclick="updateChartFilter('day', event)" id="filter-day" class="px-3 py-1.5 rounded-lg text-roast-300 hover:text-white transition-all">Day</button>
-                                <button onclick="updateChartFilter('week', event)" id="filter-week" class="px-3 py-1.5 rounded-lg text-roast-300 hover:text-white transition-all">Week</button>
-                                <button onclick="updateChartFilter('month', event)" id="filter-month" class="px-3 py-1.5 rounded-lg bg-amberGold text-adminBg shadow transition-all">Month</button>
-                                <button onclick="updateChartFilter('year', event)" id="filter-year" class="px-3 py-1.5 rounded-lg text-roast-300 hover:text-white transition-all">Year</button>
-                            </div>
+                        <div>
+                            <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Performance</span>
+                            <h3 class="text-2xl font-extrabold text-white font-serif mt-1">Revenue & Sales Trends</h3>
                         </div>
                         <div class="h-80 relative">
                             <canvas id="revenueChart"></canvas>
@@ -271,22 +299,22 @@
                             <div class="flex items-center gap-2">
                                 <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:#F59E0B"></span>
                                 <span class="text-roast-300 truncate">Coffee Beans</span>
-                                <span class="text-white font-bold ml-auto">55%</span>
+                                <span id="legend-coffee-pct" class="text-white font-bold ml-auto">55%</span>
                             </div>
                             <div class="flex items-center gap-2">
                                 <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:#3B82F6"></span>
                                 <span class="text-roast-300 truncate">Masterclass</span>
-                                <span class="text-white font-bold ml-auto">25%</span>
+                                <span id="legend-masterclass-pct" class="text-white font-bold ml-auto">25%</span>
                             </div>
                             <div class="flex items-center gap-2">
                                 <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:#10B981"></span>
                                 <span class="text-roast-300 truncate">Merchandise</span>
-                                <span class="text-white font-bold ml-auto">12%</span>
+                                <span id="legend-merchandise-pct" class="text-white font-bold ml-auto">12%</span>
                             </div>
                             <div class="flex items-center gap-2">
                                 <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:#8B5CF6"></span>
                                 <span class="text-roast-300 truncate">Drip Bags</span>
-                                <span class="text-white font-bold ml-auto">8%</span>
+                                <span id="legend-dripbags-pct" class="text-white font-bold ml-auto">8%</span>
                             </div>
                         </div>
                     </div>
@@ -299,11 +327,11 @@
                             <div class="w-12 h-12 rounded-2xl bg-amberGold/20 text-amberGold flex items-center justify-center text-xl">
                                 <i class="fa-solid fa-receipt"></i>
                             </div>
-                            <span class="px-2.5 py-1 bg-green-500/15 text-green-400 font-bold text-[10px] rounded-full">+6.1%</span>
+                            <span id="kpi-avg-order-growth" class="px-2.5 py-1 bg-green-500/15 text-green-400 font-bold text-[10px] rounded-full">+6.1%</span>
                         </div>
                         <div>
                             <span class="text-xs text-roast-300 font-medium block">Avg. Order Value</span>
-                            <div class="text-3xl font-bold font-serif text-white mt-1">RM 535.00</div>
+                            <div id="kpi-avg-order" class="text-3xl font-bold font-serif text-white mt-1">RM 535.00</div>
                         </div>
                     </div>
                     <div class="bg-adminCard p-6 rounded-3xl border border-adminBorder space-y-3 shadow-xl">
@@ -311,11 +339,11 @@
                             <div class="w-12 h-12 rounded-2xl bg-red-500/20 text-red-400 flex items-center justify-center text-xl">
                                 <i class="fa-solid fa-hourglass-half"></i>
                             </div>
-                            <span class="px-2.5 py-1 bg-red-500/15 text-red-300 font-bold text-[10px] rounded-full">5 orders</span>
+                            <span id="kpi-pending-count" class="px-2.5 py-1 bg-red-500/15 text-red-300 font-bold text-[10px] rounded-full">5 orders</span>
                         </div>
                         <div>
                             <span class="text-xs text-roast-300 font-medium block">Pending Payments</span>
-                            <div class="text-3xl font-bold font-serif text-white mt-1">RM 1,240.00</div>
+                            <div id="kpi-pending-amount" class="text-3xl font-bold font-serif text-white mt-1">RM 1,240.00</div>
                         </div>
                     </div>
                     <div class="bg-adminCard p-6 rounded-3xl border border-adminBorder space-y-3 shadow-xl">
@@ -356,37 +384,37 @@
                             <div class="space-y-1.5">
                                 <div class="flex justify-between text-xs">
                                     <span class="text-roast-300 font-medium">Awaiting Verification</span>
-                                    <span class="text-white font-bold">5 orders</span>
+                                    <span id="status-awaiting-count" class="text-white font-bold">5 orders</span>
                                 </div>
                                 <div class="w-full h-2 rounded-full bg-adminBg overflow-hidden">
-                                    <div class="h-full bg-amberGold rounded-full" style="width: 21%"></div>
+                                    <div id="status-awaiting-bar" class="h-full bg-amberGold rounded-full transition-all duration-500" style="width: 21%"></div>
                                 </div>
                             </div>
                             <div class="space-y-1.5">
                                 <div class="flex justify-between text-xs">
                                     <span class="text-roast-300 font-medium">Preparing</span>
-                                    <span class="text-white font-bold">9 orders</span>
+                                    <span id="status-preparing-count" class="text-white font-bold">9 orders</span>
                                 </div>
                                 <div class="w-full h-2 rounded-full bg-adminBg overflow-hidden">
-                                    <div class="h-full bg-blue-400 rounded-full" style="width: 38%"></div>
+                                    <div id="status-preparing-bar" class="h-full bg-blue-400 rounded-full transition-all duration-500" style="width: 38%"></div>
                                 </div>
                             </div>
                             <div class="space-y-1.5">
                                 <div class="flex justify-between text-xs">
                                     <span class="text-roast-300 font-medium">Shipping</span>
-                                    <span class="text-white font-bold">7 orders</span>
+                                    <span id="status-shipping-count" class="text-white font-bold">7 orders</span>
                                 </div>
                                 <div class="w-full h-2 rounded-full bg-adminBg overflow-hidden">
-                                    <div class="h-full bg-green-400 rounded-full" style="width: 29%"></div>
+                                    <div id="status-shipping-bar" class="h-full bg-green-400 rounded-full transition-all duration-500" style="width: 29%"></div>
                                 </div>
                             </div>
                             <div class="space-y-1.5">
                                 <div class="flex justify-between text-xs">
                                     <span class="text-roast-300 font-medium">Completed</span>
-                                    <span class="text-white font-bold">3 orders</span>
+                                    <span id="status-completed-count" class="text-white font-bold">3 orders</span>
                                 </div>
                                 <div class="w-full h-2 rounded-full bg-adminBg overflow-hidden">
-                                    <div class="h-full bg-roast-400 rounded-full" style="width: 13%"></div>
+                                    <div id="status-completed-bar" class="h-full bg-roast-400 rounded-full transition-all duration-500" style="width: 13%"></div>
                                 </div>
                             </div>
                         </div>
@@ -518,7 +546,7 @@
                     </div>
                 </div>
 
-                <div class="bg-adminCard rounded-3xl border border-adminBorder overflow-hidden shadow-2xl p-3 sm:p-0">
+                <div class="bg-transparent sm:bg-adminCard rounded-none sm:rounded-3xl border-0 sm:border sm:border-adminBorder overflow-visible sm:overflow-hidden shadow-none sm:shadow-2xl p-0 sm:p-0">
                     <div class="overflow-x-auto">
                         <table class="responsive-table w-full min-w-[920px] text-left text-xs" id="orders-table">
                             <thead class="bg-[#181311] text-roast-300 uppercase tracking-wider border-b border-adminBorder">
@@ -593,7 +621,7 @@
                     </div>
                 </div>
 
-                <div class="bg-adminCard rounded-3xl border border-adminBorder overflow-hidden shadow-2xl p-3 sm:p-0">
+                <div class="bg-transparent sm:bg-adminCard rounded-none sm:rounded-3xl border-0 sm:border sm:border-adminBorder overflow-visible sm:overflow-hidden shadow-none sm:shadow-2xl p-0 sm:p-0">
                     <div class="overflow-x-auto">
                         <table class="responsive-table w-full min-w-[820px] text-left text-xs" id="inventory-table">
                             <thead class="bg-[#181311] text-roast-300 uppercase tracking-wider border-b border-adminBorder">
@@ -651,7 +679,34 @@
                     </div>
                 </div>
 
-                <div class="bg-adminCard rounded-3xl border border-adminBorder overflow-hidden shadow-2xl p-3 sm:p-0">
+                <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+                    <div class="relative sm:max-w-xs w-full">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-roast-400 text-xs"></i>
+                        <input type="text" id="class-search" oninput="filterClassesTable()" placeholder="Search class name..." class="w-full bg-adminCard border border-adminBorder text-white text-xs rounded-xl pl-10 pr-4 py-2.5 focus:outline-none focus:border-amberGold">
+                    </div>
+                    <select id="class-month-filter" onchange="filterClassesTable()" class="bg-adminCard border border-adminBorder text-roast-200 text-xs rounded-xl px-4 py-2.5 focus:outline-none focus:border-amberGold">
+                        <option value="all">All Months</option>
+                        <option value="01">January</option>
+                        <option value="02">February</option>
+                        <option value="03">March</option>
+                        <option value="04">April</option>
+                        <option value="05">May</option>
+                        <option value="06">June</option>
+                        <option value="07">July</option>
+                        <option value="08">August</option>
+                        <option value="09">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                    </select>
+                    <select id="class-year-filter" onchange="filterClassesTable()" class="bg-adminCard border border-adminBorder text-roast-200 text-xs rounded-xl px-4 py-2.5 focus:outline-none focus:border-amberGold">
+                        <option value="all">All Years</option>
+                        <option value="2026">2026</option>
+                        <option value="2027">2027</option>
+                    </select>
+                </div>
+
+                <div class="bg-transparent sm:bg-adminCard rounded-none sm:rounded-3xl border-0 sm:border sm:border-adminBorder overflow-visible sm:overflow-hidden shadow-none sm:shadow-2xl p-0 sm:p-0">
                     <div class="overflow-x-auto">
                         <table class="responsive-table w-full min-w-[960px] text-left text-xs" id="classes-table">
                             <thead class="bg-[#181311] text-roast-300 uppercase tracking-wider border-b border-adminBorder">
@@ -666,7 +721,7 @@
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-adminBorder" id="classes-tbody">
-                                <tr class="hover:bg-adminCardHover class-row">
+                                <tr class="hover:bg-adminCardHover class-row" data-month="09" data-year="2026">
                                     <td class="p-4 font-bold text-white class-name" data-label="Class Name">Coffee Brewing Masterclass</td>
                                     <td class="p-4 whitespace-nowrap class-format" data-label="Format"><span class="whitespace-nowrap inline-flex items-center px-2.5 py-0.5 bg-blue-500/20 text-blue-300 font-bold text-[10px] rounded-full"><i class="fa-solid fa-people-roof mr-1"></i>Face-to-Face</span></td>
                                     <td class="p-4 text-roast-300 whitespace-nowrap class-schedule" data-label="Schedule">Sat, 6 Sep 2026 — 10:00 AM</td>
@@ -678,7 +733,7 @@
                                         <button onclick="deleteClassRow(this)" class="px-3 py-1.5 bg-red-500/10 text-red-400 border border-red-500/30 font-bold rounded-lg shadow hover:bg-red-500/20" title="Delete"><i class="fa-solid fa-trash"></i></button>
                                     </td>
                                 </tr>
-                                <tr class="hover:bg-adminCardHover class-row">
+                                <tr class="hover:bg-adminCardHover class-row" data-month="09" data-year="2026">
                                     <td class="p-4 font-bold text-white class-name" data-label="Class Name">Coffee Cupping Experience</td>
                                     <td class="p-4 whitespace-nowrap class-format" data-label="Format"><span class="whitespace-nowrap inline-flex items-center px-2.5 py-0.5 bg-purple-500/20 text-purple-300 font-bold text-[10px] rounded-full"><i class="fa-solid fa-video mr-1"></i>Online</span></td>
                                     <td class="p-4 text-roast-300 whitespace-nowrap class-schedule" data-label="Schedule">Thu, 11 Sep 2026 — 8:00 PM</td>
@@ -696,7 +751,34 @@
                 </div>
             </div>
 
-            <!-- TAB 5: MEMBERS & LOYALTY -->
+            <!-- TAB 5: MANAGE BLOG -->
+            <div id="view-blog" class="admin-view space-y-6 hidden">
+                <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+                    <div>
+                        <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Stories & Culture</span>
+                        <h3 class="text-2xl font-extrabold text-white font-serif mt-1">Blog Post Management</h3>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="openAddBlogModal()" class="px-4 py-2.5 bg-amberGold text-adminBg font-extrabold rounded-xl text-xs shadow hover:opacity-90 flex items-center gap-2">
+                            <i class="fa-solid fa-plus"></i> New Blog Post
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+                    <div class="relative sm:max-w-xs w-full">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-roast-400 text-xs"></i>
+                        <input type="text" id="blog-search" oninput="filterBlogTable()" placeholder="Search post title..." class="w-full bg-adminCard border border-adminBorder text-white text-xs rounded-xl pl-10 pr-4 py-2.5 focus:outline-none focus:border-amberGold">
+                    </div>
+                    <p class="text-[11px] text-roast-400 flex items-center gap-1.5">
+                        <i class="fa-solid fa-circle-info text-amberGold"></i> Published posts appear live on the customer site's Blog section.
+                    </p>
+                </div>
+
+                <div id="blog-tbody" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+            </div>
+
+            <!-- TAB 6: MEMBERS & LOYALTY -->
             <div id="view-loyalty" class="admin-view space-y-6 hidden">
                 <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
                     <div>
@@ -709,20 +791,46 @@
                     </div>
                 </div>
 
-                <div class="bg-adminCard rounded-3xl border border-adminBorder p-6 space-y-4 shadow-xl" id="members-container">
-                    <div class="member-item flex justify-between items-center pb-4 border-b border-adminBorder">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-full bg-amberGold/20 text-amberGold font-bold flex items-center justify-center font-serif">NZ</div>
-                            <div><strong class="member-name text-white text-sm block">Nana Zailani</strong><span class="text-xs text-roast-300">Gold Tier (350 pts)</span></div>
+                <div class="bg-adminCard rounded-3xl border border-adminBorder p-6 space-y-5 shadow-xl" id="members-container">
+                    <div class="member-item flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-5 border-b border-adminBorder">
+                        <div class="flex items-start sm:items-center gap-3">
+                            <div class="w-11 h-11 rounded-full bg-amberGold/20 text-amberGold font-bold flex items-center justify-center font-serif shrink-0">NZ</div>
+                            <div class="space-y-1">
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <strong class="member-name text-white text-sm">Nana Zailani</strong>
+                                    <span class="px-2 py-0.5 bg-amberGold/15 text-amberGold text-[10px] font-bold rounded-full uppercase">Gold Tier</span>
+                                </div>
+                                <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-roast-400">
+                                    <span><i class="fa-solid fa-envelope mr-1 text-roast-500"></i>nana.zailani@gmail.com</span>
+                                    <span><i class="fa-solid fa-phone mr-1 text-roast-500"></i>+60 12-345 6789</span>
+                                    <span><i class="fa-solid fa-calendar-days mr-1 text-roast-500"></i>Joined 12 Jan 2025</span>
+                                </div>
+                            </div>
                         </div>
-                        <button onclick="openPointsModal('Nana Zailani', 350)" class="px-4 py-2 bg-adminBg text-roast-100 font-bold rounded-xl border border-adminBorder text-xs hover:bg-adminCardHover">Adjust Points</button>
+                        <div class="flex items-center justify-between sm:justify-end gap-4 pl-14 sm:pl-0">
+                            <span class="text-amberGold font-bold text-sm font-serif whitespace-nowrap">350 pts</span>
+                            <button onclick="openPointsModal('Nana Zailani', 350)" class="px-4 py-2 bg-adminBg text-roast-100 font-bold rounded-xl border border-adminBorder text-xs hover:bg-adminCardHover whitespace-nowrap">Adjust Points</button>
+                        </div>
                     </div>
-                    <div class="member-item flex justify-between items-center pt-2">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-full bg-roast-700/40 text-roast-200 font-bold flex items-center justify-center font-serif">AZ</div>
-                            <div><strong class="member-name text-white text-sm block">Ahmad Zaki</strong><span class="text-xs text-roast-300">Silver Tier (120 pts)</span></div>
+                    <div class="member-item flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-1">
+                        <div class="flex items-start sm:items-center gap-3">
+                            <div class="w-11 h-11 rounded-full bg-roast-700/40 text-roast-200 font-bold flex items-center justify-center font-serif shrink-0">AZ</div>
+                            <div class="space-y-1">
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <strong class="member-name text-white text-sm">Ahmad Zaki</strong>
+                                    <span class="px-2 py-0.5 bg-roast-700/30 text-roast-200 text-[10px] font-bold rounded-full uppercase">Silver Tier</span>
+                                </div>
+                                <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-roast-400">
+                                    <span><i class="fa-solid fa-envelope mr-1 text-roast-500"></i>ahmad.zaki@gmail.com</span>
+                                    <span><i class="fa-solid fa-phone mr-1 text-roast-500"></i>+60 19-876 5432</span>
+                                    <span><i class="fa-solid fa-calendar-days mr-1 text-roast-500"></i>Joined 3 May 2025</span>
+                                </div>
+                            </div>
                         </div>
-                        <button onclick="openPointsModal('Ahmad Zaki', 120)" class="px-4 py-2 bg-adminBg text-roast-100 font-bold rounded-xl border border-adminBorder text-xs hover:bg-adminCardHover">Adjust Points</button>
+                        <div class="flex items-center justify-between sm:justify-end gap-4 pl-14 sm:pl-0">
+                            <span class="text-amberGold font-bold text-sm font-serif whitespace-nowrap">120 pts</span>
+                            <button onclick="openPointsModal('Ahmad Zaki', 120)" class="px-4 py-2 bg-adminBg text-roast-100 font-bold rounded-xl border border-adminBorder text-xs hover:bg-adminCardHover whitespace-nowrap">Adjust Points</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -972,6 +1080,73 @@
         </div>
     </div>
 
+    <!-- MODAL: ADD / EDIT BLOG POST -->
+    <div id="blog-post-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-adminCard border border-adminBorder rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl relative space-y-6 text-roast-100 my-8">
+            <button onclick="closeBlogPostModal()" class="absolute top-5 right-5 text-roast-400 hover:text-white p-2">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div class="text-center space-y-1">
+                <div class="w-14 h-14 rounded-2xl bg-amberGold/20 border border-amberGold/40 text-amberGold flex items-center justify-center mx-auto text-2xl shadow">
+                    <i class="fa-solid fa-newspaper"></i>
+                </div>
+                <h3 id="blog-post-modal-title" class="text-xl font-bold font-serif text-white">New Blog Post</h3>
+                <p class="text-xs text-roast-300">This will appear live on the customer site's Blog section</p>
+            </div>
+            <div class="space-y-4 text-xs">
+                <input type="hidden" id="edit-blog-id" value="">
+                <div>
+                    <label class="block font-semibold text-roast-300 uppercase mb-1">Post Title</label>
+                    <input type="text" id="input-blog-title" placeholder="e.g. New Single-Origin Drop This Week" class="w-full bg-adminBg border border-adminBorder text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block font-semibold text-roast-300 uppercase mb-1">Category</label>
+                        <select id="input-blog-category" class="w-full bg-adminBg border border-adminBorder text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                            <option value="Uncategorized">Uncategorized</option>
+                            <option value="Culture">Culture</option>
+                            <option value="Bean">Bean</option>
+                            <option value="Recipe">Recipe</option>
+                            <option value="News">News</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-roast-300 uppercase mb-1">Author</label>
+                        <input type="text" id="input-blog-author" value="RU.PA" class="w-full bg-adminBg border border-adminBorder text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-semibold text-roast-300 uppercase mb-1">Cover Image</label>
+                    <div class="flex items-center gap-3">
+                        <label for="input-blog-image-file" class="cursor-pointer flex-1 px-4 py-3 bg-adminBg border border-dashed border-adminBorder rounded-xl text-roast-300 text-xs flex items-center gap-2 hover:border-amberGold hover:text-amberGold transition-all">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                            <span id="blog-image-filename" class="truncate">Choose an image to upload</span>
+                        </label>
+                        <input type="file" id="input-blog-image-file" accept="image/*" class="hidden" onchange="handleBlogImageUpload(event)">
+                    </div>
+                    <div id="blog-image-preview-wrap" class="mt-3 hidden relative">
+                        <img id="blog-image-preview" src="" alt="Cover preview" class="w-full h-32 object-cover rounded-xl border border-adminBorder">
+                        <button type="button" onclick="removeBlogImage()" class="absolute top-2 right-2 w-7 h-7 rounded-full bg-adminBg/90 border border-adminBorder text-roast-200 hover:text-red-400 flex items-center justify-center text-xs" title="Remove image">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-semibold text-roast-300 uppercase mb-1">Short Excerpt (shown on the card preview)</label>
+                    <textarea id="input-blog-excerpt" rows="2" placeholder="A short teaser sentence or two..." class="w-full bg-adminBg border border-adminBorder text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold"></textarea>
+                </div>
+                <div>
+                    <label class="block font-semibold text-roast-300 uppercase mb-1">Full Article Content</label>
+                    <textarea id="input-blog-content" rows="6" placeholder="Write the full article here. Separate paragraphs with a blank line." class="w-full bg-adminBg border border-adminBorder text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold"></textarea>
+                </div>
+            </div>
+            <div class="flex gap-3 pt-2">
+                <button onclick="saveBlogPost()" class="flex-1 py-3 bg-amberGold text-adminBg font-extrabold rounded-xl text-xs shadow hover:opacity-90">Publish Post</button>
+                <button onclick="closeBlogPostModal()" class="px-5 py-3 bg-adminBg text-roast-300 font-bold rounded-xl border border-adminBorder text-xs">Cancel</button>
+            </div>
+        </div>
+    </div>
+
     <!-- TOAST NOTIFICATION -->
     <div id="admin-toast" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none">
         <div class="bg-adminCard border border-amberGold/50 text-white px-5 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3">
@@ -1000,8 +1175,61 @@
             year: { labels: ['2023', '2024', '2025', '2026'], data: [45000, 78000, 115000, 154000] }
         };
 
+        // All the non-chart Overview metrics, keyed by the same day/week/month/year periods. 
+        // Widgets that represent "right now" rather than a historical window (Class Occupancy, 
+        // Low Stock Alerts, Member Tier Distribution, Upcoming Class Schedule) intentionally 
+        // stay constant across periods since they describe current state, not a time range. 
+        const overviewDataSets = {
+            day: {
+                label: 'Today',
+                totalOrders: '4', ordersGrowth: '+2 today',
+                membersGrowth: '+1 new',
+                totalRevenue: 'RM 740',
+                workshops: '1 Class', workshopsBadge: 'Today',
+                avgOrder: 'RM 185.00', avgOrderGrowth: '+3.1%',
+                pendingAmount: 'RM 240.00', pendingCount: '1 order',
+                topSelling: [50, 30, 12, 8],
+                orderStatus: { awaiting: 1, preparing: 2, shipping: 1, completed: 0 }
+            },
+            week: {
+                label: 'This Week',
+                totalOrders: '9', ordersGrowth: '+3 this week',
+                membersGrowth: '+3 new',
+                totalRevenue: 'RM 3,120',
+                workshops: '2 Classes', workshopsBadge: 'This Week',
+                avgOrder: 'RM 346.67', avgOrderGrowth: '+4.4%',
+                pendingAmount: 'RM 620.00', pendingCount: '2 orders',
+                topSelling: [52, 28, 12, 8],
+                orderStatus: { awaiting: 2, preparing: 3, shipping: 3, completed: 1 }
+            },
+            month: {
+                label: 'This Month',
+                totalOrders: '24', ordersGrowth: '+14.2%',
+                membersGrowth: '+8 new',
+                totalRevenue: 'RM 12,840',
+                workshops: '3 Classes', workshopsBadge: 'Booked',
+                avgOrder: 'RM 535.00', avgOrderGrowth: '+6.1%',
+                pendingAmount: 'RM 1,240.00', pendingCount: '5 orders',
+                topSelling: [55, 25, 12, 8],
+                orderStatus: { awaiting: 5, preparing: 9, shipping: 7, completed: 3 }
+            },
+            year: {
+                label: 'This Year',
+                totalOrders: '268', ordersGrowth: '+31.4%',
+                membersGrowth: '+52 new',
+                totalRevenue: 'RM 154,000',
+                workshops: '36 Classes', workshopsBadge: 'YTD',
+                avgOrder: 'RM 574.63', avgOrderGrowth: '+18.9%',
+                pendingAmount: 'RM 3,850.00', pendingCount: '14 orders',
+                topSelling: [58, 22, 13, 7],
+                orderStatus: { awaiting: 14, preparing: 32, shipping: 58, completed: 164 }
+            }
+        };
+
         document.addEventListener('DOMContentLoaded', () => {
             initCharts();
+            loadBlogPosts();
+            renderBlogTable();
         });
 
         // Desktop-only sidebar collapse (hamburger). The sidebar itself is hidden entirely 
@@ -1038,7 +1266,7 @@
             document.querySelectorAll('.admin-view').forEach(el => el.classList.add('hidden'));
             document.getElementById(`view-${tabId}`).classList.remove('hidden');
 
-            ['overview', 'orders', 'inventory', 'classes', 'loyalty'].forEach(t => {
+            ['overview', 'orders', 'inventory', 'classes', 'blog', 'loyalty'].forEach(t => {
                 const navBtn = document.getElementById(`nav-${t}`);
                 if(t === tabId) {
                     navBtn.className = "flex items-center gap-3 px-4 py-3 rounded-xl bg-amberGold text-adminBg font-bold transition-all shadow-md";
@@ -1354,6 +1582,8 @@
                 ? `<a href="${linkVal}" target="_blank" class="text-amberGold hover:underline break-all">${linkVal}</a>`
                 : `${locationVal}`;
 
+            const parsedDate = parseMonthYearFromSchedule(schedule);
+
             if (isEdit && activeClassRow) {
                 activeClassRow.querySelector('.class-name').innerText = name;
                 activeClassRow.querySelector('.class-format').innerHTML = formatHtml;
@@ -1361,11 +1591,15 @@
                 activeClassRow.querySelector('.class-price').innerText = `RM ${price}`;
                 activeClassRow.querySelector('.class-location').innerHTML = locationHtml;
                 activeClassRow.querySelector('.class-pax').innerText = `${pax} pax`;
+                if (parsedDate.month) activeClassRow.setAttribute('data-month', parsedDate.month);
+                if (parsedDate.year) activeClassRow.setAttribute('data-year', parsedDate.year);
                 showAdminToast(`Class slot for "${name}" successfully updated.`);
             } else {
                 const tbody = document.getElementById('classes-tbody');
                 const newRow = document.createElement('tr');
                 newRow.className = "hover:bg-adminCardHover class-row";
+                if (parsedDate.month) newRow.setAttribute('data-month', parsedDate.month);
+                if (parsedDate.year) newRow.setAttribute('data-year', parsedDate.year);
                 newRow.innerHTML = `
                     <td class="p-4 font-bold text-white class-name" data-label="Class Name">${name}</td>
                     <td class="p-4 whitespace-nowrap class-format" data-label="Format">${formatHtml}</td>
@@ -1383,6 +1617,38 @@
             }
 
             closeClassModal();
+            filterClassesTable();
+        }
+
+        // Extracts month (01-12) and year (yyyy) from a free-text schedule string 
+        // like "Sat, 6 Sep 2026 — 10:00 AM" so it can be filtered by Month/Year. 
+        function parseMonthYearFromSchedule(scheduleText) {
+            const monthMap = { jan: '01', feb: '02', mar: '03', apr: '04', may: '05', jun: '06', jul: '07', aug: '08', sep: '09', oct: '10', nov: '11', dec: '12' };
+            const monthMatch = scheduleText.match(/\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\w*/i);
+            const yearMatch = scheduleText.match(/\b(20\d{2})\b/);
+            return {
+                month: monthMatch ? monthMap[monthMatch[1].toLowerCase()] : null,
+                year: yearMatch ? yearMatch[1] : null
+            };
+        }
+
+        function filterClassesTable() {
+            const query = document.getElementById('class-search').value.toLowerCase();
+            const monthFilter = document.getElementById('class-month-filter').value;
+            const yearFilter = document.getElementById('class-year-filter').value;
+            const rows = document.querySelectorAll('.class-row');
+
+            rows.forEach(row => {
+                const name = row.querySelector('.class-name').innerText.toLowerCase();
+                const rowMonth = row.getAttribute('data-month');
+                const rowYear = row.getAttribute('data-year');
+
+                const matchesQuery = name.includes(query);
+                const matchesMonth = (monthFilter === 'all' || rowMonth === monthFilter);
+                const matchesYear = (yearFilter === 'all' || rowYear === yearFilter);
+
+                row.style.display = (matchesQuery && matchesMonth && matchesYear) ? '' : 'none';
+            });
         }
 
         function deleteClassRow(btn) {
@@ -1392,6 +1658,264 @@
                 showAdminToast('Class slot successfully deleted.');
             }
         }
+
+        // ===================== BLOG POST MANAGEMENT (shared with customer site via localStorage) ===================== 
+        // Same "rp_blog_posts" localStorage key used by index.html. Whichever page runs first 
+        // seeds the default posts; after that both pages read/write the same shared list, so 
+        // publishing here shows up live on the customer Blog section. 
+        const DEFAULT_BLOG_POSTS = [
+            {
+                id: "seed-1",
+                title: "New year, New Price, Same Quality.",
+                author: "RU.PA",
+                date: "31/12/2024",
+                category: "Uncategorized",
+                image: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=800&q=80",
+                excerpt: "To continue supporting our farmers and maintaining the quality you love, we'll be adjusting our prices starting 1st of January 2025...",
+                content: `<p class="text-roast-200 leading-relaxed font-light text-sm sm:text-base mb-4">To continue supporting our farmers and maintaining the quality you love, we'll be adjusting our prices starting 1st of January 2025. We deeply appreciate your understanding and support as we navigate these changes together.</p><p class="text-roast-200 leading-relaxed font-light text-sm sm:text-base mb-4">Over the past year, global coffee market dynamics and logistics costs have evolved significantly.</p>`
+            },
+            {
+                id: "seed-2",
+                title: "What the hell is even Coffee Desk bro?",
+                author: "RU.PA",
+                date: "18/12/2024",
+                category: "Culture",
+                image: "https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=800&q=80",
+                excerpt: "CoffeeDesk is a session where two worlds collide, where two arts are infused and coexist together, much like a blended coffee bean...",
+                content: `<p class="text-roast-200 leading-relaxed font-light text-sm sm:text-base mb-4">CoffeeDesk is a session where two worlds collide, where two arts are infused and coexist together, much like a blended coffee bean creating unique flavor profiles.</p><p class="text-roast-200 leading-relaxed font-light text-sm sm:text-base mb-4">Keep an eye out on our socials for the next CoffeeDesk session happening near you!</p>`
+            },
+            {
+                id: "seed-3",
+                title: "12 Grams Supremacy: The Art of Precision in Every Brew",
+                author: "RU.PA",
+                date: "18/12/2024",
+                category: "Bean",
+                image: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=800&q=80",
+                excerpt: "In a world where more is often considered better, we're here to challenge that notion with a simple truth: 12 grams is all you need...",
+                content: `<p class="text-roast-200 leading-relaxed font-light text-sm sm:text-base mb-4">In a world where more is often considered better, we're here to challenge that notion with a simple, yet powerful truth: 12 grams is all you need.</p><p class="text-roast-200 leading-relaxed font-light text-sm sm:text-base mb-4">Experience precision brewing crafted for true coffee purists.</p>`
+            },
+            {
+                id: "seed-4",
+                title: "MERAH SAGA – ESPRESSO BLEND series RU.PA",
+                author: "RU.PA",
+                date: "10/12/2024",
+                category: "Bean",
+                image: "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?auto=format&fit=crop&w=800&q=80",
+                excerpt: "\u201cMerah saga represents a name and color that is familiar and deeply close to the hearts of Malaysians...\u201d",
+                content: `<blockquote class="p-4 bg-roast-950 border-l-4 border-amberGold text-amber-400 italic text-sm sm:text-base mb-4">\u201cMerah saga represents a name and color that is familiar and deeply close to the hearts of Malaysians, holding its own unique history and nostalgia.\u201d</blockquote><p class="text-roast-200 leading-relaxed font-light text-sm sm:text-base mb-4">This premium blend selection from Colombia & Brazil promises balanced notes of milk chocolate, praline, and hazelnut for your everyday coffee cup.</p>`
+            }
+        ];
+
+        let blogPosts = [];
+        let activeBlogId = null;
+        let currentBlogImageData = "";
+
+        function handleBlogImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (!file.type.startsWith('image/')) {
+                alert('Sila pilih fail imej yang sah.');
+                event.target.value = "";
+                return;
+            }
+
+            const filenameEl = document.getElementById('blog-image-filename');
+            filenameEl.innerText = file.name;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                currentBlogImageData = e.target.result;
+                const previewWrap = document.getElementById('blog-image-preview-wrap');
+                const previewImg = document.getElementById('blog-image-preview');
+                previewImg.src = currentBlogImageData;
+                previewWrap.classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function removeBlogImage() {
+            currentBlogImageData = "";
+            document.getElementById('input-blog-image-file').value = "";
+            document.getElementById('blog-image-filename').innerText = "Choose an image to upload";
+            document.getElementById('blog-image-preview-wrap').classList.add('hidden');
+            document.getElementById('blog-image-preview').src = "";
+        }
+
+        function loadBlogPosts() {
+            const stored = localStorage.getItem('rp_blog_posts');
+            if (stored) {
+                try {
+                    blogPosts = JSON.parse(stored);
+                } catch (e) {
+                    blogPosts = DEFAULT_BLOG_POSTS.slice();
+                }
+            } else {
+                blogPosts = DEFAULT_BLOG_POSTS.slice();
+                localStorage.setItem('rp_blog_posts', JSON.stringify(blogPosts));
+            }
+        }
+
+        function saveBlogPostsToStorage() {
+            localStorage.setItem('rp_blog_posts', JSON.stringify(blogPosts));
+        }
+
+        function renderBlogTable() {
+            const container = document.getElementById('blog-tbody');
+            if (!container) return;
+            if (blogPosts.length === 0) {
+                container.innerHTML = `<div class="sm:col-span-2 p-8 text-center text-roast-400 bg-adminCard rounded-2xl border border-adminBorder">No blog posts yet. Click "New Blog Post" to publish your first article.</div>`;
+                return;
+            }
+            container.innerHTML = blogPosts.map(post => `
+                <div class="blog-row bg-adminCard rounded-2xl border border-adminBorder overflow-hidden shadow-xl hover:border-amberGold/40 transition-all flex flex-col" data-id="${post.id}">
+                    <div class="relative h-36 sm:h-40 bg-adminBg shrink-0">
+                        <img src="${post.image}" alt="${post.title}" class="w-full h-full object-cover">
+                        <span class="absolute top-3 left-3 px-2.5 py-1 bg-amberGold text-adminBg text-[10px] font-bold uppercase rounded-full shadow">${post.category}</span>
+                    </div>
+                    <div class="p-4 space-y-2 flex-1 flex flex-col justify-between">
+                        <div class="space-y-1.5">
+                            <h4 class="blog-title text-sm font-bold text-white font-serif leading-snug line-clamp-2">${post.title}</h4>
+                            <div class="flex items-center justify-between text-[11px] text-roast-400">
+                                <span class="truncate">${post.author}</span>
+                                <span class="shrink-0 ml-2">${post.date}</span>
+                            </div>
+                        </div>
+                        <div class="flex gap-2 pt-3">
+                            <button onclick="openEditBlogModal('${post.id}')" class="flex-1 px-3 py-2 bg-adminBg border border-adminBorder text-roast-100 font-bold rounded-lg text-[11px] hover:bg-adminCardHover transition-all"><i class="fa-solid fa-pen mr-1.5"></i>Edit</button>
+                            <button onclick="deleteBlogPost('${post.id}')" class="px-3 py-2 bg-red-500/10 text-red-400 border border-red-500/30 font-bold rounded-lg text-[11px] hover:bg-red-500/20 transition-all" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterBlogTable() {
+            const query = document.getElementById('blog-search').value.toLowerCase();
+            document.querySelectorAll('.blog-row').forEach(row => {
+                const title = row.querySelector('.blog-title').innerText.toLowerCase();
+                row.style.display = title.includes(query) ? '' : 'none';
+            });
+        }
+
+        // Converts a plain-text HTML string back into an approximate plain-text version 
+        // for editing (strips tags), and vice versa (wraps blank-line-separated paragraphs 
+        // into styled <p> tags matching the customer site's article typography). 
+        function stripHtmlToPlainText(html) {
+            const tmp = document.createElement('div');
+            tmp.innerHTML = html;
+            return (tmp.textContent || tmp.innerText || '').replace(/\s+\n/g, '\n').trim();
+        }
+
+        function textToParagraphsHtml(text) {
+            return text.split(/\n+/).map(p => p.trim()).filter(Boolean)
+                .map(p => `<p class="text-roast-200 leading-relaxed font-light text-sm sm:text-base mb-4">${p}</p>`)
+                .join('');
+        }
+
+        function openAddBlogModal() {
+            activeBlogId = null;
+            document.getElementById('blog-post-modal-title').innerText = "New Blog Post";
+            document.getElementById('edit-blog-id').value = "";
+            document.getElementById('input-blog-title').value = "";
+            document.getElementById('input-blog-category').value = "Uncategorized";
+            document.getElementById('input-blog-author').value = "RU.PA";
+            document.getElementById('input-blog-excerpt').value = "";
+            document.getElementById('input-blog-content').value = "";
+            removeBlogImage();
+            document.getElementById('blog-post-modal').classList.remove('hidden');
+        }
+
+        function openEditBlogModal(id) {
+            const post = blogPosts.find(p => p.id === id);
+            if (!post) return;
+            activeBlogId = id;
+            document.getElementById('blog-post-modal-title').innerText = "Edit Blog Post";
+            document.getElementById('edit-blog-id').value = id;
+            document.getElementById('input-blog-title').value = post.title;
+            document.getElementById('input-blog-category').value = post.category;
+            document.getElementById('input-blog-author').value = post.author;
+            document.getElementById('input-blog-excerpt').value = post.excerpt || '';
+            document.getElementById('input-blog-content').value = stripHtmlToPlainText(post.content || '');
+
+            document.getElementById('input-blog-image-file').value = "";
+            currentBlogImageData = post.image || "";
+            if (currentBlogImageData) {
+                document.getElementById('blog-image-filename').innerText = "Current image (upload a new one to replace)";
+                document.getElementById('blog-image-preview').src = currentBlogImageData;
+                document.getElementById('blog-image-preview-wrap').classList.remove('hidden');
+            } else {
+                document.getElementById('blog-image-filename').innerText = "Choose an image to upload";
+                document.getElementById('blog-image-preview-wrap').classList.add('hidden');
+            }
+
+            document.getElementById('blog-post-modal').classList.remove('hidden');
+        }
+
+        function closeBlogPostModal() {
+            document.getElementById('blog-post-modal').classList.add('hidden');
+            activeBlogId = null;
+        }
+
+        function saveBlogPost() {
+            const title = document.getElementById('input-blog-title').value.trim();
+            const category = document.getElementById('input-blog-category').value;
+            const author = document.getElementById('input-blog-author').value.trim() || 'RU.PA';
+            const image = currentBlogImageData;
+            const excerpt = document.getElementById('input-blog-excerpt').value.trim();
+            const rawContent = document.getElementById('input-blog-content').value.trim();
+            const isEdit = document.getElementById('edit-blog-id').value !== "";
+
+            if (!title || !image || !excerpt || !rawContent) {
+                alert('Sila lengkapkan semua maklumat pos (tajuk, gambar, excerpt, dan kandungan).');
+                return;
+            }
+
+            const contentHtml = textToParagraphsHtml(rawContent);
+            const today = new Date();
+            const formattedToday = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
+
+            if (isEdit) {
+                const post = blogPosts.find(p => p.id === activeBlogId);
+                if (post) {
+                    post.title = title;
+                    post.category = category;
+                    post.author = author;
+                    post.image = image;
+                    post.excerpt = excerpt;
+                    post.content = contentHtml;
+                }
+            } else {
+                blogPosts.unshift({
+                    id: 'post-' + Date.now(),
+                    title, category, author, image, excerpt,
+                    date: formattedToday,
+                    content: contentHtml
+                });
+            }
+
+            try {
+                saveBlogPostsToStorage();
+            } catch (e) {
+                alert('Imej terlalu besar untuk disimpan. Sila cuba imej dengan saiz fail yang lebih kecil.');
+                return;
+            }
+
+            showAdminToast(isEdit ? `Blog post "${title}" successfully updated.` : `Blog post "${title}" successfully published to the customer site.`);
+            renderBlogTable();
+            filterBlogTable();
+            closeBlogPostModal();
+        }
+
+        function deleteBlogPost(id) {
+            if (confirm('Adakah anda pasti mahu memadam artikel blog ini? Ia akan hilang dari laman web customer.')) {
+                blogPosts = blogPosts.filter(p => p.id !== id);
+                saveBlogPostsToStorage();
+                renderBlogTable();
+                showAdminToast('Blog post successfully deleted.');
+            }
+        }
+        // ===================== END BLOG POST MANAGEMENT ===================== 
 
         // --- ORDER MANAGEMENT FUNCTIONS ---
         function filterOrdersTable() {
@@ -1535,21 +2059,198 @@
             });
         }
 
-        function updateChartFilter(period, event) {
-            ['day', 'week', 'month', 'year'].forEach(p => {
+        function updatePeriodFilter(period, event) {
+            document.getElementById('custom-date-picker').classList.add('hidden');
+
+            ['day', 'week', 'month', 'year', 'custom'].forEach(p => {
                 const btn = document.getElementById(`filter-${p}`);
+                if (!btn) return;
                 if (p === period) {
-                    btn.className = "px-3 py-1.5 rounded-lg bg-amberGold text-adminBg shadow transition-all";
+                    btn.className = btn.className.includes('flex items-center gap-1.5')
+                        ? "px-3 py-1.5 rounded-lg bg-amberGold text-adminBg shadow transition-all flex items-center gap-1.5"
+                        : "px-3 py-1.5 rounded-lg bg-amberGold text-adminBg shadow transition-all";
                 } else {
-                    btn.className = "px-3 py-1.5 rounded-lg text-roast-300 hover:text-white transition-all";
+                    btn.className = btn.className.includes('flex items-center gap-1.5')
+                        ? "px-3 py-1.5 rounded-lg text-roast-300 hover:text-white transition-all flex items-center gap-1.5"
+                        : "px-3 py-1.5 rounded-lg text-roast-300 hover:text-white transition-all";
                 }
             });
 
-            if (revenueChartInstance && chartDataSets[period]) {
-                revenueChartInstance.data.labels = chartDataSets[period].labels;
-                revenueChartInstance.data.datasets[0].data = chartDataSets[period].data;
+            const d = overviewDataSets[period];
+            if (!d) return;
+
+            applyOverviewData(d, chartDataSets[period].labels, chartDataSets[period].data);
+        }
+
+        // Renders one overviewDataSets-shaped object (plus chart labels/data) into every 
+        // widget on the Overview tab. Shared by the quick Day/Week/Month/Year filters and 
+        // by the custom date range picker below. 
+        function applyOverviewData(d, chartLabels, chartData) {
+            const periodLabelEl = document.getElementById('period-label');
+            if (periodLabelEl) periodLabelEl.innerText = d.label;
+
+            if (revenueChartInstance) {
+                revenueChartInstance.data.labels = chartLabels;
+                revenueChartInstance.data.datasets[0].data = chartData;
                 revenueChartInstance.update();
             }
+
+            if (productsChartInstance) {
+                productsChartInstance.data.datasets[0].data = d.topSelling;
+                productsChartInstance.update();
+            }
+            document.getElementById('legend-coffee-pct').innerText = `${d.topSelling[0]}%`;
+            document.getElementById('legend-masterclass-pct').innerText = `${d.topSelling[1]}%`;
+            document.getElementById('legend-merchandise-pct').innerText = `${d.topSelling[2]}%`;
+            document.getElementById('legend-dripbags-pct').innerText = `${d.topSelling[3]}%`;
+
+            document.getElementById('kpi-total-orders').innerText = d.totalOrders;
+            document.getElementById('kpi-orders-growth').innerText = d.ordersGrowth;
+            document.getElementById('kpi-members-growth').innerText = d.membersGrowth;
+            document.getElementById('kpi-total-revenue').innerText = d.totalRevenue;
+            document.getElementById('kpi-workshops').innerText = d.workshops;
+            document.getElementById('kpi-workshops-badge').innerText = d.workshopsBadge;
+
+            document.getElementById('kpi-avg-order').innerText = d.avgOrder;
+            document.getElementById('kpi-avg-order-growth').innerText = d.avgOrderGrowth;
+            document.getElementById('kpi-pending-amount').innerText = d.pendingAmount;
+            document.getElementById('kpi-pending-count').innerText = d.pendingCount;
+
+            const s = d.orderStatus;
+            const totalOrders = s.awaiting + s.preparing + s.shipping + s.completed;
+            const pct = (n) => totalOrders > 0 ? Math.round((n / totalOrders) * 100) : 0;
+
+            document.getElementById('status-awaiting-count').innerText = `${s.awaiting} orders`;
+            document.getElementById('status-awaiting-bar').style.width = `${pct(s.awaiting)}%`;
+            document.getElementById('status-preparing-count').innerText = `${s.preparing} orders`;
+            document.getElementById('status-preparing-bar').style.width = `${pct(s.preparing)}%`;
+            document.getElementById('status-shipping-count').innerText = `${s.shipping} orders`;
+            document.getElementById('status-shipping-bar').style.width = `${pct(s.shipping)}%`;
+            document.getElementById('status-completed-count').innerText = `${s.completed} orders`;
+            document.getElementById('status-completed-bar').style.width = `${pct(s.completed)}%`;
+        }
+
+        // ===================== CUSTOM DATE RANGE FILTER ===================== 
+        function toggleCustomDatePicker(event) {
+            const picker = document.getElementById('custom-date-picker');
+            const isHidden = picker.classList.contains('hidden');
+
+            ['day', 'week', 'month', 'year', 'custom'].forEach(p => {
+                const btn = document.getElementById(`filter-${p}`);
+                if (!btn) return;
+                const isCustom = p === 'custom';
+                const active = isCustom && isHidden;
+                btn.className = isCustom
+                    ? (active ? "px-3 py-1.5 rounded-lg bg-amberGold text-adminBg shadow transition-all flex items-center gap-1.5" : "px-3 py-1.5 rounded-lg text-roast-300 hover:text-white transition-all flex items-center gap-1.5")
+                    : "px-3 py-1.5 rounded-lg text-roast-300 hover:text-white transition-all";
+            });
+
+            if (isHidden) {
+                picker.classList.remove('hidden');
+                if (!document.getElementById('custom-date-from').value) {
+                    const today = new Date();
+                    const weekAgo = new Date();
+                    weekAgo.setDate(today.getDate() - 6);
+                    document.getElementById('custom-date-from').value = weekAgo.toISOString().slice(0, 10);
+                    document.getElementById('custom-date-to').value = today.toISOString().slice(0, 10);
+                }
+            } else {
+                picker.classList.add('hidden');
+            }
+        }
+
+        function applyCustomDateFilter() {
+            const fromVal = document.getElementById('custom-date-from').value;
+            const toVal = document.getElementById('custom-date-to').value;
+
+            if (!fromVal || !toVal) {
+                alert('Sila pilih tarikh "From" dan "To".');
+                return;
+            }
+
+            const fromDate = new Date(fromVal + 'T00:00:00');
+            const toDate = new Date(toVal + 'T00:00:00');
+
+            if (fromDate > toDate) {
+                alert('Tarikh "From" mesti sebelum atau sama dengan tarikh "To".');
+                return;
+            }
+
+            const { data, chartLabels, chartData } = generateCustomPeriodData(fromDate, toDate);
+            applyOverviewData(data, chartLabels, chartData);
+        }
+
+        // Builds a plausible dataset for an arbitrary custom date range by scaling the known 
+        // per-day baseline (from the "day" filter) across the number of days selected. This 
+        // keeps numbers internally consistent without needing a real backend/history to query. 
+        function generateCustomPeriodData(fromDate, toDate) {
+            const msPerDay = 24 * 60 * 60 * 1000;
+            const daysCount = Math.round((toDate - fromDate) / msPerDay) + 1;
+
+            const dailyOrders = 4;
+            const dailyRevenue = 740;
+
+            const totalOrders = Math.max(1, Math.round(dailyOrders * daysCount));
+            const totalRevenue = Math.round(dailyRevenue * daysCount);
+            const avgOrderValue = totalRevenue / totalOrders;
+
+            const statusRatio = { awaiting: 0.21, preparing: 0.38, shipping: 0.29, completed: 0.13 };
+            let orderStatus = {
+                awaiting: Math.round(totalOrders * statusRatio.awaiting),
+                preparing: Math.round(totalOrders * statusRatio.preparing),
+                shipping: Math.round(totalOrders * statusRatio.shipping),
+                completed: 0
+            };
+            orderStatus.completed = Math.max(0, totalOrders - orderStatus.awaiting - orderStatus.preparing - orderStatus.shipping);
+
+            const workshopsCount = Math.max(1, Math.round(daysCount / 7));
+            const pendingCount = Math.max(0, Math.round(daysCount * 0.18));
+            const pendingAmount = Math.round(pendingCount * avgOrderValue);
+            const newMembers = Math.max(0, Math.round(daysCount * 0.27));
+
+            const fmt = (d) => d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+            const label = daysCount === 1
+                ? fmt(fromDate) + ' ' + fromDate.getFullYear()
+                : `${fmt(fromDate)} \u2013 ${fmt(toDate)} ${toDate.getFullYear()}`;
+
+            // Chart series: one bar per day if the range is short enough to stay readable, 
+            // otherwise group into weekly buckets. 
+            let chartLabels = [];
+            let chartData = [];
+            const weekdayMultiplier = [0.75, 0.9, 0.95, 1.0, 1.15, 1.6, 1.35]; // Sun..Sat, weekends busier
+
+            if (daysCount <= 31) {
+                for (let i = 0; i < daysCount; i++) {
+                    const d = new Date(fromDate.getTime() + i * msPerDay);
+                    chartLabels.push(fmt(d));
+                    chartData.push(Math.round(dailyRevenue * weekdayMultiplier[d.getDay()]));
+                }
+            } else {
+                const weeksCount = Math.ceil(daysCount / 7);
+                for (let w = 0; w < weeksCount; w++) {
+                    const weekStart = new Date(fromDate.getTime() + w * 7 * msPerDay);
+                    chartLabels.push(fmt(weekStart));
+                    chartData.push(Math.round(dailyRevenue * 7));
+                }
+            }
+
+            const data = {
+                label,
+                totalOrders: String(totalOrders),
+                ordersGrowth: `${daysCount}-day range`,
+                membersGrowth: `+${newMembers} new`,
+                totalRevenue: `RM ${totalRevenue.toLocaleString('en-MY')}`,
+                workshops: `${workshopsCount} Class${workshopsCount > 1 ? 'es' : ''}`,
+                workshopsBadge: 'Est.',
+                avgOrder: `RM ${avgOrderValue.toFixed(2)}`,
+                avgOrderGrowth: `${daysCount}d avg`,
+                pendingAmount: `RM ${pendingAmount.toLocaleString('en-MY')}.00`,
+                pendingCount: `${pendingCount} order${pendingCount === 1 ? '' : 's'}`,
+                topSelling: [55, 25, 12, 8],
+                orderStatus
+            };
+
+            return { data, chartLabels, chartData };
         }
 
         function logoutAdmin() {

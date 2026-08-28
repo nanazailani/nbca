@@ -44,6 +44,15 @@
         @media (prefers-reduced-motion: reduce) { 
             .anim-fade-up { animation: none !important; opacity: 1 !important; transform: none !important; } 
         } 
+
+        /* Prevent iOS/mobile browsers from auto-zooming (and shifting the whole page) 
+           when an input is focused. Mobile browsers zoom in on any text input whose 
+           font-size is below 16px, which makes the screen appear to "move" while typing. */
+        @media (max-width: 767px) { 
+            input, select, textarea { 
+                font-size: 16px !important; 
+            } 
+        } 
     </style> 
 </head> 
 <body class="bg-roast-950 text-roast-100 antialiased min-h-screen selection:bg-amberGold selection:text-white"> 
