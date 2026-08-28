@@ -46,12 +46,49 @@
         ::-webkit-scrollbar-track { background: #181311; }
         ::-webkit-scrollbar-thumb { background: #42332B; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #F59E0B; }
+
+        /* ===================== RESPONSIVE TABLE-TO-CARD (mobile/tablet) ===================== */
+        @media (max-width: 1023px) {
+            .responsive-table { min-width: 0 !important; width: 100% !important; }
+            .responsive-table thead { display: none; }
+            .responsive-table, .responsive-table tbody, .responsive-table tr, .responsive-table td {
+                display: block;
+                width: 100%;
+            }
+            .responsive-table tr {
+                margin-bottom: 0.9rem;
+                border: 1px solid #42332B;
+                border-radius: 1.1rem;
+                padding: 0.9rem 1rem;
+                background: #181311;
+            }
+            .responsive-table tbody tr:last-child { margin-bottom: 0; }
+            .responsive-table td {
+                padding: 0.55rem 0;
+                border-bottom: 1px solid rgba(66, 51, 43, 0.4);
+            }
+            .responsive-table td:last-child {
+                border-bottom: none;
+                padding-top: 0.85rem;
+            }
+            .responsive-table td::before {
+                content: attr(data-label);
+                display: block;
+                font-size: 10px;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+                color: #CFAD8F;
+                margin-bottom: 0.3rem;
+            }
+            .responsive-table td:last-child::before { display: none; }
+        }
     </style>
 </head>
 <body class="bg-adminBg text-roast-100 antialiased selection:bg-amberGold selection:text-adminBg min-h-screen">
 
     <!-- SIDEBAR NAVIGATION -->
-    <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-adminCard border-r border-adminBorder transform transition-transform duration-300 flex flex-col justify-between">
+    <aside id="sidebar" class="hidden lg:flex fixed inset-y-0 left-0 z-50 w-64 bg-adminCard border-r border-adminBorder transform transition-transform duration-300 flex-col justify-between">
         <div>
             <!-- Sidebar Header / Logo -->
             <div class="h-24 flex items-center px-6 border-b border-adminBorder gap-3">
@@ -101,31 +138,55 @@
         </div>
     </aside>
 
-    <!-- SIDEBAR BACKDROP (Mobile) -->
-    <div id="sidebar-backdrop" onclick="closeSidebar()" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 hidden transition-opacity"></div>
+    <!-- BOTTOM NAVIGATION (Mobile & Tablet only) -->
+    <nav id="bottom-nav" class="lg:hidden fixed bottom-0 inset-x-0 z-50 bg-adminCard border-t border-adminBorder flex items-stretch justify-around shadow-[0_-8px_24px_rgba(0,0,0,0.35)]" style="padding-bottom: env(safe-area-inset-bottom);">
+        <button onclick="switchTab('overview', event)" id="bottomnav-overview" class="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-amberGold transition-all">
+            <i class="fa-solid fa-chart-pie text-base"></i>
+            <span class="text-[10px] font-bold">Overview</span>
+        </button>
+        <button onclick="switchTab('orders', event)" id="bottomnav-orders" class="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-roast-400 transition-all">
+            <i class="fa-solid fa-bag-shopping text-base"></i>
+            <span class="text-[10px] font-bold">Orders</span>
+        </button>
+        <button onclick="switchTab('inventory', event)" id="bottomnav-inventory" class="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-roast-400 transition-all">
+            <i class="fa-solid fa-boxes-stacked text-base"></i>
+            <span class="text-[10px] font-bold">Stock</span>
+        </button>
+        <button onclick="switchTab('classes', event)" id="bottomnav-classes" class="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-roast-400 transition-all">
+            <i class="fa-solid fa-chalkboard-user text-base"></i>
+            <span class="text-[10px] font-bold">Classes</span>
+        </button>
+        <button onclick="switchTab('loyalty', event)" id="bottomnav-loyalty" class="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-roast-400 transition-all">
+            <i class="fa-solid fa-users text-base"></i>
+            <span class="text-[10px] font-bold">Members</span>
+        </button>
+    </nav>
 
     <!-- MAIN CONTENT WRAPPER -->
-    <div id="main-content" class="flex-1 flex flex-col min-w-0 ml-64 transition-all duration-300 min-h-screen">
+    <div id="main-content" class="flex-1 flex flex-col min-w-0 lg:ml-64 transition-all duration-300 min-h-screen">
         
         <!-- TOP HEADER BAR -->
         <header class="sticky top-0 z-30 bg-adminBg/90 backdrop-blur-md border-b border-adminBorder h-24 px-6 sm:px-8 flex items-center justify-between">
             <div class="flex items-center gap-4">
-                <button onclick="toggleSidebar()" class="w-11 h-11 rounded-xl bg-adminCard hover:bg-adminCardHover border border-adminBorder text-amberGold flex items-center justify-center transition-all shadow" title="Toggle Sidebar">
+                <button onclick="toggleSidebar()" class="hidden lg:flex w-11 h-11 rounded-xl bg-adminCard hover:bg-adminCardHover border border-adminBorder text-amberGold items-center justify-center transition-all shadow" title="Toggle Sidebar">
                     <i class="fa-solid fa-bars text-base"></i>
                 </button>
                 <h2 id="page-title" class="font-serif text-xl sm:text-2xl font-extrabold text-white tracking-tight">Rumah Panggang</h2>
             </div>
          
-            <!-- RIGHT HEADER PROFILE BUTTON (Tanpa Sync) -->
+            <!-- RIGHT HEADER PROFILE & LOGOUT BUTTONS -->
             <div class="flex items-center gap-3">
                 <button onclick="openEditProfileModal()" class="w-10 h-10 rounded-full bg-roast-900 hover:bg-roast-800 border border-roast-800 text-amberGold flex items-center justify-center transition-all shadow-md" title="Edit Profile">
                     <i class="fa-solid fa-user text-base"></i>
+                </button>
+                <button onclick="logoutAdmin()" class="w-10 h-10 rounded-full bg-roast-900 hover:bg-red-950/40 border border-roast-800 text-roast-300 hover:text-red-400 flex items-center justify-center transition-all shadow-md" title="Logout">
+                    <i class="fa-solid fa-right-from-bracket text-base"></i>
                 </button>
             </div>
         </header>
 
         <!-- DYNAMIC CONTENT AREA -->
-        <main class="p-6 sm:p-8 space-y-8 flex-1">
+        <main class="p-6 sm:p-8 pb-28 lg:pb-8 space-y-8 flex-1">
 
             <!-- TAB 1: OVERVIEW & CHARTS -->
             <div id="view-overview" class="admin-view space-y-8">
@@ -457,12 +518,13 @@
                     </div>
                 </div>
 
-                <div class="bg-adminCard rounded-3xl border border-adminBorder overflow-hidden shadow-2xl">
+                <div class="bg-adminCard rounded-3xl border border-adminBorder overflow-hidden shadow-2xl p-3 sm:p-0">
                     <div class="overflow-x-auto">
-                        <table class="w-full min-w-[820px] text-left text-xs" id="orders-table">
+                        <table class="responsive-table w-full min-w-[920px] text-left text-xs" id="orders-table">
                             <thead class="bg-[#181311] text-roast-300 uppercase tracking-wider border-b border-adminBorder">
                                 <tr>
                                     <th class="p-4 font-bold">Order ID</th>
+                                    <th class="p-4 font-bold">Order Date & Time</th>
                                     <th class="p-4 font-bold">Customer</th>
                                     <th class="p-4 font-bold">Items</th>
                                     <th class="p-4 font-bold">Total</th>
@@ -472,28 +534,30 @@
                             </thead>
                             <tbody class="divide-y divide-adminBorder" id="orders-tbody">
                                 <tr class="hover:bg-adminCardHover order-row" data-status="Awaiting Verification">
-                                    <td class="p-4 font-bold text-amberGold order-id">#ORD1001</td>
-                                    <td class="p-4 font-bold text-white order-customer">Nana Zailani</td>
-                                    <td class="p-4 text-roast-300">3 items (Coffee & Class)</td>
-                                    <td class="p-4 font-bold text-amberGold font-serif text-sm">RM 2,040.00</td>
-                                    <td class="p-4 space-y-1">
+                                    <td class="p-4 font-bold text-amberGold order-id" data-label="Order ID">#ORD1001</td>
+                                    <td class="p-4 text-roast-300 whitespace-nowrap" data-label="Order Date & Time">Wed, 26 Aug 2026 — 3:42 PM</td>
+                                    <td class="p-4 font-bold text-white order-customer" data-label="Customer">Nana Zailani</td>
+                                    <td class="p-4 text-roast-300" data-label="Items">3 items (Coffee & Class)</td>
+                                    <td class="p-4 font-bold text-amberGold font-serif text-sm" data-label="Total">RM 2,040.00</td>
+                                    <td class="p-4 space-y-1" data-label="Status & Tracking">
                                         <span class="status-badge px-3 py-1 bg-amberGold/20 text-amberGold font-bold rounded-full text-[10px] inline-block">Awaiting Verification</span>
                                         <div class="tracking-info text-[11px] text-roast-300 hidden"></div>
                                     </td>
-                                    <td class="p-4 text-right space-x-2 action-btns">
+                                    <td class="p-4 text-right space-x-2 action-btns" data-label="Actions">
                                         <button onclick="prepareOrder(this, '#ORD1001')" class="px-3.5 py-2 bg-amberGold text-adminBg font-extrabold rounded-xl shadow hover:opacity-90">Prepare</button>
                                     </td>
                                 </tr>
                                 <tr class="hover:bg-adminCardHover order-row" data-status="Preparing">
-                                    <td class="p-4 font-bold text-amberGold order-id">#ORD1002</td>
-                                    <td class="p-4 font-bold text-white order-customer">Ahmad Zaki</td>
-                                    <td class="p-4 text-roast-300">1 item (Merah Saga Blend)</td>
-                                    <td class="p-4 font-bold text-amberGold font-serif text-sm">RM 45.00</td>
-                                    <td class="p-4 space-y-1">
+                                    <td class="p-4 font-bold text-amberGold order-id" data-label="Order ID">#ORD1002</td>
+                                    <td class="p-4 text-roast-300 whitespace-nowrap" data-label="Order Date & Time">Thu, 27 Aug 2026 — 11:15 AM</td>
+                                    <td class="p-4 font-bold text-white order-customer" data-label="Customer">Ahmad Zaki</td>
+                                    <td class="p-4 text-roast-300" data-label="Items">1 item (Merah Saga Blend)</td>
+                                    <td class="p-4 font-bold text-amberGold font-serif text-sm" data-label="Total">RM 45.00</td>
+                                    <td class="p-4 space-y-1" data-label="Status & Tracking">
                                         <span class="status-badge px-3 py-1 bg-blue-500/20 text-blue-300 font-bold rounded-full text-[10px] inline-block">Preparing</span>
                                         <div class="tracking-info text-[11px] text-roast-300 hidden"></div>
                                     </td>
-                                    <td class="p-4 text-right space-x-2 action-btns">
+                                    <td class="p-4 text-right space-x-2 action-btns" data-label="Actions">
                                         <button onclick="openShippingModal('#ORD1002', this)" class="px-3.5 py-2 bg-adminBg border border-adminBorder text-roast-100 font-bold rounded-xl shadow hover:bg-adminCardHover">Shipping</button>
                                     </td>
                                 </tr>
@@ -517,9 +581,21 @@
                     </div>
                 </div>
 
-                <div class="bg-adminCard rounded-3xl border border-adminBorder overflow-hidden shadow-2xl">
+                <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+                    <div class="relative sm:max-w-xs w-full">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-roast-400 text-xs"></i>
+                        <input type="text" id="inventory-search" oninput="filterInventoryTable()" placeholder="Search product name..." class="w-full bg-adminCard border border-adminBorder text-white text-xs rounded-xl pl-10 pr-4 py-2.5 focus:outline-none focus:border-amberGold">
+                    </div>
+                    <div class="flex flex-wrap gap-2" id="inventory-category-filter">
+                        <button onclick="filterInventoryCategory('all', event)" class="inv-cat-btn px-3.5 py-2 rounded-xl text-[11px] font-bold bg-amberGold text-adminBg shadow transition-all">All Products</button>
+                        <button onclick="filterInventoryCategory('Coffee Beans', event)" class="inv-cat-btn px-3.5 py-2 rounded-xl text-[11px] font-bold border border-adminBorder bg-adminBg text-roast-300 hover:text-white transition-all">Coffee Beans</button>
+                        <button onclick="filterInventoryCategory('Merchandise', event)" class="inv-cat-btn px-3.5 py-2 rounded-xl text-[11px] font-bold border border-adminBorder bg-adminBg text-roast-300 hover:text-white transition-all">Merchandise</button>
+                    </div>
+                </div>
+
+                <div class="bg-adminCard rounded-3xl border border-adminBorder overflow-hidden shadow-2xl p-3 sm:p-0">
                     <div class="overflow-x-auto">
-                        <table class="w-full min-w-[820px] text-left text-xs" id="inventory-table">
+                        <table class="responsive-table w-full min-w-[820px] text-left text-xs" id="inventory-table">
                             <thead class="bg-[#181311] text-roast-300 uppercase tracking-wider border-b border-adminBorder">
                                 <tr>
                                     <th class="p-4 font-bold">Product Name</th>
@@ -532,24 +608,24 @@
                             </thead>
                             <tbody class="divide-y divide-adminBorder" id="inventory-tbody">
                                 <tr class="hover:bg-adminCardHover inventory-row">
-                                    <td class="p-4 font-bold text-white prod-name">Colombia Finca Milan</td>
-                                    <td class="p-4 text-roast-300 prod-category">Coffee Beans</td>
-                                    <td class="p-4 text-amberGold font-serif prod-price">RM 65.00</td>
-                                    <td class="p-4 font-bold text-white prod-stock">84 units</td>
-                                    <td class="p-4"><span class="px-2.5 py-0.5 bg-green-500/20 text-green-400 font-bold text-[10px] rounded-full">In Stock</span></td>
-                                    <td class="p-4 text-right space-x-2">
+                                    <td class="p-4 font-bold text-white prod-name" data-label="Product Name">Colombia Finca Milan</td>
+                                    <td class="p-4 text-roast-300 prod-category" data-label="Category">Coffee Beans</td>
+                                    <td class="p-4 text-amberGold font-serif prod-price" data-label="Price">RM 65.00</td>
+                                    <td class="p-4 font-bold text-white prod-stock" data-label="Stock Units">84 units</td>
+                                    <td class="p-4" data-label="Status"><span class="px-2.5 py-0.5 bg-green-500/20 text-green-400 font-bold text-[10px] rounded-full">In Stock</span></td>
+                                    <td class="p-4 text-right space-x-2" data-label="Actions">
                                         <button onclick="openAddStockModal(this)" class="px-3 py-1.5 bg-adminBg border border-adminBorder text-amberGold font-bold rounded-lg shadow hover:bg-adminCardHover" title="Add Stock"><i class="fa-solid fa-plus"></i> Stock</button>
                                         <button onclick="openEditProductModal(this)" class="px-3 py-1.5 bg-adminBg border border-adminBorder text-roast-100 font-bold rounded-lg shadow hover:bg-adminCardHover" title="Edit"><i class="fa-solid fa-pen"></i></button>
                                         <button onclick="deleteInventoryRow(this)" class="px-3 py-1.5 bg-red-500/10 text-red-400 border border-red-500/30 font-bold rounded-lg shadow hover:bg-red-500/20" title="Delete"><i class="fa-solid fa-trash"></i></button>
                                     </td>
                                 </tr>
                                 <tr class="hover:bg-adminCardHover inventory-row">
-                                    <td class="p-4 font-bold text-white prod-name">Merah Saga Blend</td>
-                                    <td class="p-4 text-roast-300 prod-category">Coffee Beans</td>
-                                    <td class="p-4 text-amberGold font-serif prod-price">RM 45.00</td>
-                                    <td class="p-4 font-bold text-white prod-stock">14 units</td>
-                                    <td class="p-4"><span class="px-2.5 py-0.5 bg-yellow-500/20 text-yellow-400 font-bold text-[10px] rounded-full">Low Stock</span></td>
-                                    <td class="p-4 text-right space-x-2">
+                                    <td class="p-4 font-bold text-white prod-name" data-label="Product Name">Merah Saga Blend</td>
+                                    <td class="p-4 text-roast-300 prod-category" data-label="Category">Coffee Beans</td>
+                                    <td class="p-4 text-amberGold font-serif prod-price" data-label="Price">RM 45.00</td>
+                                    <td class="p-4 font-bold text-white prod-stock" data-label="Stock Units">14 units</td>
+                                    <td class="p-4" data-label="Status"><span class="px-2.5 py-0.5 bg-yellow-500/20 text-yellow-400 font-bold text-[10px] rounded-full">Low Stock</span></td>
+                                    <td class="p-4 text-right space-x-2" data-label="Actions">
                                         <button onclick="openAddStockModal(this)" class="px-3 py-1.5 bg-adminBg border border-adminBorder text-amberGold font-bold rounded-lg shadow hover:bg-adminCardHover" title="Add Stock"><i class="fa-solid fa-plus"></i> Stock</button>
                                         <button onclick="openEditProductModal(this)" class="px-3 py-1.5 bg-adminBg border border-adminBorder text-roast-100 font-bold rounded-lg shadow hover:bg-adminCardHover" title="Edit"><i class="fa-solid fa-pen"></i></button>
                                         <button onclick="deleteInventoryRow(this)" class="px-3 py-1.5 bg-red-500/10 text-red-400 border border-red-500/30 font-bold rounded-lg shadow hover:bg-red-500/20" title="Delete"><i class="fa-solid fa-trash"></i></button>
@@ -575,9 +651,9 @@
                     </div>
                 </div>
 
-                <div class="bg-adminCard rounded-3xl border border-adminBorder overflow-hidden shadow-2xl">
+                <div class="bg-adminCard rounded-3xl border border-adminBorder overflow-hidden shadow-2xl p-3 sm:p-0">
                     <div class="overflow-x-auto">
-                        <table class="w-full min-w-[960px] text-left text-xs" id="classes-table">
+                        <table class="responsive-table w-full min-w-[960px] text-left text-xs" id="classes-table">
                             <thead class="bg-[#181311] text-roast-300 uppercase tracking-wider border-b border-adminBorder">
                                 <tr>
                                     <th class="p-4 font-bold">Class Name</th>
@@ -591,25 +667,25 @@
                             </thead>
                             <tbody class="divide-y divide-adminBorder" id="classes-tbody">
                                 <tr class="hover:bg-adminCardHover class-row">
-                                    <td class="p-4 font-bold text-white class-name">Coffee Brewing Masterclass</td>
-                                    <td class="p-4 whitespace-nowrap class-format"><span class="whitespace-nowrap inline-flex items-center px-2.5 py-0.5 bg-blue-500/20 text-blue-300 font-bold text-[10px] rounded-full"><i class="fa-solid fa-people-roof mr-1"></i>Face-to-Face</span></td>
-                                    <td class="p-4 text-roast-300 whitespace-nowrap class-schedule">Sat, 6 Sep 2026 — 10:00 AM</td>
-                                    <td class="p-4 text-amberGold font-serif class-price">RM 120.00</td>
-                                    <td class="p-4 text-roast-300 class-location">Rumah Panggang Roastery, Sungai Petani, Kedah</td>
-                                    <td class="p-4 font-bold text-white class-pax">8 pax</td>
-                                    <td class="p-4 text-right space-x-2">
+                                    <td class="p-4 font-bold text-white class-name" data-label="Class Name">Coffee Brewing Masterclass</td>
+                                    <td class="p-4 whitespace-nowrap class-format" data-label="Format"><span class="whitespace-nowrap inline-flex items-center px-2.5 py-0.5 bg-blue-500/20 text-blue-300 font-bold text-[10px] rounded-full"><i class="fa-solid fa-people-roof mr-1"></i>Face-to-Face</span></td>
+                                    <td class="p-4 text-roast-300 whitespace-nowrap class-schedule" data-label="Schedule">Sat, 6 Sep 2026 — 10:00 AM</td>
+                                    <td class="p-4 text-amberGold font-serif class-price" data-label="Price">RM 120.00</td>
+                                    <td class="p-4 text-roast-300 class-location" data-label="Location / Meeting Link">Rumah Panggang Roastery, Sungai Petani, Kedah</td>
+                                    <td class="p-4 font-bold text-white class-pax" data-label="Max Pax">8 pax</td>
+                                    <td class="p-4 text-right space-x-2" data-label="Actions">
                                         <button onclick="openEditClassModal(this)" class="px-3 py-1.5 bg-adminBg border border-adminBorder text-roast-100 font-bold rounded-lg shadow hover:bg-adminCardHover" title="Edit"><i class="fa-solid fa-pen"></i></button>
                                         <button onclick="deleteClassRow(this)" class="px-3 py-1.5 bg-red-500/10 text-red-400 border border-red-500/30 font-bold rounded-lg shadow hover:bg-red-500/20" title="Delete"><i class="fa-solid fa-trash"></i></button>
                                     </td>
                                 </tr>
                                 <tr class="hover:bg-adminCardHover class-row">
-                                    <td class="p-4 font-bold text-white class-name">Coffee Cupping Experience</td>
-                                    <td class="p-4 whitespace-nowrap class-format"><span class="whitespace-nowrap inline-flex items-center px-2.5 py-0.5 bg-purple-500/20 text-purple-300 font-bold text-[10px] rounded-full"><i class="fa-solid fa-video mr-1"></i>Online</span></td>
-                                    <td class="p-4 text-roast-300 whitespace-nowrap class-schedule">Thu, 11 Sep 2026 — 8:00 PM</td>
-                                    <td class="p-4 text-amberGold font-serif class-price">RM 80.00</td>
-                                    <td class="p-4 text-roast-300 class-location"><a href="#" class="text-amberGold hover:underline break-all">https://zoom.us/j/1234567890</a></td>
-                                    <td class="p-4 font-bold text-white class-pax">10 pax</td>
-                                    <td class="p-4 text-right space-x-2">
+                                    <td class="p-4 font-bold text-white class-name" data-label="Class Name">Coffee Cupping Experience</td>
+                                    <td class="p-4 whitespace-nowrap class-format" data-label="Format"><span class="whitespace-nowrap inline-flex items-center px-2.5 py-0.5 bg-purple-500/20 text-purple-300 font-bold text-[10px] rounded-full"><i class="fa-solid fa-video mr-1"></i>Online</span></td>
+                                    <td class="p-4 text-roast-300 whitespace-nowrap class-schedule" data-label="Schedule">Thu, 11 Sep 2026 — 8:00 PM</td>
+                                    <td class="p-4 text-amberGold font-serif class-price" data-label="Price">RM 80.00</td>
+                                    <td class="p-4 text-roast-300 class-location" data-label="Location / Meeting Link"><a href="#" class="text-amberGold hover:underline break-all">https://zoom.us/j/1234567890</a></td>
+                                    <td class="p-4 font-bold text-white class-pax" data-label="Max Pax">10 pax</td>
+                                    <td class="p-4 text-right space-x-2" data-label="Actions">
                                         <button onclick="openEditClassModal(this)" class="px-3 py-1.5 bg-adminBg border border-adminBorder text-roast-100 font-bold rounded-lg shadow hover:bg-adminCardHover" title="Edit"><i class="fa-solid fa-pen"></i></button>
                                         <button onclick="deleteClassRow(this)" class="px-3 py-1.5 bg-red-500/10 text-red-400 border border-red-500/30 font-bold rounded-lg shadow hover:bg-red-500/20" title="Delete"><i class="fa-solid fa-trash"></i></button>
                                     </td>
@@ -926,47 +1002,25 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             initCharts();
-            applySidebarResponsiveState();
-            window.addEventListener('resize', applySidebarResponsiveState);
         });
 
-        // Sets the correct default sidebar/content state for the current viewport width. 
-        // Runs on load and on window resize so the layout never gets stuck in a broken state. 
-        function applySidebarResponsiveState() {
-            if (window.innerWidth >= 1024) { 
-                openSidebar(); 
-            } else { 
-                closeSidebar(); 
-            } 
-        }
-
+        // Desktop-only sidebar collapse (hamburger). The sidebar itself is hidden entirely 
+        // below the lg breakpoint via the "hidden lg:flex" classes on the <aside>; mobile 
+        // navigation instead uses the fixed bottom nav bar. 
         function openSidebar() {
             const sidebar = document.getElementById('sidebar');
             const mainContent = document.getElementById('main-content');
-            const backdrop = document.getElementById('sidebar-backdrop');
-
             sidebar.classList.remove('-translate-x-full');
-
-            if (window.innerWidth >= 1024) {
-                mainContent.classList.remove('ml-0');
-                mainContent.classList.add('ml-64');
-                backdrop.classList.add('hidden');
-            } else {
-                mainContent.classList.remove('ml-64');
-                mainContent.classList.add('ml-0');
-                backdrop.classList.remove('hidden');
-            }
+            mainContent.classList.remove('lg:ml-0');
+            mainContent.classList.add('lg:ml-64');
         }
 
         function closeSidebar() {
             const sidebar = document.getElementById('sidebar');
             const mainContent = document.getElementById('main-content');
-            const backdrop = document.getElementById('sidebar-backdrop');
-
             sidebar.classList.add('-translate-x-full');
-            mainContent.classList.remove('ml-64');
-            mainContent.classList.add('ml-0');
-            backdrop.classList.add('hidden');
+            mainContent.classList.remove('lg:ml-64');
+            mainContent.classList.add('lg:ml-0');
         }
 
         function toggleSidebar() {
@@ -991,15 +1045,18 @@
                 } else {
                     navBtn.className = "flex items-center gap-3 px-4 py-3 rounded-xl text-roast-300 hover:bg-adminCardHover hover:text-white transition-all";
                 }
+
+                const bottomBtn = document.getElementById(`bottomnav-${t}`);
+                if (bottomBtn) {
+                    if (t === tabId) {
+                        bottomBtn.className = "flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-amberGold transition-all";
+                    } else {
+                        bottomBtn.className = "flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-roast-400 transition-all";
+                    }
+                }
             });
 
             document.getElementById('page-title').innerText = 'Rumah Panggang';
-
-            // On mobile/tablet, close the drawer after picking a tab. Always close (never blind-toggle) 
-            // so this can never accidentally re-open an already-closed sidebar. 
-            if(window.innerWidth < 1024) {
-                closeSidebar();
-            }
         }
 
         // --- EDIT PROFILE MODAL FUNCTIONS ---
@@ -1098,12 +1155,12 @@
                 const newRow = document.createElement('tr');
                 newRow.className = "hover:bg-adminCardHover inventory-row";
                 newRow.innerHTML = `
-                    <td class="p-4 font-bold text-white prod-name">${name}</td>
-                    <td class="p-4 text-roast-300 prod-category">${category}</td>
-                    <td class="p-4 text-amberGold font-serif prod-price">RM ${price}</td>
-                    <td class="p-4 font-bold text-white prod-stock">${stock} units</td>
-                    <td class="p-4">${statusHtml}</td>
-                    <td class="p-4 text-right space-x-2">
+                    <td class="p-4 font-bold text-white prod-name" data-label="Product Name">${name}</td>
+                    <td class="p-4 text-roast-300 prod-category" data-label="Category">${category}</td>
+                    <td class="p-4 text-amberGold font-serif prod-price" data-label="Price">RM ${price}</td>
+                    <td class="p-4 font-bold text-white prod-stock" data-label="Stock Units">${stock} units</td>
+                    <td class="p-4" data-label="Status">${statusHtml}</td>
+                    <td class="p-4 text-right space-x-2" data-label="Actions">
                         <button onclick="openAddStockModal(this)" class="px-3 py-1.5 bg-adminBg border border-adminBorder text-amberGold font-bold rounded-lg shadow hover:bg-adminCardHover" title="Add Stock"><i class="fa-solid fa-plus"></i> Stock</button>
                         <button onclick="openEditProductModal(this)" class="px-3 py-1.5 bg-adminBg border border-adminBorder text-roast-100 font-bold rounded-lg shadow hover:bg-adminCardHover" title="Edit"><i class="fa-solid fa-pen"></i></button>
                         <button onclick="deleteInventoryRow(this)" class="px-3 py-1.5 bg-red-500/10 text-red-400 border border-red-500/30 font-bold rounded-lg shadow hover:bg-red-500/20" title="Delete"><i class="fa-solid fa-trash"></i></button>
@@ -1114,6 +1171,7 @@
             }
 
             closeProductModal();
+            filterInventoryTable();
         }
 
         function openAddStockModal(btn) {
@@ -1160,6 +1218,37 @@
                 row.remove();
                 showAdminToast('Product successfully deleted.');
             }
+        }
+
+        // --- INVENTORY SEARCH & CATEGORY FILTER ---
+        let activeInventoryCategory = 'all';
+
+        function filterInventoryCategory(category, event) {
+            activeInventoryCategory = category;
+
+            document.querySelectorAll('.inv-cat-btn').forEach(btn => {
+                btn.className = "inv-cat-btn px-3.5 py-2 rounded-xl text-[11px] font-bold border border-adminBorder bg-adminBg text-roast-300 hover:text-white transition-all";
+            });
+            if (event && event.target) {
+                event.target.className = "inv-cat-btn px-3.5 py-2 rounded-xl text-[11px] font-bold bg-amberGold text-adminBg shadow transition-all";
+            }
+
+            filterInventoryTable();
+        }
+
+        function filterInventoryTable() {
+            const query = document.getElementById('inventory-search').value.toLowerCase();
+            const rows = document.querySelectorAll('.inventory-row');
+
+            rows.forEach(row => {
+                const name = row.querySelector('.prod-name').innerText.toLowerCase();
+                const category = row.querySelector('.prod-category').innerText.trim();
+
+                const matchesQuery = name.includes(query);
+                const matchesCategory = (activeInventoryCategory === 'all' || category === activeInventoryCategory);
+
+                row.style.display = (matchesQuery && matchesCategory) ? '' : 'none';
+            });
         }
 
         // --- CLASS SLOT MANAGEMENT FUNCTIONS ---
@@ -1278,13 +1367,13 @@
                 const newRow = document.createElement('tr');
                 newRow.className = "hover:bg-adminCardHover class-row";
                 newRow.innerHTML = `
-                    <td class="p-4 font-bold text-white class-name">${name}</td>
-                    <td class="p-4 whitespace-nowrap class-format">${formatHtml}</td>
-                    <td class="p-4 text-roast-300 whitespace-nowrap class-schedule">${schedule}</td>
-                    <td class="p-4 text-amberGold font-serif class-price">RM ${price}</td>
-                    <td class="p-4 text-roast-300 class-location">${locationHtml}</td>
-                    <td class="p-4 font-bold text-white class-pax">${pax} pax</td>
-                    <td class="p-4 text-right space-x-2">
+                    <td class="p-4 font-bold text-white class-name" data-label="Class Name">${name}</td>
+                    <td class="p-4 whitespace-nowrap class-format" data-label="Format">${formatHtml}</td>
+                    <td class="p-4 text-roast-300 whitespace-nowrap class-schedule" data-label="Schedule">${schedule}</td>
+                    <td class="p-4 text-amberGold font-serif class-price" data-label="Price">RM ${price}</td>
+                    <td class="p-4 text-roast-300 class-location" data-label="Location / Meeting Link">${locationHtml}</td>
+                    <td class="p-4 font-bold text-white class-pax" data-label="Max Pax">${pax} pax</td>
+                    <td class="p-4 text-right space-x-2" data-label="Actions">
                         <button onclick="openEditClassModal(this)" class="px-3 py-1.5 bg-adminBg border border-adminBorder text-roast-100 font-bold rounded-lg shadow hover:bg-adminCardHover" title="Edit"><i class="fa-solid fa-pen"></i></button>
                         <button onclick="deleteClassRow(this)" class="px-3 py-1.5 bg-red-500/10 text-red-400 border border-red-500/30 font-bold rounded-lg shadow hover:bg-red-500/20" title="Delete"><i class="fa-solid fa-trash"></i></button>
                     </td>
