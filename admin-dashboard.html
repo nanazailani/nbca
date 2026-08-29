@@ -116,7 +116,7 @@
                     <i class="fa-solid fa-chalkboard-user w-5 text-base shrink-0"></i> <span class="sidebar-text">Manage Classes</span>
                 </a>
                 <a href="#" onclick="switchTab('blog', event)" id="nav-blog" class="flex items-center gap-3 px-4 py-3 rounded-xl text-roast-300 hover:bg-adminCardHover hover:text-roast-950 transition-all">
-                    <i class="fa-solid fa-newspaper w-5 text-base shrink-0"></i> <span class="sidebar-text">Manage Blog</span>
+                    <i class="fa-solid fa-bullhorn w-5 text-base shrink-0"></i> <span class="sidebar-text">Announcements</span>
                 </a>
                 <a href="#" onclick="switchTab('loyalty', event)" id="nav-loyalty" class="flex items-center gap-3 px-4 py-3 rounded-xl text-roast-300 hover:bg-adminCardHover hover:text-roast-950 transition-all">
                     <i class="fa-solid fa-users w-5 text-base shrink-0"></i> <span class="sidebar-text">Members & Points</span>
@@ -160,8 +160,8 @@
             <span class="text-[10px] font-bold">Classes</span>
         </button>
         <button onclick="switchTab('blog', event)" id="bottomnav-blog" class="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-roast-400 transition-all">
-            <i class="fa-solid fa-newspaper text-base"></i>
-            <span class="text-[10px] font-bold">Blog</span>
+            <i class="fa-solid fa-bullhorn text-base"></i>
+            <span class="text-[10px] font-bold">Announce</span>
         </button>
         <button onclick="switchTab('loyalty', event)" id="bottomnav-loyalty" class="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-roast-400 transition-all">
             <i class="fa-solid fa-users text-base"></i>
@@ -755,11 +755,11 @@
                 <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
                     <div>
                         <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Stories & Culture</span>
-                        <h3 class="text-2xl font-extrabold text-roast-950 font-serif mt-1">Blog Post Management</h3>
+                        <h3 class="text-2xl font-extrabold text-roast-950 font-serif mt-1">Announcement Management</h3>
                     </div>
                     <div class="flex items-center gap-3">
                         <button onclick="openAddBlogModal()" class="px-4 py-2.5 bg-amberGold text-adminBg font-extrabold rounded-xl text-xs shadow hover:opacity-90 flex items-center gap-2">
-                            <i class="fa-solid fa-plus"></i> New Blog Post
+                            <i class="fa-solid fa-plus"></i> New Announcement
                         </button>
                     </div>
                 </div>
@@ -770,7 +770,7 @@
                         <input type="text" id="blog-search" oninput="filterBlogTable()" placeholder="Search post title..." class="w-full bg-adminCard border border-adminBorder text-roast-950 text-xs rounded-xl pl-10 pr-4 py-2.5 focus:outline-none focus:border-amberGold">
                     </div>
                     <p class="text-[11px] text-roast-400 flex items-center gap-1.5">
-                        <i class="fa-solid fa-circle-info text-amberGold"></i> Published posts appear live on the customer site's Blog section.
+                        <i class="fa-solid fa-circle-info text-amberGold"></i> Published announcements appear live on the customer site's Announcements section.
                     </p>
                 </div>
 
@@ -1087,10 +1087,10 @@
             </button>
             <div class="text-center space-y-1">
                 <div class="w-14 h-14 rounded-2xl bg-amberGold/20 border border-amberGold/40 text-amberGold flex items-center justify-center mx-auto text-2xl shadow">
-                    <i class="fa-solid fa-newspaper"></i>
+                    <i class="fa-solid fa-bullhorn"></i>
                 </div>
                 <h3 id="blog-post-modal-title" class="text-xl font-bold font-serif text-roast-950">New Blog Post</h3>
-                <p class="text-xs text-roast-300">This will appear live on the customer site's Blog section</p>
+                <p class="text-xs text-roast-300">This will appear live on the customer site's Announcements section</p>
             </div>
             <div class="space-y-4 text-xs">
                 <input type="hidden" id="edit-blog-id" value="">
@@ -1661,7 +1661,7 @@
         // ===================== BLOG POST MANAGEMENT (shared with customer site via localStorage) ===================== 
         // Same "rp_blog_posts" localStorage key used by index.html. Whichever page runs first 
         // seeds the default posts; after that both pages read/write the same shared list, so 
-        // publishing here shows up live on the customer Blog section. 
+        // publishing here shows up live on the customer Announcements section. 
         const DEFAULT_BLOG_POSTS = [
             {
                 id: "seed-1",
@@ -1763,7 +1763,7 @@
             const container = document.getElementById('blog-tbody');
             if (!container) return;
             if (blogPosts.length === 0) {
-                container.innerHTML = `<div class="sm:col-span-2 p-8 text-center text-roast-400 bg-adminCard rounded-2xl border border-adminBorder">No blog posts yet. Click "New Blog Post" to publish your first article.</div>`;
+                container.innerHTML = `<div class="sm:col-span-2 p-8 text-center text-roast-400 bg-adminCard rounded-2xl border border-adminBorder">No announcements yet. Click "New Announcement" to publish your first one.</div>`;
                 return;
             }
             container.innerHTML = blogPosts.map(post => `
@@ -1900,18 +1900,18 @@
                 return;
             }
 
-            showAdminToast(isEdit ? `Blog post "${title}" successfully updated.` : `Blog post "${title}" successfully published to the customer site.`);
+            showAdminToast(isEdit ? `Announcement "${title}" successfully updated.` : `Announcement "${title}" successfully published to the customer site.`);
             renderBlogTable();
             filterBlogTable();
             closeBlogPostModal();
         }
 
         function deleteBlogPost(id) {
-            if (confirm('Adakah anda pasti mahu memadam artikel blog ini? Ia akan hilang dari laman web customer.')) {
+            if (confirm('Adakah anda pasti mahu memadam announcement ini? Ia akan hilang dari laman web customer.')) {
                 blogPosts = blogPosts.filter(p => p.id !== id);
                 saveBlogPostsToStorage();
                 renderBlogTable();
-                showAdminToast('Blog post successfully deleted.');
+                showAdminToast('Announcement successfully deleted.');
             }
         }
         // ===================== END BLOG POST MANAGEMENT ===================== 

@@ -40,7 +40,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: #F8FAFC; 
+            background-image: 
+                radial-gradient(circle at 8% 5%, rgba(37,99,235,0.06) 0%, transparent 30%), 
+                radial-gradient(circle at 95% 8%, rgba(30,64,175,0.05) 0%, transparent 28%), 
+                radial-gradient(circle at 50% 100%, rgba(37,99,235,0.05) 0%, transparent 35%); 
+            background-attachment: fixed; 
+        }
         h1, h2, h3, .font-serif { font-family: 'Playfair Display', serif; }
         .bg-coffee-pattern {
             background-color: #140803;
@@ -129,7 +137,7 @@
             <source src="video/background.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
-        <div class="absolute inset-0 bg-roast-50/75 z-10"></div>
+        <div class="absolute inset-0 bg-roast-50/70 z-10"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 w-full text-center md:text-left">
             <div class="space-y-3">
                 <h1 id="hero-welcome-title" class="text-3xl sm:text-5xl font-extrabold text-roast-950 font-serif">Hello, Member!</h1>
@@ -138,8 +146,10 @@
         </div>
     </section>
 
-    <main class="pt-20 pb-32 md:pb-20 bg-roast-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+    <main class="relative overflow-hidden pt-10 pb-32 md:pb-20 bg-transparent">
+        <div class="absolute -top-10 -left-24 w-80 h-80 bg-amberGold/8 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute top-1/3 -right-24 w-96 h-96 bg-blue-300/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 relative z-10">
             <div>
                 <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Member Portal Hub</span>
                 <h2 class="text-3xl font-extrabold text-roast-950 mt-1">At A Glance</h2>
@@ -147,7 +157,7 @@
             
             <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <!-- Shop Coffee Beans CTA -->
-                <div class="bg-gradient-to-br from-amberGold/20 to-roast-100/80 rounded-2xl p-6 border border-amberGold/40 space-y-4 hover:border-amberGold/70 transition-all flex flex-col justify-between">
+                <div class="bg-gradient-to-br from-amberGold/15 to-white rounded-2xl p-6 border border-amberGold/40 shadow-sm space-y-4 hover:border-amberGold/70 hover:shadow-lg hover:-translate-y-1 transition-all flex flex-col justify-between">
                     <div class="space-y-3">
                         <div class="flex items-center justify-between">
                             <div class="w-11 h-11 rounded-xl bg-amberGold text-roast-50 flex items-center justify-center text-lg shadow-md">
@@ -166,7 +176,7 @@
                 </div>
 
                 <!-- Latest Order Snapshot -->
-                <div class="bg-roast-100/80 rounded-2xl p-6 border border-roast-200 space-y-4 hover:border-amberGold/50 transition-all flex flex-col justify-between">
+                <div class="bg-white rounded-2xl p-6 border border-roast-200 shadow-sm space-y-4 hover:border-amberGold/50 hover:shadow-lg hover:-translate-y-1 transition-all flex flex-col justify-between">
                     <div class="space-y-3">
                         <div class="flex items-center justify-between">
                             <div class="w-11 h-11 rounded-xl bg-amberGold/20 text-amberGold flex items-center justify-center text-lg">
@@ -185,7 +195,7 @@
                 </div>
 
                 <!-- Membership Points Snapshot -->
-                <div class="bg-roast-100/80 rounded-2xl p-6 border border-roast-200 space-y-4 hover:border-amberGold/50 transition-all flex flex-col justify-between">
+                <div class="bg-white rounded-2xl p-6 border border-roast-200 shadow-sm space-y-4 hover:border-amberGold/50 hover:shadow-lg hover:-translate-y-1 transition-all flex flex-col justify-between">
                     <div class="space-y-3">
                         <div class="flex items-center justify-between">
                             <div class="w-11 h-11 rounded-xl bg-amberGold/20 text-amberGold flex items-center justify-center text-lg">
@@ -204,7 +214,7 @@
                 </div>
 
                 <!-- Upcoming Class Snapshot -->
-                <div class="bg-roast-100/80 rounded-2xl p-6 border border-roast-200 space-y-4 hover:border-amberGold/50 transition-all flex flex-col justify-between">
+                <div class="bg-white rounded-2xl p-6 border border-roast-200 shadow-sm space-y-4 hover:border-amberGold/50 hover:shadow-lg hover:-translate-y-1 transition-all flex flex-col justify-between">
                     <div class="space-y-3">
                         <div class="flex items-center justify-between">
                             <div class="w-11 h-11 rounded-xl bg-amberGold/20 text-amberGold flex items-center justify-center text-lg">
