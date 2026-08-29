@@ -21,10 +21,12 @@
                             600: '#475569', 
                             700: '#334155', 
                             800: '#1E293B', 
-                            900: '#0F172A', 
-                            950: '#020617', 
+                            900: '#1E40AF', 
+                            950: '#172554', 
                         }, 
                         amberGold: '#2563EB', 
+                        royalBlue: '#1E40AF', 
+                        navy: '#172554', 
                     }, 
                     fontFamily: { 
                         sans: ['Plus Jakarta Sans', 'sans-serif'], 
@@ -41,7 +43,15 @@
     <!-- FontAwesome CDN --> 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> 
     <style> 
-        body { font-family: 'Plus Jakarta Sans', sans-serif; } 
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: #F8FAFC; 
+            background-image: 
+                radial-gradient(circle at 8% 5%, rgba(37,99,235,0.06) 0%, transparent 30%), 
+                radial-gradient(circle at 95% 8%, rgba(30,64,175,0.05) 0%, transparent 28%), 
+                radial-gradient(circle at 50% 100%, rgba(37,99,235,0.05) 0%, transparent 35%); 
+            background-attachment: fixed; 
+        } 
         h1, h2, h3, .font-serif { font-family: 'Playfair Display', serif; } 
         .bg-coffee-pattern { 
             background-color: #F8FAFC; 
@@ -135,7 +145,7 @@
 
         /* Card hover lift */
         .card-lift { transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease, border-color 0.35s ease; } 
-        .card-lift:hover { transform: translateY(-6px); box-shadow: 0 20px 40px -12px rgba(0,0,0,0.55); } 
+        .card-lift:hover { transform: translateY(-6px); box-shadow: 0 20px 40px -12px rgba(37,99,235,0.28), 0 8px 16px -8px rgba(30,64,175,0.18); }
 
         /* Cart badge pulse when item added */
         @keyframes cartPulse { 
@@ -184,9 +194,7 @@
             <div class="flex items-center justify-between h-20"> 
                 <!-- Brand Logo --> 
                 <a href="#" class="flex items-center gap-3 group"> 
-                    <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-amberGold to-roast-500 flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform"> 
-                        <i class="fa-solid me-0 fa-fire-burner text-roast-50 text-lg"></i> 
-                    </div> 
+                    <img src="images/logo.png" alt="Nb.CA Academy Logo" class="w-12 h-12 object-contain group-hover:scale-105 transition-transform"> 
                     <div class="flex flex-col"> 
                         <span class="font-serif text-xl font-extrabold tracking-wider text-roast-950 uppercase">Nb.CA Academy</span> 
                         <span class="text-[10px] tracking-widest text-amberGold uppercase">Coffee Education Academy</span> 
@@ -198,7 +206,7 @@
                     <a href="#team" class="text-roast-800 hover:text-amberGold transition-colors">Team</a> 
                     <a href="#classes" class="text-roast-800 hover:text-amberGold transition-colors font-bold">Classes</a> 
                     <a href="#coffee-beans" class="text-roast-800 hover:text-amberGold transition-colors">Coffee Beans</a> 
-                    <a href="#blog" class="text-roast-800 hover:text-amberGold transition-colors">Blog</a> 
+                    <a href="#blog" class="text-roast-800 hover:text-amberGold transition-colors">Announcements</a> 
                     <a href="#merchandise" class="text-roast-800 hover:text-amberGold transition-colors">Merchandise</a> 
                     <a href="#location" class="text-roast-800 hover:text-amberGold transition-colors">Locations</a> 
                 </div> 
@@ -233,7 +241,7 @@
             <a href="#team" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-800 hover:text-amberGold font-medium border-b border-roast-100/50"><i class="fa-solid fa-users text-amberGold text-xs"></i> Meet The Team</a> 
             <a href="#classes" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-800 hover:text-amberGold font-bold border-b border-roast-100/50"><i class="fa-solid fa-chalkboard-user text-amberGold text-xs"></i> Paid Classes</a> 
             <a href="#coffee-beans" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-800 hover:text-amberGold font-medium border-b border-roast-100/50"><i class="fa-solid fa-mug-hot text-amberGold text-xs"></i> Coffee Beans</a> 
-            <a href="#blog" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-800 hover:text-amberGold font-medium border-b border-roast-100/50"><i class="fa-solid fa-book-open text-amberGold text-xs"></i> Blog & Stories</a> 
+            <a href="#blog" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-800 hover:text-amberGold font-medium border-b border-roast-100/50"><i class="fa-solid fa-bullhorn text-amberGold text-xs"></i> Announcements</a> 
             <a href="#merchandise" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-800 hover:text-amberGold font-medium border-b border-roast-100/50"><i class="fa-solid fa-shirt text-amberGold text-xs"></i> Merchandise</a> 
             <a href="#location" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-800 hover:text-amberGold font-medium"><i class="fa-solid fa-location-dot text-amberGold text-xs"></i> Locations & Outlets</a> 
             <div class="pt-2" id="mobile-auth-container"> 
@@ -271,7 +279,7 @@
                         Nb.CA Academy is Malaysia's hands-on coffee education academy — learn brewing, roasting & latte art from certified instructors, hosted at our Sungai Petani studio. 
                     </p> 
                     <div class="hero-anim-4 flex flex-col sm:flex-row items-center justify-center gap-4"> 
-                        <a href="#classes" class="btn-anim w-full sm:w-auto px-8 py-4 rounded-full bg-amberGold hover:bg-blue-500 text-roast-50 font-bold text-center shadow-lg"> 
+                        <a href="#classes" class="btn-anim w-full sm:w-auto px-8 py-4 rounded-full bg-amberGold hover:bg-royalBlue text-roast-50 font-bold text-center shadow-lg"> 
                             <i class="fa-solid fa-chalkboard-user me-2"></i> Browse Classes 
                         </a> 
                     </div> 
@@ -312,14 +320,14 @@
                         <p class="text-amberGold font-medium italic">As for Barista and Home Brewing Enthusiasts, we'll help you understand the key Sensory Skills and different Coffee Flavour Profiles. You'll also learn Barista Skills such as Hand Brew & Latte Art technique.</p> 
                     </div> 
                     <div class="grid sm:grid-cols-2 gap-4 pt-4"> 
-                        <div class="p-5 rounded-2xl bg-roast-50/90 border border-roast-200 hover:border-amberGold/40 transition-all"> 
+                        <div class="p-5 rounded-2xl bg-white/55 backdrop-blur-lg border border-white/70 shadow-lg hover:border-amberGold/50 hover:shadow-xl transition-all"> 
                             <div class="w-10 h-10 rounded-lg bg-amberGold/20 text-amberGold flex items-center justify-center mb-3"> 
                                 <i class="fa-solid fa-eye text-lg"></i> 
                             </div> 
                             <h4 class="font-bold text-roast-950 text-base font-serif mb-1">Our Vision</h4> 
                             <p class="text-xs text-roast-600 font-light leading-relaxed"> We aim to become Malaysia's go-to coffee education academy. We want every student to leave with real, usable skill. </p> 
                         </div> 
-                        <div class="p-5 rounded-2xl bg-roast-50/90 border border-roast-200 hover:border-amberGold/40 transition-all"> 
+                        <div class="p-5 rounded-2xl bg-white/55 backdrop-blur-lg border border-white/70 shadow-lg hover:border-amberGold/50 hover:shadow-xl transition-all"> 
                             <div class="w-10 h-10 rounded-lg bg-amberGold/20 text-amberGold flex items-center justify-center mb-3"> 
                                 <i class="fa-solid fa-bullseye text-lg"></i> 
                             </div> 
@@ -456,21 +464,13 @@
         <div class="absolute -bottom-16 -right-16 w-64 h-64 bg-blue-300/10 rounded-full blur-3xl pointer-events-none"></div> 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10"> <i class="fa-solid fa-mug-saucer absolute -top-8 left-1/4 text-[180px] text-amberGold/[0.06] rotate-6 pointer-events-none select-none"></i> 
         
-            <div class="reveal-up flex flex-col md:flex-row md:items-end justify-between mb-8"> 
-                <div> 
-                    <span class="text-[11px] font-bold tracking-widest text-roast-500 uppercase">Also Available</span> 
-                    <h2 class="text-xl sm:text-2xl font-bold text-roast-800 mt-1">Coffee Beans, By The Bag</h2> 
-                    <p class="text-xs text-roast-500 mt-1 font-light max-w-lg">Take the beans we teach with home with you.</p> 
-                </div> 
-                <div class="flex flex-wrap gap-2 mt-4 md:mt-0" id="beans-filter"> 
-                    <button onclick="filterBeans('all')" class="bean-filter-btn px-3.5 py-1.5 rounded-full text-[11px] font-semibold bg-amberGold text-roast-50 transition-all">All Beans</button> 
-                    <button onclick="filterBeans('single-origin')" class="bean-filter-btn px-3.5 py-1.5 rounded-full text-[11px] font-semibold bg-roast-100 text-roast-700 hover:text-roast-950 border border-roast-200 transition-all">Single Origin</button> 
-                    <button onclick="filterBeans('blend')" class="bean-filter-btn px-3.5 py-1.5 rounded-full text-[11px] font-semibold bg-roast-100 text-roast-700 hover:text-roast-950 border border-roast-200 transition-all">Nb.CA Signature Blend</button> 
-                    <button onclick="filterBeans('dark')" class="bean-filter-btn px-3.5 py-1.5 rounded-full text-[11px] font-semibold bg-roast-100 text-roast-700 hover:text-roast-950 border border-roast-200 transition-all">Dark Roast</button> 
-                </div> 
+            <div class="reveal-up text-center mb-8"> 
+                <span class="text-[11px] font-bold tracking-widest text-roast-500 uppercase">Also Available</span> 
+                <h2 class="text-xl sm:text-2xl font-bold text-roast-800 mt-1">Coffee Beans, By The Bag</h2> 
+                <p class="text-xs text-roast-500 mt-1 font-light max-w-lg mx-auto">Take the beans we teach with home with you.</p> 
             </div> 
 
-            <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 lg:gap-8 reveal-stagger" id="coffee-grid"> 
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-3 sm:gap-6 max-w-6xl mx-auto reveal-stagger" id="coffee-grid"> 
                 <div class="coffee-card dark card-lift bg-roast-100/80 rounded-2xl p-3 sm:p-6 border border-roast-200 hover:border-amberGold/50 flex flex-col justify-between group overflow-hidden"> 
                     <div> 
                         <div class="relative h-24 sm:h-48 rounded-lg sm:rounded-xl overflow-hidden mb-2 sm:mb-4 border border-roast-200 bg-roast-50"> 
@@ -490,7 +490,7 @@
                             <span class="px-2 py-0.5 bg-roast-50 rounded text-[10px] text-roast-700">Free Shipping</span> 
                         </div> 
                     </div> 
-                    <button onclick="openProductModal('hitam-manis')" class="btn-anim w-full py-2 sm:py-3 bg-amberGold hover:bg-blue-500 text-roast-50 font-bold rounded-lg sm:rounded-xl text-[10px] sm:text-xs transition-all shadow-md flex items-center justify-center gap-1 sm:gap-2"> 
+                    <button onclick="openProductModal('hitam-manis')" class="btn-anim w-full py-2 sm:py-3 bg-amberGold hover:bg-royalBlue text-roast-50 font-bold rounded-lg sm:rounded-xl text-[10px] sm:text-xs transition-all shadow-md flex items-center justify-center gap-1 sm:gap-2"> 
                         <i class="fa-solid fa-circle-info"></i> Learn More 
                     </button> 
                 </div> 
@@ -514,7 +514,7 @@
                             <span class="px-2 py-0.5 bg-roast-50 rounded text-[10px] text-roast-700">Free Shipping</span> 
                         </div> 
                     </div> 
-                    <button onclick="openProductModal('cream-beans')" class="btn-anim w-full py-2 sm:py-3 bg-amberGold hover:bg-blue-500 text-roast-50 font-bold rounded-lg sm:rounded-xl text-[10px] sm:text-xs transition-all shadow-md flex items-center justify-center gap-1 sm:gap-2"> 
+                    <button onclick="openProductModal('cream-beans')" class="btn-anim w-full py-2 sm:py-3 bg-amberGold hover:bg-royalBlue text-roast-50 font-bold rounded-lg sm:rounded-xl text-[10px] sm:text-xs transition-all shadow-md flex items-center justify-center gap-1 sm:gap-2"> 
                         <i class="fa-solid fa-circle-info"></i> Learn More 
                     </button> 
                 </div> 
@@ -538,7 +538,7 @@
                             <span class="px-2 py-0.5 bg-roast-50 rounded text-[10px] text-roast-700">Free Shipping</span> 
                         </div> 
                     </div> 
-                    <button onclick="openProductModal('black-stone')" class="btn-anim w-full py-2 sm:py-3 bg-amberGold hover:bg-blue-500 text-roast-50 font-bold rounded-lg sm:rounded-xl text-[10px] sm:text-xs transition-all shadow-md flex items-center justify-center gap-1 sm:gap-2"> 
+                    <button onclick="openProductModal('black-stone')" class="btn-anim w-full py-2 sm:py-3 bg-amberGold hover:bg-royalBlue text-roast-50 font-bold rounded-lg sm:rounded-xl text-[10px] sm:text-xs transition-all shadow-md flex items-center justify-center gap-1 sm:gap-2"> 
                         <i class="fa-solid fa-circle-info"></i> Learn More 
                     </button> 
                 </div> 
@@ -562,7 +562,7 @@
                             <span class="px-2 py-0.5 bg-roast-50 rounded text-[10px] text-roast-700">Free Shipping</span> 
                         </div> 
                     </div> 
-                    <button onclick="openProductModal('sunrise')" class="btn-anim w-full py-2 sm:py-3 bg-amberGold hover:bg-blue-500 text-roast-50 font-bold rounded-lg sm:rounded-xl text-[10px] sm:text-xs transition-all shadow-md flex items-center justify-center gap-1 sm:gap-2"> 
+                    <button onclick="openProductModal('sunrise')" class="btn-anim w-full py-2 sm:py-3 bg-amberGold hover:bg-royalBlue text-roast-50 font-bold rounded-lg sm:rounded-xl text-[10px] sm:text-xs transition-all shadow-md flex items-center justify-center gap-1 sm:gap-2"> 
                         <i class="fa-solid fa-circle-info"></i> Learn More 
                     </button> 
                 </div> 
@@ -574,12 +574,12 @@
     <section id="blog" class="relative overflow-hidden py-20 bg-roast-100/40 border-t border-roast-100"> 
         <div class="absolute top-0 right-0 w-96 h-96 bg-amberGold/8 rounded-full blur-3xl pointer-events-none"></div> 
         <div class="absolute bottom-0 -left-16 w-64 h-64 bg-blue-300/12 rounded-full blur-3xl pointer-events-none"></div> 
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10"> <i class="fa-solid fa-book-open absolute top-4 right-8 text-[160px] text-blue-400/[0.06] -rotate-6 pointer-events-none select-none"></i> 
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10"> <i class="fa-solid fa-bullhorn absolute top-4 right-8 text-[160px] text-blue-400/[0.06] -rotate-6 pointer-events-none select-none"></i> 
         
             <div class="reveal-up text-center max-w-2xl mx-auto mb-16"> 
-                <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Stories & Culture</span> 
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-roast-950 mt-1">Nb.CA Academy Journal & Blog</h2> 
-                <p class="text-roast-700 text-sm mt-3 font-light">Insights into coffee craftsmanship, roastery updates, and our unique culture directly from the Nb.CA team.</p> 
+                <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Latest Updates</span> 
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-roast-950 mt-1">Nb.CA Academy Announcements</h2> 
+                <p class="text-roast-700 text-sm mt-3 font-light">Class schedules, new programmes, and the latest news directly from the Nb.CA team.</p> 
             </div> 
             <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 reveal-stagger" id="blog-grid"></div> 
         </div> 
@@ -661,13 +661,13 @@
                     <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Location</span> 
                     <h2 class="text-3xl font-bold text-roast-950 font-serif">Visit Our Academy</h2> 
                     <div class="space-y-4"> 
-                        <div class="flex items-start gap-4 p-4 rounded-xl bg-roast-50/80 border border-roast-200"> 
+                        <div class="flex items-start gap-4 p-4 rounded-xl bg-white/55 backdrop-blur-lg border border-white/70 shadow-lg"> 
                             <div class="w-10 h-10 rounded-lg bg-amberGold/20 text-amberGold flex items-center justify-center shrink-0 mt-1"> 
                                 <i class="fa-solid fa-graduation-cap text-base"></i> 
                             </div> 
                             <div> 
                                 <h4 class="font-bold text-roast-950 text-sm">Nb.CA Academy</h4> 
-                                <p class="text-xs text-roast-600 mt-1">Sungai Petani, Kedah Darul Aman — Coffee Education Workshops & Training Programmes</p> 
+                                <p class="text-xs text-roast-600 mt-1">10, Lengkok Cempaka 1, Bandar Amanjaya, 08000 Sungai Petani, Kedah, Malaysia</p> 
                             </div> 
                         </div> 
                     </div> 
@@ -679,7 +679,7 @@
                     </div> 
                 </div> 
                 <div class="reveal-up h-80 rounded-3xl overflow-hidden border border-roast-200 shadow-xl bg-roast-100 flex items-center justify-center relative"> 
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15938.805561134267!2d101.5284!3d2.9734!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31cdb21e8a2a5b0d%3A0x88f8d5bc803e3a22!2sJalan%20Kebun%2C%20Shah%20Alam%2C%20Selangor!5e0!3m2!1sen!2smy!4v1690000000000!5m2!1sen!2smy" class="w-full h-full border-0 grayscale opacity-80 hover:grayscale-0 transition-all duration-500" allowfullscreen="" loading="lazy"></iframe> 
+                    <iframe src="https://www.google.com/maps?q=10,+Lengkok+Cempaka+1,+Bandar+Amanjaya,+08000+Sungai+Petani,+Kedah,+Malaysia&output=embed" class="w-full h-full border-0 grayscale opacity-80 hover:grayscale-0 transition-all duration-500" allowfullscreen="" loading="lazy"></iframe> 
                 </div> 
             </div> 
         </div> 
@@ -688,15 +688,15 @@
     <!-- FOOTER --> 
     <footer class="relative overflow-hidden border-t border-roast-800 py-16 text-roast-200"> 
         <img src="images/footer-bg.jpg" alt="" class="absolute inset-0 w-full h-full object-cover z-0"> 
-        <div class="absolute inset-0 bg-roast-950/78 z-[1]"></div> 
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10"> 
+        <div class="absolute inset-0 bg-roast-950/90 z-[1]"></div> 
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10" style="text-shadow: 0 1px 8px rgba(2,6,23,0.8);"> 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-10 items-start mb-12"> 
                 <div class="space-y-4"> 
                     <div class="flex flex-col"> 
                         <span class="font-serif text-lg font-extrabold tracking-wider text-white uppercase leading-tight">Nb.CA Academy</span> 
                         <span class="text-[10px] tracking-widest text-amberGold uppercase">Nine Bar Coffee Academy</span> 
                     </div> 
-                    <p class="text-xs text-roast-300 font-light leading-relaxed max-w-xs">Coffee Education Workshops & Training Programmes in Sungai Petani, Kedah Darul Aman.</p> 
+                    <p class="text-xs text-white font-light leading-relaxed max-w-xs">Coffee Education Workshops & Training Programmes in Sungai Petani, Kedah Darul Aman.</p> 
                 </div> 
                 <div class="space-y-4"> 
                     <h3 class="font-serif text-lg font-bold text-white tracking-wide">Follow Us</h3> 
@@ -711,16 +711,16 @@
                             <i class="fa-solid fa-bag-shopping text-base"></i> 
                         </a> 
                     </div> 
-                    <p class="text-xs text-roast-300 font-medium tracking-wide">@nbca.academy</p> 
+                    <p class="text-xs text-white font-medium tracking-wide">@nbca.academy</p> 
                 </div> 
                 <div class="space-y-4 md:text-right"> 
                     <h3 class="font-serif text-lg font-bold text-white tracking-wide">Contact Us</h3> 
                     <div> 
-                        <a href="https://wa.me/60123456789" target="_blank" class="inline-flex items-center justify-center px-6 py-2.5 rounded-xl bg-amberGold hover:bg-blue-500 text-white font-bold text-xs shadow-md transition-all"> Whatsapp Now! </a> 
+                        <a href="https://wa.me/60123456789" target="_blank" class="inline-flex items-center justify-center px-6 py-2.5 rounded-xl bg-amberGold hover:bg-royalBlue text-white font-bold text-xs shadow-md transition-all" style="text-shadow: none;"> Whatsapp Now! </a> 
                     </div> 
                 </div> 
             </div> 
-            <div class="border-t border-white/15 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-roast-300"> 
+            <div class="border-t border-white/20 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-white"> 
                 <p>© 2026 Nb.CA Academy. E-commerce Powered by Nb.CA Academy.</p> 
                 <div class="flex flex-wrap gap-6 font-medium"> 
                     <a href="#" class="hover:text-amberGold transition-colors">Terms of Service</a> 
@@ -786,7 +786,7 @@
                             <span id="pm-qty" class="text-roast-950 font-bold text-sm px-3">1</span> 
                             <button onclick="adjustModalQty(1)" class="text-roast-600 hover:text-roast-950 px-2 text-sm font-bold">+</button> 
                         </div> 
-                        <button onclick="checkAuthAndExecute(addModalItemToCart)" class="btn-anim flex-1 py-3 bg-amberGold hover:bg-blue-500 text-roast-50 font-bold rounded-xl text-sm transition-all shadow-lg flex items-center justify-center gap-2"> 
+                        <button onclick="checkAuthAndExecute(addModalItemToCart)" class="btn-anim flex-1 py-3 bg-amberGold hover:bg-royalBlue text-roast-50 font-bold rounded-xl text-sm transition-all shadow-lg flex items-center justify-center gap-2"> 
                             <i class="fa-solid fa-basket-shopping"></i> Add To Cart 
                         </button> 
                     </div> 
@@ -841,7 +841,7 @@
                                 <label class="block text-xs font-semibold text-roast-700 uppercase mb-1">Your Review *</label> 
                                 <textarea id="rev-comment" required rows="4" placeholder="Describe the aroma, acidity, body, and taste notes..." class="w-full bg-roast-100 border border-roast-300 text-roast-950 rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-amberGold"></textarea> 
                             </div> 
-                            <button type="submit" class="btn-anim px-6 py-3 bg-amberGold hover:bg-blue-500 text-roast-50 font-bold rounded-xl text-xs transition-all shadow-md"> Submit Review </button> 
+                            <button type="submit" class="btn-anim px-6 py-3 bg-amberGold hover:bg-royalBlue text-roast-50 font-bold rounded-xl text-xs transition-all shadow-md"> Submit Review </button> 
                         </form> 
                     </div> 
                 </div> 
@@ -868,7 +868,7 @@
                     <span>Total Amount:</span> 
                     <span id="cart-total" class="text-amberGold text-lg">RM 0.00</span> 
                 </div> 
-                <button onclick="openCheckoutModal()" class="btn-anim w-full py-3.5 bg-amberGold hover:bg-blue-500 text-roast-50 font-bold rounded-xl transition-all shadow-lg text-sm flex items-center justify-center gap-2"> 
+                <button onclick="openCheckoutModal()" class="btn-anim w-full py-3.5 bg-amberGold hover:bg-royalBlue text-roast-50 font-bold rounded-xl transition-all shadow-lg text-sm flex items-center justify-center gap-2"> 
                     <i class="fa-solid fa-credit-card"></i> Proceed To Checkout 
                 </button> 
             </div> 
@@ -980,7 +980,7 @@
                                 <span class="text-roast-600 text-[10px] block leading-relaxed"> Direct online banking payment via Billplz API (Maybank2u, CIMB Clicks, TNG eWallet, DuitNow, etc.) </span> 
                             </div> 
                         </div> 
-                        <button type="submit" id="checkout-submit-btn" class="btn-anim w-full py-4 bg-amberGold hover:bg-blue-500 text-roast-50 font-extrabold rounded-xl text-sm transition-all shadow-xl flex items-center justify-center gap-2 mt-4"> 
+                        <button type="submit" id="checkout-submit-btn" class="btn-anim w-full py-4 bg-amberGold hover:bg-royalBlue text-roast-50 font-extrabold rounded-xl text-sm transition-all shadow-xl flex items-center justify-center gap-2 mt-4"> 
                             <i class="fa-solid fa-lock"></i> Pay via Billplz Gateway 
                         </button> 
                         <p class="text-[10px] text-roast-600 text-center flex items-center justify-center gap-1"> 
@@ -1043,7 +1043,7 @@
                             <span id="cm-qty" class="text-roast-950 font-bold text-sm px-3">1</span> 
                             <button onclick="adjustClassQty(1)" class="text-roast-600 hover:text-roast-950 px-2 text-sm font-bold">+</button> 
                         </div> 
-                        <button onclick="checkAuthAndExecute(addClassModalItemToCart)" class="btn-anim flex-1 py-3 bg-amberGold hover:bg-blue-500 text-roast-50 font-bold rounded-xl text-sm transition-all shadow-lg flex items-center justify-center gap-2"> 
+                        <button onclick="checkAuthAndExecute(addClassModalItemToCart)" class="btn-anim flex-1 py-3 bg-amberGold hover:bg-royalBlue text-roast-50 font-bold rounded-xl text-sm transition-all shadow-lg flex items-center justify-center gap-2"> 
                             <i class="fa-solid fa-calendar-check"></i> Enroll This Slot 
                         </button> 
                     </div> 
@@ -1123,7 +1123,7 @@
                 <p class="text-xs text-roast-700 mt-1">Please sign in to your account first before adding items to cart or enrolling in classes.</p> 
             </div> 
             <div class="space-y-2 pt-2"> 
-                <a href="auth.html" class="block w-full py-3 bg-amberGold hover:bg-blue-500 text-roast-50 font-bold rounded-xl text-xs transition-all shadow-md"> Go To Sign In </a> 
+                <a href="auth.html" class="block w-full py-3 bg-amberGold hover:bg-royalBlue text-roast-50 font-bold rounded-xl text-xs transition-all shadow-md"> Go To Sign In </a> 
                 <button onclick="closeLoginRequiredModal()" class="block w-full py-2.5 bg-roast-100 hover:bg-roast-200 text-roast-700 font-bold rounded-xl text-xs border border-roast-300"> Cancel </button> 
             </div> 
         </div> 
@@ -1713,7 +1713,7 @@
             const grid = document.getElementById('team-grid'); 
             if (!grid) return; 
             grid.innerHTML = teamMembersData.map((member, mIdx) => ` 
-                <div class="card-lift bg-roast-100/80 rounded-2xl border border-roast-200 overflow-hidden"> 
+                <div class="card-lift bg-white/55 backdrop-blur-lg rounded-2xl border border-white/70 shadow-lg overflow-hidden"> 
                     <div class="relative h-72 sm:h-80 bg-roast-200 overflow-hidden" id="team-carousel-${mIdx}"> 
                         ${member.photos.map((photo, pIdx) => ` 
                             <img src="${photo}" alt="${member.name} photo ${pIdx + 1}" class="team-slide absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${pIdx === 0 ? 'opacity-100' : 'opacity-0 pointer-events-none'}"> 
@@ -1929,7 +1929,7 @@
                     </div> 
                     <div class="pt-4 border-t border-roast-200"> ${article.content} </div> 
                     <div class="pt-6 flex justify-end"> 
-                        <button onclick="closeBlogModal()" class="px-6 py-2.5 bg-amberGold hover:bg-blue-500 text-roast-50 font-bold rounded-xl text-xs transition-all shadow-md"> Close Article </button> 
+                        <button onclick="closeBlogModal()" class="px-6 py-2.5 bg-amberGold hover:bg-royalBlue text-roast-50 font-bold rounded-xl text-xs transition-all shadow-md"> Close Article </button> 
                     </div> 
                 </div> 
             `; 
@@ -1938,23 +1938,6 @@
 
         function closeBlogModal() { 
             closeModal('blog-modal'); 
-        } 
-
-        function filterBeans(category) { 
-            const cards = document.querySelectorAll('.coffee-card'); 
-            const btns = document.querySelectorAll('.bean-filter-btn'); 
-            btns.forEach(btn => { 
-                btn.classList.remove('bg-amberGold', 'text-roast-50'); 
-                btn.classList.add('bg-roast-100', 'text-roast-700'); 
-            }); 
-            event.target.classList.add('bg-amberGold', 'text-roast-50'); 
-            cards.forEach(card => { 
-                if(category === 'all' || card.classList.contains(category)) { 
-                    card.style.display = 'flex'; 
-                } else { 
-                    card.style.display = 'none'; 
-                } 
-            }); 
         } 
 
         function openCheckoutModal() { 

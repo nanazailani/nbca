@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Command Center | Rumah Panggang</title>
+    <title>Admin Command Center | Nb.CA Academy</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chart.js CDN -->
@@ -13,21 +13,22 @@
             theme: {
                 extend: {
                     colors: {
-                        adminBg: '#181311',
-                        adminCard: '#241C18',
-                        adminCardHover: '#2E241F',
-                        adminBorder: '#42332B',
+                        adminBg: '#F1F5F9',
+                        adminCard: '#FFFFFF',
+                        adminCardHover: '#EFF6FF',
+                        adminBorder: '#E2E8F0',
                         roast: {
-                            50: '#FAF6F0',
-                            100: '#F4EBE1',
-                            200: '#E2CEB9',
-                            300: '#CFAD8F',
-                            400: '#B88760',
-                            500: '#9E6437',
-                            800: '#2E241F',
-                            900: '#241C18',
+                            50: '#F8FAFC',
+                            100: '#1E293B',
+                            200: '#334155',
+                            300: '#64748B',
+                            400: '#94A3B8',
+                            500: '#475569',
+                            800: '#1E293B',
+                            900: '#0F172A',
+                            950: '#172554',
                         },
-                        amberGold: '#F59E0B',
+                        amberGold: '#2563EB',
                     },
                     fontFamily: {
                         sans: ['Plus Jakarta Sans', 'sans-serif'],
@@ -43,9 +44,9 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
         h1, h2, h3, .font-serif { font-family: 'Playfair Display', serif; }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #181311; }
-        ::-webkit-scrollbar-thumb { background: #42332B; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #F59E0B; }
+        ::-webkit-scrollbar-track { background: #F1F5F9; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #2563EB; }
 
         /* ===================== RESPONSIVE TABLE-TO-CARD (mobile/tablet) ===================== */
         @media (max-width: 1023px) {
@@ -57,10 +58,10 @@
             }
             .responsive-table tr {
                 margin-bottom: 0.9rem;
-                border: 1px solid #42332B;
+                border: 1px solid #E2E8F0;
                 border-radius: 1.1rem;
                 padding: 0.9rem 1rem;
-                background: #2E241F;
+                background: #FFFFFF;
                 box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
             }
             .responsive-table tbody tr:last-child { margin-bottom: 0; }
@@ -79,7 +80,7 @@
                 font-weight: 700;
                 text-transform: uppercase;
                 letter-spacing: 0.05em;
-                color: #CFAD8F;
+                color: #64748B;
                 margin-bottom: 0.3rem;
             }
             .responsive-table td:last-child::before { display: none; }
@@ -93,11 +94,9 @@
         <div>
             <!-- Sidebar Header / Logo -->
             <div class="h-24 flex items-center px-6 border-b border-adminBorder gap-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amberGold to-yellow-600 flex items-center justify-center shadow-lg shadow-amberGold/10 border border-amberGold/40 shrink-0">
-                    <i class="fa-solid fa-shield-halved text-adminBg text-base font-bold"></i>
-                </div>
+                <img src="images/logo.png" alt="Nb.CA Academy Logo" class="w-10 h-10 object-contain shrink-0">
                 <div class="sidebar-text truncate">
-                    <span class="font-serif text-xl font-extrabold tracking-wider text-white uppercase block leading-tight truncate">Menu</span>
+                    <span class="font-serif text-xl font-extrabold tracking-wider text-roast-950 uppercase block leading-tight truncate">Menu</span>
                     <span class="text-[9px] tracking-widest text-amberGold uppercase font-bold">Admin Portal</span>
                 </div>
             </div>
@@ -107,19 +106,19 @@
                 <a href="#" onclick="switchTab('overview', event)" id="nav-overview" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-amberGold text-adminBg font-bold transition-all shadow-md">
                     <i class="fa-solid fa-chart-pie w-5 text-base shrink-0"></i> <span class="sidebar-text">Overview & Charts</span>
                 </a>
-                <a href="#" onclick="switchTab('orders', event)" id="nav-orders" class="flex items-center gap-3 px-4 py-3 rounded-xl text-roast-300 hover:bg-adminCardHover hover:text-white transition-all">
+                <a href="#" onclick="switchTab('orders', event)" id="nav-orders" class="flex items-center gap-3 px-4 py-3 rounded-xl text-roast-300 hover:bg-adminCardHover hover:text-roast-950 transition-all">
                     <i class="fa-solid fa-bag-shopping w-5 text-base shrink-0"></i> <span class="sidebar-text">Manage Orders</span>
                 </a>
-                <a href="#" onclick="switchTab('inventory', event)" id="nav-inventory" class="flex items-center gap-3 px-4 py-3 rounded-xl text-roast-300 hover:bg-adminCardHover hover:text-white transition-all">
+                <a href="#" onclick="switchTab('inventory', event)" id="nav-inventory" class="flex items-center gap-3 px-4 py-3 rounded-xl text-roast-300 hover:bg-adminCardHover hover:text-roast-950 transition-all">
                     <i class="fa-solid fa-boxes-stacked w-5 text-base shrink-0"></i> <span class="sidebar-text">Inventory Stock</span>
                 </a>
-                <a href="#" onclick="switchTab('classes', event)" id="nav-classes" class="flex items-center gap-3 px-4 py-3 rounded-xl text-roast-300 hover:bg-adminCardHover hover:text-white transition-all">
+                <a href="#" onclick="switchTab('classes', event)" id="nav-classes" class="flex items-center gap-3 px-4 py-3 rounded-xl text-roast-300 hover:bg-adminCardHover hover:text-roast-950 transition-all">
                     <i class="fa-solid fa-chalkboard-user w-5 text-base shrink-0"></i> <span class="sidebar-text">Manage Classes</span>
                 </a>
-                <a href="#" onclick="switchTab('blog', event)" id="nav-blog" class="flex items-center gap-3 px-4 py-3 rounded-xl text-roast-300 hover:bg-adminCardHover hover:text-white transition-all">
+                <a href="#" onclick="switchTab('blog', event)" id="nav-blog" class="flex items-center gap-3 px-4 py-3 rounded-xl text-roast-300 hover:bg-adminCardHover hover:text-roast-950 transition-all">
                     <i class="fa-solid fa-newspaper w-5 text-base shrink-0"></i> <span class="sidebar-text">Manage Blog</span>
                 </a>
-                <a href="#" onclick="switchTab('loyalty', event)" id="nav-loyalty" class="flex items-center gap-3 px-4 py-3 rounded-xl text-roast-300 hover:bg-adminCardHover hover:text-white transition-all">
+                <a href="#" onclick="switchTab('loyalty', event)" id="nav-loyalty" class="flex items-center gap-3 px-4 py-3 rounded-xl text-roast-300 hover:bg-adminCardHover hover:text-roast-950 transition-all">
                     <i class="fa-solid fa-users w-5 text-base shrink-0"></i> <span class="sidebar-text">Members & Points</span>
                 </a>
             </div>
@@ -131,8 +130,8 @@
                 <div class="flex items-center gap-2.5 truncate sidebar-text">
                     <div class="w-8 h-8 rounded-full bg-amberGold/20 text-amberGold font-bold flex items-center justify-center text-xs shrink-0">NZ</div>
                     <div class="truncate">
-                        <span class="text-xs font-bold text-white block truncate">Nana Zailani</span>
-                        <span class="text-[10px] text-roast-400 block truncate">admin@rumahpanggang.com</span>
+                        <span class="text-xs font-bold text-roast-950 block truncate">Nana Zailani</span>
+                        <span class="text-[10px] text-roast-400 block truncate">admin@nbca.academy</span>
                     </div>
                 </div>
                 <button onclick="logoutAdmin()" class="text-roast-400 hover:text-red-400 p-2 transition-colors shrink-0" title="Logout">
@@ -179,7 +178,7 @@
                 <button onclick="toggleSidebar()" class="hidden lg:flex w-11 h-11 rounded-xl bg-adminCard hover:bg-adminCardHover border border-adminBorder text-amberGold items-center justify-center transition-all shadow" title="Toggle Sidebar">
                     <i class="fa-solid fa-bars text-base"></i>
                 </button>
-                <h2 id="page-title" class="font-serif text-xl sm:text-2xl font-extrabold text-white tracking-tight">Rumah Panggang</h2>
+                <h2 id="page-title" class="font-serif text-xl sm:text-2xl font-extrabold text-roast-950 tracking-tight">Nb.CA Academy</h2>
             </div>
          
             <!-- RIGHT HEADER PROFILE & LOGOUT BUTTONS -->
@@ -202,14 +201,14 @@
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div>
                         <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Business Snapshot</span>
-                        <h3 class="text-xl font-extrabold text-white font-serif mt-1">Viewing data for: <span id="period-label" class="text-amberGold">This Month</span></h3>
+                        <h3 class="text-xl font-extrabold text-roast-950 font-serif mt-1">Viewing data for: <span id="period-label" class="text-amberGold">This Month</span></h3>
                     </div>
                     <div class="flex bg-adminCard p-1 rounded-xl border border-adminBorder text-xs font-bold shadow flex-wrap">
-                        <button onclick="updatePeriodFilter('day', event)" id="filter-day" class="px-3 py-1.5 rounded-lg text-roast-300 hover:text-white transition-all">Day</button>
-                        <button onclick="updatePeriodFilter('week', event)" id="filter-week" class="px-3 py-1.5 rounded-lg text-roast-300 hover:text-white transition-all">Week</button>
+                        <button onclick="updatePeriodFilter('day', event)" id="filter-day" class="px-3 py-1.5 rounded-lg text-roast-300 hover:text-roast-950 transition-all">Day</button>
+                        <button onclick="updatePeriodFilter('week', event)" id="filter-week" class="px-3 py-1.5 rounded-lg text-roast-300 hover:text-roast-950 transition-all">Week</button>
                         <button onclick="updatePeriodFilter('month', event)" id="filter-month" class="px-3 py-1.5 rounded-lg bg-amberGold text-adminBg shadow transition-all">Month</button>
-                        <button onclick="updatePeriodFilter('year', event)" id="filter-year" class="px-3 py-1.5 rounded-lg text-roast-300 hover:text-white transition-all">Year</button>
-                        <button onclick="toggleCustomDatePicker(event)" id="filter-custom" class="px-3 py-1.5 rounded-lg text-roast-300 hover:text-white transition-all flex items-center gap-1.5"><i class="fa-solid fa-calendar-days text-[11px]"></i> Custom</button>
+                        <button onclick="updatePeriodFilter('year', event)" id="filter-year" class="px-3 py-1.5 rounded-lg text-roast-300 hover:text-roast-950 transition-all">Year</button>
+                        <button onclick="toggleCustomDatePicker(event)" id="filter-custom" class="px-3 py-1.5 rounded-lg text-roast-300 hover:text-roast-950 transition-all flex items-center gap-1.5"><i class="fa-solid fa-calendar-days text-[11px]"></i> Custom</button>
                     </div>
                 </div>
 
@@ -217,11 +216,11 @@
                 <div id="custom-date-picker" class="hidden flex flex-col sm:flex-row sm:items-end gap-3 bg-adminCard p-4 rounded-2xl border border-adminBorder">
                     <div class="flex-1">
                         <label class="block text-[10px] font-bold text-roast-300 uppercase mb-1">From</label>
-                        <input type="date" id="custom-date-from" class="w-full bg-adminBg border border-adminBorder text-white text-xs rounded-xl px-3 py-2.5 focus:outline-none focus:border-amberGold">
+                        <input type="date" id="custom-date-from" class="w-full bg-adminBg border border-adminBorder text-roast-950 text-xs rounded-xl px-3 py-2.5 focus:outline-none focus:border-amberGold">
                     </div>
                     <div class="flex-1">
                         <label class="block text-[10px] font-bold text-roast-300 uppercase mb-1">To</label>
-                        <input type="date" id="custom-date-to" class="w-full bg-adminBg border border-adminBorder text-white text-xs rounded-xl px-3 py-2.5 focus:outline-none focus:border-amberGold">
+                        <input type="date" id="custom-date-to" class="w-full bg-adminBg border border-adminBorder text-roast-950 text-xs rounded-xl px-3 py-2.5 focus:outline-none focus:border-amberGold">
                     </div>
                     <button onclick="applyCustomDateFilter()" class="px-5 py-2.5 bg-amberGold text-adminBg font-extrabold rounded-xl text-xs shadow hover:opacity-90 whitespace-nowrap">Apply Range</button>
                 </div>
@@ -236,7 +235,7 @@
                         </div>
                         <div>
                             <span class="text-xs text-roast-300 font-medium block">Total Orders</span>
-                            <div id="kpi-total-orders" class="text-3xl font-bold font-serif text-white mt-1">24</div>
+                            <div id="kpi-total-orders" class="text-3xl font-bold font-serif text-roast-950 mt-1">24</div>
                         </div>
                     </div>
                     <div class="bg-adminCard p-6 rounded-3xl border border-adminBorder space-y-3 shadow-xl">
@@ -248,7 +247,7 @@
                         </div>
                         <div>
                             <span class="text-xs text-roast-300 font-medium block">Active Members</span>
-                            <div class="text-3xl font-bold font-serif text-white mt-1">142</div>
+                            <div class="text-3xl font-bold font-serif text-roast-950 mt-1">142</div>
                         </div>
                     </div>
                     <div class="bg-adminCard p-6 rounded-3xl border border-adminBorder space-y-3 shadow-xl">
@@ -260,7 +259,7 @@
                         </div>
                         <div>
                             <span class="text-xs text-roast-300 font-medium block">Total Revenue</span>
-                            <div id="kpi-total-revenue" class="text-3xl font-bold font-serif text-white mt-1">RM 12,840</div>
+                            <div id="kpi-total-revenue" class="text-3xl font-bold font-serif text-roast-950 mt-1">RM 12,840</div>
                         </div>
                     </div>
                     <div class="bg-adminCard p-6 rounded-3xl border border-adminBorder space-y-3 shadow-xl">
@@ -272,7 +271,7 @@
                         </div>
                         <div>
                             <span class="text-xs text-roast-300 font-medium block">Active Workshops</span>
-                            <div id="kpi-workshops" class="text-3xl font-bold font-serif text-white mt-1">3 Classes</div>
+                            <div id="kpi-workshops" class="text-3xl font-bold font-serif text-roast-950 mt-1">3 Classes</div>
                         </div>
                     </div>
                 </div>
@@ -281,7 +280,7 @@
                     <div class="lg:col-span-8 bg-adminCard p-6 sm:p-8 rounded-3xl border border-adminBorder shadow-2xl space-y-6">
                         <div>
                             <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Performance</span>
-                            <h3 class="text-2xl font-extrabold text-white font-serif mt-1">Revenue & Sales Trends</h3>
+                            <h3 class="text-2xl font-extrabold text-roast-950 font-serif mt-1">Revenue & Sales Trends</h3>
                         </div>
                         <div class="h-80 relative">
                             <canvas id="revenueChart"></canvas>
@@ -290,31 +289,31 @@
                     <div class="lg:col-span-4 bg-adminCard p-6 sm:p-8 rounded-3xl border border-adminBorder shadow-2xl space-y-6 flex flex-col justify-between">
                         <div>
                             <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Breakdown</span>
-                            <h3 class="text-2xl font-extrabold text-white font-serif mt-1">Top Selling Items</h3>
+                            <h3 class="text-2xl font-extrabold text-roast-950 font-serif mt-1">Top Selling Items</h3>
                         </div>
                         <div class="h-48 relative flex items-center justify-center">
                             <canvas id="productsChart"></canvas>
                         </div>
                         <div class="grid grid-cols-2 gap-x-2 gap-y-3 text-[11px]">
                             <div class="flex items-center gap-2">
-                                <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:#F59E0B"></span>
+                                <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:#2563EB"></span>
                                 <span class="text-roast-300 truncate">Coffee Beans</span>
-                                <span id="legend-coffee-pct" class="text-white font-bold ml-auto">55%</span>
+                                <span id="legend-coffee-pct" class="text-roast-950 font-bold ml-auto">55%</span>
                             </div>
                             <div class="flex items-center gap-2">
                                 <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:#3B82F6"></span>
                                 <span class="text-roast-300 truncate">Masterclass</span>
-                                <span id="legend-masterclass-pct" class="text-white font-bold ml-auto">25%</span>
+                                <span id="legend-masterclass-pct" class="text-roast-950 font-bold ml-auto">25%</span>
                             </div>
                             <div class="flex items-center gap-2">
                                 <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:#10B981"></span>
                                 <span class="text-roast-300 truncate">Merchandise</span>
-                                <span id="legend-merchandise-pct" class="text-white font-bold ml-auto">12%</span>
+                                <span id="legend-merchandise-pct" class="text-roast-950 font-bold ml-auto">12%</span>
                             </div>
                             <div class="flex items-center gap-2">
                                 <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:#8B5CF6"></span>
                                 <span class="text-roast-300 truncate">Drip Bags</span>
-                                <span id="legend-dripbags-pct" class="text-white font-bold ml-auto">8%</span>
+                                <span id="legend-dripbags-pct" class="text-roast-950 font-bold ml-auto">8%</span>
                             </div>
                         </div>
                     </div>
@@ -331,7 +330,7 @@
                         </div>
                         <div>
                             <span class="text-xs text-roast-300 font-medium block">Avg. Order Value</span>
-                            <div id="kpi-avg-order" class="text-3xl font-bold font-serif text-white mt-1">RM 535.00</div>
+                            <div id="kpi-avg-order" class="text-3xl font-bold font-serif text-roast-950 mt-1">RM 535.00</div>
                         </div>
                     </div>
                     <div class="bg-adminCard p-6 rounded-3xl border border-adminBorder space-y-3 shadow-xl">
@@ -343,7 +342,7 @@
                         </div>
                         <div>
                             <span class="text-xs text-roast-300 font-medium block">Pending Payments</span>
-                            <div id="kpi-pending-amount" class="text-3xl font-bold font-serif text-white mt-1">RM 1,240.00</div>
+                            <div id="kpi-pending-amount" class="text-3xl font-bold font-serif text-roast-950 mt-1">RM 1,240.00</div>
                         </div>
                     </div>
                     <div class="bg-adminCard p-6 rounded-3xl border border-adminBorder space-y-3 shadow-xl">
@@ -355,7 +354,7 @@
                         </div>
                         <div>
                             <span class="text-xs text-roast-300 font-medium block">Low Stock Alerts</span>
-                            <div class="text-3xl font-bold font-serif text-white mt-1">1 Item</div>
+                            <div class="text-3xl font-bold font-serif text-roast-950 mt-1">1 Item</div>
                         </div>
                     </div>
                     <div class="bg-adminCard p-6 rounded-3xl border border-adminBorder space-y-3 shadow-xl">
@@ -367,7 +366,7 @@
                         </div>
                         <div>
                             <span class="text-xs text-roast-300 font-medium block">Class Occupancy</span>
-                            <div class="text-3xl font-bold font-serif text-white mt-1">72%</div>
+                            <div class="text-3xl font-bold font-serif text-roast-950 mt-1">72%</div>
                         </div>
                     </div>
                 </div>
@@ -378,13 +377,13 @@
                     <div class="lg:col-span-4 bg-adminCard p-6 sm:p-8 rounded-3xl border border-adminBorder shadow-2xl space-y-6">
                         <div>
                             <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Fulfillment</span>
-                            <h3 class="text-xl font-extrabold text-white font-serif mt-1">Order Status Breakdown</h3>
+                            <h3 class="text-xl font-extrabold text-roast-950 font-serif mt-1">Order Status Breakdown</h3>
                         </div>
                         <div class="space-y-4">
                             <div class="space-y-1.5">
                                 <div class="flex justify-between text-xs">
                                     <span class="text-roast-300 font-medium">Awaiting Verification</span>
-                                    <span id="status-awaiting-count" class="text-white font-bold">5 orders</span>
+                                    <span id="status-awaiting-count" class="text-roast-950 font-bold">5 orders</span>
                                 </div>
                                 <div class="w-full h-2 rounded-full bg-adminBg overflow-hidden">
                                     <div id="status-awaiting-bar" class="h-full bg-amberGold rounded-full transition-all duration-500" style="width: 21%"></div>
@@ -393,7 +392,7 @@
                             <div class="space-y-1.5">
                                 <div class="flex justify-between text-xs">
                                     <span class="text-roast-300 font-medium">Preparing</span>
-                                    <span id="status-preparing-count" class="text-white font-bold">9 orders</span>
+                                    <span id="status-preparing-count" class="text-roast-950 font-bold">9 orders</span>
                                 </div>
                                 <div class="w-full h-2 rounded-full bg-adminBg overflow-hidden">
                                     <div id="status-preparing-bar" class="h-full bg-blue-400 rounded-full transition-all duration-500" style="width: 38%"></div>
@@ -402,7 +401,7 @@
                             <div class="space-y-1.5">
                                 <div class="flex justify-between text-xs">
                                     <span class="text-roast-300 font-medium">Shipping</span>
-                                    <span id="status-shipping-count" class="text-white font-bold">7 orders</span>
+                                    <span id="status-shipping-count" class="text-roast-950 font-bold">7 orders</span>
                                 </div>
                                 <div class="w-full h-2 rounded-full bg-adminBg overflow-hidden">
                                     <div id="status-shipping-bar" class="h-full bg-green-400 rounded-full transition-all duration-500" style="width: 29%"></div>
@@ -411,7 +410,7 @@
                             <div class="space-y-1.5">
                                 <div class="flex justify-between text-xs">
                                     <span class="text-roast-300 font-medium">Completed</span>
-                                    <span id="status-completed-count" class="text-white font-bold">3 orders</span>
+                                    <span id="status-completed-count" class="text-roast-950 font-bold">3 orders</span>
                                 </div>
                                 <div class="w-full h-2 rounded-full bg-adminBg overflow-hidden">
                                     <div id="status-completed-bar" class="h-full bg-roast-400 rounded-full transition-all duration-500" style="width: 13%"></div>
@@ -424,7 +423,7 @@
                     <div class="lg:col-span-4 bg-adminCard p-6 sm:p-8 rounded-3xl border border-adminBorder shadow-2xl space-y-6 flex flex-col justify-between">
                         <div>
                             <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Loyalty</span>
-                            <h3 class="text-xl font-extrabold text-white font-serif mt-1">Member Tier Distribution</h3>
+                            <h3 class="text-xl font-extrabold text-roast-950 font-serif mt-1">Member Tier Distribution</h3>
                         </div>
                         <div class="h-44 relative flex items-center justify-center">
                             <canvas id="memberTierChart"></canvas>
@@ -432,17 +431,17 @@
                         <div class="grid grid-cols-3 gap-2 text-center text-[11px]">
                             <div>
                                 <span class="block w-2.5 h-2.5 rounded-full bg-amberGold mx-auto mb-1"></span>
-                                <span class="text-white font-bold block">28</span>
+                                <span class="text-roast-950 font-bold block">28</span>
                                 <span class="text-roast-400">Gold</span>
                             </div>
                             <div>
                                 <span class="block w-2.5 h-2.5 rounded-full bg-roast-300 mx-auto mb-1"></span>
-                                <span class="text-white font-bold block">64</span>
+                                <span class="text-roast-950 font-bold block">64</span>
                                 <span class="text-roast-400">Silver</span>
                             </div>
                             <div>
                                 <span class="block w-2.5 h-2.5 rounded-full bg-roast-500 mx-auto mb-1"></span>
-                                <span class="text-white font-bold block">50</span>
+                                <span class="text-roast-950 font-bold block">50</span>
                                 <span class="text-roast-400">Bronze</span>
                             </div>
                         </div>
@@ -452,7 +451,7 @@
                     <div class="lg:col-span-4 bg-adminCard p-6 sm:p-8 rounded-3xl border border-adminBorder shadow-2xl space-y-6">
                         <div>
                             <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Inventory</span>
-                            <h3 class="text-xl font-extrabold text-white font-serif mt-1">Restock Recommended</h3>
+                            <h3 class="text-xl font-extrabold text-roast-950 font-serif mt-1">Restock Recommended</h3>
                         </div>
                         <div class="space-y-3">
                             <div class="flex items-center justify-between p-3.5 rounded-2xl bg-adminBg border border-yellow-500/20">
@@ -461,7 +460,7 @@
                                         <i class="fa-solid fa-mug-hot"></i>
                                     </div>
                                     <div>
-                                        <span class="text-xs font-bold text-white block">Merah Saga Blend</span>
+                                        <span class="text-xs font-bold text-roast-950 block">Merah Saga Blend</span>
                                         <span class="text-[10px] text-roast-400">Coffee Beans</span>
                                     </div>
                                 </div>
@@ -476,7 +475,7 @@
                 <div class="bg-adminCard p-6 sm:p-8 rounded-3xl border border-adminBorder shadow-2xl space-y-6">
                     <div>
                         <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Workshops</span>
-                        <h3 class="text-xl font-extrabold text-white font-serif mt-1">Upcoming Class Schedule & Seat Fill Rate</h3>
+                        <h3 class="text-xl font-extrabold text-roast-950 font-serif mt-1">Upcoming Class Schedule & Seat Fill Rate</h3>
                     </div>
                     <div class="space-y-4">
                         <div class="flex flex-col sm:flex-row sm:items-center gap-4 p-4 rounded-2xl bg-adminBg border border-adminBorder">
@@ -485,14 +484,14 @@
                                     <i class="fa-solid fa-people-roof"></i>
                                 </div>
                                 <div>
-                                    <span class="text-xs font-bold text-white block">Coffee Brewing Masterclass</span>
+                                    <span class="text-xs font-bold text-roast-950 block">Coffee Brewing Masterclass</span>
                                     <span class="text-[10px] text-roast-400">Sat, 6 Sep 2026 — 10:00 AM</span>
                                 </div>
                             </div>
                             <div class="flex-1 space-y-1.5">
                                 <div class="flex justify-between text-[11px]">
                                     <span class="text-roast-300">Seats Filled</span>
-                                    <span class="text-white font-bold">6 / 8 pax</span>
+                                    <span class="text-roast-950 font-bold">6 / 8 pax</span>
                                 </div>
                                 <div class="w-full h-2 rounded-full bg-adminCard overflow-hidden">
                                     <div class="h-full bg-blue-400 rounded-full" style="width: 75%"></div>
@@ -506,14 +505,14 @@
                                     <i class="fa-solid fa-video"></i>
                                 </div>
                                 <div>
-                                    <span class="text-xs font-bold text-white block">Coffee Cupping Experience</span>
+                                    <span class="text-xs font-bold text-roast-950 block">Coffee Cupping Experience</span>
                                     <span class="text-[10px] text-roast-400">Thu, 11 Sep 2026 — 8:00 PM</span>
                                 </div>
                             </div>
                             <div class="flex-1 space-y-1.5">
                                 <div class="flex justify-between text-[11px]">
                                     <span class="text-roast-300">Seats Filled</span>
-                                    <span class="text-white font-bold">7 / 10 pax</span>
+                                    <span class="text-roast-950 font-bold">7 / 10 pax</span>
                                 </div>
                                 <div class="w-full h-2 rounded-full bg-adminCard overflow-hidden">
                                     <div class="h-full bg-purple-400 rounded-full" style="width: 70%"></div>
@@ -530,12 +529,12 @@
                 <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
                     <div>
                         <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Fulfillment</span>
-                        <h3 class="text-2xl font-extrabold text-white font-serif mt-1">Customer Orders Control</h3>
+                        <h3 class="text-2xl font-extrabold text-roast-950 font-serif mt-1">Customer Orders Control</h3>
                     </div>
                     <div class="flex flex-wrap items-center gap-3">
                         <div class="relative">
                             <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-roast-400 text-xs"></i>
-                            <input type="text" id="order-search" oninput="filterOrdersTable()" placeholder="Search ID or Customer..." class="bg-adminCard border border-adminBorder text-white text-xs rounded-xl pl-10 pr-4 py-2.5 focus:outline-none focus:border-amberGold w-56">
+                            <input type="text" id="order-search" oninput="filterOrdersTable()" placeholder="Search ID or Customer..." class="bg-adminCard border border-adminBorder text-roast-950 text-xs rounded-xl pl-10 pr-4 py-2.5 focus:outline-none focus:border-amberGold w-56">
                         </div>
                         <select id="order-status-filter" onchange="filterOrdersTable()" class="bg-adminCard border border-adminBorder text-roast-200 text-xs rounded-xl px-4 py-2.5 focus:outline-none focus:border-amberGold">
                             <option value="all">All Status</option>
@@ -549,7 +548,7 @@
                 <div class="bg-transparent sm:bg-adminCard rounded-none sm:rounded-3xl border-0 sm:border sm:border-adminBorder overflow-visible sm:overflow-hidden shadow-none sm:shadow-2xl p-0 sm:p-0">
                     <div class="overflow-x-auto">
                         <table class="responsive-table w-full min-w-[920px] text-left text-xs" id="orders-table">
-                            <thead class="bg-[#181311] text-roast-300 uppercase tracking-wider border-b border-adminBorder">
+                            <thead class="bg-[#F8FAFC] text-roast-300 uppercase tracking-wider border-b border-adminBorder">
                                 <tr>
                                     <th class="p-4 font-bold">Order ID</th>
                                     <th class="p-4 font-bold">Order Date & Time</th>
@@ -564,7 +563,7 @@
                                 <tr class="hover:bg-adminCardHover order-row" data-status="Awaiting Verification">
                                     <td class="p-4 font-bold text-amberGold order-id" data-label="Order ID">#ORD1001</td>
                                     <td class="p-4 text-roast-300 whitespace-nowrap" data-label="Order Date & Time">Wed, 26 Aug 2026 — 3:42 PM</td>
-                                    <td class="p-4 font-bold text-white order-customer" data-label="Customer">Nana Zailani</td>
+                                    <td class="p-4 font-bold text-roast-950 order-customer" data-label="Customer">Nana Zailani</td>
                                     <td class="p-4 text-roast-300" data-label="Items">3 items (Coffee & Class)</td>
                                     <td class="p-4 font-bold text-amberGold font-serif text-sm" data-label="Total">RM 2,040.00</td>
                                     <td class="p-4 space-y-1" data-label="Status & Tracking">
@@ -578,7 +577,7 @@
                                 <tr class="hover:bg-adminCardHover order-row" data-status="Preparing">
                                     <td class="p-4 font-bold text-amberGold order-id" data-label="Order ID">#ORD1002</td>
                                     <td class="p-4 text-roast-300 whitespace-nowrap" data-label="Order Date & Time">Thu, 27 Aug 2026 — 11:15 AM</td>
-                                    <td class="p-4 font-bold text-white order-customer" data-label="Customer">Ahmad Zaki</td>
+                                    <td class="p-4 font-bold text-roast-950 order-customer" data-label="Customer">Ahmad Zaki</td>
                                     <td class="p-4 text-roast-300" data-label="Items">1 item (Merah Saga Blend)</td>
                                     <td class="p-4 font-bold text-amberGold font-serif text-sm" data-label="Total">RM 45.00</td>
                                     <td class="p-4 space-y-1" data-label="Status & Tracking">
@@ -600,7 +599,7 @@
                 <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
                     <div>
                         <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Inventory</span>
-                        <h3 class="text-2xl font-extrabold text-white font-serif mt-1">Roastery Stock Control</h3>
+                        <h3 class="text-2xl font-extrabold text-roast-950 font-serif mt-1">Roastery Stock Control</h3>
                     </div>
                     <div class="flex items-center gap-3">
                         <button onclick="openAddProductModal()" class="px-4 py-2.5 bg-amberGold text-adminBg font-extrabold rounded-xl text-xs shadow hover:opacity-90 flex items-center gap-2">
@@ -612,19 +611,19 @@
                 <div class="flex flex-col sm:flex-row sm:items-center gap-3">
                     <div class="relative sm:max-w-xs w-full">
                         <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-roast-400 text-xs"></i>
-                        <input type="text" id="inventory-search" oninput="filterInventoryTable()" placeholder="Search product name..." class="w-full bg-adminCard border border-adminBorder text-white text-xs rounded-xl pl-10 pr-4 py-2.5 focus:outline-none focus:border-amberGold">
+                        <input type="text" id="inventory-search" oninput="filterInventoryTable()" placeholder="Search product name..." class="w-full bg-adminCard border border-adminBorder text-roast-950 text-xs rounded-xl pl-10 pr-4 py-2.5 focus:outline-none focus:border-amberGold">
                     </div>
                     <div class="flex flex-wrap gap-2" id="inventory-category-filter">
                         <button onclick="filterInventoryCategory('all', event)" class="inv-cat-btn px-3.5 py-2 rounded-xl text-[11px] font-bold bg-amberGold text-adminBg shadow transition-all">All Products</button>
-                        <button onclick="filterInventoryCategory('Coffee Beans', event)" class="inv-cat-btn px-3.5 py-2 rounded-xl text-[11px] font-bold border border-adminBorder bg-adminBg text-roast-300 hover:text-white transition-all">Coffee Beans</button>
-                        <button onclick="filterInventoryCategory('Merchandise', event)" class="inv-cat-btn px-3.5 py-2 rounded-xl text-[11px] font-bold border border-adminBorder bg-adminBg text-roast-300 hover:text-white transition-all">Merchandise</button>
+                        <button onclick="filterInventoryCategory('Coffee Beans', event)" class="inv-cat-btn px-3.5 py-2 rounded-xl text-[11px] font-bold border border-adminBorder bg-adminBg text-roast-300 hover:text-roast-950 transition-all">Coffee Beans</button>
+                        <button onclick="filterInventoryCategory('Merchandise', event)" class="inv-cat-btn px-3.5 py-2 rounded-xl text-[11px] font-bold border border-adminBorder bg-adminBg text-roast-300 hover:text-roast-950 transition-all">Merchandise</button>
                     </div>
                 </div>
 
                 <div class="bg-transparent sm:bg-adminCard rounded-none sm:rounded-3xl border-0 sm:border sm:border-adminBorder overflow-visible sm:overflow-hidden shadow-none sm:shadow-2xl p-0 sm:p-0">
                     <div class="overflow-x-auto">
                         <table class="responsive-table w-full min-w-[820px] text-left text-xs" id="inventory-table">
-                            <thead class="bg-[#181311] text-roast-300 uppercase tracking-wider border-b border-adminBorder">
+                            <thead class="bg-[#F8FAFC] text-roast-300 uppercase tracking-wider border-b border-adminBorder">
                                 <tr>
                                     <th class="p-4 font-bold">Product Name</th>
                                     <th class="p-4 font-bold">Category</th>
@@ -636,10 +635,10 @@
                             </thead>
                             <tbody class="divide-y divide-adminBorder" id="inventory-tbody">
                                 <tr class="hover:bg-adminCardHover inventory-row">
-                                    <td class="p-4 font-bold text-white prod-name" data-label="Product Name">Colombia Finca Milan</td>
+                                    <td class="p-4 font-bold text-roast-950 prod-name" data-label="Product Name">Colombia Finca Milan</td>
                                     <td class="p-4 text-roast-300 prod-category" data-label="Category">Coffee Beans</td>
                                     <td class="p-4 text-amberGold font-serif prod-price" data-label="Price">RM 65.00</td>
-                                    <td class="p-4 font-bold text-white prod-stock" data-label="Stock Units">84 units</td>
+                                    <td class="p-4 font-bold text-roast-950 prod-stock" data-label="Stock Units">84 units</td>
                                     <td class="p-4" data-label="Status"><span class="px-2.5 py-0.5 bg-green-500/20 text-green-400 font-bold text-[10px] rounded-full">In Stock</span></td>
                                     <td class="p-4 text-right space-x-2" data-label="Actions">
                                         <button onclick="openAddStockModal(this)" class="px-3 py-1.5 bg-adminBg border border-adminBorder text-amberGold font-bold rounded-lg shadow hover:bg-adminCardHover" title="Add Stock"><i class="fa-solid fa-plus"></i> Stock</button>
@@ -648,10 +647,10 @@
                                     </td>
                                 </tr>
                                 <tr class="hover:bg-adminCardHover inventory-row">
-                                    <td class="p-4 font-bold text-white prod-name" data-label="Product Name">Merah Saga Blend</td>
+                                    <td class="p-4 font-bold text-roast-950 prod-name" data-label="Product Name">Merah Saga Blend</td>
                                     <td class="p-4 text-roast-300 prod-category" data-label="Category">Coffee Beans</td>
                                     <td class="p-4 text-amberGold font-serif prod-price" data-label="Price">RM 45.00</td>
-                                    <td class="p-4 font-bold text-white prod-stock" data-label="Stock Units">14 units</td>
+                                    <td class="p-4 font-bold text-roast-950 prod-stock" data-label="Stock Units">14 units</td>
                                     <td class="p-4" data-label="Status"><span class="px-2.5 py-0.5 bg-yellow-500/20 text-yellow-400 font-bold text-[10px] rounded-full">Low Stock</span></td>
                                     <td class="p-4 text-right space-x-2" data-label="Actions">
                                         <button onclick="openAddStockModal(this)" class="px-3 py-1.5 bg-adminBg border border-adminBorder text-amberGold font-bold rounded-lg shadow hover:bg-adminCardHover" title="Add Stock"><i class="fa-solid fa-plus"></i> Stock</button>
@@ -670,7 +669,7 @@
                 <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
                     <div>
                         <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Workshops & Masterclasses</span>
-                        <h3 class="text-2xl font-extrabold text-white font-serif mt-1">Class Slot Management</h3>
+                        <h3 class="text-2xl font-extrabold text-roast-950 font-serif mt-1">Class Slot Management</h3>
                     </div>
                     <div class="flex items-center gap-3">
                         <button onclick="openAddClassModal()" class="px-4 py-2.5 bg-amberGold text-adminBg font-extrabold rounded-xl text-xs shadow hover:opacity-90 flex items-center gap-2">
@@ -682,7 +681,7 @@
                 <div class="flex flex-col sm:flex-row sm:items-center gap-3">
                     <div class="relative sm:max-w-xs w-full">
                         <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-roast-400 text-xs"></i>
-                        <input type="text" id="class-search" oninput="filterClassesTable()" placeholder="Search class name..." class="w-full bg-adminCard border border-adminBorder text-white text-xs rounded-xl pl-10 pr-4 py-2.5 focus:outline-none focus:border-amberGold">
+                        <input type="text" id="class-search" oninput="filterClassesTable()" placeholder="Search class name..." class="w-full bg-adminCard border border-adminBorder text-roast-950 text-xs rounded-xl pl-10 pr-4 py-2.5 focus:outline-none focus:border-amberGold">
                     </div>
                     <select id="class-month-filter" onchange="filterClassesTable()" class="bg-adminCard border border-adminBorder text-roast-200 text-xs rounded-xl px-4 py-2.5 focus:outline-none focus:border-amberGold">
                         <option value="all">All Months</option>
@@ -709,7 +708,7 @@
                 <div class="bg-transparent sm:bg-adminCard rounded-none sm:rounded-3xl border-0 sm:border sm:border-adminBorder overflow-visible sm:overflow-hidden shadow-none sm:shadow-2xl p-0 sm:p-0">
                     <div class="overflow-x-auto">
                         <table class="responsive-table w-full min-w-[960px] text-left text-xs" id="classes-table">
-                            <thead class="bg-[#181311] text-roast-300 uppercase tracking-wider border-b border-adminBorder">
+                            <thead class="bg-[#F8FAFC] text-roast-300 uppercase tracking-wider border-b border-adminBorder">
                                 <tr>
                                     <th class="p-4 font-bold">Class Name</th>
                                     <th class="p-4 font-bold">Format</th>
@@ -722,24 +721,24 @@
                             </thead>
                             <tbody class="divide-y divide-adminBorder" id="classes-tbody">
                                 <tr class="hover:bg-adminCardHover class-row" data-month="09" data-year="2026">
-                                    <td class="p-4 font-bold text-white class-name" data-label="Class Name">Coffee Brewing Masterclass</td>
+                                    <td class="p-4 font-bold text-roast-950 class-name" data-label="Class Name">Coffee Brewing Masterclass</td>
                                     <td class="p-4 whitespace-nowrap class-format" data-label="Format"><span class="whitespace-nowrap inline-flex items-center px-2.5 py-0.5 bg-blue-500/20 text-blue-300 font-bold text-[10px] rounded-full"><i class="fa-solid fa-people-roof mr-1"></i>Face-to-Face</span></td>
                                     <td class="p-4 text-roast-300 whitespace-nowrap class-schedule" data-label="Schedule">Sat, 6 Sep 2026 — 10:00 AM</td>
                                     <td class="p-4 text-amberGold font-serif class-price" data-label="Price">RM 120.00</td>
-                                    <td class="p-4 text-roast-300 class-location" data-label="Location / Meeting Link">Rumah Panggang Roastery, Sungai Petani, Kedah</td>
-                                    <td class="p-4 font-bold text-white class-pax" data-label="Max Pax">8 pax</td>
+                                    <td class="p-4 text-roast-300 class-location" data-label="Location / Meeting Link">Nb.CA Academy, Sungai Petani, Kedah</td>
+                                    <td class="p-4 font-bold text-roast-950 class-pax" data-label="Max Pax">8 pax</td>
                                     <td class="p-4 text-right space-x-2" data-label="Actions">
                                         <button onclick="openEditClassModal(this)" class="px-3 py-1.5 bg-adminBg border border-adminBorder text-roast-100 font-bold rounded-lg shadow hover:bg-adminCardHover" title="Edit"><i class="fa-solid fa-pen"></i></button>
                                         <button onclick="deleteClassRow(this)" class="px-3 py-1.5 bg-red-500/10 text-red-400 border border-red-500/30 font-bold rounded-lg shadow hover:bg-red-500/20" title="Delete"><i class="fa-solid fa-trash"></i></button>
                                     </td>
                                 </tr>
                                 <tr class="hover:bg-adminCardHover class-row" data-month="09" data-year="2026">
-                                    <td class="p-4 font-bold text-white class-name" data-label="Class Name">Coffee Cupping Experience</td>
+                                    <td class="p-4 font-bold text-roast-950 class-name" data-label="Class Name">Coffee Cupping Experience</td>
                                     <td class="p-4 whitespace-nowrap class-format" data-label="Format"><span class="whitespace-nowrap inline-flex items-center px-2.5 py-0.5 bg-purple-500/20 text-purple-300 font-bold text-[10px] rounded-full"><i class="fa-solid fa-video mr-1"></i>Online</span></td>
                                     <td class="p-4 text-roast-300 whitespace-nowrap class-schedule" data-label="Schedule">Thu, 11 Sep 2026 — 8:00 PM</td>
                                     <td class="p-4 text-amberGold font-serif class-price" data-label="Price">RM 80.00</td>
                                     <td class="p-4 text-roast-300 class-location" data-label="Location / Meeting Link"><a href="#" class="text-amberGold hover:underline break-all">https://zoom.us/j/1234567890</a></td>
-                                    <td class="p-4 font-bold text-white class-pax" data-label="Max Pax">10 pax</td>
+                                    <td class="p-4 font-bold text-roast-950 class-pax" data-label="Max Pax">10 pax</td>
                                     <td class="p-4 text-right space-x-2" data-label="Actions">
                                         <button onclick="openEditClassModal(this)" class="px-3 py-1.5 bg-adminBg border border-adminBorder text-roast-100 font-bold rounded-lg shadow hover:bg-adminCardHover" title="Edit"><i class="fa-solid fa-pen"></i></button>
                                         <button onclick="deleteClassRow(this)" class="px-3 py-1.5 bg-red-500/10 text-red-400 border border-red-500/30 font-bold rounded-lg shadow hover:bg-red-500/20" title="Delete"><i class="fa-solid fa-trash"></i></button>
@@ -756,7 +755,7 @@
                 <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
                     <div>
                         <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Stories & Culture</span>
-                        <h3 class="text-2xl font-extrabold text-white font-serif mt-1">Blog Post Management</h3>
+                        <h3 class="text-2xl font-extrabold text-roast-950 font-serif mt-1">Blog Post Management</h3>
                     </div>
                     <div class="flex items-center gap-3">
                         <button onclick="openAddBlogModal()" class="px-4 py-2.5 bg-amberGold text-adminBg font-extrabold rounded-xl text-xs shadow hover:opacity-90 flex items-center gap-2">
@@ -768,7 +767,7 @@
                 <div class="flex flex-col sm:flex-row sm:items-center gap-3">
                     <div class="relative sm:max-w-xs w-full">
                         <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-roast-400 text-xs"></i>
-                        <input type="text" id="blog-search" oninput="filterBlogTable()" placeholder="Search post title..." class="w-full bg-adminCard border border-adminBorder text-white text-xs rounded-xl pl-10 pr-4 py-2.5 focus:outline-none focus:border-amberGold">
+                        <input type="text" id="blog-search" oninput="filterBlogTable()" placeholder="Search post title..." class="w-full bg-adminCard border border-adminBorder text-roast-950 text-xs rounded-xl pl-10 pr-4 py-2.5 focus:outline-none focus:border-amberGold">
                     </div>
                     <p class="text-[11px] text-roast-400 flex items-center gap-1.5">
                         <i class="fa-solid fa-circle-info text-amberGold"></i> Published posts appear live on the customer site's Blog section.
@@ -783,11 +782,11 @@
                 <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
                     <div>
                         <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Loyalty Program</span>
-                        <h3 class="text-2xl font-extrabold text-white font-serif mt-1">Member Points & Tier Control</h3>
+                        <h3 class="text-2xl font-extrabold text-roast-950 font-serif mt-1">Member Points & Tier Control</h3>
                     </div>
                     <div class="relative">
                         <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-roast-400 text-xs"></i>
-                        <input type="text" id="member-search" oninput="filterMembersList()" placeholder="Search member name..." class="bg-adminCard border border-adminBorder text-white text-xs rounded-xl pl-10 pr-4 py-2.5 focus:outline-none focus:border-amberGold w-60">
+                        <input type="text" id="member-search" oninput="filterMembersList()" placeholder="Search member name..." class="bg-adminCard border border-adminBorder text-roast-950 text-xs rounded-xl pl-10 pr-4 py-2.5 focus:outline-none focus:border-amberGold w-60">
                     </div>
                 </div>
 
@@ -797,7 +796,7 @@
                             <div class="w-11 h-11 rounded-full bg-amberGold/20 text-amberGold font-bold flex items-center justify-center font-serif shrink-0">NZ</div>
                             <div class="space-y-1">
                                 <div class="flex items-center gap-2 flex-wrap">
-                                    <strong class="member-name text-white text-sm">Nana Zailani</strong>
+                                    <strong class="member-name text-roast-950 text-sm">Nana Zailani</strong>
                                     <span class="px-2 py-0.5 bg-amberGold/15 text-amberGold text-[10px] font-bold rounded-full uppercase">Gold Tier</span>
                                 </div>
                                 <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-roast-400">
@@ -817,7 +816,7 @@
                             <div class="w-11 h-11 rounded-full bg-roast-700/40 text-roast-200 font-bold flex items-center justify-center font-serif shrink-0">AZ</div>
                             <div class="space-y-1">
                                 <div class="flex items-center gap-2 flex-wrap">
-                                    <strong class="member-name text-white text-sm">Ahmad Zaki</strong>
+                                    <strong class="member-name text-roast-950 text-sm">Ahmad Zaki</strong>
                                     <span class="px-2 py-0.5 bg-roast-700/30 text-roast-200 text-[10px] font-bold rounded-full uppercase">Silver Tier</span>
                                 </div>
                                 <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-roast-400">
@@ -841,28 +840,28 @@
     <!-- MODAL: EDIT PROFILE -->
     <div id="edit-profile-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="bg-adminCard border border-adminBorder rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl relative space-y-6 text-roast-100">
-            <button onclick="closeEditProfileModal()" class="absolute top-5 right-5 text-roast-400 hover:text-white p-2">
+            <button onclick="closeEditProfileModal()" class="absolute top-5 right-5 text-roast-400 hover:text-roast-950 p-2">
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
             <div class="text-center space-y-1">
                 <div class="w-14 h-14 rounded-2xl bg-amberGold/20 border border-amberGold/40 text-amberGold flex items-center justify-center mx-auto text-2xl shadow">
                     <i class="fa-solid fa-user-gear"></i>
                 </div>
-                <h3 class="text-xl font-bold font-serif text-white">Edit Admin Profile</h3>
+                <h3 class="text-xl font-bold font-serif text-roast-950">Edit Admin Profile</h3>
                 <p class="text-xs text-roast-300">Update your account details below</p>
             </div>
             <div class="space-y-4 text-xs">
                 <div>
                     <label class="block font-semibold text-roast-300 uppercase mb-1">Full Name</label>
-                    <input type="text" id="profile-name" value="Nana Zailani" class="w-full bg-adminBg border border-adminBorder text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                    <input type="text" id="profile-name" value="Nana Zailani" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
                 </div>
                 <div>
                     <label class="block font-semibold text-roast-300 uppercase mb-1">Email Address</label>
-                    <input type="email" id="profile-email" value="admin@rumahpanggang.com" class="w-full bg-adminBg border border-adminBorder text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                    <input type="email" id="profile-email" value="admin@nbca.academy" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
                 </div>
                 <div>
                     <label class="block font-semibold text-roast-300 uppercase mb-1">New Password (Optional)</label>
-                    <input type="password" id="profile-password" placeholder="Leave blank to keep current" class="w-full bg-adminBg border border-adminBorder text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                    <input type="password" id="profile-password" placeholder="Leave blank to keep current" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
                 </div>
             </div>
             <div class="flex gap-3 pt-2">
@@ -875,25 +874,25 @@
     <!-- MODAL: ADD / EDIT PRODUCT -->
     <div id="product-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="bg-adminCard border border-adminBorder rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl relative space-y-6 text-roast-100">
-            <button onclick="closeProductModal()" class="absolute top-5 right-5 text-roast-400 hover:text-white p-2">
+            <button onclick="closeProductModal()" class="absolute top-5 right-5 text-roast-400 hover:text-roast-950 p-2">
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
             <div class="text-center space-y-1">
                 <div class="w-14 h-14 rounded-2xl bg-amberGold/20 border border-amberGold/40 text-amberGold flex items-center justify-center mx-auto text-2xl shadow">
                     <i class="fa-solid fa-box-open"></i>
                 </div>
-                <h3 id="product-modal-title" class="text-xl font-bold font-serif text-white">Add New Product</h3>
+                <h3 id="product-modal-title" class="text-xl font-bold font-serif text-roast-950">Add New Product</h3>
                 <p class="text-xs text-roast-300">Fill in product details below</p>
             </div>
             <div class="space-y-4 text-xs">
                 <input type="hidden" id="edit-row-index" value="">
                 <div>
                     <label class="block font-semibold text-roast-300 uppercase mb-1">Product Name</label>
-                    <input type="text" id="input-prod-name" placeholder="e.g. Ethiopian Yirgacheffe" class="w-full bg-adminBg border border-adminBorder text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                    <input type="text" id="input-prod-name" placeholder="e.g. Ethiopian Yirgacheffe" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
                 </div>
                 <div>
                     <label class="block font-semibold text-roast-300 uppercase mb-1">Category</label>
-                    <select id="input-prod-cat" class="w-full bg-adminBg border border-adminBorder text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                    <select id="input-prod-cat" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
                         <option value="Coffee Beans">Coffee Beans</option>
                         <option value="Masterclass">Masterclass Pass</option>
                         <option value="Merchandise">Merchandise</option>
@@ -903,11 +902,11 @@
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block font-semibold text-roast-300 uppercase mb-1">Price (RM)</label>
-                        <input type="number" step="0.01" id="input-prod-price" placeholder="50.00" class="w-full bg-adminBg border border-adminBorder text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                        <input type="number" step="0.01" id="input-prod-price" placeholder="50.00" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
                     </div>
                     <div>
                         <label class="block font-semibold text-roast-300 uppercase mb-1">Initial Stock</label>
-                        <input type="number" id="input-prod-stock" placeholder="50" class="w-full bg-adminBg border border-adminBorder text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                        <input type="number" id="input-prod-stock" placeholder="50" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
                     </div>
                 </div>
             </div>
@@ -921,20 +920,20 @@
     <!-- MODAL: ADD STOCK -->
     <div id="stock-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="bg-adminCard border border-adminBorder rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl relative space-y-6 text-roast-100">
-            <button onclick="closeAddStockModal()" class="absolute top-5 right-5 text-roast-400 hover:text-white p-2">
+            <button onclick="closeAddStockModal()" class="absolute top-5 right-5 text-roast-400 hover:text-roast-950 p-2">
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
             <div class="text-center space-y-1">
                 <div class="w-14 h-14 rounded-2xl bg-amberGold/20 border border-amberGold/40 text-amberGold flex items-center justify-center mx-auto text-2xl shadow">
                     <i class="fa-solid fa-boxes-stacked"></i>
                 </div>
-                <h3 class="text-xl font-bold font-serif text-white">Add Stock Units</h3>
+                <h3 class="text-xl font-bold font-serif text-roast-950">Add Stock Units</h3>
                 <p id="modal-stock-prod-name" class="text-xs text-amberGold font-bold">Product Name</p>
             </div>
             <div class="space-y-4 text-xs">
                 <div>
                     <label class="block font-semibold text-roast-300 uppercase mb-1">Quantity to Add (+)</label>
-                    <input type="number" id="input-add-stock-qty" placeholder="e.g. 20" class="w-full bg-adminBg border border-adminBorder text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                    <input type="number" id="input-add-stock-qty" placeholder="e.g. 20" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
                 </div>
             </div>
             <div class="flex gap-3 pt-2">
@@ -947,20 +946,20 @@
     <!-- SHIPPING MODAL -->
     <div id="shipping-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="bg-adminCard border border-adminBorder rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl relative space-y-6 text-roast-100">
-            <button onclick="closeShippingModal()" class="absolute top-5 right-5 text-roast-400 hover:text-white p-2">
+            <button onclick="closeShippingModal()" class="absolute top-5 right-5 text-roast-400 hover:text-roast-950 p-2">
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
             <div class="text-center space-y-1">
                 <div class="w-14 h-14 rounded-2xl bg-amberGold/20 border border-amberGold/40 text-amberGold flex items-center justify-center mx-auto text-2xl shadow">
                     <i class="fa-solid fa-truck-fast"></i>
                 </div>
-                <h3 class="text-xl font-bold font-serif text-white">Enter Tracking Number</h3>
+                <h3 class="text-xl font-bold font-serif text-roast-950">Enter Tracking Number</h3>
                 <p id="modal-shipping-id" class="text-xs text-amberGold font-bold">#ORD1002</p>
             </div>
             <div class="space-y-4 text-xs">
                 <div>
                     <label class="block font-semibold text-roast-300 uppercase mb-1">Courier Service</label>
-                    <select id="courier-select" class="w-full bg-adminBg border border-adminBorder text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                    <select id="courier-select" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
                         <option value="J&T Express">J&T Express</option>
                         <option value="Pos Laju">Pos Laju</option>
                         <option value="DHL eCommerce">DHL eCommerce</option>
@@ -969,7 +968,7 @@
                 </div>
                 <div>
                     <label class="block font-semibold text-roast-300 uppercase mb-1">Tracking Number</label>
-                    <input type="text" id="tracking-input-val" placeholder="e.g. JT938201948MY" class="w-full bg-adminBg border border-adminBorder text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                    <input type="text" id="tracking-input-val" placeholder="e.g. JT938201948MY" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
                 </div>
             </div>
             <div class="flex gap-3 pt-2">
@@ -982,27 +981,27 @@
     <!-- POINTS ADJUSTMENT MODAL -->
     <div id="points-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="bg-adminCard border border-adminBorder rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl relative space-y-6 text-roast-100">
-            <button onclick="closePointsModal()" class="absolute top-5 right-5 text-roast-400 hover:text-white p-2">
+            <button onclick="closePointsModal()" class="absolute top-5 right-5 text-roast-400 hover:text-roast-950 p-2">
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
             <div class="text-center space-y-1">
                 <div class="w-14 h-14 rounded-2xl bg-amberGold/20 border border-amberGold/40 text-amberGold flex items-center justify-center mx-auto text-2xl shadow">
                     <i class="fa-solid fa-coins"></i>
                 </div>
-                <h3 class="text-xl font-bold font-serif text-white">Adjust Member Points</h3>
+                <h3 class="text-xl font-bold font-serif text-roast-950">Adjust Member Points</h3>
                 <p id="modal-member-name" class="text-xs text-amberGold font-bold">Nana Zailani</p>
             </div>
             <div class="space-y-4 text-xs">
                 <div>
                     <label class="block font-semibold text-roast-300 uppercase mb-1">Action Type</label>
-                    <select id="points-action-type" class="w-full bg-adminBg border border-adminBorder text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                    <select id="points-action-type" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
                         <option value="add">Add Points (+)</option>
                         <option value="deduct">Deduct Points (-)</option>
                     </select>
                 </div>
                 <div>
                     <label class="block font-semibold text-roast-300 uppercase mb-1">Points Value</label>
-                    <input type="number" id="points-input-val" placeholder="e.g. 50" class="w-full bg-adminBg border border-adminBorder text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                    <input type="number" id="points-input-val" placeholder="e.g. 50" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
                 </div>
             </div>
             <div class="flex gap-3 pt-2">
@@ -1015,21 +1014,21 @@
     <!-- MODAL: ADD / EDIT CLASS SLOT -->
     <div id="class-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-adminCard border border-adminBorder rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl relative space-y-6 text-roast-100 my-8">
-            <button onclick="closeClassModal()" class="absolute top-5 right-5 text-roast-400 hover:text-white p-2">
+            <button onclick="closeClassModal()" class="absolute top-5 right-5 text-roast-400 hover:text-roast-950 p-2">
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
             <div class="text-center space-y-1">
                 <div class="w-14 h-14 rounded-2xl bg-amberGold/20 border border-amberGold/40 text-amberGold flex items-center justify-center mx-auto text-2xl shadow">
                     <i class="fa-solid fa-chalkboard-user"></i>
                 </div>
-                <h3 id="class-modal-title" class="text-xl font-bold font-serif text-white">Add Class Slot</h3>
+                <h3 id="class-modal-title" class="text-xl font-bold font-serif text-roast-950">Add Class Slot</h3>
                 <p class="text-xs text-roast-300">Fill in the class & slot details below</p>
             </div>
             <div class="space-y-4 text-xs">
                 <input type="hidden" id="edit-class-index" value="">
                 <div>
                     <label class="block font-semibold text-roast-300 uppercase mb-1">Class Name</label>
-                    <input type="text" id="input-class-name" list="class-name-suggestions" placeholder="e.g. Latte Art Workshop" class="w-full bg-adminBg border border-adminBorder text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                    <input type="text" id="input-class-name" list="class-name-suggestions" placeholder="e.g. Latte Art Workshop" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
                     <datalist id="class-name-suggestions">
                         <option value="Coffee Brewing Masterclass">
                         <option value="Latte Art Workshop">
@@ -1039,7 +1038,7 @@
 
                 <div>
                     <label class="block font-semibold text-roast-300 uppercase mb-1">Class Format</label>
-                    <select id="input-class-format" onchange="toggleClassLocationField()" class="w-full bg-adminBg border border-adminBorder text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                    <select id="input-class-format" onchange="toggleClassLocationField()" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
                         <option value="face-to-face">Face-to-Face</option>
                         <option value="online">Online</option>
                     </select>
@@ -1048,29 +1047,29 @@
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block font-semibold text-roast-300 uppercase mb-1">Price (RM)</label>
-                        <input type="number" step="0.01" id="input-class-price" placeholder="120.00" class="w-full bg-adminBg border border-adminBorder text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                        <input type="number" step="0.01" id="input-class-price" placeholder="120.00" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
                     </div>
                     <div>
                         <label class="block font-semibold text-roast-300 uppercase mb-1">Max Pax</label>
-                        <input type="number" id="input-class-pax" placeholder="8" class="w-full bg-adminBg border border-adminBorder text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                        <input type="number" id="input-class-pax" placeholder="8" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
                     </div>
                 </div>
 
                 <div>
                     <label class="block font-semibold text-roast-300 uppercase mb-1">Slot Date & Time</label>
-                    <input type="text" id="input-class-schedule" placeholder="e.g. Sat, 6 Sep 2026 — 10:00 AM" class="w-full bg-adminBg border border-adminBorder text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                    <input type="text" id="input-class-schedule" placeholder="e.g. Sat, 6 Sep 2026 — 10:00 AM" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
                 </div>
 
                 <!-- Face-to-Face: Location field -->
                 <div id="field-class-location">
                     <label class="block font-semibold text-roast-300 uppercase mb-1">Location</label>
-                    <input type="text" id="input-class-location-val" placeholder="e.g. Rumah Panggang Roastery, Sungai Petani, Kedah" class="w-full bg-adminBg border border-adminBorder text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                    <input type="text" id="input-class-location-val" placeholder="e.g. Nb.CA Academy, Sungai Petani, Kedah" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
                 </div>
 
                 <!-- Online: Meeting Link field -->
                 <div id="field-class-link" class="hidden">
                     <label class="block font-semibold text-roast-300 uppercase mb-1">Meeting Link</label>
-                    <input type="url" id="input-class-link-val" placeholder="e.g. https://zoom.us/j/1234567890" class="w-full bg-adminBg border border-adminBorder text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                    <input type="url" id="input-class-link-val" placeholder="e.g. https://zoom.us/j/1234567890" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
                 </div>
             </div>
             <div class="flex gap-3 pt-2">
@@ -1083,26 +1082,26 @@
     <!-- MODAL: ADD / EDIT BLOG POST -->
     <div id="blog-post-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-adminCard border border-adminBorder rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl relative space-y-6 text-roast-100 my-8">
-            <button onclick="closeBlogPostModal()" class="absolute top-5 right-5 text-roast-400 hover:text-white p-2">
+            <button onclick="closeBlogPostModal()" class="absolute top-5 right-5 text-roast-400 hover:text-roast-950 p-2">
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
             <div class="text-center space-y-1">
                 <div class="w-14 h-14 rounded-2xl bg-amberGold/20 border border-amberGold/40 text-amberGold flex items-center justify-center mx-auto text-2xl shadow">
                     <i class="fa-solid fa-newspaper"></i>
                 </div>
-                <h3 id="blog-post-modal-title" class="text-xl font-bold font-serif text-white">New Blog Post</h3>
+                <h3 id="blog-post-modal-title" class="text-xl font-bold font-serif text-roast-950">New Blog Post</h3>
                 <p class="text-xs text-roast-300">This will appear live on the customer site's Blog section</p>
             </div>
             <div class="space-y-4 text-xs">
                 <input type="hidden" id="edit-blog-id" value="">
                 <div>
                     <label class="block font-semibold text-roast-300 uppercase mb-1">Post Title</label>
-                    <input type="text" id="input-blog-title" placeholder="e.g. New Single-Origin Drop This Week" class="w-full bg-adminBg border border-adminBorder text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                    <input type="text" id="input-blog-title" placeholder="e.g. New Single-Origin Drop This Week" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block font-semibold text-roast-300 uppercase mb-1">Category</label>
-                        <select id="input-blog-category" class="w-full bg-adminBg border border-adminBorder text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                        <select id="input-blog-category" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
                             <option value="Uncategorized">Uncategorized</option>
                             <option value="Culture">Culture</option>
                             <option value="Bean">Bean</option>
@@ -1112,7 +1111,7 @@
                     </div>
                     <div>
                         <label class="block font-semibold text-roast-300 uppercase mb-1">Author</label>
-                        <input type="text" id="input-blog-author" value="RU.PA" class="w-full bg-adminBg border border-adminBorder text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                        <input type="text" id="input-blog-author" value="Nb.CA" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
                     </div>
                 </div>
                 <div>
@@ -1133,11 +1132,11 @@
                 </div>
                 <div>
                     <label class="block font-semibold text-roast-300 uppercase mb-1">Short Excerpt (shown on the card preview)</label>
-                    <textarea id="input-blog-excerpt" rows="2" placeholder="A short teaser sentence or two..." class="w-full bg-adminBg border border-adminBorder text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold"></textarea>
+                    <textarea id="input-blog-excerpt" rows="2" placeholder="A short teaser sentence or two..." class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold"></textarea>
                 </div>
                 <div>
                     <label class="block font-semibold text-roast-300 uppercase mb-1">Full Article Content</label>
-                    <textarea id="input-blog-content" rows="6" placeholder="Write the full article here. Separate paragraphs with a blank line." class="w-full bg-adminBg border border-adminBorder text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold"></textarea>
+                    <textarea id="input-blog-content" rows="6" placeholder="Write the full article here. Separate paragraphs with a blank line." class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold"></textarea>
                 </div>
             </div>
             <div class="flex gap-3 pt-2">
@@ -1149,12 +1148,12 @@
 
     <!-- TOAST NOTIFICATION -->
     <div id="admin-toast" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none">
-        <div class="bg-adminCard border border-amberGold/50 text-white px-5 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3">
+        <div class="bg-adminCard border border-amberGold/50 text-roast-950 px-5 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3">
             <div class="w-8 h-8 rounded-full bg-amberGold text-adminBg flex items-center justify-center font-bold shrink-0">
                 <i class="fa-solid fa-check text-xs"></i>
             </div>
             <div>
-                <h4 class="text-xs font-bold text-white">Admin Command Center</h4>
+                <h4 class="text-xs font-bold text-roast-950">Admin Command Center</h4>
                 <p id="admin-toast-msg" class="text-[11px] text-roast-200">Action completed successfully.</p>
             </div>
         </div>
@@ -1271,7 +1270,7 @@
                 if(t === tabId) {
                     navBtn.className = "flex items-center gap-3 px-4 py-3 rounded-xl bg-amberGold text-adminBg font-bold transition-all shadow-md";
                 } else {
-                    navBtn.className = "flex items-center gap-3 px-4 py-3 rounded-xl text-roast-300 hover:bg-adminCardHover hover:text-white transition-all";
+                    navBtn.className = "flex items-center gap-3 px-4 py-3 rounded-xl text-roast-300 hover:bg-adminCardHover hover:text-roast-950 transition-all";
                 }
 
                 const bottomBtn = document.getElementById(`bottomnav-${t}`);
@@ -1284,7 +1283,7 @@
                 }
             });
 
-            document.getElementById('page-title').innerText = 'Rumah Panggang';
+            document.getElementById('page-title').innerText = 'Nb.CA Academy';
         }
 
         // --- EDIT PROFILE MODAL FUNCTIONS ---
@@ -1383,10 +1382,10 @@
                 const newRow = document.createElement('tr');
                 newRow.className = "hover:bg-adminCardHover inventory-row";
                 newRow.innerHTML = `
-                    <td class="p-4 font-bold text-white prod-name" data-label="Product Name">${name}</td>
+                    <td class="p-4 font-bold text-roast-950 prod-name" data-label="Product Name">${name}</td>
                     <td class="p-4 text-roast-300 prod-category" data-label="Category">${category}</td>
                     <td class="p-4 text-amberGold font-serif prod-price" data-label="Price">RM ${price}</td>
-                    <td class="p-4 font-bold text-white prod-stock" data-label="Stock Units">${stock} units</td>
+                    <td class="p-4 font-bold text-roast-950 prod-stock" data-label="Stock Units">${stock} units</td>
                     <td class="p-4" data-label="Status">${statusHtml}</td>
                     <td class="p-4 text-right space-x-2" data-label="Actions">
                         <button onclick="openAddStockModal(this)" class="px-3 py-1.5 bg-adminBg border border-adminBorder text-amberGold font-bold rounded-lg shadow hover:bg-adminCardHover" title="Add Stock"><i class="fa-solid fa-plus"></i> Stock</button>
@@ -1455,7 +1454,7 @@
             activeInventoryCategory = category;
 
             document.querySelectorAll('.inv-cat-btn').forEach(btn => {
-                btn.className = "inv-cat-btn px-3.5 py-2 rounded-xl text-[11px] font-bold border border-adminBorder bg-adminBg text-roast-300 hover:text-white transition-all";
+                btn.className = "inv-cat-btn px-3.5 py-2 rounded-xl text-[11px] font-bold border border-adminBorder bg-adminBg text-roast-300 hover:text-roast-950 transition-all";
             });
             if (event && event.target) {
                 event.target.className = "inv-cat-btn px-3.5 py-2 rounded-xl text-[11px] font-bold bg-amberGold text-adminBg shadow transition-all";
@@ -1601,12 +1600,12 @@
                 if (parsedDate.month) newRow.setAttribute('data-month', parsedDate.month);
                 if (parsedDate.year) newRow.setAttribute('data-year', parsedDate.year);
                 newRow.innerHTML = `
-                    <td class="p-4 font-bold text-white class-name" data-label="Class Name">${name}</td>
+                    <td class="p-4 font-bold text-roast-950 class-name" data-label="Class Name">${name}</td>
                     <td class="p-4 whitespace-nowrap class-format" data-label="Format">${formatHtml}</td>
                     <td class="p-4 text-roast-300 whitespace-nowrap class-schedule" data-label="Schedule">${schedule}</td>
                     <td class="p-4 text-amberGold font-serif class-price" data-label="Price">RM ${price}</td>
                     <td class="p-4 text-roast-300 class-location" data-label="Location / Meeting Link">${locationHtml}</td>
-                    <td class="p-4 font-bold text-white class-pax" data-label="Max Pax">${pax} pax</td>
+                    <td class="p-4 font-bold text-roast-950 class-pax" data-label="Max Pax">${pax} pax</td>
                     <td class="p-4 text-right space-x-2" data-label="Actions">
                         <button onclick="openEditClassModal(this)" class="px-3 py-1.5 bg-adminBg border border-adminBorder text-roast-100 font-bold rounded-lg shadow hover:bg-adminCardHover" title="Edit"><i class="fa-solid fa-pen"></i></button>
                         <button onclick="deleteClassRow(this)" class="px-3 py-1.5 bg-red-500/10 text-red-400 border border-red-500/30 font-bold rounded-lg shadow hover:bg-red-500/20" title="Delete"><i class="fa-solid fa-trash"></i></button>
@@ -1667,7 +1666,7 @@
             {
                 id: "seed-1",
                 title: "New year, New Price, Same Quality.",
-                author: "RU.PA",
+                author: "Nb.CA",
                 date: "31/12/2024",
                 category: "Uncategorized",
                 image: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=800&q=80",
@@ -1677,7 +1676,7 @@
             {
                 id: "seed-2",
                 title: "What the hell is even Coffee Desk bro?",
-                author: "RU.PA",
+                author: "Nb.CA",
                 date: "18/12/2024",
                 category: "Culture",
                 image: "https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=800&q=80",
@@ -1687,7 +1686,7 @@
             {
                 id: "seed-3",
                 title: "12 Grams Supremacy: The Art of Precision in Every Brew",
-                author: "RU.PA",
+                author: "Nb.CA",
                 date: "18/12/2024",
                 category: "Bean",
                 image: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=800&q=80",
@@ -1696,13 +1695,13 @@
             },
             {
                 id: "seed-4",
-                title: "MERAH SAGA – ESPRESSO BLEND series RU.PA",
-                author: "RU.PA",
-                date: "10/12/2024",
-                category: "Bean",
-                image: "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?auto=format&fit=crop&w=800&q=80",
-                excerpt: "\u201cMerah saga represents a name and color that is familiar and deeply close to the hearts of Malaysians...\u201d",
-                content: `<blockquote class="p-4 bg-roast-950 border-l-4 border-amberGold text-amber-400 italic text-sm sm:text-base mb-4">\u201cMerah saga represents a name and color that is familiar and deeply close to the hearts of Malaysians, holding its own unique history and nostalgia.\u201d</blockquote><p class="text-roast-200 leading-relaxed font-light text-sm sm:text-base mb-4">This premium blend selection from Colombia & Brazil promises balanced notes of milk chocolate, praline, and hazelnut for your everyday coffee cup.</p>`
+                title: "Meet Our Team",
+                author: "Nb.CA",
+                date: "29/08/2026",
+                category: "Team",
+                image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&q=80",
+                excerpt: "Get to know the passionate instructors behind Nb.CA Academy — full team profiles coming soon!",
+                content: `<p class="text-roast-200 leading-relaxed font-light text-sm sm:text-base mb-4">Behind every great class is a team that genuinely loves coffee and loves teaching it. We're putting together full profiles of our instructors — their background, specialities, and what they bring to each session.</p><p class="text-roast-200 leading-relaxed font-light text-sm sm:text-base">Check back soon to meet the people who'll be guiding you from Coffee Cherry all the way to your perfect cup.</p>`
             }
         ];
 
@@ -1775,7 +1774,7 @@
                     </div>
                     <div class="p-4 space-y-2 flex-1 flex flex-col justify-between">
                         <div class="space-y-1.5">
-                            <h4 class="blog-title text-sm font-bold text-white font-serif leading-snug line-clamp-2">${post.title}</h4>
+                            <h4 class="blog-title text-sm font-bold text-roast-950 font-serif leading-snug line-clamp-2">${post.title}</h4>
                             <div class="flex items-center justify-between text-[11px] text-roast-400">
                                 <span class="truncate">${post.author}</span>
                                 <span class="shrink-0 ml-2">${post.date}</span>
@@ -1819,7 +1818,7 @@
             document.getElementById('edit-blog-id').value = "";
             document.getElementById('input-blog-title').value = "";
             document.getElementById('input-blog-category').value = "Uncategorized";
-            document.getElementById('input-blog-author').value = "RU.PA";
+            document.getElementById('input-blog-author').value = "Nb.CA";
             document.getElementById('input-blog-excerpt').value = "";
             document.getElementById('input-blog-content').value = "";
             removeBlogImage();
@@ -1860,7 +1859,7 @@
         function saveBlogPost() {
             const title = document.getElementById('input-blog-title').value.trim();
             const category = document.getElementById('input-blog-category').value;
-            const author = document.getElementById('input-blog-author').value.trim() || 'RU.PA';
+            const author = document.getElementById('input-blog-author').value.trim() || 'Nb.CA';
             const image = currentBlogImageData;
             const excerpt = document.getElementById('input-blog-excerpt').value.trim();
             const rawContent = document.getElementById('input-blog-content').value.trim();
@@ -1983,7 +1982,7 @@
 
                 const trackingDiv = activeShippingRow.querySelector('.tracking-info');
                 trackingDiv.classList.remove('hidden');
-                trackingDiv.innerHTML = `<i class="fa-solid fa-truck text-amberGold mr-1"></i> ${courier}: <strong class="text-white">${trackingNo}</strong>`;
+                trackingDiv.innerHTML = `<i class="fa-solid fa-truck text-amberGold mr-1"></i> ${courier}: <strong class="text-roast-950">${trackingNo}</strong>`;
 
                 const actionTd = activeShippingRow.querySelector('.action-btns');
                 actionTd.innerHTML = `<span class="text-[11px] text-green-400 font-bold"><i class="fa-solid fa-circle-check"></i> Shipped</span>`;
@@ -2002,7 +2001,7 @@
                     datasets: [{
                         label: 'Revenue (RM)',
                         data: chartDataSets.month.data,
-                        borderColor: '#F59E0B',
+                        borderColor: '#2563EB',
                         backgroundColor: 'rgba(245, 158, 11, 0.1)',
                         borderWidth: 3,
                         fill: true,
@@ -2014,8 +2013,8 @@
                     maintainAspectRatio: false,
                     plugins: { legend: { display: false } },
                     scales: {
-                        x: { grid: { color: 'rgba(66, 51, 43, 0.4)' }, ticks: { color: '#CFAD8F', font: { size: 10 } } },
-                        y: { grid: { color: 'rgba(66, 51, 43, 0.4)' }, ticks: { color: '#CFAD8F', font: { size: 10 } } }
+                        x: { grid: { color: 'rgba(203, 213, 225, 0.5)' }, ticks: { color: '#64748B', font: { size: 10 } } },
+                        y: { grid: { color: 'rgba(203, 213, 225, 0.5)' }, ticks: { color: '#64748B', font: { size: 10 } } }
                     }
                 }
             });
@@ -2027,7 +2026,7 @@
                     labels: ['Coffee Beans', 'Masterclass', 'Merchandise', 'Drip Bags'],
                     datasets: [{
                         data: [55, 25, 12, 8],
-                        backgroundColor: ['#F59E0B', '#3B82F6', '#10B981', '#8B5CF6'],
+                        backgroundColor: ['#2563EB', '#3B82F6', '#10B981', '#8B5CF6'],
                         borderWidth: 0
                     }]
                 },
@@ -2046,7 +2045,7 @@
                     labels: ['Gold', 'Silver', 'Bronze'],
                     datasets: [{
                         data: [28, 64, 50],
-                        backgroundColor: ['#F59E0B', '#CFAD8F', '#9E6437'],
+                        backgroundColor: ['#2563EB', '#94A3B8', '#1E40AF'],
                         borderWidth: 0
                     }]
                 },
@@ -2071,8 +2070,8 @@
                         : "px-3 py-1.5 rounded-lg bg-amberGold text-adminBg shadow transition-all";
                 } else {
                     btn.className = btn.className.includes('flex items-center gap-1.5')
-                        ? "px-3 py-1.5 rounded-lg text-roast-300 hover:text-white transition-all flex items-center gap-1.5"
-                        : "px-3 py-1.5 rounded-lg text-roast-300 hover:text-white transition-all";
+                        ? "px-3 py-1.5 rounded-lg text-roast-300 hover:text-roast-950 transition-all flex items-center gap-1.5"
+                        : "px-3 py-1.5 rounded-lg text-roast-300 hover:text-roast-950 transition-all";
                 }
             });
 
@@ -2141,8 +2140,8 @@
                 const isCustom = p === 'custom';
                 const active = isCustom && isHidden;
                 btn.className = isCustom
-                    ? (active ? "px-3 py-1.5 rounded-lg bg-amberGold text-adminBg shadow transition-all flex items-center gap-1.5" : "px-3 py-1.5 rounded-lg text-roast-300 hover:text-white transition-all flex items-center gap-1.5")
-                    : "px-3 py-1.5 rounded-lg text-roast-300 hover:text-white transition-all";
+                    ? (active ? "px-3 py-1.5 rounded-lg bg-amberGold text-adminBg shadow transition-all flex items-center gap-1.5" : "px-3 py-1.5 rounded-lg text-roast-300 hover:text-roast-950 transition-all flex items-center gap-1.5")
+                    : "px-3 py-1.5 rounded-lg text-roast-300 hover:text-roast-950 transition-all";
             });
 
             if (isHidden) {

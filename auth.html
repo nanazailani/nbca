@@ -3,7 +3,7 @@
 <head> 
     <meta charset="UTF-8"> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-    <title>Login & Register | Rumah Panggang</title> 
+    <title>Login & Register | Nb.CA Academy</title> 
     <!-- Tailwind CSS CDN --> 
     <script src="https://cdn.tailwindcss.com"></script> 
     <script> 
@@ -12,11 +12,13 @@
                 extend: { 
                     colors: { 
                         roast: { 
-                            50: '#FAF6F0', 100: '#F4EBE1', 200: '#E2CEB9', 300: '#CFAD8F', 
-                            400: '#B88760', 500: '#9E6437', 600: '#834C28', 700: '#68371C', 
-                            800: '#472210', 900: '#281107', 950: '#140803', 
+                            50: '#F8FAFC', 100: '#F1F5F9', 200: '#E2E8F0', 300: '#CBD5E1', 
+                            400: '#94A3B8', 500: '#64748B', 600: '#475569', 700: '#334155', 
+                            800: '#1E293B', 900: '#1E40AF', 950: '#172554', 
                         }, 
-                        amberGold: '#D97706', 
+                        amberGold: '#2563EB', 
+                        royalBlue: '#1E40AF', 
+                        navy: '#172554', 
                     }, 
                     fontFamily: { 
                         sans: ['Plus Jakarta Sans', 'sans-serif'], 
@@ -55,7 +57,7 @@
         } 
     </style> 
 </head> 
-<body class="bg-roast-950 text-roast-100 antialiased min-h-screen selection:bg-amberGold selection:text-white"> 
+<body class="bg-roast-50 text-roast-900 antialiased min-h-screen selection:bg-amberGold selection:text-white"> 
 
     <div class="w-full min-h-screen grid lg:grid-cols-2 relative"> 
 
@@ -64,77 +66,73 @@
         <!-- ============================================================ -->
         <div class="lg:hidden relative h-64 sm:h-72 w-full overflow-hidden"> 
             <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1200&q=80" alt="Coffee Roastery" class="absolute inset-0 w-full h-full object-cover opacity-50"> 
-            <div class="absolute inset-0 bg-gradient-to-t from-roast-950 via-roast-950/50 to-roast-950/10"></div> 
+            <div class="absolute inset-0 bg-gradient-to-t from-roast-50 via-roast-50/50 to-roast-50/10"></div> 
 
             <!-- Top bar: logo + home button --> 
             <div class="relative z-10 flex items-center justify-between p-5"> 
                 <a href="index.html" class="flex items-center gap-2.5 group"> 
-                    <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-amberGold to-roast-500 flex items-center justify-center shadow-lg"> 
-                        <i class="fa-solid fa-fire-burner text-roast-950 text-sm"></i> 
-                    </div> 
-                    <span class="font-serif text-base font-extrabold tracking-wider text-white uppercase">Rumah Panggang</span> 
+                    <img src="images/logo.png" alt="Nb.CA Academy Logo" class="w-10 h-10 object-contain"> 
+                    <span class="font-serif text-base font-extrabold tracking-wider text-roast-950 uppercase">Nb.CA Academy</span> 
                 </a> 
-                <a href="index.html" class="w-9 h-9 rounded-full bg-roast-950/60 hover:bg-roast-950 border border-roast-700/60 text-roast-300 hover:text-amberGold text-xs flex items-center justify-center transition-all backdrop-blur-sm"> 
+                <a href="index.html" class="w-9 h-9 rounded-full bg-roast-50/60 hover:bg-roast-50 border border-roast-300/60 text-roast-700 hover:text-amberGold text-xs flex items-center justify-center transition-all backdrop-blur-sm"> 
                     <i class="fa-solid fa-house"></i> 
                 </a> 
             </div> 
 
             <!-- Bottom quote text --> 
             <div class="absolute bottom-5 left-5 right-5 z-10 space-y-1.5"> 
-                <span class="inline-block px-2.5 py-1 bg-amberGold/15 text-amberGold rounded-full text-[10px] font-semibold uppercase tracking-wider border border-amberGold/25">Artisanal Roastery</span> 
-                <h1 class="text-xl sm:text-2xl font-extrabold text-white font-serif leading-tight">Crafted with passion, roasted to perfection.</h1> 
+                <span class="inline-block px-2.5 py-1 bg-amberGold/15 text-amberGold rounded-full text-[10px] font-semibold uppercase tracking-wider border border-amberGold/25">Coffee Education Academy</span> 
+                <h1 class="text-xl sm:text-2xl font-extrabold text-roast-950 font-serif leading-tight">Master your craft, brew by brew.</h1> 
             </div> 
         </div> 
 
         <!-- ============================================================ -->
         <!-- DESKTOP-ONLY LEFT COLUMN — visible only at lg breakpoint and up --> 
         <!-- ============================================================ -->
-        <div class="relative hidden lg:flex flex-col justify-between p-12 bg-roast-900 overflow-hidden border-r border-roast-800"> 
+        <div class="relative hidden lg:flex flex-col justify-between p-12 bg-roast-100 overflow-hidden border-r border-roast-200"> 
             <!-- Background Image with Dark Gradient Overlay --> 
             <div class="absolute inset-0 z-0"> 
-                <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1200&q=80" alt="Coffee Roastery" class="w-full h-full object-cover opacity-40 scale-105 transform hover:scale-100 transition-transform duration-1000"> 
-                <div class="absolute inset-0 bg-gradient-to-t from-roast-950 via-roast-950/60 to-transparent"></div> 
+                <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1200&q=80" alt="Coffee Roastery" class="w-full h-full object-cover opacity-75 scale-105 transform hover:scale-100 transition-transform duration-1000"> 
+                <div class="absolute inset-0 bg-gradient-to-t from-roast-50 via-roast-50/60 to-transparent"></div> 
             </div> 
 
             <!-- Top Brand Logo & Back to Home Link --> 
             <div class="relative z-10 flex items-center justify-between"> 
                 <a href="index.html" class="flex items-center gap-3 group"> 
-                    <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-amberGold to-roast-500 flex items-center justify-center shadow-lg"> 
-                        <i class="fa-solid fa-fire-burner text-roast-950 text-lg"></i> 
-                    </div> 
-                    <span class="font-serif text-xl font-extrabold tracking-wider text-white uppercase">Rumah Panggang</span> 
+                    <img src="images/logo.png" alt="Nb.CA Academy Logo" class="w-12 h-12 object-contain group-hover:scale-105 transition-transform"> 
+                    <span class="font-serif text-xl font-extrabold tracking-wider text-roast-950 uppercase">Nb.CA Academy</span> 
                 </a> 
-                <a href="index.html" class="px-3.5 py-2 rounded-xl bg-roast-950/60 hover:bg-roast-950 border border-roast-700/60 text-roast-300 hover:text-amberGold text-xs font-semibold transition-all flex items-center gap-2 backdrop-blur-sm"> 
+                <a href="index.html" class="px-3.5 py-2 rounded-xl bg-roast-50/60 hover:bg-roast-50 border border-roast-300/60 text-roast-700 hover:text-amberGold text-xs font-semibold transition-all flex items-center gap-2 backdrop-blur-sm"> 
                     <i class="fa-solid fa-house"></i> Home 
                 </a> 
             </div> 
 
             <!-- Middle Quote / Welcome Text --> 
             <div class="relative z-10 space-y-4 max-w-lg my-auto"> 
-                <span class="px-3 py-1 bg-amberGold/10 text-amberGold rounded-full text-xs font-semibold uppercase tracking-wider border border-amberGold/20">Artisanal Roastery</span> 
-                <h1 class="text-4xl sm:text-5xl font-extrabold text-white font-serif leading-tight">Crafted with passion, roasted to perfection.</h1> 
-                <p class="text-xs text-roast-300 font-light leading-relaxed">Join our exclusive member portal to track your artisanal coffee orders, secure merchandise, and book professional masterclasses in Sungai Petani.</p> 
+                <span class="px-3 py-1 bg-amberGold/10 text-amberGold rounded-full text-xs font-semibold uppercase tracking-wider border border-amberGold/20">Coffee Education Academy</span> 
+                <h1 class="text-4xl sm:text-5xl font-extrabold text-roast-950 font-serif leading-tight">Master your craft, brew by brew.</h1> 
+                <p class="text-xs text-roast-700 font-light leading-relaxed">Join our member portal to track your class bookings, manage your coffee bean orders, and access exclusive academy perks in Sungai Petani.</p> 
             </div> 
 
             <!-- Footer Copyright --> 
-            <div class="relative z-10 text-xs text-roast-400"> 
-                <p>© 2026 Rumah Panggang. All rights reserved.</p> 
+            <div class="relative z-10 text-xs text-roast-600"> 
+                <p>© 2026 Nb.CA Academy. All rights reserved.</p> 
             </div> 
         </div> 
 
         <!-- ============================================================ -->
         <!-- RIGHT COLUMN — the login/register form card, shared by both mobile & desktop --> 
         <!-- ============================================================ -->
-        <div class="flex flex-col justify-center items-center px-6 sm:px-12 pb-10 pt-6 lg:pt-12 bg-roast-950 relative -mt-6 lg:mt-0 rounded-t-[28px] lg:rounded-none border-t border-roast-900 lg:border-t-0 z-10 anim-fade-up"> 
+        <div class="flex flex-col justify-center items-center px-6 sm:px-10 pb-10 pt-6 lg:pt-12 relative -mt-6 lg:mt-0 rounded-t-[28px] lg:rounded-none border-t border-roast-100 lg:border-t-0 z-10 anim-fade-up overflow-hidden" style="background-color: #F8FAFC; background-image: radial-gradient(circle at 15% 10%, rgba(37,99,235,0.07) 0%, transparent 35%), radial-gradient(circle at 90% 90%, rgba(30,64,175,0.06) 0%, transparent 40%);"> 
 
             <div class="w-full max-w-md space-y-6 pt-6 lg:pt-0"> 
 
                 <!-- Tab Switcher Header --> 
-                <div class="flex bg-roast-900/80 p-1.5 rounded-2xl border border-roast-800"> 
-                    <button onclick="switchTab('login')" id="tab-login" class="flex-1 py-2.5 rounded-xl text-xs font-bold transition-all bg-amberGold text-roast-950 shadow"> 
+                <div class="flex bg-roast-100/80 p-1.5 rounded-2xl border border-roast-200"> 
+                    <button onclick="switchTab('login')" id="tab-login" class="flex-1 py-2.5 rounded-xl text-xs font-bold transition-all bg-amberGold text-roast-50 shadow"> 
                         Member Login 
                     </button> 
-                    <button onclick="switchTab('register')" id="tab-register" class="flex-1 py-2.5 rounded-xl text-xs font-bold transition-all text-roast-300 hover:text-white"> 
+                    <button onclick="switchTab('register')" id="tab-register" class="flex-1 py-2.5 rounded-xl text-xs font-bold transition-all text-roast-700 hover:text-roast-950"> 
                         Create Account 
                     </button> 
                 </div> 
@@ -148,26 +146,26 @@
                 <!-- LOGIN FORM --> 
                 <div id="form-login-container" class="space-y-4"> 
                     <div class="space-y-1"> 
-                        <h2 class="text-2xl font-bold font-serif text-white">Welcome Back</h2> 
-                        <p class="text-xs text-roast-400">Please enter your credentials to access your portal.</p> 
+                        <h2 class="text-2xl font-bold font-serif text-roast-950">Welcome Back</h2> 
+                        <p class="text-xs text-roast-600">Please enter your credentials to access your portal.</p> 
                     </div> 
 
                     <form onsubmit="handleLogin(event)" class="space-y-4"> 
                         <div> 
-                            <label class="block text-xs font-semibold text-roast-300 uppercase mb-1">Email Address</label> 
+                            <label class="block text-xs font-semibold text-roast-700 uppercase mb-1">Email Address</label> 
                             <div class="relative"> 
-                                <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-roast-400"><i class="fa-solid fa-envelope text-xs"></i></span> 
-                                <input type="email" id="login-email" required placeholder="name@example.com" class="w-full bg-roast-900/90 border border-roast-800 text-white rounded-xl pl-10 pr-4 py-3 text-xs focus:outline-none focus:border-amberGold transition-all"> 
+                                <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-roast-600"><i class="fa-solid fa-envelope text-xs"></i></span> 
+                                <input type="email" id="login-email" required placeholder="name@example.com" class="w-full bg-roast-100/90 border border-roast-200 text-roast-950 rounded-xl pl-10 pr-4 py-3 text-xs focus:outline-none focus:border-amberGold transition-all"> 
                             </div> 
                         </div> 
                         <div> 
-                            <label class="block text-xs font-semibold text-roast-300 uppercase mb-1">Password</label> 
+                            <label class="block text-xs font-semibold text-roast-700 uppercase mb-1">Password</label> 
                             <div class="relative"> 
-                                <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-roast-400"><i class="fa-solid fa-lock text-xs"></i></span> 
-                                <input type="password" id="login-password" required placeholder="••••••••" class="w-full bg-roast-900/90 border border-roast-800 text-white rounded-xl pl-10 pr-4 py-3 text-xs focus:outline-none focus:border-amberGold transition-all"> 
+                                <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-roast-600"><i class="fa-solid fa-lock text-xs"></i></span> 
+                                <input type="password" id="login-password" required placeholder="••••••••" class="w-full bg-roast-100/90 border border-roast-200 text-roast-950 rounded-xl pl-10 pr-4 py-3 text-xs focus:outline-none focus:border-amberGold transition-all"> 
                             </div> 
                         </div> 
-                        <button type="submit" class="btn-anim w-full py-3.5 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl text-xs transition-all shadow-lg uppercase tracking-wider"> 
+                        <button type="submit" class="btn-anim w-full py-3.5 bg-amberGold hover:bg-royalBlue text-roast-50 font-bold rounded-xl text-xs transition-all shadow-lg uppercase tracking-wider"> 
                             Login to Portal 
                         </button> 
                     </form> 
@@ -176,41 +174,41 @@
                 <!-- REGISTER FORM --> 
                 <div id="form-register-container" class="space-y-4 hidden"> 
                     <div class="space-y-1"> 
-                        <h2 class="text-2xl font-bold font-serif text-white">Join Our Community</h2> 
-                        <p class="text-xs text-roast-400">Create your member account to begin ordering coffee & classes.</p> 
+                        <h2 class="text-2xl font-bold font-serif text-roast-950">Join Our Community</h2> 
+                        <p class="text-xs text-roast-600">Create your member account to begin ordering coffee & classes.</p> 
                     </div> 
 
                     <form onsubmit="handleRegister(event)" class="space-y-4"> 
                         <div> 
-                            <label class="block text-xs font-semibold text-roast-300 uppercase mb-1">Full Name</label> 
+                            <label class="block text-xs font-semibold text-roast-700 uppercase mb-1">Full Name</label> 
                             <div class="relative"> 
-                                <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-roast-400"><i class="fa-solid fa-user text-xs"></i></span> 
-                                <input type="text" id="reg-name" required placeholder="Nana Zailani" class="w-full bg-roast-900/90 border border-roast-800 text-white rounded-xl pl-10 pr-4 py-3 text-xs focus:outline-none focus:border-amberGold transition-all"> 
+                                <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-roast-600"><i class="fa-solid fa-user text-xs"></i></span> 
+                                <input type="text" id="reg-name" required placeholder="Nana Zailani" class="w-full bg-roast-100/90 border border-roast-200 text-roast-950 rounded-xl pl-10 pr-4 py-3 text-xs focus:outline-none focus:border-amberGold transition-all"> 
                             </div> 
                         </div> 
                         <div> 
-                            <label class="block text-xs font-semibold text-roast-300 uppercase mb-1">Email Address</label> 
+                            <label class="block text-xs font-semibold text-roast-700 uppercase mb-1">Email Address</label> 
                             <div class="relative"> 
-                                <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-roast-400"><i class="fa-solid fa-envelope text-xs"></i></span> 
-                                <input type="email" id="reg-email" required placeholder="name@example.com" class="w-full bg-roast-900/90 border border-roast-800 text-white rounded-xl pl-10 pr-4 py-3 text-xs focus:outline-none focus:border-amberGold transition-all"> 
+                                <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-roast-600"><i class="fa-solid fa-envelope text-xs"></i></span> 
+                                <input type="email" id="reg-email" required placeholder="name@example.com" class="w-full bg-roast-100/90 border border-roast-200 text-roast-950 rounded-xl pl-10 pr-4 py-3 text-xs focus:outline-none focus:border-amberGold transition-all"> 
                             </div> 
                         </div> 
                         <div> 
-                            <label class="block text-xs font-semibold text-roast-300 uppercase mb-1">Password</label> 
+                            <label class="block text-xs font-semibold text-roast-700 uppercase mb-1">Password</label> 
                             <div class="relative"> 
-                                <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-roast-400"><i class="fa-solid fa-lock text-xs"></i></span> 
-                                <input type="password" id="reg-password" required placeholder="••••••••" class="w-full bg-roast-900/90 border border-roast-800 text-white rounded-xl pl-10 pr-4 py-3 text-xs focus:outline-none focus:border-amberGold transition-all"> 
+                                <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-roast-600"><i class="fa-solid fa-lock text-xs"></i></span> 
+                                <input type="password" id="reg-password" required placeholder="••••••••" class="w-full bg-roast-100/90 border border-roast-200 text-roast-950 rounded-xl pl-10 pr-4 py-3 text-xs focus:outline-none focus:border-amberGold transition-all"> 
                             </div> 
                         </div> 
-                        <button type="submit" class="btn-anim w-full py-3.5 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl text-xs transition-all shadow-lg uppercase tracking-wider"> 
+                        <button type="submit" class="btn-anim w-full py-3.5 bg-amberGold hover:bg-royalBlue text-roast-50 font-bold rounded-xl text-xs transition-all shadow-lg uppercase tracking-wider"> 
                             Register Account 
                         </button> 
                     </form> 
                 </div> 
 
                 <!-- Admin Link Shortcut --> 
-                <div class="text-center pt-4 border-t border-roast-900"> 
-                    <a href="admin-login.html" class="text-xs text-roast-400 hover:text-amberGold transition-colors flex items-center justify-center gap-1.5"> 
+                <div class="text-center pt-4 border-t border-roast-100"> 
+                    <a href="admin-login.html" class="text-xs text-roast-600 hover:text-amberGold transition-colors flex items-center justify-center gap-1.5"> 
                         <i class="fa-solid fa-shield-halved"></i> Administrator Login Portal 
                     </a> 
                 </div> 
@@ -232,13 +230,13 @@
             if (tab === 'login') { 
                 loginContainer.classList.remove('hidden'); 
                 registerContainer.classList.add('hidden'); 
-                tabLogin.className = "flex-1 py-2.5 rounded-xl text-xs font-bold transition-all bg-amberGold text-roast-950 shadow"; 
-                tabRegister.className = "flex-1 py-2.5 rounded-xl text-xs font-bold transition-all text-roast-300 hover:text-white"; 
+                tabLogin.className = "flex-1 py-2.5 rounded-xl text-xs font-bold transition-all bg-amberGold text-roast-50 shadow"; 
+                tabRegister.className = "flex-1 py-2.5 rounded-xl text-xs font-bold transition-all text-roast-700 hover:text-roast-950"; 
             } else { 
                 loginContainer.classList.add('hidden'); 
                 registerContainer.classList.remove('hidden'); 
-                tabRegister.className = "flex-1 py-2.5 rounded-xl text-xs font-bold transition-all bg-amberGold text-roast-950 shadow"; 
-                tabLogin.className = "flex-1 py-2.5 rounded-xl text-xs font-bold transition-all text-roast-300 hover:text-white"; 
+                tabRegister.className = "flex-1 py-2.5 rounded-xl text-xs font-bold transition-all bg-amberGold text-roast-50 shadow"; 
+                tabLogin.className = "flex-1 py-2.5 rounded-xl text-xs font-bold transition-all text-roast-700 hover:text-roast-950"; 
             } 
         } 
 
@@ -297,7 +295,7 @@
                     window.location.href = 'dashboard.html'; 
                 }, 1000); 
             } else { 
-                if (!savedUser && email === 'member@rumahpanggang.com' && password === '123456') { 
+                if (!savedUser && email === 'member@nbca.academy' && password === '123456') { 
                     const demoUser = { name: 'Nana Zailani', email: email }; 
                     localStorage.setItem('rp_user', JSON.stringify(demoUser)); 
                     localStorage.setItem('rp_logged_user', JSON.stringify(demoUser)); 

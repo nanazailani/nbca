@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Member Dashboard | Rumah Panggang</title>
+    <title>Member Dashboard | Nb.CA Academy</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -11,19 +11,21 @@
                 extend: {
                     colors: {
                         roast: {
-                            50: '#FAF6F0',
-                            100: '#F4EBE1',
-                            200: '#E2CEB9',
-                            300: '#CFAD8F',
-                            400: '#B88760',
-                            500: '#9E6437',
-                            600: '#834C28',
-                            700: '#68371C',
-                            800: '#472210',
-                            900: '#281107',
-                            950: '#140803',
+                            50: '#F8FAFC',
+                            100: '#F1F5F9',
+                            200: '#E2E8F0',
+                            300: '#CBD5E1',
+                            400: '#94A3B8',
+                            500: '#64748B',
+                            600: '#475569',
+                            700: '#334155',
+                            800: '#1E293B',
+                            900: '#1E40AF',
+                            950: '#172554',
                         },
-                        amberGold: '#D97706',
+                        amberGold: '#2563EB',
+                        royalBlue: '#1E40AF',
+                        navy: '#172554',
                     },
                     fontFamily: {
                         sans: ['Plus Jakarta Sans', 'sans-serif'],
@@ -47,44 +49,42 @@
         }
     </style>
 </head>
-<body class="bg-roast-950 text-roast-100 antialiased selection:bg-amberGold selection:text-white">
+<body class="bg-roast-50 text-roast-900 antialiased selection:bg-amberGold selection:text-white">
 
-    <nav class="fixed top-0 left-0 right-0 z-50 bg-roast-950/90 backdrop-blur-md border-b border-roast-900 transition-all duration-300" id="navbar">
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-roast-50/90 backdrop-blur-md border-b border-roast-100 transition-all duration-300" id="navbar">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
                 <a href="index.html" class="flex items-center gap-3 group">
-                    <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-amberGold to-roast-500 flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
-                        <i class="fa-solid me-0 fa-fire-burner text-roast-950 text-lg"></i>
-                    </div>
+                    <img src="images/logo.png" alt="Nb.CA Academy Logo" class="w-12 h-12 object-contain group-hover:scale-105 transition-transform">
                     <div class="flex flex-col">
-                        <span class="font-serif text-xl font-extrabold tracking-wider text-white uppercase">Rumah Panggang</span>
+                        <span class="font-serif text-xl font-extrabold tracking-wider text-roast-950 uppercase">Nb.CA Academy</span>
                         <span class="text-[10px] tracking-widest text-amberGold uppercase">Member Portal</span>
                     </div>
                 </a>
 
                 <div class="hidden md:flex items-center space-x-8 text-sm font-medium">
                     <a href="index.html" class="text-amberGold font-bold hover:underline transition-colors">Home</a>
-                    <a href="orders.html" class="text-roast-200 hover:text-amberGold transition-colors"><i class="fa-solid fa-box-open me-1"></i> My Orders</a>
+                    <a href="orders.html" class="text-roast-800 hover:text-amberGold transition-colors"><i class="fa-solid fa-box-open me-1"></i> My Orders</a>
                 </div>
 
                 <!-- On mobile only Profile + Logout stay here; Membership/Cart/Wishlist move to the bottom nav bar. -->
                 <div class="flex items-center gap-2.5">
-                    <a href="membership.html" class="hidden md:flex relative w-10 h-10 rounded-full bg-roast-900 hover:bg-roast-800 border border-roast-800 text-amberGold items-center justify-center transition-all shadow-md" title="Membership Points">
+                    <a href="membership.html" class="hidden md:flex relative w-10 h-10 rounded-full bg-roast-100 hover:bg-roast-200 border border-roast-200 text-amberGold items-center justify-center transition-all shadow-md" title="Membership Points">
                         <i class="fa-solid fa-bag-shopping text-base"></i>
-                        <span class="absolute -top-1 -right-1 bg-amberGold text-roast-950 text-[9px] font-extrabold px-1.5 py-0.5 rounded-full shadow">350</span>
+                        <span class="absolute -top-1 -right-1 bg-amberGold text-roast-50 text-[9px] font-extrabold px-1.5 py-0.5 rounded-full shadow">350</span>
                     </a>
-                    <button onclick="toggleCart(true)" class="hidden md:flex relative w-10 h-10 rounded-full bg-roast-900 hover:bg-roast-800 border border-roast-800 text-amberGold items-center justify-center transition-all shadow-md" title="Shopping Cart">
+                    <button onclick="toggleCart(true)" class="hidden md:flex relative w-10 h-10 rounded-full bg-roast-100 hover:bg-roast-200 border border-roast-200 text-amberGold items-center justify-center transition-all shadow-md" title="Shopping Cart">
                         <i class="fa-solid fa-cart-shopping text-base"></i>
-                        <span id="cart-count" class="absolute -top-1 -right-1 bg-amberGold text-roast-950 text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow">0</span>
+                        <span id="cart-count" class="absolute -top-1 -right-1 bg-amberGold text-roast-50 text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow">0</span>
                     </button>
-                    <button onclick="toggleWishlistDrawer()" class="hidden md:flex relative w-10 h-10 rounded-full bg-roast-900 hover:bg-roast-800 border border-roast-800 text-amberGold items-center justify-center transition-all shadow-md" title="View Wishlist">
+                    <button onclick="toggleWishlistDrawer()" class="hidden md:flex relative w-10 h-10 rounded-full bg-roast-100 hover:bg-roast-200 border border-roast-200 text-amberGold items-center justify-center transition-all shadow-md" title="View Wishlist">
                         <i class="fa-solid fa-heart text-base"></i>
-                        <span id="wishlist-count" class="absolute -top-1 -right-1 bg-amberGold text-roast-950 text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow">0</span>
+                        <span id="wishlist-count" class="absolute -top-1 -right-1 bg-amberGold text-roast-50 text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow">0</span>
                     </button>
-                    <button onclick="openProfileModal()" class="w-10 h-10 rounded-full bg-roast-900 hover:bg-roast-800 border border-roast-800 text-amberGold flex items-center justify-center transition-all shadow-md" title="Edit Profile">
+                    <button onclick="openProfileModal()" class="w-10 h-10 rounded-full bg-roast-100 hover:bg-roast-200 border border-roast-200 text-amberGold flex items-center justify-center transition-all shadow-md" title="Edit Profile">
                         <i class="fa-solid fa-user text-base"></i>
                     </button>
-                    <button onclick="logoutUser()" class="px-3 sm:px-3.5 py-2 rounded-full bg-roast-900 hover:bg-red-950/40 border border-roast-700 text-roast-300 hover:text-red-400 text-xs font-semibold transition-all">
+                    <button onclick="logoutUser()" class="px-3 sm:px-3.5 py-2 rounded-full bg-roast-100 hover:bg-red-950/40 border border-roast-300 text-roast-700 hover:text-red-400 text-xs font-semibold transition-all">
                         <i class="fa-solid fa-right-from-bracket"></i> <span class="hidden sm:inline">Logout</span>
                     </button>
                 </div>
@@ -95,78 +95,78 @@
     <!-- ============================================================ -->
     <!-- BOTTOM NAVIGATION (Mobile & Tablet only) -->
     <!-- ============================================================ -->
-    <nav id="bottom-nav" class="md:hidden fixed bottom-0 inset-x-0 z-50 bg-roast-950 border-t border-roast-900 flex items-stretch justify-around shadow-[0_-8px_24px_rgba(0,0,0,0.35)]" style="padding-bottom: env(safe-area-inset-bottom);">
+    <nav id="bottom-nav" class="md:hidden fixed bottom-0 inset-x-0 z-50 bg-roast-50 border-t border-roast-100 flex items-stretch justify-around shadow-[0_-8px_24px_rgba(0,0,0,0.35)]" style="padding-bottom: env(safe-area-inset-bottom);">
         <a href="index.html" class="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-amberGold transition-all">
             <i class="fa-solid fa-house text-base"></i>
             <span class="text-[10px] font-bold">Home</span>
         </a>
-        <a href="orders.html" class="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-roast-400 transition-all">
+        <a href="orders.html" class="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-roast-600 transition-all">
             <i class="fa-solid fa-box-open text-base"></i>
             <span class="text-[10px] font-bold">Orders</span>
         </a>
-        <a href="membership.html" class="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-roast-400 transition-all">
+        <a href="membership.html" class="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-roast-600 transition-all">
             <i class="fa-solid fa-coins text-base"></i>
             <span class="text-[10px] font-bold">Points</span>
         </a>
-        <button onclick="toggleWishlistDrawer()" class="relative flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-roast-400 transition-all">
+        <button onclick="toggleWishlistDrawer()" class="relative flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-roast-600 transition-all">
             <span class="relative">
                 <i class="fa-solid fa-heart text-base"></i>
-                <span id="bottomnav-wishlist-count" class="absolute -top-1.5 -right-2.5 bg-amberGold text-roast-950 text-[9px] font-extrabold w-4 h-4 rounded-full flex items-center justify-center shadow">0</span>
+                <span id="bottomnav-wishlist-count" class="absolute -top-1.5 -right-2.5 bg-amberGold text-roast-50 text-[9px] font-extrabold w-4 h-4 rounded-full flex items-center justify-center shadow">0</span>
             </span>
             <span class="text-[10px] font-bold">Wishlist</span>
         </button>
-        <button onclick="toggleCart(true)" class="relative flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-roast-400 transition-all">
+        <button onclick="toggleCart(true)" class="relative flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-roast-600 transition-all">
             <span class="relative">
                 <i class="fa-solid fa-cart-shopping text-base"></i>
-                <span id="bottomnav-cart-count" class="absolute -top-1.5 -right-2.5 bg-amberGold text-roast-950 text-[9px] font-extrabold w-4 h-4 rounded-full flex items-center justify-center shadow">0</span>
+                <span id="bottomnav-cart-count" class="absolute -top-1.5 -right-2.5 bg-amberGold text-roast-50 text-[9px] font-extrabold w-4 h-4 rounded-full flex items-center justify-center shadow">0</span>
             </span>
             <span class="text-[10px] font-bold">Cart</span>
         </button>
     </nav>
 
-    <section class="relative pt-36 pb-24 overflow-hidden border-b border-roast-900 flex items-center justify-center">
+    <section class="relative pt-36 pb-24 overflow-hidden border-b border-roast-100 flex items-center justify-center">
         <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover z-0">
             <source src="video/background.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
-        <div class="absolute inset-0 bg-roast-950/75 z-10"></div>
+        <div class="absolute inset-0 bg-roast-50/75 z-10"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 w-full text-center md:text-left">
             <div class="space-y-3">
-                <h1 id="hero-welcome-title" class="text-3xl sm:text-5xl font-extrabold text-white font-serif">Hello, Member!</h1>
-                <p class="text-xs sm:text-sm text-roast-300 font-light max-w-xl">Welcome back to your portal. Browse our signature coffee beans, exclusive merchandise, and professional roasting classes below.</p>
+                <h1 id="hero-welcome-title" class="text-3xl sm:text-5xl font-extrabold text-roast-950 font-serif">Hello, Member!</h1>
+                <p class="text-xs sm:text-sm text-roast-700 font-light max-w-xl">Welcome back to your portal. Browse your upcoming classes, track orders, and manage your coffee bean stash below.</p>
             </div>
         </div>
     </section>
 
-    <main class="pt-20 pb-32 md:pb-20 bg-roast-950">
+    <main class="pt-20 pb-32 md:pb-20 bg-roast-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
             <div>
                 <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Member Portal Hub</span>
-                <h2 class="text-3xl font-extrabold text-white mt-1">At A Glance</h2>
+                <h2 class="text-3xl font-extrabold text-roast-950 mt-1">At A Glance</h2>
             </div>
             
             <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <!-- Shop Coffee Beans CTA -->
-                <div class="bg-gradient-to-br from-amberGold/20 to-roast-900/80 rounded-2xl p-6 border border-amberGold/40 space-y-4 hover:border-amberGold/70 transition-all flex flex-col justify-between">
+                <div class="bg-gradient-to-br from-amberGold/20 to-roast-100/80 rounded-2xl p-6 border border-amberGold/40 space-y-4 hover:border-amberGold/70 transition-all flex flex-col justify-between">
                     <div class="space-y-3">
                         <div class="flex items-center justify-between">
-                            <div class="w-11 h-11 rounded-xl bg-amberGold text-roast-950 flex items-center justify-center text-lg shadow-md">
+                            <div class="w-11 h-11 rounded-xl bg-amberGold text-roast-50 flex items-center justify-center text-lg shadow-md">
                                 <i class="fa-solid fa-mug-hot"></i>
                             </div>
-                            <span class="px-2.5 py-1 bg-amberGold text-roast-950 text-[10px] font-bold rounded-full">Order Now</span>
+                            <span class="px-2.5 py-1 bg-amberGold text-roast-50 text-[10px] font-bold rounded-full">Order Now</span>
                         </div>
                         <div>
-                            <h3 class="text-base font-bold text-white font-serif">Craving Fresh Beans?</h3>
-                            <p class="text-xs text-roast-300 mt-0.5">Browse our in-house roasted single origin & Series RU.PA blends.</p>
+                            <h3 class="text-base font-bold text-roast-950 font-serif">Craving Fresh Beans?</h3>
+                            <p class="text-xs text-roast-700 mt-0.5">Browse our in-house roasted single origin & Series RU.PA blends.</p>
                         </div>
                     </div>
-                    <a href="index.html#coffee-beans" class="inline-flex items-center justify-between py-2.5 px-4 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl text-xs transition-all shadow">
+                    <a href="index.html#coffee-beans" class="inline-flex items-center justify-between py-2.5 px-4 bg-amberGold hover:bg-royalBlue text-roast-50 font-bold rounded-xl text-xs transition-all shadow">
                         Shop Coffee Beans <i class="fa-solid fa-arrow-right text-[10px]"></i>
                     </a>
                 </div>
 
                 <!-- Latest Order Snapshot -->
-                <div class="bg-roast-900/80 rounded-2xl p-6 border border-roast-800 space-y-4 hover:border-amberGold/50 transition-all flex flex-col justify-between">
+                <div class="bg-roast-100/80 rounded-2xl p-6 border border-roast-200 space-y-4 hover:border-amberGold/50 transition-all flex flex-col justify-between">
                     <div class="space-y-3">
                         <div class="flex items-center justify-between">
                             <div class="w-11 h-11 rounded-xl bg-amberGold/20 text-amberGold flex items-center justify-center text-lg">
@@ -175,17 +175,17 @@
                             <span class="px-2.5 py-1 bg-amberGold/15 text-amberGold text-[10px] font-bold rounded-full">Awaiting Payment</span>
                         </div>
                         <div>
-                            <h3 class="text-base font-bold text-white font-serif">Order #ORD1001</h3>
-                            <p class="text-xs text-roast-400 mt-0.5">3 items · RM 2,040.00 · 9 Aug 2026</p>
+                            <h3 class="text-base font-bold text-roast-950 font-serif">Order #ORD1001</h3>
+                            <p class="text-xs text-roast-600 mt-0.5">3 items · RM 2,040.00 · 9 Aug 2026</p>
                         </div>
                     </div>
-                    <a href="orders.html" class="inline-flex items-center justify-between py-2.5 px-4 bg-roast-950 hover:bg-roast-800 border border-roast-800 text-roast-100 font-bold rounded-xl text-xs transition-all">
+                    <a href="orders.html" class="inline-flex items-center justify-between py-2.5 px-4 bg-roast-50 hover:bg-roast-200 border border-roast-200 text-roast-900 font-bold rounded-xl text-xs transition-all">
                         Track Order <i class="fa-solid fa-arrow-right text-[10px]"></i>
                     </a>
                 </div>
 
                 <!-- Membership Points Snapshot -->
-                <div class="bg-roast-900/80 rounded-2xl p-6 border border-roast-800 space-y-4 hover:border-amberGold/50 transition-all flex flex-col justify-between">
+                <div class="bg-roast-100/80 rounded-2xl p-6 border border-roast-200 space-y-4 hover:border-amberGold/50 transition-all flex flex-col justify-between">
                     <div class="space-y-3">
                         <div class="flex items-center justify-between">
                             <div class="w-11 h-11 rounded-xl bg-amberGold/20 text-amberGold flex items-center justify-center text-lg">
@@ -194,17 +194,17 @@
                             <span class="px-2.5 py-1 bg-amberGold/15 text-amberGold text-[10px] font-bold rounded-full">Gold Tier</span>
                         </div>
                         <div>
-                            <h3 class="text-2xl font-extrabold text-white font-serif">350 <span class="text-xs font-medium text-roast-400">points</span></h3>
-                            <p class="text-xs text-roast-400 mt-0.5">150 more points to redeem Free Delivery</p>
+                            <h3 class="text-2xl font-extrabold text-roast-950 font-serif">350 <span class="text-xs font-medium text-roast-600">points</span></h3>
+                            <p class="text-xs text-roast-600 mt-0.5">150 more points to redeem Free Delivery</p>
                         </div>
                     </div>
-                    <a href="membership.html" class="inline-flex items-center justify-between py-2.5 px-4 bg-roast-950 hover:bg-roast-800 border border-roast-800 text-roast-100 font-bold rounded-xl text-xs transition-all">
+                    <a href="membership.html" class="inline-flex items-center justify-between py-2.5 px-4 bg-roast-50 hover:bg-roast-200 border border-roast-200 text-roast-900 font-bold rounded-xl text-xs transition-all">
                         Redeem Rewards <i class="fa-solid fa-arrow-right text-[10px]"></i>
                     </a>
                 </div>
 
                 <!-- Upcoming Class Snapshot -->
-                <div class="bg-roast-900/80 rounded-2xl p-6 border border-roast-800 space-y-4 hover:border-amberGold/50 transition-all flex flex-col justify-between">
+                <div class="bg-roast-100/80 rounded-2xl p-6 border border-roast-200 space-y-4 hover:border-amberGold/50 transition-all flex flex-col justify-between">
                     <div class="space-y-3">
                         <div class="flex items-center justify-between">
                             <div class="w-11 h-11 rounded-xl bg-amberGold/20 text-amberGold flex items-center justify-center text-lg">
@@ -213,11 +213,11 @@
                             <span class="px-2.5 py-1 bg-blue-500/15 text-blue-300 text-[10px] font-bold rounded-full">Confirmed</span>
                         </div>
                         <div>
-                            <h3 class="text-base font-bold text-white font-serif">Coffee Brewing Masterclass</h3>
-                            <p class="text-xs text-roast-400 mt-0.5">Saturday, 10:00 AM · Sungai Petani Roastery</p>
+                            <h3 class="text-base font-bold text-roast-950 font-serif">Coffee Brewing Masterclass</h3>
+                            <p class="text-xs text-roast-600 mt-0.5">Saturday, 10:00 AM · Sungai Petani Roastery</p>
                         </div>
                     </div>
-                    <a href="orders.html" class="inline-flex items-center justify-between py-2.5 px-4 bg-roast-950 hover:bg-roast-800 border border-roast-800 text-roast-100 font-bold rounded-xl text-xs transition-all">
+                    <a href="orders.html" class="inline-flex items-center justify-between py-2.5 px-4 bg-roast-50 hover:bg-roast-200 border border-roast-200 text-roast-900 font-bold rounded-xl text-xs transition-all">
                         View E-Ticket <i class="fa-solid fa-arrow-right text-[10px]"></i>
                     </a>
                 </div>
@@ -226,57 +226,57 @@
     </main>
 
     <div id="profile-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-roast-900 border border-roast-800 rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl relative space-y-6 text-roast-100">
-            <button onclick="closeProfileModal()" class="absolute top-5 right-5 text-roast-400 hover:text-white p-2">
+        <div class="bg-roast-100 border border-roast-200 rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl relative space-y-6 text-roast-900">
+            <button onclick="closeProfileModal()" class="absolute top-5 right-5 text-roast-600 hover:text-roast-950 p-2">
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
             <div class="text-center space-y-1">
                 <div class="w-14 h-14 rounded-2xl bg-amberGold/25 border border-amberGold/40 text-amberGold flex items-center justify-center mx-auto text-2xl shadow">
                     <i class="fa-solid fa-user-pen"></i>
                 </div>
-                <h3 class="text-xl font-bold font-serif text-white">Edit Profile</h3>
-                <p class="text-xs text-roast-300">Update your member account details</p>
+                <h3 class="text-xl font-bold font-serif text-roast-950">Edit Profile</h3>
+                <p class="text-xs text-roast-700">Update your member account details</p>
             </div>
             <div class="space-y-4 text-xs">
                 <div>
-                    <label class="block font-semibold text-roast-300 uppercase mb-1">Full Name</label>
-                    <input type="text" id="input-profile-name" placeholder="Your Name" class="w-full bg-roast-950 border border-roast-800 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                    <label class="block font-semibold text-roast-700 uppercase mb-1">Full Name</label>
+                    <input type="text" id="input-profile-name" placeholder="Your Name" class="w-full bg-roast-50 border border-roast-200 text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
                 </div>
                 <div>
-                    <label class="block font-semibold text-roast-300 uppercase mb-1">Email Address</label>
-                    <input type="email" id="input-profile-email" placeholder="your@email.com" class="w-full bg-roast-950 border border-roast-800 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                    <label class="block font-semibold text-roast-700 uppercase mb-1">Email Address</label>
+                    <input type="email" id="input-profile-email" placeholder="your@email.com" class="w-full bg-roast-50 border border-roast-200 text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
                 </div>
                 <div>
-                    <label class="block font-semibold text-roast-300 uppercase mb-1">New Password (Optional)</label>
-                    <input type="password" id="input-profile-password" placeholder="Leave blank to keep current" class="w-full bg-roast-950 border border-roast-800 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                    <label class="block font-semibold text-roast-700 uppercase mb-1">New Password (Optional)</label>
+                    <input type="password" id="input-profile-password" placeholder="Leave blank to keep current" class="w-full bg-roast-50 border border-roast-200 text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
                 </div>
             </div>
             <div class="flex gap-3 pt-2">
-                <button onclick="saveProfileChanges()" class="flex-1 py-3 bg-amberGold hover:bg-amber-500 text-roast-950 font-extrabold rounded-xl text-xs shadow transition-all">Save Changes</button>
-                <button onclick="closeProfileModal()" class="px-5 py-3 bg-roast-950 text-roast-300 font-bold rounded-xl border border-roast-800 text-xs">Cancel</button>
+                <button onclick="saveProfileChanges()" class="flex-1 py-3 bg-amberGold hover:bg-royalBlue text-roast-50 font-extrabold rounded-xl text-xs shadow transition-all">Save Changes</button>
+                <button onclick="closeProfileModal()" class="px-5 py-3 bg-roast-50 text-roast-700 font-bold rounded-xl border border-roast-200 text-xs">Cancel</button>
             </div>
         </div>
     </div>
 
     <div id="cart-drawer" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden transition-opacity">
-        <div class="absolute right-0 top-0 bottom-0 w-full max-w-md bg-roast-900 border-l border-roast-800 p-6 flex flex-col justify-between shadow-2xl">
+        <div class="absolute right-0 top-0 bottom-0 w-full max-w-md bg-roast-100 border-l border-roast-200 p-6 flex flex-col justify-between shadow-2xl">
             <div>
-                <div class="flex justify-between items-center pb-4 border-b border-roast-800">
-                    <h3 class="text-lg font-bold text-white font-serif"><i class="fa-solid fa-cart-shopping text-amberGold me-2"></i> Your Order Basket</h3>
-                    <button onclick="toggleCart()" class="text-roast-400 hover:text-white p-2">
+                <div class="flex justify-between items-center pb-4 border-b border-roast-200">
+                    <h3 class="text-lg font-bold text-roast-950 font-serif"><i class="fa-solid fa-cart-shopping text-amberGold me-2"></i> Your Order Basket</h3>
+                    <button onclick="toggleCart()" class="text-roast-600 hover:text-roast-950 p-2">
                         <i class="fa-solid fa-xmark text-xl"></i>
                     </button>
                 </div>
                 <div id="cart-items" class="py-4 space-y-3 overflow-y-auto max-h-[60vh]">
-                    <p class="text-center text-roast-400 text-xs py-8">Your order basket is currently empty.</p>
+                    <p class="text-center text-roast-600 text-xs py-8">Your order basket is currently empty.</p>
                 </div>
             </div>
-            <div class="border-t border-roast-800 pt-4 space-y-4">
-                <div class="flex justify-between items-center text-sm font-bold text-white">
+            <div class="border-t border-roast-200 pt-4 space-y-4">
+                <div class="flex justify-between items-center text-sm font-bold text-roast-950">
                     <span>Total Amount:</span>
                     <span id="cart-total" class="text-amberGold text-lg">RM 0.00</span>
                 </div>
-                <button onclick="toggleCart()" class="w-full py-3.5 bg-amberGold hover:bg-amber-500 text-roast-950 font-bold rounded-xl transition-all shadow-lg text-sm flex items-center justify-center gap-2">
+                <button onclick="toggleCart()" class="w-full py-3.5 bg-amberGold hover:bg-royalBlue text-roast-50 font-bold rounded-xl transition-all shadow-lg text-sm flex items-center justify-center gap-2">
                     <i class="fa-solid fa-credit-card"></i> Close Cart
                 </button>
             </div>
@@ -284,20 +284,20 @@
     </div>
 
     <div id="wishlist-drawer" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden transition-opacity">
-        <div class="absolute right-0 top-0 bottom-0 w-full max-w-md bg-roast-900 border-l border-roast-800 p-6 flex flex-col justify-between shadow-2xl">
+        <div class="absolute right-0 top-0 bottom-0 w-full max-w-md bg-roast-100 border-l border-roast-200 p-6 flex flex-col justify-between shadow-2xl">
             <div>
-                <div class="flex justify-between items-center pb-4 border-b border-roast-800">
-                    <h3 class="text-lg font-bold text-white font-serif"><i class="fa-solid fa-heart text-amberGold me-2"></i> My Wishlist</h3>
-                    <button onclick="toggleWishlistDrawer()" class="text-roast-400 hover:text-white p-2">
+                <div class="flex justify-between items-center pb-4 border-b border-roast-200">
+                    <h3 class="text-lg font-bold text-roast-950 font-serif"><i class="fa-solid fa-heart text-amberGold me-2"></i> My Wishlist</h3>
+                    <button onclick="toggleWishlistDrawer()" class="text-roast-600 hover:text-roast-950 p-2">
                         <i class="fa-solid fa-xmark text-xl"></i>
                     </button>
                 </div>
                 <div id="wishlist-items" class="py-4 space-y-3 overflow-y-auto max-h-[65vh]">
-                    <p class="text-center text-roast-400 text-xs py-8">Your wishlist is currently empty.</p>
+                    <p class="text-center text-roast-600 text-xs py-8">Your wishlist is currently empty.</p>
                 </div>
             </div>
-            <div class="border-t border-roast-800 pt-4">
-                <button onclick="toggleWishlistDrawer()" class="w-full py-3 bg-roast-800 hover:bg-roast-700 text-roast-100 font-bold rounded-xl transition-all text-xs"> Close Wishlist </button>
+            <div class="border-t border-roast-200 pt-4">
+                <button onclick="toggleWishlistDrawer()" class="w-full py-3 bg-roast-200 hover:bg-roast-300 text-roast-900 font-bold rounded-xl transition-all text-xs"> Close Wishlist </button>
             </div>
         </div>
     </div>
