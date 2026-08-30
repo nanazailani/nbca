@@ -202,12 +202,9 @@
                 </a> 
                 <!-- Desktop Menu --> 
                 <div class="hidden md:flex items-center space-x-8 text-sm font-medium"> 
-                    <a href="#about" class="text-roast-800 hover:text-amberGold transition-colors">About Us</a> 
-                    <a href="#team" class="text-roast-800 hover:text-amberGold transition-colors">Team</a> 
-                    <a href="#classes" class="text-roast-800 hover:text-amberGold transition-colors font-bold">Classes</a> 
+                    <a href="#fixed-classes" class="text-roast-800 hover:text-amberGold transition-colors font-bold">Fixed Classes</a> 
+                    <a href="#classes" class="text-roast-800 hover:text-amberGold transition-colors font-bold">Workshops</a> 
                     <a href="#coffee-beans" class="text-roast-800 hover:text-amberGold transition-colors">Coffee Beans</a> 
-                    <a href="#blog" class="text-roast-800 hover:text-amberGold transition-colors">Announcements</a> 
-                    <a href="#merchandise" class="text-roast-800 hover:text-amberGold transition-colors">Merchandise</a> 
                     <a href="#location" class="text-roast-800 hover:text-amberGold transition-colors">Locations</a> 
                 </div> 
                 <!-- Right Actions --> 
@@ -239,7 +236,8 @@
             </div> 
             <a href="#about" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-800 hover:text-amberGold font-medium border-b border-roast-100/50"><i class="fa-solid fa-circle-info text-amberGold text-xs"></i> About Us</a> 
             <a href="#team" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-800 hover:text-amberGold font-medium border-b border-roast-100/50"><i class="fa-solid fa-users text-amberGold text-xs"></i> Meet The Team</a> 
-            <a href="#classes" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-800 hover:text-amberGold font-bold border-b border-roast-100/50"><i class="fa-solid fa-chalkboard-user text-amberGold text-xs"></i> Paid Classes</a> 
+            <a href="#fixed-classes" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-800 hover:text-amberGold font-bold border-b border-roast-100/50"><i class="fa-solid fa-calendar-days text-amberGold text-xs"></i> Fixed Classes</a> 
+            <a href="#classes" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-800 hover:text-amberGold font-bold border-b border-roast-100/50"><i class="fa-solid fa-chalkboard-user text-amberGold text-xs"></i> Workshops</a> 
             <a href="#coffee-beans" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-800 hover:text-amberGold font-medium border-b border-roast-100/50"><i class="fa-solid fa-mug-hot text-amberGold text-xs"></i> Coffee Beans</a> 
             <a href="#blog" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-800 hover:text-amberGold font-medium border-b border-roast-100/50"><i class="fa-solid fa-bullhorn text-amberGold text-xs"></i> Announcements</a> 
             <a href="#merchandise" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-800 hover:text-amberGold font-medium border-b border-roast-100/50"><i class="fa-solid fa-shirt text-amberGold text-xs"></i> Merchandise</a> 
@@ -363,6 +361,67 @@
     </section> 
 
     <!-- PAID CLASSES / WORKSHOP SECTION (MOVED UP — PRIMARY FOCUS) --> 
+    <!-- FIXED CLASSES SECTION (daily schedule, deposit-based registration) -->
+    <section id="fixed-classes" class="relative overflow-hidden py-20 bg-roast-50 border-t border-roast-100">
+        <div class="absolute top-0 -left-24 w-80 h-80 bg-blue-300/12 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute bottom-0 -right-20 w-72 h-72 bg-amberGold/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="reveal-up text-center max-w-2xl mx-auto mb-12">
+                <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amberGold/10 text-amberGold text-xs font-bold uppercase tracking-wider border border-amberGold/20 mb-3"><i class="fa-solid fa-calendar-days text-[10px]"></i> Daily Training</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-roast-950 mt-1">Fixed Classes</h2>
+                <p class="text-roast-700 text-sm mt-3 font-light">Join our regular daily coffee training sessions — no need to wait for a special workshop date.</p>
+            </div>
+
+            <div class="max-w-3xl mx-auto reveal-up">
+                <div class="bg-white rounded-3xl border border-roast-200 shadow-lg overflow-hidden">
+                    <div class="grid md:grid-cols-2">
+                        <div class="relative h-56 md:h-auto">
+                            <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=800&q=80" alt="Fixed Coffee Class" class="w-full h-full object-cover">
+                            <span class="absolute top-4 left-4 px-3 py-1 bg-amberGold text-roast-50 text-[10px] font-bold uppercase rounded-full">Walk-In Friendly</span>
+                        </div>
+                        <div class="p-6 sm:p-8 space-y-5">
+                            <div>
+                                <h3 class="text-xl font-bold text-roast-950 font-serif">Coffee Fundamentals — Daily Class</h3>
+                                <p class="text-xs text-roast-600 mt-1">Hands-on brewing basics for beginners, run every operating day.</p>
+                            </div>
+
+                            <div class="space-y-2">
+                                <div class="flex items-center gap-2 text-xs text-roast-700">
+                                    <i class="fa-solid fa-clock text-amberGold w-4"></i>
+                                    <span><strong class="text-roast-950">Morning Session:</strong> 10:00 AM – 12:00 PM</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-xs text-roast-700">
+                                    <i class="fa-solid fa-clock text-amberGold w-4"></i>
+                                    <span><strong class="text-roast-950">Afternoon Session:</strong> 2:00 PM – 5:00 PM</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-xs text-roast-700">
+                                    <i class="fa-solid fa-calendar-xmark text-amberGold w-4"></i>
+                                    <span>Open daily <strong class="text-roast-950">except Friday</strong> (closed)</span>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-between py-3 border-y border-roast-100">
+                                <div>
+                                    <span class="text-[10px] text-roast-500 uppercase tracking-wider block">Class Fee</span>
+                                    <span class="text-2xl font-extrabold text-amberGold font-serif">RM 150.00</span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-[10px] text-roast-500 uppercase tracking-wider block">Deposit Required (50%)</span>
+                                    <span class="text-lg font-bold text-roast-950">RM 75.00</span>
+                                </div>
+                            </div>
+
+                            <button onclick="openFixedClassModal()" class="btn-anim w-full py-3 bg-amberGold hover:bg-royalBlue text-roast-50 font-bold rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-user-pen"></i> Register as Student
+                            </button>
+                            <p class="text-[10px] text-roast-500 text-center">A 50% deposit is required to confirm your seat. Balance is payable on class day. No cart/checkout — registration is via student form.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section id="classes" class="relative overflow-hidden py-20 bg-gradient-to-b from-roast-50 to-roast-100/60 border-t border-roast-100"> 
         <div class="absolute top-0 -right-24 w-96 h-96 bg-blue-300/15 rounded-full blur-3xl pointer-events-none"></div> 
         <div class="absolute bottom-0 -left-20 w-72 h-72 bg-amberGold/12 rounded-full blur-3xl pointer-events-none"></div> 
@@ -370,8 +429,8 @@
         <i class="fa-solid fa-mug-hot absolute -bottom-10 left-6 text-[160px] text-blue-400/[0.07] -rotate-6 pointer-events-none select-none"></i> 
         
             <div class="reveal-up text-center max-w-2xl mx-auto mb-12"> 
-                <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amberGold/10 text-amberGold text-xs font-bold uppercase tracking-wider border border-amberGold/20 mb-3"><i class="fa-solid fa-star text-[10px]"></i> Our Core Offering</span> 
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-roast-950 mt-1">Paid Classes & Workshops</h2> 
+                <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amberGold/10 text-amberGold text-xs font-bold uppercase tracking-wider border border-amberGold/20 mb-3"><i class="fa-solid fa-star text-[10px]"></i> Special Sessions</span> 
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-roast-950 mt-1">Workshops & Masterclasses</h2> 
                 <p class="text-roast-700 text-sm mt-3 font-light">Learn directly from our instructors — from brewing basics to latte art, hosted at Nb.CA Academy, Sungai Petani.</p> 
             </div> 
             <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 lg:gap-8 reveal-stagger" id="classes-grid-placeholder"> 
@@ -688,7 +747,7 @@
     <!-- FOOTER --> 
     <footer class="relative overflow-hidden border-t border-roast-800 py-16 text-roast-200"> 
         <img src="images/footer-bg.jpg" alt="" class="absolute inset-0 w-full h-full object-cover z-0"> 
-        <div class="absolute inset-0 bg-roast-950/70 z-[1]"></div> 
+        <div class="absolute inset-0 bg-roast-950/90 z-[1]"></div> 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10" style="text-shadow: 0 1px 8px rgba(2,6,23,0.8);"> 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-10 items-start mb-12"> 
                 <div class="space-y-4"> 
@@ -993,6 +1052,68 @@
     </div> 
 
     <!-- CLASS DETAIL / SLOT BOOKING MODAL --> 
+    <!-- FIXED CLASS: STUDENT REGISTRATION MODAL (deposit-based, no cart) -->
+    <div id="fixed-class-modal" class="modal-overlay fixed inset-0 bg-black/50 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="modal-panel bg-white rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl relative p-6 sm:p-8">
+            <button onclick="closeFixedClassModal()" class="absolute top-5 right-5 text-roast-400 hover:text-roast-950 p-2">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div class="text-center space-y-1 mb-6">
+                <div class="w-14 h-14 rounded-2xl bg-amberGold/15 border border-amberGold/30 text-amberGold flex items-center justify-center mx-auto text-2xl shadow">
+                    <i class="fa-solid fa-user-graduate"></i>
+                </div>
+                <h3 class="text-xl font-bold font-serif text-roast-950">Student Registration</h3>
+                <p class="text-xs text-roast-500">Fixed Class — Coffee Fundamentals</p>
+            </div>
+
+            <form onsubmit="submitFixedClassRegistration(event)" class="space-y-4 text-xs">
+                <div>
+                    <label class="block font-semibold text-roast-600 uppercase mb-1">Full Name *</label>
+                    <input type="text" id="fc-student-name" required placeholder="Ahmad Zaki" class="w-full bg-roast-50 border border-roast-200 text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                </div>
+                <div class="grid sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block font-semibold text-roast-600 uppercase mb-1">Email *</label>
+                        <input type="email" id="fc-student-email" required placeholder="you@example.com" class="w-full bg-roast-50 border border-roast-200 text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-roast-600 uppercase mb-1">Phone Number *</label>
+                        <input type="tel" id="fc-student-phone" required placeholder="+60 12-345 6789" class="w-full bg-roast-50 border border-roast-200 text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-semibold text-roast-600 uppercase mb-1">IC / Passport Number *</label>
+                    <input type="text" id="fc-student-ic" required placeholder="e.g. 990101-01-1234" class="w-full bg-roast-50 border border-roast-200 text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                </div>
+                <div class="grid sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block font-semibold text-roast-600 uppercase mb-1">Preferred Date *</label>
+                        <input type="date" id="fc-preferred-date" required class="w-full bg-roast-50 border border-roast-200 text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-roast-600 uppercase mb-1">Preferred Session *</label>
+                        <select id="fc-preferred-session" required class="w-full bg-roast-50 border border-roast-200 text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                            <option value="">Select a session</option>
+                            <option value="Morning (10:00 AM – 12:00 PM)">Morning (10:00 AM – 12:00 PM)</option>
+                            <option value="Afternoon (2:00 PM – 5:00 PM)">Afternoon (2:00 PM – 5:00 PM)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="bg-roast-50 rounded-xl p-4 border border-roast-200 space-y-1.5">
+                    <div class="flex justify-between"><span class="text-roast-600">Class Fee</span><span class="font-bold text-roast-950">RM 150.00</span></div>
+                    <div class="flex justify-between text-amberGold font-bold"><span>Deposit Due Now (50%)</span><span>RM 75.00</span></div>
+                    <div class="flex justify-between text-roast-500"><span>Balance on Class Day</span><span>RM 75.00</span></div>
+                </div>
+
+                <button type="submit" class="btn-anim w-full py-3.5 bg-amberGold hover:bg-royalBlue text-roast-50 font-bold rounded-xl text-xs transition-all shadow-lg uppercase tracking-wider">
+                    Submit & Proceed to Deposit Payment
+                </button>
+                <p class="text-[10px] text-roast-500 text-center">Note: We are closed on Fridays — please select another day.</p>
+            </form>
+        </div>
+    </div>
+
     <div id="class-modal" class="modal-overlay fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4"> 
         <div class="modal-panel bg-gradient-to-b from-roast-100 to-roast-50 border border-roast-200 rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative text-left p-6 sm:p-8"> 
             <button onclick="closeClassModal()" class="absolute top-4 right-4 z-10 bg-roast-50/80 border border-roast-300 text-roast-800 hover:text-roast-950 p-2 rounded-full w-10 h-10 flex items-center justify-center shadow transition-all"> 
@@ -1495,6 +1616,42 @@
         let selectedClassSlot = null; 
         let classQty = 1; 
 
+        // ===================== FIXED CLASS: STUDENT REGISTRATION (deposit-based, no cart) ===================== 
+        function openFixedClassModal() { 
+            openModal('fixed-class-modal'); 
+        } 
+
+        function closeFixedClassModal() { 
+            closeModal('fixed-class-modal'); 
+        } 
+
+        function submitFixedClassRegistration(e) { 
+            e.preventDefault(); 
+
+            const name = document.getElementById('fc-student-name').value.trim(); 
+            const email = document.getElementById('fc-student-email').value.trim(); 
+            const phone = document.getElementById('fc-student-phone').value.trim(); 
+            const ic = document.getElementById('fc-student-ic').value.trim(); 
+            const dateVal = document.getElementById('fc-preferred-date').value; 
+            const session = document.getElementById('fc-preferred-session').value; 
+
+            if (!name || !email || !phone || !ic || !dateVal || !session) { 
+                alert('Please complete all required fields.'); 
+                return; 
+            } 
+
+            // Friday is a closed day for Fixed Classes 
+            const selectedDate = new Date(dateVal + 'T00:00:00'); 
+            if (selectedDate.getDay() === 5) { 
+                alert('We are closed on Fridays. Please choose a different date.'); 
+                return; 
+            } 
+
+            closeFixedClassModal(); 
+            showToastMessage(`Registration received for ${name} on ${dateVal} (${session}). Please pay your RM 75.00 deposit to confirm your seat.`, 'Registration Submitted'); 
+            e.target.reset(); 
+        } 
+
         function openClassModal(classId) { 
             const c = classesCatalog[classId]; 
             if (!c) return; 
@@ -1780,9 +1937,12 @@
         } 
         // ===================== END MEET THE TEAM ===================== 
 
+        const BLOG_DATA_VERSION = 'v2-blue-theme';
+
         function loadBlogPosts() { 
+            const storedVersion = localStorage.getItem('rp_blog_posts_version'); 
             const stored = localStorage.getItem('rp_blog_posts'); 
-            if (stored) { 
+            if (stored && storedVersion === BLOG_DATA_VERSION) { 
                 try { 
                     blogArticlesData = JSON.parse(stored); 
                 } catch (e) { 
@@ -1791,6 +1951,7 @@
             } else { 
                 blogArticlesData = DEFAULT_BLOG_POSTS; 
                 localStorage.setItem('rp_blog_posts', JSON.stringify(blogArticlesData)); 
+                localStorage.setItem('rp_blog_posts_version', BLOG_DATA_VERSION); 
             } 
         } 
 

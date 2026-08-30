@@ -109,11 +109,14 @@
                 <a href="#" onclick="switchTab('orders', event)" id="nav-orders" class="flex items-center gap-3 px-4 py-3 rounded-xl text-roast-300 hover:bg-adminCardHover hover:text-roast-950 transition-all">
                     <i class="fa-solid fa-bag-shopping w-5 text-base shrink-0"></i> <span class="sidebar-text">Manage Orders</span>
                 </a>
-                <a href="#" onclick="switchTab('inventory', event)" id="nav-inventory" class="flex items-center gap-3 px-4 py-3 rounded-xl text-roast-300 hover:bg-adminCardHover hover:text-roast-950 transition-all">
-                    <i class="fa-solid fa-boxes-stacked w-5 text-base shrink-0"></i> <span class="sidebar-text">Inventory Stock</span>
+                <a href="#" onclick="switchTab('fixedclass', event)" id="nav-fixedclass" class="flex items-center gap-3 px-4 py-3 rounded-xl text-roast-300 hover:bg-adminCardHover hover:text-roast-950 transition-all">
+                    <i class="fa-solid fa-calendar-days w-5 text-base shrink-0"></i> <span class="sidebar-text">Manage Fixed Class</span>
                 </a>
                 <a href="#" onclick="switchTab('classes', event)" id="nav-classes" class="flex items-center gap-3 px-4 py-3 rounded-xl text-roast-300 hover:bg-adminCardHover hover:text-roast-950 transition-all">
                     <i class="fa-solid fa-chalkboard-user w-5 text-base shrink-0"></i> <span class="sidebar-text">Manage Classes</span>
+                </a>
+                <a href="#" onclick="switchTab('inventory', event)" id="nav-inventory" class="flex items-center gap-3 px-4 py-3 rounded-xl text-roast-300 hover:bg-adminCardHover hover:text-roast-950 transition-all">
+                    <i class="fa-solid fa-boxes-stacked w-5 text-base shrink-0"></i> <span class="sidebar-text">Inventory Stock</span>
                 </a>
                 <a href="#" onclick="switchTab('blog', event)" id="nav-blog" class="flex items-center gap-3 px-4 py-3 rounded-xl text-roast-300 hover:bg-adminCardHover hover:text-roast-950 transition-all">
                     <i class="fa-solid fa-bullhorn w-5 text-base shrink-0"></i> <span class="sidebar-text">Announcements</span>
@@ -123,51 +126,50 @@
                 </a>
             </div>
         </div>
-
-        <!-- Sidebar Footer / Admin Info -->
-        <div class="p-4 border-t border-adminBorder">
-            <div class="bg-adminBg p-3 rounded-2xl border border-adminBorder flex items-center justify-between">
-                <div class="flex items-center gap-2.5 truncate sidebar-text">
-                    <div class="w-8 h-8 rounded-full bg-amberGold/20 text-amberGold font-bold flex items-center justify-center text-xs shrink-0">NZ</div>
-                    <div class="truncate">
-                        <span class="text-xs font-bold text-roast-950 block truncate">Nana Zailani</span>
-                        <span class="text-[10px] text-roast-400 block truncate">admin@nbca.academy</span>
-                    </div>
-                </div>
-                <button onclick="logoutAdmin()" class="text-roast-400 hover:text-red-400 p-2 transition-colors shrink-0" title="Logout">
-                    <i class="fa-solid fa-right-from-bracket text-sm"></i>
-                </button>
-            </div>
-        </div>
     </aside>
 
     <!-- BOTTOM NAVIGATION (Mobile & Tablet only) -->
-    <nav id="bottom-nav" class="lg:hidden fixed bottom-0 inset-x-0 z-50 bg-adminCard border-t border-adminBorder flex items-stretch justify-around shadow-[0_-8px_24px_rgba(0,0,0,0.35)]" style="padding-bottom: env(safe-area-inset-bottom);">
-        <button onclick="switchTab('overview', event)" id="bottomnav-overview" class="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-amberGold transition-all">
-            <i class="fa-solid fa-chart-pie text-base"></i>
-            <span class="text-[10px] font-bold">Overview</span>
-        </button>
-        <button onclick="switchTab('orders', event)" id="bottomnav-orders" class="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-roast-400 transition-all">
-            <i class="fa-solid fa-bag-shopping text-base"></i>
-            <span class="text-[10px] font-bold">Orders</span>
-        </button>
-        <button onclick="switchTab('inventory', event)" id="bottomnav-inventory" class="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-roast-400 transition-all">
-            <i class="fa-solid fa-boxes-stacked text-base"></i>
-            <span class="text-[10px] font-bold">Stock</span>
-        </button>
-        <button onclick="switchTab('classes', event)" id="bottomnav-classes" class="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-roast-400 transition-all">
-            <i class="fa-solid fa-chalkboard-user text-base"></i>
-            <span class="text-[10px] font-bold">Classes</span>
-        </button>
-        <button onclick="switchTab('blog', event)" id="bottomnav-blog" class="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-roast-400 transition-all">
-            <i class="fa-solid fa-bullhorn text-base"></i>
-            <span class="text-[10px] font-bold">Announce</span>
-        </button>
-        <button onclick="switchTab('loyalty', event)" id="bottomnav-loyalty" class="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-roast-400 transition-all">
-            <i class="fa-solid fa-users text-base"></i>
-            <span class="text-[10px] font-bold">Members</span>
-        </button>
-    </nav>
+    <div class="lg:hidden fixed inset-x-0 bottom-0 z-50 flex flex-col">
+        <!-- MORE SHEET: rises above the bottom nav when "More" is tapped -->
+        <div id="more-sheet" class="bg-adminCard border-t border-adminBorder rounded-t-2xl shadow-2xl overflow-hidden transition-all duration-300 ease-out" style="max-height: 0; opacity: 0;">
+            <div class="p-3 space-y-1.5">
+                <div class="w-10 h-1 bg-adminBorder rounded-full mx-auto mb-1"></div>
+                <button onclick="switchTab('inventory', event)" id="bottomnav-inventory" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-roast-300 hover:bg-adminCardHover transition-all">
+                    <i class="fa-solid fa-boxes-stacked w-5 text-base shrink-0"></i> <span class="text-xs font-bold">Inventory Stock</span>
+                </button>
+                <button onclick="switchTab('blog', event)" id="bottomnav-blog" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-roast-300 hover:bg-adminCardHover transition-all">
+                    <i class="fa-solid fa-bullhorn w-5 text-base shrink-0"></i> <span class="text-xs font-bold">Announcements</span>
+                </button>
+                <button onclick="switchTab('loyalty', event)" id="bottomnav-loyalty" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-roast-300 hover:bg-adminCardHover transition-all">
+                    <i class="fa-solid fa-users w-5 text-base shrink-0"></i> <span class="text-xs font-bold">Members & Points</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- MAIN BOTTOM NAV: 4 primary tabs + More -->
+        <nav id="bottom-nav" class="bg-adminCard border-t border-adminBorder flex items-stretch justify-around shadow-[0_-8px_24px_rgba(0,0,0,0.35)]" style="padding-bottom: env(safe-area-inset-bottom);">
+            <button onclick="switchTab('overview', event)" id="bottomnav-overview" class="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-amberGold transition-all">
+                <i class="fa-solid fa-chart-pie text-base"></i>
+                <span class="text-[10px] font-bold">Overview</span>
+            </button>
+            <button onclick="switchTab('orders', event)" id="bottomnav-orders" class="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-roast-400 transition-all">
+                <i class="fa-solid fa-bag-shopping text-base"></i>
+                <span class="text-[10px] font-bold">Orders</span>
+            </button>
+            <button onclick="switchTab('fixedclass', event)" id="bottomnav-fixedclass" class="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-roast-400 transition-all">
+                <i class="fa-solid fa-calendar-days text-base"></i>
+                <span class="text-[10px] font-bold">Fixed</span>
+            </button>
+            <button onclick="switchTab('classes', event)" id="bottomnav-classes" class="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-roast-400 transition-all">
+                <i class="fa-solid fa-chalkboard-user text-base"></i>
+                <span class="text-[10px] font-bold">Classes</span>
+            </button>
+            <button onclick="toggleMoreSheet()" id="bottomnav-more" class="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-roast-400 transition-all">
+                <i id="more-nav-icon" class="fa-solid fa-ellipsis text-base transition-transform duration-300"></i>
+                <span class="text-[10px] font-bold">More</span>
+            </button>
+        </nav>
+    </div>
 
     <!-- MAIN CONTENT WRAPPER -->
     <div id="main-content" class="flex-1 flex flex-col min-w-0 lg:ml-64 transition-all duration-300 min-h-screen">
@@ -183,6 +185,9 @@
          
             <!-- RIGHT HEADER PROFILE & LOGOUT BUTTONS -->
             <div class="flex items-center gap-3">
+                <button onclick="openAddAdminModal()" class="w-10 h-10 rounded-full bg-roast-900 hover:bg-roast-800 border border-roast-800 text-amberGold flex items-center justify-center transition-all shadow-md" title="Add Admin">
+                    <i class="fa-solid fa-user-plus text-base"></i>
+                </button>
                 <button onclick="openEditProfileModal()" class="w-10 h-10 rounded-full bg-roast-900 hover:bg-roast-800 border border-roast-800 text-amberGold flex items-center justify-center transition-all shadow-md" title="Edit Profile">
                     <i class="fa-solid fa-user text-base"></i>
                 </button>
@@ -664,6 +669,126 @@
                 </div>
             </div>
 
+            <!-- TAB: MANAGE FIXED CLASS -->
+            <div id="view-fixedclass" class="admin-view space-y-6 hidden">
+                <div>
+                    <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Daily Training</span>
+                    <h3 class="text-2xl font-extrabold text-roast-950 font-serif mt-1">Manage Fixed Class</h3>
+                    <p class="text-xs text-roast-500 mt-1">This is the single daily-schedule class shown on the homepage. Changes here update the website immediately.</p>
+                </div>
+
+                <form onsubmit="saveFixedClassSettings(event)" class="grid lg:grid-cols-3 gap-6 text-xs">
+                    <!-- LEFT/MAIN COLUMN: form fields, spans 2 of 3 columns on large screens -->
+                    <div class="lg:col-span-2 space-y-6">
+
+                        <div class="bg-adminCard rounded-3xl border border-adminBorder p-6 sm:p-8 shadow-xl space-y-5">
+                            <h4 class="text-sm font-bold text-roast-950 uppercase tracking-wider border-b border-adminBorder pb-3">Basic Info</h4>
+                            <div>
+                                <label class="block font-semibold text-roast-300 uppercase mb-1">Class Name</label>
+                                <input type="text" id="fcs-name" required oninput="updateFixedClassPreview()" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-roast-300 uppercase mb-1">Description</label>
+                                <textarea id="fcs-description" required rows="2" oninput="updateFixedClassPreview()" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold"></textarea>
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-roast-300 uppercase mb-1">Cover Image</label>
+                                <div class="flex items-center gap-3">
+                                    <label for="fcs-image-file" class="cursor-pointer flex-1 px-4 py-3 bg-adminBg border border-dashed border-adminBorder rounded-xl text-roast-400 text-xs flex items-center gap-2 hover:border-amberGold hover:text-amberGold transition-all">
+                                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                                        <span id="fcs-image-filename" class="truncate">Choose an image to upload</span>
+                                    </label>
+                                    <input type="file" id="fcs-image-file" accept="image/*" class="hidden" onchange="handleFixedClassImageUpload(event)">
+                                </div>
+                                <input type="hidden" id="fcs-image">
+                            </div>
+                        </div>
+
+                        <div class="bg-adminCard rounded-3xl border border-adminBorder p-6 sm:p-8 shadow-xl space-y-5">
+                            <h4 class="text-sm font-bold text-roast-950 uppercase tracking-wider border-b border-adminBorder pb-3">Schedule</h4>
+                            <div class="grid sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block font-semibold text-roast-300 uppercase mb-1">Morning Session</label>
+                                    <input type="text" id="fcs-morning" required placeholder="10:00 AM – 12:00 PM" oninput="updateFixedClassPreview()" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                                </div>
+                                <div>
+                                    <label class="block font-semibold text-roast-300 uppercase mb-1">Afternoon Session</label>
+                                    <input type="text" id="fcs-afternoon" required placeholder="2:00 PM – 5:00 PM" oninput="updateFixedClassPreview()" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-roast-300 uppercase mb-1">Closed Day</label>
+                                <select id="fcs-closed-day" onchange="updateFixedClassPreview()" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                                    <option value="0">Sunday</option>
+                                    <option value="1">Monday</option>
+                                    <option value="2">Tuesday</option>
+                                    <option value="3">Wednesday</option>
+                                    <option value="4">Thursday</option>
+                                    <option value="5" selected>Friday</option>
+                                    <option value="6">Saturday</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="bg-adminCard rounded-3xl border border-adminBorder p-6 sm:p-8 shadow-xl space-y-5">
+                            <h4 class="text-sm font-bold text-roast-950 uppercase tracking-wider border-b border-adminBorder pb-3">Pricing & Deposit</h4>
+                            <div class="grid sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block font-semibold text-roast-300 uppercase mb-1">Class Fee (RM)</label>
+                                    <input type="number" step="0.01" id="fcs-fee" required oninput="updateFixedClassPreview()" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                                </div>
+                                <div>
+                                    <label class="block font-semibold text-roast-300 uppercase mb-1">Deposit Required (%)</label>
+                                    <input type="number" min="0" max="100" id="fcs-deposit-pct" required oninput="updateFixedClassPreview()" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                                </div>
+                            </div>
+                            <div class="bg-adminBg rounded-xl p-4 border border-adminBorder flex items-center justify-between">
+                                <span class="text-roast-400 uppercase tracking-wider text-[10px]">Deposit Amount (calculated)</span>
+                                <span id="fcs-deposit-preview" class="text-amberGold font-bold text-sm">RM 0.00</span>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full py-3.5 bg-amberGold hover:opacity-90 text-adminBg font-extrabold rounded-xl text-xs shadow transition-all">
+                            Save Fixed Class Settings
+                        </button>
+                    </div>
+
+                    <!-- RIGHT COLUMN: sticky live preview of how the card looks on the homepage -->
+                    <div class="lg:col-span-1">
+                        <div class="lg:sticky lg:top-24 space-y-3">
+                            <h4 class="text-[10px] font-bold text-roast-400 uppercase tracking-wider">Live Preview — Homepage Card</h4>
+                            <div class="bg-white rounded-3xl border border-adminBorder shadow-xl overflow-hidden">
+                                <div class="relative h-40">
+                                    <img id="fcs-preview-image" src="" alt="Preview" class="w-full h-full object-cover">
+                                    <span class="absolute top-3 left-3 px-2.5 py-1 bg-amberGold text-white text-[9px] font-bold uppercase rounded-full">Walk-In Friendly</span>
+                                </div>
+                                <div class="p-5 space-y-3">
+                                    <div>
+                                        <h5 id="fcs-preview-name" class="text-base font-bold text-roast-950 font-serif">Coffee Fundamentals — Daily Class</h5>
+                                        <p id="fcs-preview-description" class="text-[11px] text-roast-500 mt-1">Hands-on brewing basics for beginners.</p>
+                                    </div>
+                                    <div class="space-y-1.5 text-[11px] text-roast-600">
+                                        <div class="flex items-center gap-2"><i class="fa-solid fa-clock text-amberGold w-3.5"></i> <span id="fcs-preview-morning">10:00 AM – 12:00 PM</span></div>
+                                        <div class="flex items-center gap-2"><i class="fa-solid fa-clock text-amberGold w-3.5"></i> <span id="fcs-preview-afternoon">2:00 PM – 5:00 PM</span></div>
+                                        <div class="flex items-center gap-2"><i class="fa-solid fa-calendar-xmark text-amberGold w-3.5"></i> Closed <span id="fcs-preview-closed-day">Friday</span></div>
+                                    </div>
+                                    <div class="flex items-center justify-between py-2.5 border-y border-adminBorder">
+                                        <div>
+                                            <span class="text-[9px] text-roast-400 uppercase tracking-wider block">Fee</span>
+                                            <span id="fcs-preview-fee" class="text-lg font-extrabold text-amberGold font-serif">RM 150.00</span>
+                                        </div>
+                                        <div class="text-right">
+                                            <span class="text-[9px] text-roast-400 uppercase tracking-wider block">Deposit</span>
+                                            <span id="fcs-preview-deposit" class="text-sm font-bold text-roast-950">RM 75.00</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
             <!-- TAB 4: MANAGE CLASSES -->
             <div id="view-classes" class="admin-view space-y-6 hidden">
                 <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
@@ -781,15 +906,32 @@
             <div id="view-loyalty" class="admin-view space-y-6 hidden">
                 <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
                     <div>
-                        <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Loyalty Program</span>
-                        <h3 class="text-2xl font-extrabold text-roast-950 font-serif mt-1">Member Points & Tier Control</h3>
+                        <span class="text-xs font-bold tracking-widest text-amberGold uppercase">People</span>
+                        <h3 class="text-2xl font-extrabold text-roast-950 font-serif mt-1">Students & Customers</h3>
                     </div>
                     <div class="relative">
                         <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-roast-400 text-xs"></i>
-                        <input type="text" id="member-search" oninput="filterMembersList()" placeholder="Search member name..." class="bg-adminCard border border-adminBorder text-roast-950 text-xs rounded-xl pl-10 pr-4 py-2.5 focus:outline-none focus:border-amberGold w-60">
+                        <input type="text" id="member-search" oninput="filterMembersList()" placeholder="Search name..." class="bg-adminCard border border-adminBorder text-roast-950 text-xs rounded-xl pl-10 pr-4 py-2.5 focus:outline-none focus:border-amberGold w-60">
                     </div>
                 </div>
 
+                <!-- Student / Customer sub-tab switcher -->
+                <div class="flex bg-adminCard p-1 rounded-xl border border-adminBorder text-xs font-bold w-fit shadow">
+                    <button onclick="switchPeopleTab('student', event)" id="people-tab-student" class="px-4 py-2 rounded-lg bg-amberGold text-adminBg shadow transition-all flex items-center gap-1.5">
+                        <i class="fa-solid fa-user-graduate"></i> Students <span class="hidden sm:inline">(Fixed Class)</span>
+                    </button>
+                    <button onclick="switchPeopleTab('customer', event)" id="people-tab-customer" class="px-4 py-2 rounded-lg text-roast-300 hover:text-roast-950 transition-all flex items-center gap-1.5">
+                        <i class="fa-solid fa-user"></i> Customers <span class="hidden sm:inline">(Loyalty)</span>
+                    </button>
+                </div>
+
+                <!-- STUDENTS PANEL (Fixed Class registrations) -->
+                <div id="people-panel-student">
+                    <div id="students-container"></div>
+                </div>
+
+                <!-- CUSTOMERS PANEL (existing loyalty/points members) -->
+                <div id="people-panel-customer" class="hidden">
                 <div class="bg-adminCard rounded-3xl border border-adminBorder p-6 space-y-5 shadow-xl" id="members-container">
                     <div class="member-item flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-5 border-b border-adminBorder">
                         <div class="flex items-start sm:items-center gap-3">
@@ -832,6 +974,7 @@
                         </div>
                     </div>
                 </div>
+                </div>
             </div>
 
         </main>
@@ -867,6 +1010,45 @@
             <div class="flex gap-3 pt-2">
                 <button onclick="saveProfileChanges()" class="flex-1 py-3 bg-amberGold text-adminBg font-extrabold rounded-xl text-xs shadow hover:opacity-90">Save Changes</button>
                 <button onclick="closeEditProfileModal()" class="px-5 py-3 bg-adminBg text-roast-300 font-bold rounded-xl border border-adminBorder text-xs">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADD ADMIN MODAL (create accounts for other admins) -->
+    <div id="add-admin-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-adminCard border border-adminBorder rounded-3xl p-6 sm:p-8 max-w-md w-full max-h-[90vh] overflow-y-auto shadow-2xl relative space-y-6 text-roast-100">
+            <button onclick="closeAddAdminModal()" class="absolute top-5 right-5 text-roast-400 hover:text-roast-950 p-2">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div class="text-center space-y-1">
+                <div class="w-14 h-14 rounded-2xl bg-amberGold/20 border border-amberGold/40 text-amberGold flex items-center justify-center mx-auto text-2xl shadow">
+                    <i class="fa-solid fa-user-plus"></i>
+                </div>
+                <h3 class="text-xl font-bold font-serif text-roast-950">Add Another Admin</h3>
+                <p class="text-xs text-roast-300">Create a login for another staff member. They'll use this to sign in at the Admin Login page.</p>
+            </div>
+
+            <form onsubmit="handleAddAdmin(event)" class="space-y-4 text-xs">
+                <div>
+                    <label class="block font-semibold text-roast-300 uppercase mb-1">Full Name</label>
+                    <input type="text" id="new-admin-name" required placeholder="Ahmad Zaki" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                </div>
+                <div>
+                    <label class="block font-semibold text-roast-300 uppercase mb-1">Admin Email</label>
+                    <input type="email" id="new-admin-email" required placeholder="ahmad@nbca.academy" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                </div>
+                <div>
+                    <label class="block font-semibold text-roast-300 uppercase mb-1">Temporary Password</label>
+                    <input type="password" id="new-admin-password" required minlength="6" placeholder="Min. 6 characters" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                </div>
+                <button type="submit" class="w-full py-3 bg-amberGold text-adminBg font-extrabold rounded-xl text-xs shadow hover:opacity-90">
+                    <i class="fa-solid fa-user-plus me-1"></i> Create Admin Account
+                </button>
+            </form>
+
+            <div class="border-t border-adminBorder pt-4 space-y-3">
+                <h4 class="text-[10px] font-bold text-roast-400 uppercase tracking-wider">Existing Admin Accounts</h4>
+                <div id="admin-accounts-list" class="space-y-2"></div>
             </div>
         </div>
     </div>
@@ -1229,6 +1411,7 @@
             initCharts();
             loadBlogPosts();
             renderBlogTable();
+            renderStudentsList();
         });
 
         // Desktop-only sidebar collapse (hamburger). The sidebar itself is hidden entirely 
@@ -1265,30 +1448,280 @@
             document.querySelectorAll('.admin-view').forEach(el => el.classList.add('hidden'));
             document.getElementById(`view-${tabId}`).classList.remove('hidden');
 
-            ['overview', 'orders', 'inventory', 'classes', 'blog', 'loyalty'].forEach(t => {
+            const primaryBarTabs = ['overview', 'orders', 'fixedclass', 'classes'];
+            const moreSheetTabs = ['inventory', 'blog', 'loyalty'];
+
+            [...primaryBarTabs, ...moreSheetTabs].forEach(t => {
                 const navBtn = document.getElementById(`nav-${t}`);
-                if(t === tabId) {
-                    navBtn.className = "flex items-center gap-3 px-4 py-3 rounded-xl bg-amberGold text-adminBg font-bold transition-all shadow-md";
-                } else {
-                    navBtn.className = "flex items-center gap-3 px-4 py-3 rounded-xl text-roast-300 hover:bg-adminCardHover hover:text-roast-950 transition-all";
+                if (navBtn) {
+                    if(t === tabId) {
+                        navBtn.className = "flex items-center gap-3 px-4 py-3 rounded-xl bg-amberGold text-adminBg font-bold transition-all shadow-md";
+                    } else {
+                        navBtn.className = "flex items-center gap-3 px-4 py-3 rounded-xl text-roast-300 hover:bg-adminCardHover hover:text-roast-950 transition-all";
+                    }
                 }
 
-                const bottomBtn = document.getElementById(`bottomnav-${t}`);
-                if (bottomBtn) {
-                    if (t === tabId) {
-                        bottomBtn.className = "flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-amberGold transition-all";
-                    } else {
-                        bottomBtn.className = "flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-roast-400 transition-all";
+                if (primaryBarTabs.includes(t)) {
+                    const bottomBtn = document.getElementById(`bottomnav-${t}`);
+                    if (bottomBtn) {
+                        bottomBtn.className = t === tabId
+                            ? "flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-amberGold transition-all"
+                            : "flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-roast-400 transition-all";
+                    }
+                } else {
+                    const sheetBtn = document.getElementById(`bottomnav-${t}`);
+                    if (sheetBtn) {
+                        sheetBtn.className = t === tabId
+                            ? "w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-amberGold/10 text-amberGold font-bold transition-all"
+                            : "w-full flex items-center gap-3 px-4 py-3 rounded-xl text-roast-300 hover:bg-adminCardHover transition-all";
                     }
                 }
             });
 
+            // Highlight the "More" button itself whenever the active tab lives inside the sheet 
+            const moreBtn = document.getElementById('bottomnav-more');
+            if (moreBtn) {
+                moreBtn.className = moreSheetTabs.includes(tabId)
+                    ? "flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-amberGold transition-all"
+                    : "flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-roast-400 transition-all";
+            }
+
+            closeMoreSheet();
+
             document.getElementById('page-title').innerText = 'Nb.CA Academy';
+
+            if (tabId === 'loyalty') {
+                renderStudentsList();
+            }
+            if (tabId === 'fixedclass') {
+                loadFixedClassSettingsIntoForm();
+            }
+        }
+
+        // ===================== BOTTOM NAV "MORE" SHEET ===================== 
+        let isMoreSheetOpen = false;
+
+        function toggleMoreSheet() {
+            isMoreSheetOpen ? closeMoreSheet() : openMoreSheet();
+        }
+
+        function openMoreSheet() {
+            isMoreSheetOpen = true;
+            const sheet = document.getElementById('more-sheet');
+            const icon = document.getElementById('more-nav-icon');
+            sheet.style.maxHeight = '260px';
+            sheet.style.opacity = '1';
+            icon.style.transform = 'rotate(90deg)';
+        }
+
+        function closeMoreSheet() {
+            isMoreSheetOpen = false;
+            const sheet = document.getElementById('more-sheet');
+            const icon = document.getElementById('more-nav-icon');
+            if (!sheet || !icon) return;
+            sheet.style.maxHeight = '0';
+            sheet.style.opacity = '0';
+            icon.style.transform = 'rotate(0deg)';
+        }
+
+        // ===================== MANAGE FIXED CLASS ===================== 
+        const DEFAULT_FIXED_CLASS_SETTINGS = {
+            name: 'Coffee Fundamentals — Daily Class',
+            description: 'Hands-on brewing basics for beginners, run every operating day.',
+            image: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=800&q=80',
+            morningSession: '10:00 AM – 12:00 PM',
+            afternoonSession: '2:00 PM – 5:00 PM',
+            closedDay: 5,
+            fee: 150.00,
+            depositPct: 50
+        };
+
+        function loadFixedClassSettings() {
+            try {
+                const stored = localStorage.getItem('rp_fixed_class_settings');
+                return stored ? JSON.parse(stored) : { ...DEFAULT_FIXED_CLASS_SETTINGS };
+            } catch (e) {
+                return { ...DEFAULT_FIXED_CLASS_SETTINGS };
+            }
+        }
+
+        function loadFixedClassSettingsIntoForm() {
+            const s = loadFixedClassSettings();
+            document.getElementById('fcs-name').value = s.name;
+            document.getElementById('fcs-description').value = s.description;
+            document.getElementById('fcs-image').value = s.image;
+            document.getElementById('fcs-image-filename').innerText = s.image ? 'Current image (upload a new one to replace)' : 'Choose an image to upload';
+            document.getElementById('fcs-image-file').value = '';
+            document.getElementById('fcs-morning').value = s.morningSession;
+            document.getElementById('fcs-afternoon').value = s.afternoonSession;
+            document.getElementById('fcs-closed-day').value = String(s.closedDay);
+            document.getElementById('fcs-fee').value = s.fee;
+            document.getElementById('fcs-deposit-pct').value = s.depositPct;
+            updateFixedClassPreview();
+        }
+
+        function handleFixedClassImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (!file.type.startsWith('image/')) {
+                alert('Sila pilih fail imej yang sah.');
+                event.target.value = '';
+                return;
+            }
+
+            document.getElementById('fcs-image-filename').innerText = file.name;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('fcs-image').value = e.target.result;
+                updateFixedClassPreview();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        const FCS_DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+        function updateFixedClassPreview() {
+            const name = document.getElementById('fcs-name').value || 'Coffee Fundamentals — Daily Class';
+            const description = document.getElementById('fcs-description').value || 'Hands-on brewing basics for beginners.';
+            const image = document.getElementById('fcs-image').value;
+            const morning = document.getElementById('fcs-morning').value || '10:00 AM – 12:00 PM';
+            const afternoon = document.getElementById('fcs-afternoon').value || '2:00 PM – 5:00 PM';
+            const closedDay = FCS_DAY_NAMES[parseInt(document.getElementById('fcs-closed-day').value)] || 'Friday';
+            const fee = parseFloat(document.getElementById('fcs-fee').value) || 0;
+            const pct = parseFloat(document.getElementById('fcs-deposit-pct').value) || 0;
+            const deposit = (fee * pct / 100);
+
+            document.getElementById('fcs-deposit-preview').innerText = `RM ${deposit.toFixed(2)}`;
+
+            document.getElementById('fcs-preview-name').innerText = name;
+            document.getElementById('fcs-preview-description').innerText = description;
+            if (image) document.getElementById('fcs-preview-image').src = image;
+            document.getElementById('fcs-preview-morning').innerText = morning;
+            document.getElementById('fcs-preview-afternoon').innerText = afternoon;
+            document.getElementById('fcs-preview-closed-day').innerText = closedDay;
+            document.getElementById('fcs-preview-fee').innerText = `RM ${fee.toFixed(2)}`;
+            document.getElementById('fcs-preview-deposit').innerText = `RM ${deposit.toFixed(2)}`;
+        }
+
+        function saveFixedClassSettings(e) {
+            e.preventDefault();
+            const image = document.getElementById('fcs-image').value.trim();
+            if (!image) {
+                alert('Sila upload gambar cover untuk Fixed Class.');
+                return;
+            }
+            const settings = {
+                name: document.getElementById('fcs-name').value.trim(),
+                description: document.getElementById('fcs-description').value.trim(),
+                image: image,
+                morningSession: document.getElementById('fcs-morning').value.trim(),
+                afternoonSession: document.getElementById('fcs-afternoon').value.trim(),
+                closedDay: parseInt(document.getElementById('fcs-closed-day').value),
+                fee: parseFloat(document.getElementById('fcs-fee').value) || 0,
+                depositPct: parseFloat(document.getElementById('fcs-deposit-pct').value) || 0
+            };
+            try {
+                localStorage.setItem('rp_fixed_class_settings', JSON.stringify(settings));
+            } catch (err) {
+                alert('Imej terlalu besar untuk disimpan. Sila cuba imej dengan saiz fail yang lebih kecil.');
+                return;
+            }
+            showAdminToast('Fixed Class settings saved. The homepage will reflect these changes.');
         }
 
         // --- EDIT PROFILE MODAL FUNCTIONS ---
         function openEditProfileModal() {
             document.getElementById('edit-profile-modal').classList.remove('hidden');
+        }
+
+        // --- ADD ADMIN FUNCTIONS (create logins for other admins) ---
+        function loadAdminAccounts() {
+            try {
+                return JSON.parse(localStorage.getItem('rp_admin_accounts') || '[]');
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function saveAdminAccounts(accounts) {
+            localStorage.setItem('rp_admin_accounts', JSON.stringify(accounts));
+        }
+
+        function openAddAdminModal() {
+            document.getElementById('new-admin-name').value = '';
+            document.getElementById('new-admin-email').value = '';
+            document.getElementById('new-admin-password').value = '';
+            renderAdminAccountsList();
+            document.getElementById('add-admin-modal').classList.remove('hidden');
+        }
+
+        function closeAddAdminModal() {
+            document.getElementById('add-admin-modal').classList.add('hidden');
+        }
+
+        function handleAddAdmin(e) {
+            e.preventDefault();
+            const name = document.getElementById('new-admin-name').value.trim();
+            const email = document.getElementById('new-admin-email').value.trim().toLowerCase();
+            const password = document.getElementById('new-admin-password').value.trim();
+
+            if (!name || !email || !password) {
+                alert('Please fill in all fields.');
+                return;
+            }
+            if (password.length < 6) {
+                alert('Password must be at least 6 characters.');
+                return;
+            }
+
+            const accounts = loadAdminAccounts();
+            if (email === 'admin@rumahpanggang.com' || accounts.some(a => a.email.toLowerCase() === email)) {
+                alert('An admin account with this email already exists.');
+                return;
+            }
+
+            accounts.push({ name, email, password, role: 'admin' });
+            saveAdminAccounts(accounts);
+
+            document.getElementById('new-admin-name').value = '';
+            document.getElementById('new-admin-email').value = '';
+            document.getElementById('new-admin-password').value = '';
+
+            renderAdminAccountsList();
+            showAdminToast(`Admin account created for ${name}. They can now log in at the Admin Login page.`);
+        }
+
+        function renderAdminAccountsList() {
+            const container = document.getElementById('admin-accounts-list');
+            const accounts = loadAdminAccounts();
+
+            if (accounts.length === 0) {
+                container.innerHTML = `<p class="text-[11px] text-roast-400">No additional admin accounts yet. The default admin@rumahpanggang.com account always works.</p>`;
+                return;
+            }
+
+            container.innerHTML = accounts.map((a, idx) => `
+                <div class="flex items-center justify-between p-3 bg-adminBg rounded-xl border border-adminBorder">
+                    <div class="min-w-0">
+                        <p class="text-xs font-bold text-roast-950 truncate">${a.name}</p>
+                        <p class="text-[10px] text-roast-400 truncate">${a.email}</p>
+                    </div>
+                    <button onclick="deleteAdminAccount(${idx})" class="shrink-0 w-8 h-8 rounded-lg bg-red-500/10 text-red-400 border border-red-500/30 flex items-center justify-center hover:bg-red-500/20" title="Remove">
+                        <i class="fa-solid fa-trash text-xs"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function deleteAdminAccount(index) {
+            if (!confirm('Remove this admin account? They will no longer be able to log in.')) return;
+            const accounts = loadAdminAccounts();
+            const removed = accounts.splice(index, 1)[0];
+            saveAdminAccounts(accounts);
+            renderAdminAccountsList();
+            showAdminToast(`Removed admin account for ${removed?.name || 'user'}.`);
         }
 
         function closeEditProfileModal() {
@@ -1308,16 +1741,108 @@
         // --- MEMBERS SEARCH FUNCTION ---
         function filterMembersList() {
             const query = document.getElementById('member-search').value.toLowerCase();
-            const members = document.querySelectorAll('.member-item');
+            const members = document.querySelectorAll('.member-item, .student-item');
 
             members.forEach(item => {
-                const name = item.querySelector('.member-name').innerText.toLowerCase();
+                const nameEl = item.querySelector('.member-name, .student-name');
+                if (!nameEl) return;
+                const name = nameEl.innerText.toLowerCase();
                 if (name.includes(query)) {
                     item.style.display = '';
                 } else {
                     item.style.display = 'none';
                 }
             });
+        }
+
+        // ===================== STUDENT / CUSTOMER SUB-TABS ===================== 
+        function switchPeopleTab(tab, event) {
+            const studentBtn = document.getElementById('people-tab-student');
+            const customerBtn = document.getElementById('people-tab-customer');
+            const studentPanel = document.getElementById('people-panel-student');
+            const customerPanel = document.getElementById('people-panel-customer');
+
+            const activeClass = "px-4 py-2 rounded-lg bg-amberGold text-adminBg shadow transition-all flex items-center gap-1.5";
+            const inactiveClass = "px-4 py-2 rounded-lg text-roast-300 hover:text-roast-950 transition-all flex items-center gap-1.5";
+
+            if (tab === 'student') {
+                studentBtn.className = activeClass;
+                customerBtn.className = inactiveClass;
+                studentPanel.classList.remove('hidden');
+                customerPanel.classList.add('hidden');
+                renderStudentsList();
+            } else {
+                customerBtn.className = activeClass;
+                studentBtn.className = inactiveClass;
+                customerPanel.classList.remove('hidden');
+                studentPanel.classList.add('hidden');
+            }
+            document.getElementById('member-search').value = '';
+        }
+
+        // Fixed Class student registrations are submitted from the customer site (index.html) 
+        // and stored under this shared localStorage key. 
+        function loadFixedClassStudents() {
+            try {
+                return JSON.parse(localStorage.getItem('rp_fixed_class_students') || '[]');
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function saveFixedClassStudents(students) {
+            localStorage.setItem('rp_fixed_class_students', JSON.stringify(students));
+        }
+
+        function renderStudentsList() {
+            const container = document.getElementById('students-container');
+            if (!container) return;
+            const students = loadFixedClassStudents();
+
+            if (students.length === 0) {
+                container.innerHTML = `<div class="bg-adminCard rounded-3xl border border-adminBorder p-8 text-center text-roast-400 text-sm shadow-xl">No fixed class registrations yet. Registrations submitted from the website's "Register as Student" form will appear here.</div>`;
+                return;
+            }
+
+            container.innerHTML = `<div class="bg-adminCard rounded-3xl border border-adminBorder p-6 space-y-5 shadow-xl">` +
+                students.map((s, idx) => {
+                    const initials = (s.name || '?').split(' ').filter(Boolean).map(w => w[0]).slice(0, 2).join('').toUpperCase();
+                    const isPaid = s.depositStatus === 'Paid';
+                    const statusClass = isPaid ? 'bg-green-500/15 text-green-600' : 'bg-yellow-500/15 text-yellow-600';
+                    const borderClass = idx === students.length - 1 ? '' : 'pb-5 border-b border-adminBorder';
+                    return `
+                    <div class="student-item flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 ${borderClass}">
+                        <div class="flex items-start sm:items-center gap-3">
+                            <div class="w-11 h-11 rounded-full bg-blue-500/15 text-blue-600 font-bold flex items-center justify-center font-serif shrink-0">${initials}</div>
+                            <div class="space-y-1">
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <strong class="student-name text-roast-950 text-sm">${s.name}</strong>
+                                    <span class="px-2 py-0.5 ${statusClass} text-[10px] font-bold rounded-full uppercase">Deposit ${s.depositStatus}</span>
+                                </div>
+                                <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-roast-400">
+                                    <span><i class="fa-solid fa-envelope mr-1 text-roast-500"></i>${s.email}</span>
+                                    <span><i class="fa-solid fa-phone mr-1 text-roast-500"></i>${s.phone}</span>
+                                    <span><i class="fa-solid fa-id-card mr-1 text-roast-500"></i>${s.ic}</span>
+                                </div>
+                                <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-roast-400">
+                                    <span><i class="fa-solid fa-calendar-day mr-1 text-roast-500"></i>${s.preferredDate} — ${s.session}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between sm:justify-end gap-4 pl-14 sm:pl-0">
+                            <span class="text-amberGold font-bold text-sm font-serif whitespace-nowrap">RM ${Number(s.deposit).toFixed(2)}</span>
+                            <button onclick="toggleDepositStatus('${s.id}')" class="px-4 py-2 bg-adminBg text-roast-100 font-bold rounded-xl border border-adminBorder text-xs hover:bg-adminCardHover whitespace-nowrap">Mark ${isPaid ? 'Pending' : 'Paid'}</button>
+                        </div>
+                    </div>`;
+                }).join('') + `</div>`;
+        }
+
+        function toggleDepositStatus(id) {
+            let students = loadFixedClassStudents();
+            students = students.map(s => s.id === id ? { ...s, depositStatus: s.depositStatus === 'Paid' ? 'Pending' : 'Paid' } : s);
+            saveFixedClassStudents(students);
+            renderStudentsList();
+            showAdminToast('Deposit status updated.');
         }
 
         // --- INVENTORY MANAGEMENT FUNCTIONS ---
@@ -1741,9 +2266,12 @@
             document.getElementById('blog-image-preview').src = "";
         }
 
+        const BLOG_DATA_VERSION = 'v2-blue-theme';
+
         function loadBlogPosts() {
+            const storedVersion = localStorage.getItem('rp_blog_posts_version');
             const stored = localStorage.getItem('rp_blog_posts');
-            if (stored) {
+            if (stored && storedVersion === BLOG_DATA_VERSION) {
                 try {
                     blogPosts = JSON.parse(stored);
                 } catch (e) {
@@ -1752,11 +2280,13 @@
             } else {
                 blogPosts = DEFAULT_BLOG_POSTS.slice();
                 localStorage.setItem('rp_blog_posts', JSON.stringify(blogPosts));
+                localStorage.setItem('rp_blog_posts_version', BLOG_DATA_VERSION);
             }
         }
 
         function saveBlogPostsToStorage() {
             localStorage.setItem('rp_blog_posts', JSON.stringify(blogPosts));
+            localStorage.setItem('rp_blog_posts_version', BLOG_DATA_VERSION);
         }
 
         function renderBlogTable() {

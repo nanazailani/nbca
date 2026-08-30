@@ -232,6 +232,18 @@
             <div class="space-y-6 pt-6"> 
                 <div class="flex flex-col md:flex-row md:items-end justify-between"> 
                     <div> 
+                        <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Daily Training</span> 
+                        <h2 class="text-3xl font-extrabold text-roast-950 mt-1">My Fixed Class Registration</h2> 
+                    </div> 
+                    <p class="text-xs text-roast-600 mt-2 md:mt-0">Your registered daily class sessions and deposit status.</p> 
+                </div>
+
+                <div id="fixed-class-registrations-container" class="space-y-4"></div>
+            </div>
+
+            <div class="space-y-6 pt-6"> 
+                <div class="flex flex-col md:flex-row md:items-end justify-between"> 
+                    <div> 
                         <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Workshops & Training</span> 
                         <h2 class="text-3xl font-extrabold text-roast-950 mt-1">Enrolled Classes</h2> 
                     </div> 
@@ -253,7 +265,7 @@
                             <div class="flex justify-between"><span>Duration:</span> <strong class="text-roast-950">2.5 Hours</strong></div>
                             <div class="flex justify-between"><span>Location:</span> <strong class="text-roast-950">Sungai Petani Roastery</strong></div>
                         </div>
-                        <button onclick="showToast('Class pass downloaded successfully.')" class="w-full py-2.5 bg-roast-200 hover:bg-amberGold hover:text-roast-50 text-roast-900 font-bold rounded-xl text-xs transition-all border border-roast-300">
+                        <button onclick="openETicketModal('coffee-brewing')" class="w-full py-2.5 bg-roast-200 hover:bg-amberGold hover:text-roast-50 text-roast-900 font-bold rounded-xl text-xs transition-all border border-roast-300">
                             <i class="fa-solid fa-qrcode me-1"></i> View E-Ticket Pass
                         </button>
                     </div>
@@ -272,7 +284,7 @@
                             <div class="flex justify-between"><span>Duration:</span> <strong class="text-roast-950">3.0 Hours</strong></div>
                             <div class="flex justify-between"><span>Location:</span> <strong class="text-roast-950">Sungai Petani Roastery</strong></div>
                         </div>
-                        <button onclick="showToast('Class pass downloaded successfully.')" class="w-full py-2.5 bg-roast-200 hover:bg-amberGold hover:text-roast-50 text-roast-900 font-bold rounded-xl text-xs transition-all border border-roast-300">
+                        <button onclick="openETicketModal('latte-art')" class="w-full py-2.5 bg-roast-200 hover:bg-amberGold hover:text-roast-50 text-roast-900 font-bold rounded-xl text-xs transition-all border border-roast-300">
                             <i class="fa-solid fa-qrcode me-1"></i> View E-Ticket Pass
                         </button>
                     </div>
@@ -362,6 +374,57 @@
         </div>
     </div>
 
+    <!-- E-TICKET PASS MODAL -->
+    <div id="eticket-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-sm w-full shadow-2xl relative overflow-hidden">
+            <button onclick="closeETicketModal()" class="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 text-white flex items-center justify-center transition-all">
+                <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+
+            <!-- Ticket header -->
+            <div class="bg-gradient-to-br from-amberGold to-royalBlue p-6 text-center">
+                <p class="text-[10px] uppercase tracking-widest text-white/80">Nb.CA Academy — E-Ticket Pass</p>
+                <h3 id="et-class-name" class="text-xl font-bold font-serif text-white mt-1">Coffee Brewing Masterclass</h3>
+            </div>
+
+            <!-- Perforated divider with notches -->
+            <div class="relative">
+                <div class="absolute -left-3 -top-3 w-6 h-6 bg-black/60 rounded-full"></div>
+                <div class="absolute -right-3 -top-3 w-6 h-6 bg-black/60 rounded-full"></div>
+                <div class="border-t-2 border-dashed border-roast-200"></div>
+            </div>
+
+            <div class="p-6 space-y-4">
+                <div class="flex justify-center">
+                    <img id="et-qr-code" src="" alt="E-Ticket QR Code" class="w-36 h-36 border border-roast-200 rounded-xl p-2">
+                </div>
+                <div class="text-center">
+                    <p class="text-[10px] text-roast-500 uppercase tracking-wider">Ticket Reference</p>
+                    <p id="et-ticket-ref" class="text-sm font-bold text-roast-950 font-mono tracking-wider">RP-0000-0000</p>
+                </div>
+
+                <div class="bg-roast-50 rounded-2xl p-4 space-y-2 text-xs text-roast-700 border border-roast-200">
+                    <div class="flex justify-between"><span>Attendee:</span> <strong id="et-attendee" class="text-roast-950">Guest</strong></div>
+                    <div class="flex justify-between"><span>Date & Time:</span> <strong id="et-datetime" class="text-roast-950">—</strong></div>
+                    <div class="flex justify-between"><span>Duration:</span> <strong id="et-duration" class="text-roast-950">—</strong></div>
+                    <div class="flex justify-between"><span>Location:</span> <strong id="et-location" class="text-roast-950">—</strong></div>
+                    <div class="flex justify-between"><span>Fee Paid:</span> <strong id="et-fee" class="text-amberGold">RM 0.00</strong></div>
+                </div>
+
+                <p class="text-[10px] text-roast-400 text-center">Please present this QR code at the front desk on your class day.</p>
+
+                <div class="flex gap-2">
+                    <button onclick="window.print()" class="flex-1 py-2.5 bg-amberGold hover:bg-royalBlue text-roast-50 font-bold rounded-xl text-xs transition-all shadow">
+                        <i class="fa-solid fa-print me-1"></i> Print / Save
+                    </button>
+                    <button onclick="closeETicketModal()" class="px-5 py-2.5 bg-roast-100 hover:bg-roast-200 text-roast-900 font-bold rounded-xl text-xs transition-all">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="cart-drawer" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden transition-opacity"> 
         <div class="absolute right-0 top-0 bottom-0 w-full max-w-md bg-roast-100 border-l border-roast-200 p-6 flex flex-col justify-between shadow-2xl"> 
             <div> 
@@ -436,7 +499,63 @@
             } 
             updateCartUI();
             updateWishlistUI();
+            renderFixedClassRegistrations();
         }); 
+
+        // Fixed Class registrations are submitted from the homepage's "Register as Student" 
+        // form and stored under this shared localStorage key. Here we only show the ones 
+        // that belong to the currently logged-in customer (matched by email). 
+        function renderFixedClassRegistrations() {
+            const container = document.getElementById('fixed-class-registrations-container');
+            if (!container) return;
+
+            const userData = JSON.parse(localStorage.getItem('rp_user') || localStorage.getItem('rp_logged_user') || '{}');
+            const userEmail = (userData.email || '').toLowerCase();
+
+            let allStudents = [];
+            try {
+                allStudents = JSON.parse(localStorage.getItem('rp_fixed_class_students') || '[]');
+            } catch (e) {
+                allStudents = [];
+            }
+
+            const myRegistrations = allStudents.filter(s => (s.email || '').toLowerCase() === userEmail);
+
+            if (myRegistrations.length === 0) {
+                container.innerHTML = `
+                    <div class="bg-white rounded-3xl p-6 border border-roast-200 shadow-sm text-center space-y-3">
+                        <p class="text-sm text-roast-600">You haven't registered for a Fixed Class yet.</p>
+                        <a href="index.html#fixed-classes" class="inline-flex items-center gap-2 text-xs font-bold text-amberGold hover:underline">
+                            <i class="fa-solid fa-user-pen"></i> Register as Student
+                        </a>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = `<div class="grid md:grid-cols-2 gap-6">` + myRegistrations.map(reg => {
+                const isPaid = reg.depositStatus === 'Paid';
+                const statusClass = isPaid ? 'bg-green-500/10 text-green-600' : 'bg-yellow-500/10 text-yellow-600';
+                const balance = (Number(reg.classFee) - Number(reg.deposit)).toFixed(2);
+                return `
+                <div class="bg-white rounded-3xl p-6 border border-roast-200 shadow-sm space-y-4 hover:border-amberGold/40 hover:shadow-lg hover:-translate-y-1 transition-all flex flex-col justify-between">
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center">
+                            <span class="px-3 py-1 ${statusClass} text-[10px] font-bold rounded-full uppercase tracking-wider">Deposit ${reg.depositStatus}</span>
+                            <span class="text-xs font-bold text-amberGold">RM ${Number(reg.classFee).toFixed(2)}</span>
+                        </div>
+                        <h3 class="font-serif text-xl font-bold text-roast-950">Coffee Fundamentals — Daily Class</h3>
+                        <p class="text-xs text-roast-700 font-light">Hands-on brewing basics, held daily except Friday.</p>
+                    </div>
+                    <div class="bg-roast-50 p-4 rounded-2xl border border-roast-200 space-y-2 text-xs text-roast-700">
+                        <div class="flex justify-between"><span>Preferred Date:</span> <strong class="text-roast-950">${reg.preferredDate}</strong></div>
+                        <div class="flex justify-between"><span>Session:</span> <strong class="text-roast-950">${reg.session}</strong></div>
+                        <div class="flex justify-between"><span>Deposit Paid:</span> <strong class="text-roast-950">RM ${Number(reg.deposit).toFixed(2)}</strong></div>
+                        <div class="flex justify-between"><span>Balance Due:</span> <strong class="text-roast-950">RM ${balance}</strong></div>
+                    </div>
+                </div>`;
+            }).join('') + `</div>`;
+        }
 
         function logoutUser() { 
             localStorage.removeItem('rp_user'); 
@@ -457,6 +576,51 @@
 
         function closeReceiptModal() {
             document.getElementById('receipt-modal').classList.add('hidden');
+        }
+
+        // ===================== E-TICKET PASS ===================== 
+        const workshopTicketsData = {
+            'coffee-brewing': {
+                className: 'Coffee Brewing Masterclass',
+                datetime: 'Saturday, 10:00 AM',
+                duration: '2.5 Hours',
+                location: 'Sungai Petani Roastery',
+                fee: 'RM 120.00',
+                ref: 'RP-CBM-1001'
+            },
+            'latte-art': {
+                className: 'Latte Art Workshop',
+                datetime: 'Sunday, 02:00 PM',
+                duration: '3.0 Hours',
+                location: 'Sungai Petani Roastery',
+                fee: 'RM 150.00',
+                ref: 'RP-LAW-1002'
+            }
+        };
+
+        function openETicketModal(ticketId) {
+            const data = workshopTicketsData[ticketId];
+            if (!data) return;
+
+            const userData = JSON.parse(localStorage.getItem('rp_user') || localStorage.getItem('rp_logged_user') || '{}');
+            const attendeeName = userData.name || 'Guest';
+
+            document.getElementById('et-class-name').innerText = data.className;
+            document.getElementById('et-attendee').innerText = attendeeName;
+            document.getElementById('et-datetime').innerText = data.datetime;
+            document.getElementById('et-duration').innerText = data.duration;
+            document.getElementById('et-location').innerText = data.location;
+            document.getElementById('et-fee').innerText = data.fee;
+            document.getElementById('et-ticket-ref').innerText = data.ref;
+
+            const qrPayload = encodeURIComponent(`${data.ref}|${data.className}|${attendeeName}`);
+            document.getElementById('et-qr-code').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${qrPayload}`;
+
+            document.getElementById('eticket-modal').classList.remove('hidden');
+        }
+
+        function closeETicketModal() {
+            document.getElementById('eticket-modal').classList.add('hidden');
         }
 
         function openProfileModal() {

@@ -137,7 +137,7 @@
             <source src="video/background.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
-        <div class="absolute inset-0 bg-roast-50/70 z-10"></div>
+        <div class="absolute inset-0 bg-roast-50/75 z-10"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 w-full text-center md:text-left">
             <div class="space-y-3">
                 <h1 id="hero-welcome-title" class="text-3xl sm:text-5xl font-extrabold text-roast-950 font-serif">Hello, Member!</h1>
@@ -155,23 +155,26 @@
                 <h2 class="text-3xl font-extrabold text-roast-950 mt-1">At A Glance</h2>
             </div>
             
-            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Shop Coffee Beans CTA -->
-                <div class="bg-gradient-to-br from-amberGold/15 to-white rounded-2xl p-6 border border-amberGold/40 shadow-sm space-y-4 hover:border-amberGold/70 hover:shadow-lg hover:-translate-y-1 transition-all flex flex-col justify-between">
+            <div class="grid sm:grid-cols-2 lg:grid-cols-5 gap-6">
+                <!-- My Fixed Class Snapshot (dynamic, rendered by renderFixedClassGlanceCard()) -->
+                <div id="fixed-class-glance-card" class="bg-gradient-to-br from-amberGold/15 to-white rounded-2xl p-6 border border-amberGold/40 shadow-sm space-y-4 hover:border-amberGold/70 hover:shadow-lg hover:-translate-y-1 transition-all flex flex-col justify-between"></div>
+
+                <!-- Upcoming Class (Workshop) Snapshot -->
+                <div class="bg-white rounded-2xl p-6 border border-roast-200 shadow-sm space-y-4 hover:border-amberGold/50 hover:shadow-lg hover:-translate-y-1 transition-all flex flex-col justify-between">
                     <div class="space-y-3">
                         <div class="flex items-center justify-between">
-                            <div class="w-11 h-11 rounded-xl bg-amberGold text-roast-50 flex items-center justify-center text-lg shadow-md">
-                                <i class="fa-solid fa-mug-hot"></i>
+                            <div class="w-11 h-11 rounded-xl bg-amberGold/20 text-amberGold flex items-center justify-center text-lg">
+                                <i class="fa-solid fa-chalkboard-user"></i>
                             </div>
-                            <span class="px-2.5 py-1 bg-amberGold text-roast-50 text-[10px] font-bold rounded-full">Order Now</span>
+                            <span class="px-2.5 py-1 bg-green-500/15 text-green-600 text-[10px] font-bold rounded-full">Confirmed</span>
                         </div>
                         <div>
-                            <h3 class="text-base font-bold text-roast-950 font-serif">Craving Fresh Beans?</h3>
-                            <p class="text-xs text-roast-700 mt-0.5">Browse our in-house roasted single origin & Series RU.PA blends.</p>
+                            <h3 class="text-base font-bold text-roast-950 font-serif">Coffee Brewing Masterclass</h3>
+                            <p class="text-xs text-roast-600 mt-0.5">Saturday, 10:00 AM · Sungai Petani Roastery</p>
                         </div>
                     </div>
-                    <a href="index.html#coffee-beans" class="inline-flex items-center justify-between py-2.5 px-4 bg-amberGold hover:bg-royalBlue text-roast-50 font-bold rounded-xl text-xs transition-all shadow">
-                        Shop Coffee Beans <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                    <a href="orders.html" class="inline-flex items-center justify-between py-2.5 px-4 bg-roast-50 hover:bg-roast-200 border border-roast-200 text-roast-900 font-bold rounded-xl text-xs transition-all">
+                        View E-Ticket <i class="fa-solid fa-arrow-right text-[10px]"></i>
                     </a>
                 </div>
 
@@ -182,7 +185,7 @@
                             <div class="w-11 h-11 rounded-xl bg-amberGold/20 text-amberGold flex items-center justify-center text-lg">
                                 <i class="fa-solid fa-box-open"></i>
                             </div>
-                            <span class="px-2.5 py-1 bg-amberGold/15 text-amberGold text-[10px] font-bold rounded-full">Awaiting Payment</span>
+                            <span class="px-2.5 py-1 bg-yellow-500/15 text-yellow-600 text-[10px] font-bold rounded-full">Awaiting Payment</span>
                         </div>
                         <div>
                             <h3 class="text-base font-bold text-roast-950 font-serif">Order #ORD1001</h3>
@@ -213,22 +216,22 @@
                     </a>
                 </div>
 
-                <!-- Upcoming Class Snapshot -->
+                <!-- Shop Coffee Beans CTA (de-prioritized, shown last) -->
                 <div class="bg-white rounded-2xl p-6 border border-roast-200 shadow-sm space-y-4 hover:border-amberGold/50 hover:shadow-lg hover:-translate-y-1 transition-all flex flex-col justify-between">
                     <div class="space-y-3">
                         <div class="flex items-center justify-between">
                             <div class="w-11 h-11 rounded-xl bg-amberGold/20 text-amberGold flex items-center justify-center text-lg">
-                                <i class="fa-solid fa-chalkboard-user"></i>
+                                <i class="fa-solid fa-mug-hot"></i>
                             </div>
-                            <span class="px-2.5 py-1 bg-blue-500/15 text-blue-300 text-[10px] font-bold rounded-full">Confirmed</span>
+                            <span class="px-2.5 py-1 bg-amberGold/15 text-amberGold text-[10px] font-bold rounded-full">Order Now</span>
                         </div>
                         <div>
-                            <h3 class="text-base font-bold text-roast-950 font-serif">Coffee Brewing Masterclass</h3>
-                            <p class="text-xs text-roast-600 mt-0.5">Saturday, 10:00 AM · Sungai Petani Roastery</p>
+                            <h3 class="text-base font-bold text-roast-950 font-serif">Craving Fresh Beans?</h3>
+                            <p class="text-xs text-roast-700 mt-0.5">Browse our in-house roasted single origin & Series RU.PA blends.</p>
                         </div>
                     </div>
-                    <a href="orders.html" class="inline-flex items-center justify-between py-2.5 px-4 bg-roast-50 hover:bg-roast-200 border border-roast-200 text-roast-900 font-bold rounded-xl text-xs transition-all">
-                        View E-Ticket <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                    <a href="index.html#coffee-beans" class="inline-flex items-center justify-between py-2.5 px-4 bg-roast-50 hover:bg-roast-200 border border-roast-200 text-roast-900 font-bold rounded-xl text-xs transition-all">
+                        Shop Coffee Beans <i class="fa-solid fa-arrow-right text-[10px]"></i>
                     </a>
                 </div>
             </div>
@@ -332,7 +335,69 @@
             } catch(e) {}
             updateCartUI();
             updateWishlistUI();
+            renderFixedClassGlanceCard();
         });
+
+        // Fixed Class registrations are submitted from the homepage's "Register as Student" 
+        // form and stored under this shared localStorage key. Show the current customer's 
+        // latest registration here, or a CTA to register if they haven't yet. 
+        function renderFixedClassGlanceCard() {
+            const card = document.getElementById('fixed-class-glance-card');
+            if (!card) return;
+
+            const userData = JSON.parse(localStorage.getItem('rp_user') || localStorage.getItem('rp_logged_user') || '{}');
+            const userEmail = (userData.email || '').toLowerCase();
+
+            let allStudents = [];
+            try {
+                allStudents = JSON.parse(localStorage.getItem('rp_fixed_class_students') || '[]');
+            } catch (e) {
+                allStudents = [];
+            }
+
+            const myRegistration = allStudents.find(s => (s.email || '').toLowerCase() === userEmail);
+
+            if (!myRegistration) {
+                card.innerHTML = `
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <div class="w-11 h-11 rounded-xl bg-amberGold/20 text-amberGold flex items-center justify-center text-lg">
+                                <i class="fa-solid fa-user-pen"></i>
+                            </div>
+                            <span class="px-2.5 py-1 bg-red-500/15 text-red-600 text-[10px] font-bold rounded-full">Not Registered</span>
+                        </div>
+                        <div>
+                            <h3 class="text-base font-bold text-roast-950 font-serif">Join a Fixed Class</h3>
+                            <p class="text-xs text-roast-600 mt-0.5">Daily sessions, 10AM–12PM or 2PM–5PM. Just a 50% deposit to secure your seat.</p>
+                        </div>
+                    </div>
+                    <a href="index.html#fixed-classes" class="inline-flex items-center justify-between py-2.5 px-4 bg-amberGold hover:bg-royalBlue text-roast-50 font-bold rounded-xl text-xs transition-all shadow">
+                        Register as Student <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                    </a>
+                `;
+                return;
+            }
+
+            const statusClass = 'bg-amberGold/15 text-amberGold';
+
+            card.innerHTML = `
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <div class="w-11 h-11 rounded-xl bg-amberGold/20 text-amberGold flex items-center justify-center text-lg">
+                            <i class="fa-solid fa-calendar-check"></i>
+                        </div>
+                        <span class="px-2.5 py-1 ${statusClass} text-[10px] font-bold rounded-full">Deposit ${myRegistration.depositStatus}</span>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-bold text-roast-950 font-serif">Fixed Class Booked</h3>
+                        <p class="text-xs text-roast-600 mt-0.5">${myRegistration.preferredDate} · ${myRegistration.session}</p>
+                    </div>
+                </div>
+                <a href="orders.html" class="inline-flex items-center justify-between py-2.5 px-4 bg-roast-50 hover:bg-roast-200 border border-roast-200 text-roast-900 font-bold rounded-xl text-xs transition-all">
+                    View Details <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                </a>
+            `;
+        }
 
         function logoutUser() {
             localStorage.removeItem('rp_user');
