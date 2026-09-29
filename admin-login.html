@@ -144,7 +144,7 @@
                         <label class="block text-xs font-semibold text-roast-700 uppercase mb-1">Admin Email / Username</label> 
                         <div class="relative"> 
                             <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-roast-600"><i class="fa-solid fa-user-shield text-xs"></i></span> 
-                            <input type="text" id="admin-email" required placeholder="admin@rumahpanggang.com" class="w-full bg-roast-100/90 border border-roast-200 text-roast-950 rounded-xl pl-10 pr-4 py-3 text-xs focus:outline-none focus:border-amberGold transition-all"> 
+                            <input type="text" id="admin-email" required placeholder="admin@nbca.academy" class="w-full bg-roast-100/90 border border-roast-200 text-roast-950 rounded-xl pl-10 pr-4 py-3 text-xs focus:outline-none focus:border-amberGold transition-all"> 
                         </div> 
                     </div> 
                     <div> 
@@ -189,9 +189,14 @@
             const email = document.getElementById('admin-email').value.trim(); 
             const password = document.getElementById('admin-password').value.trim(); 
 
-            // Credential rujukan ujian (Test credentials) 
-            if (email === 'admin@rumahpanggang.com' && password === 'admin123') { 
-                const adminData = { name: 'Super Admin', email: email, role: 'admin' }; 
+            // Built-in owner account, plus any admins created under Manage > Admin Accounts (demo only: no server yet)
+            let match = null;
+            if (email.toLowerCase() === 'admin@nbca.academy' && password === '123456') match = { name: 'Super Admin', email: 'admin@nbca.academy' };
+            else {
+                try { match = (JSON.parse(localStorage.getItem('rp_admin_accounts') || '[]')).find(a => a.email === email.toLowerCase() && a.password === password) || null; } catch (err) {}
+            }
+            if (match) { 
+                const adminData = { name: match.name, email: match.email, role: 'admin' }; 
                 localStorage.setItem('rp_admin', JSON.stringify(adminData)); 
 
                 // Redirect ke dashboard admin (jika ada, atau ubah ikut fail admin anda) 
@@ -199,7 +204,7 @@
             } else { 
                 const alertBox = document.getElementById('error-alert'); 
                 const msgBox = document.getElementById('error-msg'); 
-                msgBox.innerText = 'Access denied. Use admin@rumahpanggang.com / admin123'; 
+                msgBox.innerText = 'Access denied. Use admin@nbca.academy / 123456 for testing.'; 
                 alertBox.classList.remove('hidden'); 
             } 
         } 

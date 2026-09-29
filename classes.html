@@ -152,6 +152,7 @@
     </div>
 
     
+    <script src="js/nbca-config.js"></script>
     <script src="js/billplz.js"></script>
     <script src="js/member-shell.js"></script>
     <script>
@@ -197,7 +198,7 @@
                 '<div class="bg-roast-50 p-4 rounded-2xl border border-roast-200 space-y-2 text-xs text-roast-700"><div class="flex justify-between gap-3"><span>Slot</span><strong class="text-roast-950 text-right">' + MemberShell.esc(w.slot) + '</strong></div><div class="flex justify-between gap-3"><span>Mode</span><strong class="text-roast-950">' + MemberShell.esc(w.modeLabel) + '</strong></div><div class="flex justify-between gap-3"><span>Location</span><strong class="text-roast-950 text-right">' + MemberShell.esc(w.location) + '</strong></div></div>' +
                 (w.status === 'Confirmed'
                     ? '<button onclick="openETicketModal(' + i + ')" class="w-full py-2.5 bg-roast-100 hover:bg-amberGold hover:text-white text-roast-900 font-bold rounded-xl text-xs transition-all border border-roast-200"><i class="fa-solid fa-qrcode mr-1"></i> View e-ticket</button>'
-                    : '<button onclick="payNow(\'workshop\', \'' + w.id + '\')" class="w-full py-2.5 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl text-xs shadow"><i class="fa-solid fa-lock mr-1"></i> Pay RM ' + Number(w.price).toFixed(2) + ' with Billplz</button>') + '</div>').join('');
+                    : w.status === 'Cancelled' ? '<p class="text-xs text-slate-500 text-center py-2">This enrollment was cancelled.</p>' : '<button onclick="payNow(\'workshop\', \'' + w.id + '\')" class="w-full py-2.5 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl text-xs shadow"><i class="fa-solid fa-lock mr-1"></i> Pay RM ' + Number(w.price).toFixed(2) + ' with Billplz</button>') + '</div>').join('');
         }
         function closeETicketModal() { document.getElementById('eticket-modal').classList.add('hidden'); }
 
@@ -225,7 +226,7 @@
                 const resched = r.classStatus === 'Reschedule';
                 const d = new Date(r.preferredDate + 'T00:00:00');
                 const balance = (Number(r.classFee) - Number(r.deposit)).toFixed(2);
-                const badge = !paid ? ['Payment pending', 'bg-amber-500/10 text-amber-600'] : admitted ? ['Confirmed', 'bg-emerald-500/10 text-emerald-600'] : resched ? ['Reschedule needed', 'bg-red-500/10 text-red-600'] : ['Awaiting confirmation', 'bg-blue-500/10 text-blue-600'];
+                const badge = r.classStatus === 'Cancelled' ? ['Cancelled', 'bg-slate-500/10 text-slate-600'] : !paid ? ['Payment pending', 'bg-amber-500/10 text-amber-600'] : admitted ? ['Confirmed', 'bg-emerald-500/10 text-emerald-600'] : resched ? ['Reschedule needed', 'bg-red-500/10 text-red-600'] : ['Awaiting confirmation', 'bg-blue-500/10 text-blue-600'];
                 return '<article class="bg-white rounded-3xl border border-roast-200 shadow-sm overflow-hidden">' +
                     '<div class="p-5 sm:p-6 grid sm:grid-cols-12 gap-5">' +
                         '<div class="sm:col-span-3 flex sm:flex-col items-center sm:items-start gap-3">' +
@@ -237,7 +238,7 @@
                             '<span class="px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider ' + badge[1] + '">' + badge[0] + '</span></div>' +
                             '<div class="flex items-start justify-between max-w-md">' + stepDot(true, false, 'fa-pen', 'Registered') + bar(paid) + stepDot(paid, !paid, 'fa-credit-card', 'Deposit paid') + bar(admitted) + stepDot(admitted, paid && !admitted && !resched, 'fa-circle-check', 'Seat confirmed') + '</div>' +
                             (resched ? '<div class="rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs p-3 flex gap-2"><i class="fa-solid fa-triangle-exclamation mt-0.5"></i><span>We need to move your session. Our team will contact you on <strong>' + MemberShell.esc(r.phone || 'your phone') + '</strong> to agree a new date.</span></div>' : '') +
-                            (!paid ? '<div class="rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs p-3 flex flex-wrap items-center justify-between gap-3"><span>Pay the deposit to secure your seat.</span><button onclick="payNow(\'fixed\', \'' + r.id + '\')" class="px-4 py-2 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-lg whitespace-nowrap">Pay RM ' + Number(r.deposit).toFixed(2) + ' with Billplz</button></div>' : '') +
+                            (!paid && r.classStatus !== 'Cancelled' ? '<div class="rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs p-3 flex flex-wrap items-center justify-between gap-3"><span>Pay the deposit to secure your seat.</span><button onclick="payNow(\'fixed\', \'' + r.id + '\')" class="px-4 py-2 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-lg whitespace-nowrap">Pay RM ' + Number(r.deposit).toFixed(2) + ' with Billplz</button></div>' : '') +
                             '<div class="grid grid-cols-3 gap-3 text-xs bg-roast-50 border border-roast-200 rounded-2xl p-3.5">' +
                                 '<div><span class="block text-[10px] text-roast-500 uppercase">Class fee</span><strong class="text-roast-950">RM ' + Number(r.classFee).toFixed(2) + '</strong></div>' +
                                 '<div><span class="block text-[10px] text-roast-500 uppercase">Deposit</span><strong class="text-roast-950">RM ' + Number(r.deposit).toFixed(2) + '</strong></div>' +

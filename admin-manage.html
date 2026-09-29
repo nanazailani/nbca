@@ -1,0 +1,1449 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage | Nb.CA Admin</title>
+    <!-- Tailwind CSS CDN -->
+    <script>if (!localStorage.getItem('rp_admin')) { window.location.replace('admin-login.html'); }</script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    screens: { xs: '420px' },
+                    colors: {
+                        adminBg: '#F1F5F9',
+                        adminCard: '#FFFFFF',
+                        adminCardHover: '#EFF6FF',
+                        adminBorder: '#E2E8F0',
+                        roast: {
+                            50: '#F8FAFC',
+                            100: '#1E293B',
+                            200: '#334155',
+                            300: '#64748B',
+                            400: '#94A3B8',
+                            500: '#475569',
+                            800: '#1E293B',
+                            900: '#0F172A',
+                            950: '#172554',
+                        },
+                        amberGold: '#2563EB',
+                        royalBlue: '#1E40AF',
+                        navy: '#172554',
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        h1, h2, h3, .font-serif { font-family: 'Playfair Display', serif; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #F1F5F9; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #2563EB; }
+
+        /* ===================== RESPONSIVE TABLE-TO-CARD (mobile/tablet) ===================== */
+        @media (max-width: 1023px) {
+            .responsive-table { min-width: 0 !important; width: 100% !important; }
+            .responsive-table thead { display: none; }
+            .responsive-table, .responsive-table tbody, .responsive-table tr, .responsive-table td {
+                display: block;
+                width: 100%;
+            }
+            .responsive-table tr {
+                margin-bottom: 0.9rem;
+                border: 1px solid #E2E8F0;
+                border-radius: 1.1rem;
+                padding: 0.9rem 1rem;
+                background: #FFFFFF;
+                box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+            }
+            .responsive-table tbody tr:last-child { margin-bottom: 0; }
+            .responsive-table td {
+                padding: 0.55rem 0;
+                border-bottom: 1px solid rgba(66, 51, 43, 0.4);
+            }
+            .responsive-table td:last-child {
+                border-bottom: none;
+                padding-top: 0.85rem;
+            }
+            .responsive-table td::before {
+                content: attr(data-label);
+                display: block;
+                font-size: 10px;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+                color: #64748B;
+                margin-bottom: 0.3rem;
+            }
+            .responsive-table td:last-child::before { display: none; }
+        }
+    </style>
+</head>
+<body data-page="m-fixed" data-title="Manage" data-sub="Catalog, content and admin accounts" class="text-slate-800 antialiased selection:bg-amberGold selection:text-white bg-slate-50 min-h-screen">
+    <script>
+        // choose which sidebar entry is highlighted from ?tab=
+        (function () { const t = new URLSearchParams(location.search).get('tab') || 'fixed'; document.body.dataset.page = 'm-' + t; })();
+    </script>
+    <div id="a-overlay"></div>
+    <aside id="a-sidebar"></aside>
+    <div class="lg:pl-64 min-h-screen flex flex-col min-w-0 overflow-x-hidden">
+        <header id="a-topbar"></header>
+        <main class="flex-1 min-w-0 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-6 lg:py-10 pb-28 lg:pb-14 space-y-8">
+
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-1.5 flex gap-1 overflow-x-auto no-scrollbar" id="manage-tabs"></div>
+
+            <!-- TAB 3: INVENTORY STOCK -->
+            <div id="view-inventory" class="admin-view space-y-6 hidden">
+                <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+                    <div>
+                        <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Inventory</span>
+                        <h3 class="text-2xl font-extrabold text-roast-950 font-serif mt-1">Roastery Stock Control</h3>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="openAddProductModal()" class="px-4 py-2.5 bg-amberGold text-adminBg font-extrabold rounded-xl text-xs shadow hover:opacity-90 flex items-center gap-2">
+                            <i class="fa-solid fa-plus"></i> Add Product
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+                    <div class="relative sm:max-w-xs w-full">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-roast-400 text-xs"></i>
+                        <input type="text" id="inventory-search" oninput="filterInventoryTable()" placeholder="Search product name..." class="w-full bg-adminCard border border-adminBorder text-roast-950 text-xs rounded-xl pl-10 pr-4 py-2.5 focus:outline-none focus:border-amberGold">
+                    </div>
+                    <div class="flex flex-wrap gap-2" id="inventory-category-filter">
+                        <button onclick="filterInventoryCategory('all', event)" class="inv-cat-btn px-3.5 py-2 rounded-xl text-[11px] font-bold bg-amberGold text-adminBg shadow transition-all">All Products</button>
+                        <button onclick="filterInventoryCategory('Coffee Beans', event)" class="inv-cat-btn px-3.5 py-2 rounded-xl text-[11px] font-bold border border-adminBorder bg-adminBg text-roast-300 hover:text-roast-950 transition-all">Coffee Beans</button>
+                        <button onclick="filterInventoryCategory('Merchandise', event)" class="inv-cat-btn px-3.5 py-2 rounded-xl text-[11px] font-bold border border-adminBorder bg-adminBg text-roast-300 hover:text-roast-950 transition-all">Merchandise</button>
+                    </div>
+                </div>
+
+                <div class="bg-transparent sm:bg-adminCard rounded-none sm:rounded-3xl border-0 sm:border sm:border-adminBorder overflow-visible sm:overflow-hidden shadow-none sm:shadow-2xl p-0 sm:p-0">
+                    <div class="overflow-x-auto">
+                        <table class="responsive-table w-full min-w-[820px] text-left text-xs" id="inventory-table">
+                            <thead class="bg-[#F8FAFC] text-roast-300 uppercase tracking-wider border-b border-adminBorder">
+                                <tr>
+                                    <th class="p-4 font-bold">Product Name</th>
+                                    <th class="p-4 font-bold">Category</th>
+                                    <th class="p-4 font-bold">Price</th>
+                                    <th class="p-4 font-bold">Stock Units</th>
+                                    <th class="p-4 font-bold">Status</th>
+                                    <th class="p-4 font-bold text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-adminBorder" id="inventory-tbody">
+                                <tr class="hover:bg-adminCardHover inventory-row">
+                                    <td class="p-4 font-bold text-roast-950 prod-name" data-label="Product Name">Colombia Finca Milan</td>
+                                    <td class="p-4 text-roast-300 prod-category" data-label="Category">Coffee Beans</td>
+                                    <td class="p-4 text-amberGold font-serif prod-price" data-label="Price">RM 65.00</td>
+                                    <td class="p-4 font-bold text-roast-950 prod-stock" data-label="Stock Units">84 units</td>
+                                    <td class="p-4" data-label="Status"><span class="px-2.5 py-0.5 bg-green-500/20 text-green-400 font-bold text-[10px] rounded-full">In Stock</span></td>
+                                    <td class="p-4 text-right space-x-2" data-label="Actions">
+                                        <button onclick="openAddStockModal(this)" class="px-3 py-1.5 bg-adminBg border border-adminBorder text-amberGold font-bold rounded-lg shadow hover:bg-adminCardHover" title="Add Stock"><i class="fa-solid fa-plus"></i> Stock</button>
+                                        <button onclick="openEditProductModal(this)" class="px-3 py-1.5 bg-adminBg border border-adminBorder text-roast-100 font-bold rounded-lg shadow hover:bg-adminCardHover" title="Edit"><i class="fa-solid fa-pen"></i></button>
+                                        <button onclick="deleteInventoryRow(this)" class="px-3 py-1.5 bg-red-500/10 text-red-400 border border-red-500/30 font-bold rounded-lg shadow hover:bg-red-500/20" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-adminCardHover inventory-row">
+                                    <td class="p-4 font-bold text-roast-950 prod-name" data-label="Product Name">Merah Saga Blend</td>
+                                    <td class="p-4 text-roast-300 prod-category" data-label="Category">Coffee Beans</td>
+                                    <td class="p-4 text-amberGold font-serif prod-price" data-label="Price">RM 45.00</td>
+                                    <td class="p-4 font-bold text-roast-950 prod-stock" data-label="Stock Units">14 units</td>
+                                    <td class="p-4" data-label="Status"><span class="px-2.5 py-0.5 bg-yellow-500/20 text-yellow-400 font-bold text-[10px] rounded-full">Low Stock</span></td>
+                                    <td class="p-4 text-right space-x-2" data-label="Actions">
+                                        <button onclick="openAddStockModal(this)" class="px-3 py-1.5 bg-adminBg border border-adminBorder text-amberGold font-bold rounded-lg shadow hover:bg-adminCardHover" title="Add Stock"><i class="fa-solid fa-plus"></i> Stock</button>
+                                        <button onclick="openEditProductModal(this)" class="px-3 py-1.5 bg-adminBg border border-adminBorder text-roast-100 font-bold rounded-lg shadow hover:bg-adminCardHover" title="Edit"><i class="fa-solid fa-pen"></i></button>
+                                        <button onclick="deleteInventoryRow(this)" class="px-3 py-1.5 bg-red-500/10 text-red-400 border border-red-500/30 font-bold rounded-lg shadow hover:bg-red-500/20" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: MANAGE FIXED CLASS -->
+            <div id="view-fixedclass" class="admin-view space-y-6 hidden">
+                <div>
+                    <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Daily Training</span>
+                    <h3 class="text-2xl font-extrabold text-roast-950 font-serif mt-1">Manage Fixed Class</h3>
+                    <p class="text-xs text-roast-500 mt-1">This is the single daily-schedule class shown on the homepage. Changes here update the website immediately.</p>
+                </div>
+
+                <form onsubmit="saveFixedClassSettings(event)" class="grid lg:grid-cols-3 gap-6 text-xs">
+                    <!-- LEFT/MAIN COLUMN: form fields, spans 2 of 3 columns on large screens -->
+                    <div class="lg:col-span-2 space-y-6">
+
+                        <div class="bg-adminCard rounded-3xl border border-adminBorder p-6 sm:p-8 shadow-xl space-y-5">
+                            <h4 class="text-sm font-bold text-roast-950 uppercase tracking-wider border-b border-adminBorder pb-3">Basic Info</h4>
+                            <div>
+                                <label class="block font-semibold text-roast-300 uppercase mb-1">Class Name</label>
+                                <input type="text" id="fcs-name" required oninput="updateFixedClassPreview()" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-roast-300 uppercase mb-1">Description</label>
+                                <textarea id="fcs-description" required rows="2" oninput="updateFixedClassPreview()" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold"></textarea>
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-roast-300 uppercase mb-1">Cover Image</label>
+                                <div class="flex items-center gap-3">
+                                    <label for="fcs-image-file" class="cursor-pointer flex-1 px-4 py-3 bg-adminBg border border-dashed border-adminBorder rounded-xl text-roast-400 text-xs flex items-center gap-2 hover:border-amberGold hover:text-amberGold transition-all">
+                                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                                        <span id="fcs-image-filename" class="truncate">Choose an image to upload</span>
+                                    </label>
+                                    <input type="file" id="fcs-image-file" accept="image/*" class="hidden" onchange="handleFixedClassImageUpload(event)">
+                                </div>
+                                <input type="hidden" id="fcs-image">
+                            </div>
+                        </div>
+
+                        <div class="bg-adminCard rounded-3xl border border-adminBorder p-6 sm:p-8 shadow-xl space-y-5">
+                            <h4 class="text-sm font-bold text-roast-950 uppercase tracking-wider border-b border-adminBorder pb-3">Schedule</h4>
+                            <div class="grid sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block font-semibold text-roast-300 uppercase mb-1">Morning Session</label>
+                                    <input type="text" id="fcs-morning" required placeholder="10:00 AM – 12:00 PM" oninput="updateFixedClassPreview()" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                                </div>
+                                <div>
+                                    <label class="block font-semibold text-roast-300 uppercase mb-1">Afternoon Session</label>
+                                    <input type="text" id="fcs-afternoon" required placeholder="2:00 PM – 4:00 PM" oninput="updateFixedClassPreview()" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-roast-300 uppercase mb-1">Closed Day</label>
+                                <select id="fcs-closed-day" onchange="updateFixedClassPreview()" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                                    <option value="0">Sunday</option>
+                                    <option value="1">Monday</option>
+                                    <option value="2">Tuesday</option>
+                                    <option value="3">Wednesday</option>
+                                    <option value="4">Thursday</option>
+                                    <option value="5" selected>Friday</option>
+                                    <option value="6">Saturday</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="bg-adminCard rounded-3xl border border-adminBorder p-6 sm:p-8 shadow-xl space-y-5">
+                            <h4 class="text-sm font-bold text-roast-950 uppercase tracking-wider border-b border-adminBorder pb-3">Pricing & Deposit</h4>
+                            <div class="grid sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block font-semibold text-roast-300 uppercase mb-1">Class Fee (RM)</label>
+                                    <input type="number" step="0.01" id="fcs-fee" required oninput="updateFixedClassPreview()" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                                </div>
+                                <div>
+                                    <label class="block font-semibold text-roast-300 uppercase mb-1">Deposit Required (%)</label>
+                                    <input type="number" min="0" max="100" id="fcs-deposit-pct" required oninput="updateFixedClassPreview()" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                                </div>
+                            </div>
+                            <div class="bg-adminBg rounded-xl p-4 border border-adminBorder flex items-center justify-between">
+                                <span class="text-roast-400 uppercase tracking-wider text-[10px]">Deposit Amount (calculated)</span>
+                                <span id="fcs-deposit-preview" class="text-amberGold font-bold text-sm">RM 0.00</span>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full py-3.5 bg-amberGold hover:opacity-90 text-adminBg font-extrabold rounded-xl text-xs shadow transition-all">
+                            Save Fixed Class Settings
+                        </button>
+                    </div>
+
+                    <!-- RIGHT COLUMN: sticky live preview of how the card looks on the homepage -->
+                    <div class="lg:col-span-1">
+                        <div class="lg:sticky lg:top-24 space-y-3">
+                            <h4 class="text-[10px] font-bold text-roast-400 uppercase tracking-wider">Live Preview — Homepage Card</h4>
+                            <div class="bg-white rounded-3xl border border-adminBorder shadow-xl overflow-hidden">
+                                <div class="relative h-40">
+                                    <img id="fcs-preview-image" src="" alt="Preview" class="w-full h-full object-cover">
+                                    <span class="absolute top-3 left-3 px-2.5 py-1 bg-amberGold text-white text-[9px] font-bold uppercase rounded-full">Walk-In Friendly</span>
+                                </div>
+                                <div class="p-5 space-y-3">
+                                    <div>
+                                        <h5 id="fcs-preview-name" class="text-base font-bold text-roast-950 font-serif">Coffee Fundamentals — Daily Class</h5>
+                                        <p id="fcs-preview-description" class="text-[11px] text-roast-500 mt-1">Hands-on brewing basics for beginners.</p>
+                                    </div>
+                                    <div class="space-y-1.5 text-[11px] text-roast-600">
+                                        <div class="flex items-center gap-2"><i class="fa-solid fa-clock text-amberGold w-3.5"></i> <span id="fcs-preview-morning">10:00 AM – 12:00 PM</span></div>
+                                        <div class="flex items-center gap-2"><i class="fa-solid fa-clock text-amberGold w-3.5"></i> <span id="fcs-preview-afternoon">2:00 PM – 4:00 PM</span></div>
+                                        <div class="flex items-center gap-2"><i class="fa-solid fa-calendar-xmark text-amberGold w-3.5"></i> Closed <span id="fcs-preview-closed-day">Friday</span></div>
+                                    </div>
+                                    <div class="flex items-center justify-between py-2.5 border-y border-adminBorder">
+                                        <div>
+                                            <span class="text-[9px] text-roast-400 uppercase tracking-wider block">Fee</span>
+                                            <span id="fcs-preview-fee" class="text-lg font-extrabold text-amberGold font-serif">RM 150.00</span>
+                                        </div>
+                                        <div class="text-right">
+                                            <span class="text-[9px] text-roast-400 uppercase tracking-wider block">Deposit</span>
+                                            <span id="fcs-preview-deposit" class="text-sm font-bold text-roast-950">RM 75.00</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- TAB 4: MANAGE CLASSES -->
+            <div id="view-classes" class="admin-view space-y-6 hidden">
+                <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+                    <div>
+                        <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Workshops & Masterclasses</span>
+                        <h3 class="text-2xl font-extrabold text-roast-950 font-serif mt-1">Class Slot Management</h3>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="openAddClassModal()" class="px-4 py-2.5 bg-amberGold text-adminBg font-extrabold rounded-xl text-xs shadow hover:opacity-90 flex items-center gap-2">
+                            <i class="fa-solid fa-plus"></i> Add Class Slot
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+                    <div class="relative sm:max-w-xs w-full">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-roast-400 text-xs"></i>
+                        <input type="text" id="class-search" oninput="filterClassesTable()" placeholder="Search class name..." class="w-full bg-adminCard border border-adminBorder text-roast-950 text-xs rounded-xl pl-10 pr-4 py-2.5 focus:outline-none focus:border-amberGold">
+                    </div>
+                    <select id="class-month-filter" onchange="filterClassesTable()" class="bg-adminCard border border-adminBorder text-roast-200 text-xs rounded-xl px-4 py-2.5 focus:outline-none focus:border-amberGold">
+                        <option value="all">All Months</option>
+                        <option value="01">January</option>
+                        <option value="02">February</option>
+                        <option value="03">March</option>
+                        <option value="04">April</option>
+                        <option value="05">May</option>
+                        <option value="06">June</option>
+                        <option value="07">July</option>
+                        <option value="08">August</option>
+                        <option value="09">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                    </select>
+                    <select id="class-year-filter" onchange="filterClassesTable()" class="bg-adminCard border border-adminBorder text-roast-200 text-xs rounded-xl px-4 py-2.5 focus:outline-none focus:border-amberGold">
+                        <option value="all">All Years</option>
+                        <option value="2026">2026</option>
+                        <option value="2027">2027</option>
+                    </select>
+                </div>
+
+                <div class="bg-transparent sm:bg-adminCard rounded-none sm:rounded-3xl border-0 sm:border sm:border-adminBorder overflow-visible sm:overflow-hidden shadow-none sm:shadow-2xl p-0 sm:p-0">
+                    <div class="overflow-x-auto">
+                        <table class="responsive-table w-full min-w-[960px] text-left text-xs" id="classes-table">
+                            <thead class="bg-[#F8FAFC] text-roast-300 uppercase tracking-wider border-b border-adminBorder">
+                                <tr>
+                                    <th class="p-4 font-bold">Class Name</th>
+                                    <th class="p-4 font-bold">Format</th>
+                                    <th class="p-4 font-bold">Schedule</th>
+                                    <th class="p-4 font-bold">Price</th>
+                                    <th class="p-4 font-bold">Location / Meeting Link</th>
+                                    <th class="p-4 font-bold">Max Pax</th>
+                                    <th class="p-4 font-bold text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-adminBorder" id="classes-tbody">
+                                <tr class="hover:bg-adminCardHover class-row" data-month="09" data-year="2026">
+                                    <td class="p-4 font-bold text-roast-950 class-name" data-label="Class Name">Coffee Brewing Masterclass</td>
+                                    <td class="p-4 whitespace-nowrap class-format" data-label="Format"><span class="whitespace-nowrap inline-flex items-center px-2.5 py-0.5 bg-blue-500/20 text-blue-300 font-bold text-[10px] rounded-full"><i class="fa-solid fa-people-roof mr-1"></i>Face-to-Face</span></td>
+                                    <td class="p-4 text-roast-300 whitespace-nowrap class-schedule" data-label="Schedule">Sat, 6 Sep 2026 — 10:00 AM</td>
+                                    <td class="p-4 text-amberGold font-serif class-price" data-label="Price">RM 120.00</td>
+                                    <td class="p-4 text-roast-300 class-location" data-label="Location / Meeting Link">Nb.CA Academy, Sungai Petani, Kedah</td>
+                                    <td class="p-4 font-bold text-roast-950 class-pax" data-label="Max Pax">8 pax</td>
+                                    <td class="p-4 text-right space-x-2" data-label="Actions">
+                                        <button onclick="openEditClassModal(this)" class="px-3 py-1.5 bg-adminBg border border-adminBorder text-roast-100 font-bold rounded-lg shadow hover:bg-adminCardHover" title="Edit"><i class="fa-solid fa-pen"></i></button>
+                                        <button onclick="deleteClassRow(this)" class="px-3 py-1.5 bg-red-500/10 text-red-400 border border-red-500/30 font-bold rounded-lg shadow hover:bg-red-500/20" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-adminCardHover class-row" data-month="09" data-year="2026">
+                                    <td class="p-4 font-bold text-roast-950 class-name" data-label="Class Name">Coffee Cupping Experience</td>
+                                    <td class="p-4 whitespace-nowrap class-format" data-label="Format"><span class="whitespace-nowrap inline-flex items-center px-2.5 py-0.5 bg-purple-500/20 text-purple-300 font-bold text-[10px] rounded-full"><i class="fa-solid fa-video mr-1"></i>Online</span></td>
+                                    <td class="p-4 text-roast-300 whitespace-nowrap class-schedule" data-label="Schedule">Thu, 11 Sep 2026 — 8:00 PM</td>
+                                    <td class="p-4 text-amberGold font-serif class-price" data-label="Price">RM 80.00</td>
+                                    <td class="p-4 text-roast-300 class-location" data-label="Location / Meeting Link"><a href="#" class="text-amberGold hover:underline break-all">https://zoom.us/j/1234567890</a></td>
+                                    <td class="p-4 font-bold text-roast-950 class-pax" data-label="Max Pax">10 pax</td>
+                                    <td class="p-4 text-right space-x-2" data-label="Actions">
+                                        <button onclick="openEditClassModal(this)" class="px-3 py-1.5 bg-adminBg border border-adminBorder text-roast-100 font-bold rounded-lg shadow hover:bg-adminCardHover" title="Edit"><i class="fa-solid fa-pen"></i></button>
+                                        <button onclick="deleteClassRow(this)" class="px-3 py-1.5 bg-red-500/10 text-red-400 border border-red-500/30 font-bold rounded-lg shadow hover:bg-red-500/20" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 5: MANAGE BLOG -->
+            <div id="view-blog" class="admin-view space-y-6 hidden">
+                <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+                    <div>
+                        <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Stories & Culture</span>
+                        <h3 class="text-2xl font-extrabold text-roast-950 font-serif mt-1">Announcement Management</h3>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="openAddBlogModal()" class="px-4 py-2.5 bg-amberGold text-adminBg font-extrabold rounded-xl text-xs shadow hover:opacity-90 flex items-center gap-2">
+                            <i class="fa-solid fa-plus"></i> New Announcement
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+                    <div class="relative sm:max-w-xs w-full">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-roast-400 text-xs"></i>
+                        <input type="text" id="blog-search" oninput="filterBlogTable()" placeholder="Search post title..." class="w-full bg-adminCard border border-adminBorder text-roast-950 text-xs rounded-xl pl-10 pr-4 py-2.5 focus:outline-none focus:border-amberGold">
+                    </div>
+                    <p class="text-[11px] text-roast-400 flex items-center gap-1.5">
+                        <i class="fa-solid fa-circle-info text-amberGold"></i> Published announcements appear live on the customer site's Announcements section.
+                    </p>
+                </div>
+
+                <div id="blog-tbody" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+            </div>
+
+            <!-- TAB: ADMIN ACCOUNTS -->
+            <div id="view-admins" class="admin-view space-y-6 hidden">
+                <div><span class="text-[11px] font-extrabold tracking-[0.18em] text-amberGold uppercase">Access</span><h3 class="text-2xl font-extrabold text-slate-900 font-serif mt-1">Admin Accounts</h3><p class="text-xs text-slate-500 mt-1">People who can sign in to this console.</p></div>
+                <div class="grid lg:grid-cols-5 gap-6">
+                    <div class="lg:col-span-3 bg-white rounded-3xl border border-slate-200 shadow-sm p-5 sm:p-6"><h4 class="font-serif text-base font-bold text-slate-900 mb-3">Current admins</h4><div id="admin-list" class="divide-y divide-slate-100"></div></div>
+                    <form onsubmit="addAdminAccount(event)" class="lg:col-span-2 bg-white rounded-3xl border border-slate-200 shadow-sm p-5 sm:p-6 space-y-3 text-xs h-fit">
+                        <h4 class="font-serif text-base font-bold text-slate-900">Add an admin</h4>
+                        <div><label class="block font-semibold text-slate-600 uppercase mb-1">Full name</label><input id="aa-name" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-amberGold"></div>
+                        <div><label class="block font-semibold text-slate-600 uppercase mb-1">Email</label><input id="aa-email" type="email" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-amberGold"></div>
+                        <div><label class="block font-semibold text-slate-600 uppercase mb-1">Password</label><div class="relative"><input id="aa-pass" type="password" required minlength="6" class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-3.5 pr-11 py-2.5 focus:outline-none focus:border-amberGold"><button type="button" onclick="togglePw('aa-pass', this)" class="absolute inset-y-0 right-0 px-3.5 text-slate-500 hover:text-amberGold" aria-label="Show password"><i class="fa-solid fa-eye"></i></button></div><p class="text-[10px] text-slate-500 mt-1">At least 6 characters.</p></div>
+                        <button class="w-full py-3 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl shadow transition-all">Create admin</button>
+                    </form>
+                </div>
+            </div>
+
+        </main>
+    </div>
+    <nav id="a-bottomnav" aria-label="Primary"></nav>
+
+    <!-- MODAL: ADD / EDIT PRODUCT -->
+    <div id="product-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-adminCard border border-adminBorder rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl relative space-y-6 text-roast-100">
+            <button onclick="closeProductModal()" class="absolute top-5 right-5 text-roast-400 hover:text-roast-950 p-2">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div class="text-center space-y-1">
+                <div class="w-14 h-14 rounded-2xl bg-amberGold/20 border border-amberGold/40 text-amberGold flex items-center justify-center mx-auto text-2xl shadow">
+                    <i class="fa-solid fa-box-open"></i>
+                </div>
+                <h3 id="product-modal-title" class="text-xl font-bold font-serif text-roast-950">Add New Product</h3>
+                <p class="text-xs text-roast-300">Fill in product details below</p>
+            </div>
+            <div class="space-y-4 text-xs">
+                <input type="hidden" id="edit-row-index" value="">
+                <div>
+                    <label class="block font-semibold text-roast-300 uppercase mb-1">Product Name</label>
+                    <input type="text" id="input-prod-name" placeholder="e.g. Ethiopian Yirgacheffe" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                </div>
+                <div>
+                    <label class="block font-semibold text-roast-300 uppercase mb-1">Category</label>
+                    <select id="input-prod-cat" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                        <option value="Coffee Beans">Coffee Beans</option>
+                        <option value="Masterclass">Masterclass Pass</option>
+                        <option value="Merchandise">Merchandise</option>
+                        <option value="Drip Bags">Drip Bags</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block font-semibold text-roast-300 uppercase mb-1">Price (RM)</label>
+                        <input type="number" step="0.01" id="input-prod-price" placeholder="50.00" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-roast-300 uppercase mb-1">Initial Stock</label>
+                        <input type="number" id="input-prod-stock" placeholder="50" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                    </div>
+                </div>
+            </div>
+            <div class="flex gap-3 pt-2">
+                <button onclick="saveProductData()" class="flex-1 py-3 bg-amberGold text-adminBg font-extrabold rounded-xl text-xs shadow hover:opacity-90">Save Product</button>
+                <button onclick="closeProductModal()" class="px-5 py-3 bg-adminBg text-roast-300 font-bold rounded-xl border border-adminBorder text-xs">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: ADD STOCK -->
+    <div id="stock-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-adminCard border border-adminBorder rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl relative space-y-6 text-roast-100">
+            <button onclick="closeAddStockModal()" class="absolute top-5 right-5 text-roast-400 hover:text-roast-950 p-2">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div class="text-center space-y-1">
+                <div class="w-14 h-14 rounded-2xl bg-amberGold/20 border border-amberGold/40 text-amberGold flex items-center justify-center mx-auto text-2xl shadow">
+                    <i class="fa-solid fa-boxes-stacked"></i>
+                </div>
+                <h3 class="text-xl font-bold font-serif text-roast-950">Add Stock Units</h3>
+                <p id="modal-stock-prod-name" class="text-xs text-amberGold font-bold">Product Name</p>
+            </div>
+            <div class="space-y-4 text-xs">
+                <div>
+                    <label class="block font-semibold text-roast-300 uppercase mb-1">Quantity to Add (+)</label>
+                    <input type="number" id="input-add-stock-qty" placeholder="e.g. 20" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                </div>
+            </div>
+            <div class="flex gap-3 pt-2">
+                <button onclick="confirmAddStock()" class="flex-1 py-3 bg-amberGold text-adminBg font-extrabold rounded-xl text-xs shadow hover:opacity-90">Update Stock</button>
+                <button onclick="closeAddStockModal()" class="px-5 py-3 bg-adminBg text-roast-300 font-bold rounded-xl border border-adminBorder text-xs">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: ADD / EDIT CLASS SLOT -->
+    <div id="class-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-adminCard border border-adminBorder rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl relative space-y-6 text-roast-100 my-8">
+            <button onclick="closeClassModal()" class="absolute top-5 right-5 text-roast-400 hover:text-roast-950 p-2">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div class="text-center space-y-1">
+                <div class="w-14 h-14 rounded-2xl bg-amberGold/20 border border-amberGold/40 text-amberGold flex items-center justify-center mx-auto text-2xl shadow">
+                    <i class="fa-solid fa-chalkboard-user"></i>
+                </div>
+                <h3 id="class-modal-title" class="text-xl font-bold font-serif text-roast-950">Add Class Slot</h3>
+                <p class="text-xs text-roast-300">Fill in the class & slot details below</p>
+            </div>
+            <div class="space-y-4 text-xs">
+                <input type="hidden" id="edit-class-index" value="">
+                <div>
+                    <label class="block font-semibold text-roast-300 uppercase mb-1">Class Name</label>
+                    <input type="text" id="input-class-name" list="class-name-suggestions" placeholder="e.g. Latte Art Workshop" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                    <datalist id="class-name-suggestions">
+                        <option value="Coffee Brewing Masterclass">
+                        <option value="Latte Art Workshop">
+                        <option value="Coffee Cupping Experience">
+                    </datalist>
+                </div>
+
+                <div>
+                    <label class="block font-semibold text-roast-300 uppercase mb-1">Class Format</label>
+                    <select id="input-class-format" onchange="toggleClassLocationField()" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                        <option value="face-to-face">Face-to-Face</option>
+                        <option value="online">Online</option>
+                    </select>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block font-semibold text-roast-300 uppercase mb-1">Price (RM)</label>
+                        <input type="number" step="0.01" id="input-class-price" placeholder="120.00" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-roast-300 uppercase mb-1">Max Pax</label>
+                        <input type="number" id="input-class-pax" placeholder="8" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block font-semibold text-roast-300 uppercase mb-1">Slot Date & Time</label>
+                    <input type="text" id="input-class-schedule" placeholder="e.g. Sat, 6 Sep 2026 — 10:00 AM" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                </div>
+
+                <!-- Face-to-Face: Location field -->
+                <div id="field-class-location">
+                    <label class="block font-semibold text-roast-300 uppercase mb-1">Location</label>
+                    <input type="text" id="input-class-location-val" placeholder="e.g. Nb.CA Academy, Sungai Petani, Kedah" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                </div>
+
+                <!-- Online: Meeting Link field -->
+                <div id="field-class-link" class="hidden">
+                    <label class="block font-semibold text-roast-300 uppercase mb-1">Meeting Link</label>
+                    <input type="url" id="input-class-link-val" placeholder="e.g. https://zoom.us/j/1234567890" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                </div>
+            </div>
+            <div class="flex gap-3 pt-2">
+                <button onclick="saveClassData()" class="flex-1 py-3 bg-amberGold text-adminBg font-extrabold rounded-xl text-xs shadow hover:opacity-90">Save Slot</button>
+                <button onclick="closeClassModal()" class="px-5 py-3 bg-adminBg text-roast-300 font-bold rounded-xl border border-adminBorder text-xs">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: ADD / EDIT BLOG POST -->
+    <div id="blog-post-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-adminCard border border-adminBorder rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl relative space-y-6 text-roast-100 my-8">
+            <button onclick="closeBlogPostModal()" class="absolute top-5 right-5 text-roast-400 hover:text-roast-950 p-2">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div class="text-center space-y-1">
+                <div class="w-14 h-14 rounded-2xl bg-amberGold/20 border border-amberGold/40 text-amberGold flex items-center justify-center mx-auto text-2xl shadow">
+                    <i class="fa-solid fa-bullhorn"></i>
+                </div>
+                <h3 id="blog-post-modal-title" class="text-xl font-bold font-serif text-roast-950">New Blog Post</h3>
+                <p class="text-xs text-roast-300">This will appear live on the customer site's Announcements section</p>
+            </div>
+            <div class="space-y-4 text-xs">
+                <input type="hidden" id="edit-blog-id" value="">
+                <div>
+                    <label class="block font-semibold text-roast-300 uppercase mb-1">Post Title</label>
+                    <input type="text" id="input-blog-title" placeholder="e.g. New Single-Origin Drop This Week" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block font-semibold text-roast-300 uppercase mb-1">Category</label>
+                        <select id="input-blog-category" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                            <option value="Uncategorized">Uncategorized</option>
+                            <option value="Culture">Culture</option>
+                            <option value="Bean">Bean</option>
+                            <option value="Recipe">Recipe</option>
+                            <option value="News">News</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-roast-300 uppercase mb-1">Author</label>
+                        <input type="text" id="input-blog-author" value="Nb.CA" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-semibold text-roast-300 uppercase mb-1">Cover Image</label>
+                    <div class="flex items-center gap-3">
+                        <label for="input-blog-image-file" class="cursor-pointer flex-1 px-4 py-3 bg-adminBg border border-dashed border-adminBorder rounded-xl text-roast-300 text-xs flex items-center gap-2 hover:border-amberGold hover:text-amberGold transition-all">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                            <span id="blog-image-filename" class="truncate">Choose an image to upload</span>
+                        </label>
+                        <input type="file" id="input-blog-image-file" accept="image/*" class="hidden" onchange="handleBlogImageUpload(event)">
+                    </div>
+                    <div id="blog-image-preview-wrap" class="mt-3 hidden relative">
+                        <img id="blog-image-preview" src="" alt="Cover preview" class="w-full h-32 object-cover rounded-xl border border-adminBorder">
+                        <button type="button" onclick="removeBlogImage()" class="absolute top-2 right-2 w-7 h-7 rounded-full bg-adminBg/90 border border-adminBorder text-roast-200 hover:text-red-400 flex items-center justify-center text-xs" title="Remove image">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-semibold text-roast-300 uppercase mb-1">Short Excerpt (shown on the card preview)</label>
+                    <textarea id="input-blog-excerpt" rows="2" placeholder="A short teaser sentence or two..." class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold"></textarea>
+                </div>
+                <div>
+                    <label class="block font-semibold text-roast-300 uppercase mb-1">Full Article Content</label>
+                    <textarea id="input-blog-content" rows="6" placeholder="Write the full article here. Separate paragraphs with a blank line." class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold"></textarea>
+                </div>
+            </div>
+            <div class="flex gap-3 pt-2">
+                <button onclick="saveBlogPost()" class="flex-1 py-3 bg-amberGold text-adminBg font-extrabold rounded-xl text-xs shadow hover:opacity-90">Publish Post</button>
+                <button onclick="closeBlogPostModal()" class="px-5 py-3 bg-adminBg text-roast-300 font-bold rounded-xl border border-adminBorder text-xs">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/nbca-config.js"></script>
+    <script src="js/admin-shell.js"></script>
+    <!-- SCRIPT LOGIC -->
+    <script>
+        let activeStockRow = null;
+
+        // ===================== TABS =====================
+        const TABS = [['fixed', 'fixedclass', 'Fixed Class Settings', 'fa-sliders'], ['slots', 'classes', 'Workshop Slots', 'fa-clock'], ['inventory', 'inventory', 'Inventory', 'fa-boxes-stacked'], ['blog', 'blog', 'Announcements', 'fa-bullhorn'], ['admins', 'admins', 'Admin Accounts', 'fa-user-shield']];
+        function showTab(key) {
+            const t = TABS.find(x => x[0] === key) || TABS[0];
+            document.querySelectorAll('.admin-view').forEach(el => el.classList.add('hidden'));
+            document.getElementById('view-' + t[1]).classList.remove('hidden');
+            document.getElementById('manage-tabs').innerHTML = TABS.map(x => '<a href="admin-manage.html?tab=' + x[0] + '" class="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all ' + (x[0] === t[0] ? 'bg-amberGold text-white shadow' : 'text-slate-600 hover:bg-slate-100') + '"><i class="fa-solid ' + x[3] + '"></i>' + x[2] + '</a>').join('');
+            if (t[0] === 'fixed') loadFixedClassSettingsIntoForm();
+            if (t[0] === 'admins') renderAdmins();
+        }
+        function showAdminToast(msg) { AdminShell.toast(msg); }
+
+        // ===================== ADMIN ACCOUNTS =====================
+        const adminEsc = v => AdminShell.esc(v);
+        function loadAdminAccounts() { try { return JSON.parse(localStorage.getItem('rp_admin_accounts') || '[]'); } catch (e) { return []; } }
+        function renderAdmins() {
+            const me = (AdminShell.admin() || {}).email;
+            const row = (name, email, note, del) => '<div class="flex items-center gap-3 py-3"><span class="w-10 h-10 rounded-full bg-blue-100 text-amberGold font-bold text-xs flex items-center justify-center shrink-0">' + adminEsc(AdminShell.initials(name)) + '</span><div class="min-w-0 flex-1"><p class="text-sm font-bold text-slate-900 truncate">' + adminEsc(name) + (email === me ? ' <span class="text-[10px] font-bold text-amberGold">(you)</span>' : '') + '</p><p class="text-[11px] text-slate-500 truncate">' + adminEsc(email) + '</p></div><span class="text-[10px] font-bold text-slate-500 bg-slate-100 rounded-full px-2.5 py-1">' + note + '</span>' + (del || '') + '</div>';
+            document.getElementById('admin-list').innerHTML = row('Super Admin', 'admin@nbca.academy', 'Owner', '') +
+                loadAdminAccounts().map((a, i) => row(a.name, a.email, 'Admin', '<button onclick="removeAdmin(' + i + ')" class="text-red-500 hover:text-red-700 text-xs font-bold ml-1">Remove</button>')).join('');
+        }
+        function addAdminAccount(e) {
+            e.preventDefault();
+            const name = document.getElementById('aa-name').value.trim(), email = document.getElementById('aa-email').value.trim().toLowerCase(), pass = document.getElementById('aa-pass').value;
+            const list = loadAdminAccounts();
+            if (email === 'admin@nbca.academy' || list.some(a => a.email === email)) { AdminShell.toast('That email already has an admin account.'); return; }
+            list.push({ name, email, password: pass });
+            localStorage.setItem('rp_admin_accounts', JSON.stringify(list));
+            e.target.reset(); renderAdmins(); AdminShell.toast('Admin created. They can now sign in.');
+        }
+        async function removeAdmin(i) {
+            const list = loadAdminAccounts(), a = list[i];
+            if (await AdminShell.confirm({ title: 'Remove ' + a.name + '?', message: 'They will no longer be able to sign in to the admin console.', ok: 'Remove admin' })) { list.splice(i, 1); localStorage.setItem('rp_admin_accounts', JSON.stringify(list)); renderAdmins(); AdminShell.toast('Admin removed.'); }
+        }
+        function togglePw(id, btn) {
+            const input = document.getElementById(id), show = input.type === 'password';
+            input.type = show ? 'text' : 'password';
+            btn.innerHTML = '<i class="fa-solid ' + (show ? 'fa-eye-slash' : 'fa-eye') + '"></i>';
+            btn.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+        }
+
+        window.addEventListener('admin-ready', () => {
+            showTab(new URLSearchParams(location.search).get('tab') || 'fixed');
+            loadBlogPosts();
+            renderBlogTable();
+        });
+
+        // ===================== MANAGE FIXED CLASS ===================== 
+        const DEFAULT_FIXED_CLASS_SETTINGS = {
+            name: 'Coffee Fundamentals — Daily Class',
+            description: 'Hands-on brewing basics for beginners, run every operating day.',
+            image: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=800&q=80',
+            morningSession: '10:00 AM – 12:00 PM',
+            afternoonSession: '2:00 PM – 4:00 PM',
+            closedDay: 5,
+            fee: 150.00,
+            depositPct: 50
+        };
+
+        function loadFixedClassSettings() {
+            try {
+                const stored = localStorage.getItem('rp_fixed_class_settings');
+                return stored ? JSON.parse(stored) : { ...DEFAULT_FIXED_CLASS_SETTINGS };
+            } catch (e) {
+                return { ...DEFAULT_FIXED_CLASS_SETTINGS };
+            }
+        }
+
+        function loadFixedClassSettingsIntoForm() {
+            const s = loadFixedClassSettings();
+            document.getElementById('fcs-name').value = s.name;
+            document.getElementById('fcs-description').value = s.description;
+            document.getElementById('fcs-image').value = s.image;
+            document.getElementById('fcs-image-filename').innerText = s.image ? 'Current image (upload a new one to replace)' : 'Choose an image to upload';
+            document.getElementById('fcs-image-file').value = '';
+            document.getElementById('fcs-morning').value = s.morningSession;
+            document.getElementById('fcs-afternoon').value = s.afternoonSession;
+            document.getElementById('fcs-closed-day').value = String(s.closedDay);
+            document.getElementById('fcs-fee').value = s.fee;
+            document.getElementById('fcs-deposit-pct').value = s.depositPct;
+            updateFixedClassPreview();
+        }
+
+        function handleFixedClassImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (!file.type.startsWith('image/')) {
+                alert('Sila pilih fail imej yang sah.');
+                event.target.value = '';
+                return;
+            }
+
+            document.getElementById('fcs-image-filename').innerText = file.name;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('fcs-image').value = e.target.result;
+                updateFixedClassPreview();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        const FCS_DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+        function updateFixedClassPreview() {
+            const name = document.getElementById('fcs-name').value || 'Coffee Fundamentals — Daily Class';
+            const description = document.getElementById('fcs-description').value || 'Hands-on brewing basics for beginners.';
+            const image = document.getElementById('fcs-image').value;
+            const morning = document.getElementById('fcs-morning').value || '10:00 AM – 12:00 PM';
+            const afternoon = document.getElementById('fcs-afternoon').value || '2:00 PM – 4:00 PM';
+            const closedDay = FCS_DAY_NAMES[parseInt(document.getElementById('fcs-closed-day').value)] || 'Friday';
+            const fee = parseFloat(document.getElementById('fcs-fee').value) || 0;
+            const pct = parseFloat(document.getElementById('fcs-deposit-pct').value) || 0;
+            const deposit = (fee * pct / 100);
+
+            document.getElementById('fcs-deposit-preview').innerText = `RM ${deposit.toFixed(2)}`;
+
+            document.getElementById('fcs-preview-name').innerText = name;
+            document.getElementById('fcs-preview-description').innerText = description;
+            if (image) document.getElementById('fcs-preview-image').src = image;
+            document.getElementById('fcs-preview-morning').innerText = morning;
+            document.getElementById('fcs-preview-afternoon').innerText = afternoon;
+            document.getElementById('fcs-preview-closed-day').innerText = closedDay;
+            document.getElementById('fcs-preview-fee').innerText = `RM ${fee.toFixed(2)}`;
+            document.getElementById('fcs-preview-deposit').innerText = `RM ${deposit.toFixed(2)}`;
+        }
+
+        function saveFixedClassSettings(e) {
+            e.preventDefault();
+            const image = document.getElementById('fcs-image').value.trim();
+            if (!image) {
+                alert('Sila upload gambar cover untuk Fixed Class.');
+                return;
+            }
+            const settings = {
+                name: document.getElementById('fcs-name').value.trim(),
+                description: document.getElementById('fcs-description').value.trim(),
+                image: image,
+                morningSession: document.getElementById('fcs-morning').value.trim(),
+                afternoonSession: document.getElementById('fcs-afternoon').value.trim(),
+                closedDay: parseInt(document.getElementById('fcs-closed-day').value),
+                fee: parseFloat(document.getElementById('fcs-fee').value) || 0,
+                depositPct: parseFloat(document.getElementById('fcs-deposit-pct').value) || 0
+            };
+            try {
+                localStorage.setItem('rp_fixed_class_settings', JSON.stringify(settings));
+            } catch (err) {
+                alert('Imej terlalu besar untuk disimpan. Sila cuba imej dengan saiz fail yang lebih kecil.');
+                return;
+            }
+            showAdminToast('Fixed Class settings saved. The homepage will reflect these changes.');
+        }
+
+        // --- EDIT PROFILE MODAL FUNCTIONS ---
+
+        // --- ADD ADMIN FUNCTIONS (create logins for other admins) ---
+
+
+
+
+
+
+
+
+
+        // --- MEMBERS SEARCH FUNCTION ---
+
+        // ===================== STUDENT / CUSTOMER SUB-TABS ===================== 
+
+        // Fixed Class student registrations are submitted from the customer site (index.html) 
+        // and stored under this shared localStorage key. 
+
+
+
+
+
+        // Admin confirms the payment and admits the student into the class.
+
+        // Flags the booking as needing a new date and opens WhatsApp to the client. Frees the seat.
+
+
+        // --- INVENTORY MANAGEMENT FUNCTIONS ---
+        function openAddProductModal() {
+            document.getElementById('product-modal-title').innerText = "Add New Product";
+            document.getElementById('edit-row-index').value = "";
+            document.getElementById('input-prod-name').value = "";
+            document.getElementById('input-prod-price').value = "";
+            document.getElementById('input-prod-stock').value = "";
+            document.getElementById('product-modal').classList.remove('hidden');
+        }
+
+        function openEditProductModal(btn) {
+            const row = btn.closest('tr');
+            activeStockRow = row;
+
+            const name = row.querySelector('.prod-name').innerText;
+            const category = row.querySelector('.prod-category').innerText;
+            const price = row.querySelector('.prod-price').innerText.replace('RM ', '');
+            const stockText = row.querySelector('.prod-stock').innerText.replace(' units', '');
+
+            document.getElementById('product-modal-title').innerText = "Edit Product";
+            document.getElementById('edit-row-index').value = "edit";
+            document.getElementById('input-prod-name').value = name;
+            document.getElementById('input-prod-cat').value = category;
+            document.getElementById('input-prod-price').value = price;
+            document.getElementById('input-prod-stock').value = stockText;
+            document.getElementById('product-modal').classList.remove('hidden');
+        }
+
+        function closeProductModal() {
+            document.getElementById('product-modal').classList.add('hidden');
+            activeStockRow = null;
+        }
+
+        function saveProductData() {
+            const name = document.getElementById('input-prod-name').value.trim();
+            const category = document.getElementById('input-prod-cat').value;
+            const price = parseFloat(document.getElementById('input-prod-price').value).toFixed(2);
+            const stock = parseInt(document.getElementById('input-prod-stock').value);
+            const isEdit = document.getElementById('edit-row-index').value === "edit";
+
+            if (!name || isNaN(price) || isNaN(stock)) {
+                alert('Sila lengkapkan semua maklumat produk dengan betul.');
+                return;
+            }
+
+            const statusHtml = stock > 20 
+                ? '<span class="px-2.5 py-0.5 bg-green-500/20 text-green-400 font-bold text-[10px] rounded-full">In Stock</span>'
+                : (stock > 0 ? '<span class="px-2.5 py-0.5 bg-yellow-500/20 text-yellow-400 font-bold text-[10px] rounded-full">Low Stock</span>'
+                : '<span class="px-2.5 py-0.5 bg-red-500/20 text-red-400 font-bold text-[10px] rounded-full">Out of Stock</span>');
+
+            if (isEdit && activeStockRow) {
+                activeStockRow.querySelector('.prod-name').innerText = name;
+                activeStockRow.querySelector('.prod-category').innerText = category;
+                activeStockRow.querySelector('.prod-price').innerText = `RM ${price}`;
+                activeStockRow.querySelector('.prod-stock').innerText = `${stock} units`;
+                activeStockRow.querySelector('td:nth-child(5)').innerHTML = statusHtml;
+                showAdminToast(`Product "${name}" successfully updated.`);
+            } else {
+                const tbody = document.getElementById('inventory-tbody');
+                const newRow = document.createElement('tr');
+                newRow.className = "hover:bg-adminCardHover inventory-row";
+                newRow.innerHTML = `
+                    <td class="p-4 font-bold text-roast-950 prod-name" data-label="Product Name">${name}</td>
+                    <td class="p-4 text-roast-300 prod-category" data-label="Category">${category}</td>
+                    <td class="p-4 text-amberGold font-serif prod-price" data-label="Price">RM ${price}</td>
+                    <td class="p-4 font-bold text-roast-950 prod-stock" data-label="Stock Units">${stock} units</td>
+                    <td class="p-4" data-label="Status">${statusHtml}</td>
+                    <td class="p-4 text-right space-x-2" data-label="Actions">
+                        <button onclick="openAddStockModal(this)" class="px-3 py-1.5 bg-adminBg border border-adminBorder text-amberGold font-bold rounded-lg shadow hover:bg-adminCardHover" title="Add Stock"><i class="fa-solid fa-plus"></i> Stock</button>
+                        <button onclick="openEditProductModal(this)" class="px-3 py-1.5 bg-adminBg border border-adminBorder text-roast-100 font-bold rounded-lg shadow hover:bg-adminCardHover" title="Edit"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="deleteInventoryRow(this)" class="px-3 py-1.5 bg-red-500/10 text-red-400 border border-red-500/30 font-bold rounded-lg shadow hover:bg-red-500/20" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(newRow);
+                showAdminToast(`New product "${name}" successfully added.`);
+            }
+
+            closeProductModal();
+            filterInventoryTable();
+        }
+
+        function openAddStockModal(btn) {
+            activeStockRow = btn.closest('tr');
+            const prodName = activeStockRow.querySelector('.prod-name').innerText;
+            document.getElementById('modal-stock-prod-name').innerText = prodName;
+            document.getElementById('input-add-stock-qty').value = '';
+            document.getElementById('stock-modal').classList.remove('hidden');
+        }
+
+        function closeAddStockModal() {
+            document.getElementById('stock-modal').classList.add('hidden');
+            activeStockRow = null;
+        }
+
+        function confirmAddStock() {
+            const qtyToAdd = parseInt(document.getElementById('input-add-stock-qty').value);
+            if (isNaN(qtyToAdd) || qtyToAdd <= 0) {
+                alert('Sila masukkan kuantiti stok yang sah.');
+                return;
+            }
+
+            if (activeStockRow) {
+                const stockCell = activeStockRow.querySelector('.prod-stock');
+                let currentStock = parseInt(stockCell.innerText);
+                let newStock = currentStock + qtyToAdd;
+
+                stockCell.innerText = `${newStock} units`;
+
+                const statusHtml = newStock > 20 
+                    ? '<span class="px-2.5 py-0.5 bg-green-500/20 text-green-400 font-bold text-[10px] rounded-full">In Stock</span>'
+                    : '<span class="px-2.5 py-0.5 bg-yellow-500/20 text-yellow-400 font-bold text-[10px] rounded-full">Low Stock</span>';
+                
+                activeStockRow.querySelector('td:nth-child(5)').innerHTML = statusHtml;
+                showAdminToast(`Successfully added ${qtyToAdd} units to stock.`);
+            }
+
+            closeAddStockModal();
+        }
+
+        function deleteInventoryRow(btn) {
+            if (confirm('Adakah anda pasti mahu memadam produk ini dari inventori?')) {
+                const row = btn.closest('tr');
+                row.remove();
+                showAdminToast('Product successfully deleted.');
+            }
+        }
+
+        // --- INVENTORY SEARCH & CATEGORY FILTER ---
+        let activeInventoryCategory = 'all';
+
+        function filterInventoryCategory(category, event) {
+            activeInventoryCategory = category;
+
+            document.querySelectorAll('.inv-cat-btn').forEach(btn => {
+                btn.className = "inv-cat-btn px-3.5 py-2 rounded-xl text-[11px] font-bold border border-adminBorder bg-adminBg text-roast-300 hover:text-roast-950 transition-all";
+            });
+            if (event && event.target) {
+                event.target.className = "inv-cat-btn px-3.5 py-2 rounded-xl text-[11px] font-bold bg-amberGold text-adminBg shadow transition-all";
+            }
+
+            filterInventoryTable();
+        }
+
+        function filterInventoryTable() {
+            const query = document.getElementById('inventory-search').value.toLowerCase();
+            const rows = document.querySelectorAll('.inventory-row');
+
+            rows.forEach(row => {
+                const name = row.querySelector('.prod-name').innerText.toLowerCase();
+                const category = row.querySelector('.prod-category').innerText.trim();
+
+                const matchesQuery = name.includes(query);
+                const matchesCategory = (activeInventoryCategory === 'all' || category === activeInventoryCategory);
+
+                row.style.display = (matchesQuery && matchesCategory) ? '' : 'none';
+            });
+        }
+
+        // --- CLASS SLOT MANAGEMENT FUNCTIONS ---
+        let activeClassRow = null;
+
+        function toggleClassLocationField() {
+            const format = document.getElementById('input-class-format').value;
+            const locationField = document.getElementById('field-class-location');
+            const linkField = document.getElementById('field-class-link');
+
+            if (format === 'online') {
+                locationField.classList.add('hidden');
+                linkField.classList.remove('hidden');
+            } else {
+                locationField.classList.remove('hidden');
+                linkField.classList.add('hidden');
+            }
+        }
+
+        function openAddClassModal() {
+            activeClassRow = null;
+            document.getElementById('class-modal-title').innerText = "Add Class Slot";
+            document.getElementById('edit-class-index').value = "";
+            document.getElementById('input-class-name').value = "";
+            document.getElementById('input-class-format').value = "face-to-face";
+            document.getElementById('input-class-price').value = "";
+            document.getElementById('input-class-pax').value = "";
+            document.getElementById('input-class-schedule').value = "";
+            document.getElementById('input-class-location-val').value = "";
+            document.getElementById('input-class-link-val').value = "";
+            toggleClassLocationField();
+            document.getElementById('class-modal').classList.remove('hidden');
+        }
+
+        function openEditClassModal(btn) {
+            const row = btn.closest('tr');
+            activeClassRow = row;
+
+            const name = row.querySelector('.class-name').innerText;
+            const formatBadge = row.querySelector('.class-format').innerText.trim();
+            const isOnline = formatBadge.toLowerCase().includes('online');
+            const schedule = row.querySelector('.class-schedule').innerText;
+            const price = row.querySelector('.class-price').innerText.replace('RM ', '');
+            const pax = row.querySelector('.class-pax').innerText.replace(' pax', '');
+            const locationCell = row.querySelector('.class-location');
+            const linkEl = locationCell.querySelector('a');
+            const locationValue = linkEl ? linkEl.getAttribute('href') : locationCell.innerText.trim();
+
+            document.getElementById('class-modal-title').innerText = "Edit Class Slot";
+            document.getElementById('edit-class-index').value = "edit";
+            document.getElementById('input-class-name').value = name;
+            document.getElementById('input-class-format').value = isOnline ? 'online' : 'face-to-face';
+            document.getElementById('input-class-price').value = price;
+            document.getElementById('input-class-pax').value = pax;
+            document.getElementById('input-class-schedule').value = schedule;
+
+            if (isOnline) {
+                document.getElementById('input-class-link-val').value = locationValue;
+                document.getElementById('input-class-location-val').value = "";
+            } else {
+                document.getElementById('input-class-location-val').value = locationValue;
+                document.getElementById('input-class-link-val').value = "";
+            }
+
+            toggleClassLocationField();
+            document.getElementById('class-modal').classList.remove('hidden');
+        }
+
+        function closeClassModal() {
+            document.getElementById('class-modal').classList.add('hidden');
+            activeClassRow = null;
+        }
+
+        function saveClassData() {
+            const name = document.getElementById('input-class-name').value.trim();
+            const format = document.getElementById('input-class-format').value;
+            const price = parseFloat(document.getElementById('input-class-price').value).toFixed(2);
+            const pax = parseInt(document.getElementById('input-class-pax').value);
+            const schedule = document.getElementById('input-class-schedule').value.trim();
+            const isEdit = document.getElementById('edit-class-index').value === "edit";
+
+            const locationVal = document.getElementById('input-class-location-val').value.trim();
+            const linkVal = document.getElementById('input-class-link-val').value.trim();
+
+            if (!name || !schedule || isNaN(price) || isNaN(pax)) {
+                alert('Sila lengkapkan semua maklumat kelas dengan betul.');
+                return;
+            }
+            if (format === 'online' && !linkVal) {
+                alert('Sila masukkan meeting link untuk kelas online.');
+                return;
+            }
+            if (format === 'face-to-face' && !locationVal) {
+                alert('Sila masukkan lokasi untuk kelas face-to-face.');
+                return;
+            }
+
+            const formatHtml = format === 'online'
+                ? '<span class="whitespace-nowrap inline-flex items-center px-2.5 py-0.5 bg-purple-500/20 text-purple-300 font-bold text-[10px] rounded-full"><i class="fa-solid fa-video mr-1"></i>Online</span>'
+                : '<span class="whitespace-nowrap inline-flex items-center px-2.5 py-0.5 bg-blue-500/20 text-blue-300 font-bold text-[10px] rounded-full"><i class="fa-solid fa-people-roof mr-1"></i>Face-to-Face</span>';
+
+            const locationHtml = format === 'online'
+                ? `<a href="${linkVal}" target="_blank" class="text-amberGold hover:underline break-all">${linkVal}</a>`
+                : `${locationVal}`;
+
+            const parsedDate = parseMonthYearFromSchedule(schedule);
+
+            if (isEdit && activeClassRow) {
+                activeClassRow.querySelector('.class-name').innerText = name;
+                activeClassRow.querySelector('.class-format').innerHTML = formatHtml;
+                activeClassRow.querySelector('.class-schedule').innerText = schedule;
+                activeClassRow.querySelector('.class-price').innerText = `RM ${price}`;
+                activeClassRow.querySelector('.class-location').innerHTML = locationHtml;
+                activeClassRow.querySelector('.class-pax').innerText = `${pax} pax`;
+                if (parsedDate.month) activeClassRow.setAttribute('data-month', parsedDate.month);
+                if (parsedDate.year) activeClassRow.setAttribute('data-year', parsedDate.year);
+                showAdminToast(`Class slot for "${name}" successfully updated.`);
+            } else {
+                const tbody = document.getElementById('classes-tbody');
+                const newRow = document.createElement('tr');
+                newRow.className = "hover:bg-adminCardHover class-row";
+                if (parsedDate.month) newRow.setAttribute('data-month', parsedDate.month);
+                if (parsedDate.year) newRow.setAttribute('data-year', parsedDate.year);
+                newRow.innerHTML = `
+                    <td class="p-4 font-bold text-roast-950 class-name" data-label="Class Name">${name}</td>
+                    <td class="p-4 whitespace-nowrap class-format" data-label="Format">${formatHtml}</td>
+                    <td class="p-4 text-roast-300 whitespace-nowrap class-schedule" data-label="Schedule">${schedule}</td>
+                    <td class="p-4 text-amberGold font-serif class-price" data-label="Price">RM ${price}</td>
+                    <td class="p-4 text-roast-300 class-location" data-label="Location / Meeting Link">${locationHtml}</td>
+                    <td class="p-4 font-bold text-roast-950 class-pax" data-label="Max Pax">${pax} pax</td>
+                    <td class="p-4 text-right space-x-2" data-label="Actions">
+                        <button onclick="openEditClassModal(this)" class="px-3 py-1.5 bg-adminBg border border-adminBorder text-roast-100 font-bold rounded-lg shadow hover:bg-adminCardHover" title="Edit"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="deleteClassRow(this)" class="px-3 py-1.5 bg-red-500/10 text-red-400 border border-red-500/30 font-bold rounded-lg shadow hover:bg-red-500/20" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(newRow);
+                showAdminToast(`New class slot for "${name}" successfully added.`);
+            }
+
+            closeClassModal();
+            filterClassesTable();
+        }
+
+        // Extracts month (01-12) and year (yyyy) from a free-text schedule string 
+        // like "Sat, 6 Sep 2026 — 10:00 AM" so it can be filtered by Month/Year. 
+        function parseMonthYearFromSchedule(scheduleText) {
+            const monthMap = { jan: '01', feb: '02', mar: '03', apr: '04', may: '05', jun: '06', jul: '07', aug: '08', sep: '09', oct: '10', nov: '11', dec: '12' };
+            const monthMatch = scheduleText.match(/\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\w*/i);
+            const yearMatch = scheduleText.match(/\b(20\d{2})\b/);
+            return {
+                month: monthMatch ? monthMap[monthMatch[1].toLowerCase()] : null,
+                year: yearMatch ? yearMatch[1] : null
+            };
+        }
+
+        function filterClassesTable() {
+            const query = document.getElementById('class-search').value.toLowerCase();
+            const monthFilter = document.getElementById('class-month-filter').value;
+            const yearFilter = document.getElementById('class-year-filter').value;
+            const rows = document.querySelectorAll('.class-row');
+
+            rows.forEach(row => {
+                const name = row.querySelector('.class-name').innerText.toLowerCase();
+                const rowMonth = row.getAttribute('data-month');
+                const rowYear = row.getAttribute('data-year');
+
+                const matchesQuery = name.includes(query);
+                const matchesMonth = (monthFilter === 'all' || rowMonth === monthFilter);
+                const matchesYear = (yearFilter === 'all' || rowYear === yearFilter);
+
+                row.style.display = (matchesQuery && matchesMonth && matchesYear) ? '' : 'none';
+            });
+        }
+
+        function deleteClassRow(btn) {
+            if (confirm('Adakah anda pasti mahu memadam slot kelas ini?')) {
+                const row = btn.closest('tr');
+                row.remove();
+                showAdminToast('Class slot successfully deleted.');
+            }
+        }
+
+        // ===================== BLOG POST MANAGEMENT (shared with customer site via localStorage) ===================== 
+        // Same "rp_blog_posts" localStorage key used by index.html. Whichever page runs first 
+        // seeds the default posts; after that both pages read/write the same shared list, so 
+        // publishing here shows up live on the customer Announcements section. 
+        const DEFAULT_BLOG_POSTS = [
+            {
+                id: "seed-1",
+                title: "New year, New Price, Same Quality.",
+                author: "Nb.CA",
+                date: "31/12/2024",
+                category: "Uncategorized",
+                image: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=800&q=80",
+                excerpt: "To continue supporting our farmers and maintaining the quality you love, we'll be adjusting our prices starting 1st of January 2025...",
+                content: `<p class="text-roast-200 leading-relaxed font-light text-sm sm:text-base mb-4">To continue supporting our farmers and maintaining the quality you love, we'll be adjusting our prices starting 1st of January 2025. We deeply appreciate your understanding and support as we navigate these changes together.</p><p class="text-roast-200 leading-relaxed font-light text-sm sm:text-base mb-4">Over the past year, global coffee market dynamics and logistics costs have evolved significantly.</p>`
+            },
+            {
+                id: "seed-2",
+                title: "What the hell is even Coffee Desk bro?",
+                author: "Nb.CA",
+                date: "18/12/2024",
+                category: "Culture",
+                image: "https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=800&q=80",
+                excerpt: "CoffeeDesk is a session where two worlds collide, where two arts are infused and coexist together, much like a blended coffee bean...",
+                content: `<p class="text-roast-200 leading-relaxed font-light text-sm sm:text-base mb-4">CoffeeDesk is a session where two worlds collide, where two arts are infused and coexist together, much like a blended coffee bean creating unique flavor profiles.</p><p class="text-roast-200 leading-relaxed font-light text-sm sm:text-base mb-4">Keep an eye out on our socials for the next CoffeeDesk session happening near you!</p>`
+            },
+            {
+                id: "seed-3",
+                title: "12 Grams Supremacy: The Art of Precision in Every Brew",
+                author: "Nb.CA",
+                date: "18/12/2024",
+                category: "Bean",
+                image: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=800&q=80",
+                excerpt: "In a world where more is often considered better, we're here to challenge that notion with a simple truth: 12 grams is all you need...",
+                content: `<p class="text-roast-200 leading-relaxed font-light text-sm sm:text-base mb-4">In a world where more is often considered better, we're here to challenge that notion with a simple, yet powerful truth: 12 grams is all you need.</p><p class="text-roast-200 leading-relaxed font-light text-sm sm:text-base mb-4">Experience precision brewing crafted for true coffee purists.</p>`
+            },
+            {
+                id: "seed-4",
+                title: "Meet Our Team",
+                author: "Nb.CA",
+                date: "29/08/2026",
+                category: "Team",
+                image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&q=80",
+                excerpt: "Get to know the passionate instructors behind Nb.CA Academy — full team profiles coming soon!",
+                content: `<p class="text-roast-200 leading-relaxed font-light text-sm sm:text-base mb-4">Behind every great class is a team that genuinely loves coffee and loves teaching it. We're putting together full profiles of our instructors — their background, specialities, and what they bring to each session.</p><p class="text-roast-200 leading-relaxed font-light text-sm sm:text-base">Check back soon to meet the people who'll be guiding you from Coffee Cherry all the way to your perfect cup.</p>`
+            }
+        ];
+
+        let blogPosts = [];
+        let activeBlogId = null;
+        let currentBlogImageData = "";
+
+        function handleBlogImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (!file.type.startsWith('image/')) {
+                alert('Sila pilih fail imej yang sah.');
+                event.target.value = "";
+                return;
+            }
+
+            const filenameEl = document.getElementById('blog-image-filename');
+            filenameEl.innerText = file.name;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                currentBlogImageData = e.target.result;
+                const previewWrap = document.getElementById('blog-image-preview-wrap');
+                const previewImg = document.getElementById('blog-image-preview');
+                previewImg.src = currentBlogImageData;
+                previewWrap.classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function removeBlogImage() {
+            currentBlogImageData = "";
+            document.getElementById('input-blog-image-file').value = "";
+            document.getElementById('blog-image-filename').innerText = "Choose an image to upload";
+            document.getElementById('blog-image-preview-wrap').classList.add('hidden');
+            document.getElementById('blog-image-preview').src = "";
+        }
+
+        const BLOG_DATA_VERSION = 'v2-blue-theme';
+
+        function loadBlogPosts() {
+            const storedVersion = localStorage.getItem('rp_blog_posts_version');
+            const stored = localStorage.getItem('rp_blog_posts');
+            if (stored && storedVersion === BLOG_DATA_VERSION) {
+                try {
+                    blogPosts = JSON.parse(stored);
+                } catch (e) {
+                    blogPosts = DEFAULT_BLOG_POSTS.slice();
+                }
+            } else {
+                blogPosts = DEFAULT_BLOG_POSTS.slice();
+                localStorage.setItem('rp_blog_posts', JSON.stringify(blogPosts));
+                localStorage.setItem('rp_blog_posts_version', BLOG_DATA_VERSION);
+            }
+        }
+
+        function saveBlogPostsToStorage() {
+            localStorage.setItem('rp_blog_posts', JSON.stringify(blogPosts));
+            localStorage.setItem('rp_blog_posts_version', BLOG_DATA_VERSION);
+        }
+
+        function renderBlogTable() {
+            const container = document.getElementById('blog-tbody');
+            if (!container) return;
+            if (blogPosts.length === 0) {
+                container.innerHTML = `<div class="sm:col-span-2 p-8 text-center text-roast-400 bg-adminCard rounded-2xl border border-adminBorder">No announcements yet. Click "New Announcement" to publish your first one.</div>`;
+                return;
+            }
+            container.innerHTML = blogPosts.map(post => `
+                <div class="blog-row bg-adminCard rounded-2xl border border-adminBorder overflow-hidden shadow-xl hover:border-amberGold/40 transition-all flex flex-col" data-id="${post.id}">
+                    <div class="relative h-36 sm:h-40 bg-adminBg shrink-0">
+                        <img src="${post.image}" alt="${post.title}" class="w-full h-full object-cover">
+                        <span class="absolute top-3 left-3 px-2.5 py-1 bg-amberGold text-adminBg text-[10px] font-bold uppercase rounded-full shadow">${post.category}</span>
+                    </div>
+                    <div class="p-4 space-y-2 flex-1 flex flex-col justify-between">
+                        <div class="space-y-1.5">
+                            <h4 class="blog-title text-sm font-bold text-roast-950 font-serif leading-snug line-clamp-2">${post.title}</h4>
+                            <div class="flex items-center justify-between text-[11px] text-roast-400">
+                                <span class="truncate">${post.author}</span>
+                                <span class="shrink-0 ml-2">${post.date}</span>
+                            </div>
+                        </div>
+                        <div class="flex gap-2 pt-3">
+                            <button onclick="openEditBlogModal('${post.id}')" class="flex-1 px-3 py-2 bg-adminBg border border-adminBorder text-roast-100 font-bold rounded-lg text-[11px] hover:bg-adminCardHover transition-all"><i class="fa-solid fa-pen mr-1.5"></i>Edit</button>
+                            <button onclick="deleteBlogPost('${post.id}')" class="px-3 py-2 bg-red-500/10 text-red-400 border border-red-500/30 font-bold rounded-lg text-[11px] hover:bg-red-500/20 transition-all" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterBlogTable() {
+            const query = document.getElementById('blog-search').value.toLowerCase();
+            document.querySelectorAll('.blog-row').forEach(row => {
+                const title = row.querySelector('.blog-title').innerText.toLowerCase();
+                row.style.display = title.includes(query) ? '' : 'none';
+            });
+        }
+
+        // Converts a plain-text HTML string back into an approximate plain-text version 
+        // for editing (strips tags), and vice versa (wraps blank-line-separated paragraphs 
+        // into styled <p> tags matching the customer site's article typography). 
+        function stripHtmlToPlainText(html) {
+            const tmp = document.createElement('div');
+            tmp.innerHTML = html;
+            return (tmp.textContent || tmp.innerText || '').replace(/\s+\n/g, '\n').trim();
+        }
+
+        function textToParagraphsHtml(text) {
+            return text.split(/\n+/).map(p => p.trim()).filter(Boolean)
+                .map(p => `<p class="text-roast-200 leading-relaxed font-light text-sm sm:text-base mb-4">${p}</p>`)
+                .join('');
+        }
+
+        function openAddBlogModal() {
+            activeBlogId = null;
+            document.getElementById('blog-post-modal-title').innerText = "New Blog Post";
+            document.getElementById('edit-blog-id').value = "";
+            document.getElementById('input-blog-title').value = "";
+            document.getElementById('input-blog-category').value = "Uncategorized";
+            document.getElementById('input-blog-author').value = "Nb.CA";
+            document.getElementById('input-blog-excerpt').value = "";
+            document.getElementById('input-blog-content').value = "";
+            removeBlogImage();
+            document.getElementById('blog-post-modal').classList.remove('hidden');
+        }
+
+        function openEditBlogModal(id) {
+            const post = blogPosts.find(p => p.id === id);
+            if (!post) return;
+            activeBlogId = id;
+            document.getElementById('blog-post-modal-title').innerText = "Edit Blog Post";
+            document.getElementById('edit-blog-id').value = id;
+            document.getElementById('input-blog-title').value = post.title;
+            document.getElementById('input-blog-category').value = post.category;
+            document.getElementById('input-blog-author').value = post.author;
+            document.getElementById('input-blog-excerpt').value = post.excerpt || '';
+            document.getElementById('input-blog-content').value = stripHtmlToPlainText(post.content || '');
+
+            document.getElementById('input-blog-image-file').value = "";
+            currentBlogImageData = post.image || "";
+            if (currentBlogImageData) {
+                document.getElementById('blog-image-filename').innerText = "Current image (upload a new one to replace)";
+                document.getElementById('blog-image-preview').src = currentBlogImageData;
+                document.getElementById('blog-image-preview-wrap').classList.remove('hidden');
+            } else {
+                document.getElementById('blog-image-filename').innerText = "Choose an image to upload";
+                document.getElementById('blog-image-preview-wrap').classList.add('hidden');
+            }
+
+            document.getElementById('blog-post-modal').classList.remove('hidden');
+        }
+
+        function closeBlogPostModal() {
+            document.getElementById('blog-post-modal').classList.add('hidden');
+            activeBlogId = null;
+        }
+
+        function saveBlogPost() {
+            const title = document.getElementById('input-blog-title').value.trim();
+            const category = document.getElementById('input-blog-category').value;
+            const author = document.getElementById('input-blog-author').value.trim() || 'Nb.CA';
+            const image = currentBlogImageData;
+            const excerpt = document.getElementById('input-blog-excerpt').value.trim();
+            const rawContent = document.getElementById('input-blog-content').value.trim();
+            const isEdit = document.getElementById('edit-blog-id').value !== "";
+
+            if (!title || !image || !excerpt || !rawContent) {
+                alert('Sila lengkapkan semua maklumat pos (tajuk, gambar, excerpt, dan kandungan).');
+                return;
+            }
+
+            const contentHtml = textToParagraphsHtml(rawContent);
+            const today = new Date();
+            const formattedToday = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
+
+            if (isEdit) {
+                const post = blogPosts.find(p => p.id === activeBlogId);
+                if (post) {
+                    post.title = title;
+                    post.category = category;
+                    post.author = author;
+                    post.image = image;
+                    post.excerpt = excerpt;
+                    post.content = contentHtml;
+                }
+            } else {
+                blogPosts.unshift({
+                    id: 'post-' + Date.now(),
+                    title, category, author, image, excerpt,
+                    date: formattedToday,
+                    content: contentHtml
+                });
+            }
+
+            try {
+                saveBlogPostsToStorage();
+            } catch (e) {
+                alert('Imej terlalu besar untuk disimpan. Sila cuba imej dengan saiz fail yang lebih kecil.');
+                return;
+            }
+
+            showAdminToast(isEdit ? `Announcement "${title}" successfully updated.` : `Announcement "${title}" successfully published to the customer site.`);
+            renderBlogTable();
+            filterBlogTable();
+            closeBlogPostModal();
+        }
+
+        function deleteBlogPost(id) {
+            if (confirm('Adakah anda pasti mahu memadam announcement ini? Ia akan hilang dari laman web customer.')) {
+                blogPosts = blogPosts.filter(p => p.id !== id);
+                saveBlogPostsToStorage();
+                renderBlogTable();
+                showAdminToast('Announcement successfully deleted.');
+            }
+        }
+        // ===================== END BLOG POST MANAGEMENT ===================== 
+
+        // --- ORDER MANAGEMENT FUNCTIONS ---
+
+
+
+
+
+
+
+        // Renders one overviewDataSets-shaped object (plus chart labels/data) into every 
+        // widget on the Overview tab. Shared by the quick Day/Week/Month/Year filters and 
+        // by the custom date range picker below. 
+
+        // ===================== CUSTOM DATE RANGE FILTER ===================== 
+
+
+        // Builds a plausible dataset for an arbitrary custom date range by scaling the known 
+        // per-day baseline (from the "day" filter) across the number of days selected. This 
+        // keeps numbers internally consistent without needing a real backend/history to query. 
+
+
+
+
+
+    </script>
+</body>
+</html>

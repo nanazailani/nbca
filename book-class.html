@@ -144,14 +144,13 @@
     </div>
     <nav id="m-bottomnav" aria-label="Primary"></nav>
 
+    <script src="js/nbca-config.js"></script>
     <script src="js/billplz.js"></script>
     <script src="js/member-shell.js"></script>
     <script>
 
         const isLoggedIn = true;   // this page is members-only (guard in <head>)
-        const FC_CAPACITY = 10;                       // seats per session
-        const FC_OPEN_DAYS = [0, 1, 2, 3, 4];          // Sunday – Thursday
-        const FC_SESSIONS = ['10:00 AM – 12:00 PM', '2:00 PM – 4:00 PM'];
+        const { FC_CAPACITY, FC_OPEN_DAYS, FC_SESSIONS, FC_HOLD_MINUTES } = window.NBCA_CFG;   // shared with the admin console
         const FC_INACTIVE = ['Reschedule', 'Cancelled'];
         let fcDetails = null;
         let fcPicked = { date: null, session: null };
@@ -174,7 +173,7 @@
         function fcBookedCount(dateStr, session) {
             const now = Date.now();
             return fcLoadRegistrations().filter(r => r.preferredDate === dateStr && r.session === session && !FC_INACTIVE.includes(r.classStatus) &&
-                !(r.classStatus === 'Awaiting Payment' && now - new Date(r.createdAt).getTime() > 30 * 60 * 1000)).length;
+                !(r.classStatus === 'Awaiting Payment' && now - new Date(r.createdAt).getTime() > FC_HOLD_MINUTES * 60000)).length;
         }
 
         function fcDateStr(d) {

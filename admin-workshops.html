@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workshop Enrollments | Nb.CA Admin</title>
+    <script>if (!localStorage.getItem('rp_admin')) { location.replace('admin-login.html'); }</script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { theme: { extend: {
+            screens: { xs: '420px' },
+            colors: { amberGold: '#2563EB', royalBlue: '#1E40AF', navy: '#172554' },
+            fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'], serif: ['Playfair Display', 'serif'] }
+        } } }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F8FAFC; }
+        h1, h2, h3, .font-serif { font-family: 'Playfair Display', serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; } .no-scrollbar { scrollbar-width: none; }
+        @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+        main > * { animation: rise .4s ease both; } main > *:nth-child(2) { animation-delay: .05s; } main > *:nth-child(3) { animation-delay: .1s; } main > *:nth-child(4) { animation-delay: .15s; }
+        @media (prefers-reduced-motion: reduce) { main > * { animation: none; } }
+        @media print { #a-sidebar, #a-topbar, #a-bottomnav, .no-print { display: none !important; } .lg\:pl-64 { padding-left: 0 !important; } }
+    </style>
+</head>
+<body data-page="workshops" data-title="Workshop Enrollments" data-sub="Who signed up, who paid" class="text-slate-800 antialiased selection:bg-amberGold selection:text-white">
+    <div id="a-overlay"></div>
+    <aside id="a-sidebar"></aside>
+    <div class="lg:pl-64 min-h-screen flex flex-col min-w-0 overflow-x-hidden">
+        <header id="a-topbar"></header>
+        <main class="flex-1 min-w-0 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-6 lg:py-10 pb-28 lg:pb-14 space-y-8">
+
+            
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+                <div><span class="text-[11px] font-extrabold tracking-[0.18em] text-amberGold uppercase">Workshops</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">Workshop Enrollments</h2></div>
+                <button onclick="exportCsv()" class="px-4 py-2.5 bg-white border border-slate-200 hover:border-amberGold text-slate-700 font-bold rounded-full text-xs transition-all self-start"><i class="fa-solid fa-file-csv text-amberGold mr-1.5"></i>Export</button>
+            </div>
+            <section id="summary" class="grid grid-cols-2 lg:grid-cols-4 gap-4"></section>
+            <section class="space-y-3">
+                <div id="chips" class="flex flex-wrap gap-2"></div>
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <div class="relative flex-1"><i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i><input id="q" oninput="render()" placeholder="Search member, email or ticket ref" class="w-full bg-white border border-slate-200 rounded-xl pl-10 pr-4 py-3 text-xs focus:outline-none focus:border-amberGold"></div>
+                    <select id="ws" onchange="render()" class="bg-white border border-slate-200 rounded-xl px-4 py-3 text-xs font-semibold focus:outline-none focus:border-amberGold"></select>
+                </div>
+            </section>
+            <section id="slots" class="hidden"></section>
+            <section id="list" class="space-y-4"></section>
+
+        </main>
+    </div>
+    <nav id="a-bottomnav" aria-label="Primary"></nav>
+
+    <script src="js/nbca-config.js"></script>
+    <script src="js/admin-shell.js"></script>
+    <script>
+
+        const S = AdminShell, esc = S.esc, money = S.money;
+        const TONE = { good: 'bg-emerald-100 text-emerald-700', warn: 'bg-amber-100 text-amber-700', info: 'bg-blue-100 text-blue-700', bad: 'bg-red-100 text-red-700', muted: 'bg-slate-100 text-slate-600' };
+        const pill = (txt, tone) => '<span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider whitespace-nowrap ' + TONE[tone || 'muted'] + '">' + esc(txt) + '</span>';
+        const btn = (label, onclick, kind) => '<button onclick="' + onclick + '" class="px-3.5 py-2 rounded-xl text-[11px] font-bold transition-all whitespace-nowrap ' +
+            ({ primary: 'bg-amberGold hover:bg-royalBlue text-white shadow', good: 'bg-emerald-600 hover:bg-emerald-700 text-white shadow', danger: 'bg-white hover:bg-red-50 text-red-600 border border-red-200', ghost: 'bg-white hover:bg-slate-50 text-slate-700 border border-slate-200' }[kind || 'ghost']) + '">' + label + '</button>';
+        const empty = (icon, title, text) => '<div class="bg-white rounded-3xl border border-dashed border-slate-300 p-10 text-center space-y-2"><div class="w-14 h-14 rounded-2xl bg-blue-50 text-amberGold flex items-center justify-center mx-auto text-2xl"><i class="fa-solid ' + icon + '"></i></div><h3 class="font-serif text-lg font-bold text-slate-900">' + title + '</h3><p class="text-xs text-slate-500 max-w-sm mx-auto">' + text + '</p></div>';
+        const chip = (label, count, active, onclick) => '<button onclick="' + onclick + '" class="px-4 py-2 rounded-full text-xs font-bold border transition-all ' + (active ? 'bg-amberGold text-white border-amberGold shadow' : 'bg-white text-slate-700 border-slate-200 hover:border-amberGold') + '">' + label + ' <span class="ml-1 opacity-70">' + count + '</span></button>';
+        const param = k => new URLSearchParams(location.search).get(k);
+        const avatar = n => '<span class="w-11 h-11 rounded-full bg-blue-100 text-amberGold font-bold text-sm flex items-center justify-center shrink-0">' + esc(S.initials(n)) + '</span>';
+
+        let statusF = param('status') || 'all';
+        const STATUS = { 'Pending Payment': ['Pending payment', 'warn'], Confirmed: ['Confirmed', 'good'], Cancelled: ['Cancelled', 'muted'] };
+        const label = w => (STATUS[w.status] || [w.status, 'muted']);
+
+        function filtered() {
+            const q = (document.getElementById('q').value || '').toLowerCase().trim(), ws = document.getElementById('ws').value;
+            return S.enrolls().filter(w => (statusF === 'all' || w.status === statusF) && (!ws || w.title === ws) &&
+                (!q || [w.name, w.email, w.ref, w.title].some(v => (v || '').toLowerCase().includes(q)))).sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
+        }
+        function render() {
+            const all = S.enrolls();
+            const confirmed = all.filter(w => w.status === 'Confirmed');
+            document.getElementById('summary').innerHTML = [
+                ['fa-ticket', 'bg-blue-100 text-amberGold', all.length, 'Total enrollments'],
+                ['fa-circle-check', 'bg-emerald-100 text-emerald-600', confirmed.length, 'Confirmed'],
+                ['fa-hourglass-half', 'bg-amber-100 text-amber-600', all.filter(w => w.status === 'Pending Payment').length, 'Awaiting payment'],
+                ['fa-wallet', 'bg-violet-100 text-violet-600', money(confirmed.reduce((a, w) => a + Number(w.price), 0)), 'Confirmed revenue']
+            ].map(t => '<div class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-sm"><div class="w-10 h-10 rounded-xl flex items-center justify-center mb-3 ' + t[1] + '"><i class="fa-solid ' + t[0] + '"></i></div><p class="text-2xl font-extrabold text-slate-900 font-serif">' + t[2] + '</p><p class="text-xs font-bold text-slate-600">' + t[3] + '</p></div>').join('');
+
+            document.getElementById('chips').innerHTML = chip('All', all.length, statusF === 'all', "setStatus('all')") + Object.keys(STATUS).map(k => chip(STATUS[k][0], all.filter(w => w.status === k).length, statusF === k, "setStatus('" + k + "')")).join('');
+            const sel = document.getElementById('ws'), cur = sel.value;
+            const titles = [...new Set(all.map(w => w.title))];
+            sel.innerHTML = '<option value="">All workshops</option>' + titles.map(t => '<option ' + (t === cur ? 'selected' : '') + '>' + esc(t) + '</option>').join('');
+
+            // seats per workshop slot (confirmed + pending)
+            const slots = {};
+            all.filter(w => w.status !== 'Cancelled').forEach(w => { const k = w.title + ' | ' + w.slot; slots[k] = slots[k] || { title: w.title, slot: w.slot, n: 0 }; slots[k].n++; });
+            const sl = Object.values(slots);
+            const box = document.getElementById('slots');
+            box.classList.toggle('hidden', !sl.length);
+            box.innerHTML = sl.length ? '<div class="bg-white rounded-3xl border border-slate-200 shadow-sm p-5 space-y-3"><h3 class="font-serif text-base font-bold text-slate-900"><i class="fa-solid fa-chair text-amberGold mr-2"></i>Signed up per slot</h3><div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">' +
+                sl.map(s => '<div class="rounded-xl bg-slate-50 border border-slate-200 p-3 flex items-center justify-between gap-3"><div class="min-w-0"><p class="text-xs font-bold text-slate-900 truncate">' + esc(s.title) + '</p><p class="text-[11px] text-slate-500 truncate">' + esc(s.slot) + '</p></div><span class="text-lg font-serif font-extrabold text-amberGold">' + s.n + '</span></div>').join('') + '</div></div>' : '';
+
+            const list = filtered();
+            document.getElementById('list').innerHTML = list.length ? list.map(card).join('') :
+                empty('fa-chalkboard-user', all.length ? 'No enrollments match' : 'No enrollments yet', all.length ? 'Try a different status, workshop or search.' : 'Enrollments appear here when members sign up for a workshop.');
+        }
+        function card(w) {
+            const l = label(w), wa = S.waLink('', '');
+            const actions = [];
+            if (w.status === 'Pending Payment') { actions.push(btn('<i class="fa-solid fa-check mr-1.5"></i>Mark paid &amp; confirm', "confirmPaid('" + w.id + "')", 'good')); }
+            if (w.status !== 'Cancelled') actions.push(btn('Cancel', "cancelEnroll('" + w.id + "')", 'danger'));
+            if (w.status === 'Cancelled') actions.push(btn('Reopen', "reopen('" + w.id + "')", 'ghost'));
+            return '<article class="bg-white rounded-3xl border border-slate-200 shadow-sm p-5 sm:p-6 hover:shadow-md transition-all"><div class="flex flex-col lg:flex-row lg:items-start gap-5">' +
+                '<div class="flex items-start gap-4 flex-1 min-w-0">' + avatar(w.name) + '<div class="min-w-0 space-y-1.5"><div class="flex flex-wrap items-center gap-2"><strong class="text-slate-900 text-base">' + esc(w.name) + '</strong>' + pill(l[0], l[1]) + '</div>' +
+                '<p class="text-[11px] text-slate-500"><i class="fa-solid fa-envelope mr-1.5 text-slate-400"></i>' + esc(w.email) + ' &middot; Ref <span class="font-mono font-bold text-slate-700">' + esc(w.ref) + '</span></p></div></div>' +
+                '<div class="lg:w-80 shrink-0 rounded-2xl bg-slate-50 border border-slate-200 p-4 space-y-1 text-xs"><div class="font-bold text-slate-900">' + esc(w.title) + '</div><div class="text-slate-600"><i class="fa-solid fa-calendar-day text-amberGold mr-1.5"></i>' + esc(w.slot) + '</div><div class="text-slate-600"><i class="fa-solid fa-location-dot text-slate-400 mr-1.5"></i>' + esc(w.modeLabel) + '</div><div class="pt-1 mt-2 border-t border-slate-200 font-bold text-amberGold">' + money(w.price) + '</div></div></div>' +
+                '<div class="flex flex-wrap items-center gap-2 mt-4 pt-4 border-t border-slate-100">' + actions.join('') + '</div></article>';
+        }
+        const upd = (id, p) => { S.update('rp_workshop_enrollments', id, p); render(); };
+        const find = id => S.enrolls().find(w => w.id === id);
+        function setStatus(k) { statusF = k; render(); }
+        async function confirmPaid(id) {
+            const w = find(id);
+            if (await S.confirm({ title: 'Mark as paid and confirm?', message: 'Use this only if ' + w.name + ' paid ' + money(w.price) + ' outside the gateway. Their e-ticket becomes available.', ok: 'Confirm' })) { upd(id, { status: 'Confirmed', paymentStatus: 'Paid', paidAt: new Date().toISOString() }); S.toast('Enrollment confirmed.'); }
+        }
+        async function cancelEnroll(id) {
+            const w = find(id);
+            if (await S.confirm({ title: 'Cancel this enrollment?', message: w.name + ' will lose their ticket for ' + w.title + '. Any refund must be handled separately.', ok: 'Cancel enrollment' })) { upd(id, { status: 'Cancelled' }); S.toast('Enrollment cancelled.'); }
+        }
+        function reopen(id) { const w = find(id); upd(id, { status: w.paymentStatus === 'Paid' ? 'Confirmed' : 'Pending Payment' }); S.toast('Enrollment reopened.'); }
+        function exportCsv() {
+            const rows = filtered(); if (!rows.length) { S.toast('Nothing to export.'); return; }
+            S.downloadCsv('workshop-enrollments.csv', [['Name', 'Email', 'Workshop', 'Slot', 'Mode', 'Price', 'Status', 'Ref']].concat(rows.map(w => [w.name, w.email, w.title, w.slot, w.modeLabel, w.price, w.status, w.ref])));
+        }
+        window.addEventListener('admin-ready', render);
+
+    </script>
+</body>
+</html>

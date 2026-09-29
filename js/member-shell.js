@@ -190,7 +190,7 @@
     };
 
     // ---- shopping basket (stored per browser; checkout creates a member order) ----
-    const SHIPPING = 8;
+    const SHIPPING = (window.NBCA_CFG || {}).SHIPPING || 8;
     const money = n => 'RM ' + Number(n).toFixed(2);
     function getCart() { try { return JSON.parse(localStorage.getItem('rp_portal_cart') || '[]'); } catch (e) { return []; } }
     function setCart(c) { localStorage.setItem('rp_portal_cart', JSON.stringify(c)); refreshCartBadge(); }

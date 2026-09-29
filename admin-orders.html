@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders | Nb.CA Admin</title>
+    <script>if (!localStorage.getItem('rp_admin')) { location.replace('admin-login.html'); }</script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { theme: { extend: {
+            screens: { xs: '420px' },
+            colors: { amberGold: '#2563EB', royalBlue: '#1E40AF', navy: '#172554' },
+            fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'], serif: ['Playfair Display', 'serif'] }
+        } } }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F8FAFC; }
+        h1, h2, h3, .font-serif { font-family: 'Playfair Display', serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; } .no-scrollbar { scrollbar-width: none; }
+        @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+        main > * { animation: rise .4s ease both; } main > *:nth-child(2) { animation-delay: .05s; } main > *:nth-child(3) { animation-delay: .1s; } main > *:nth-child(4) { animation-delay: .15s; }
+        @media (prefers-reduced-motion: reduce) { main > * { animation: none; } }
+        @media print { #a-sidebar, #a-topbar, #a-bottomnav, .no-print { display: none !important; } .lg\:pl-64 { padding-left: 0 !important; } }
+    </style>
+</head>
+<body data-page="orders" data-title="Orders" data-sub="Pack, ship and track member orders" class="text-slate-800 antialiased selection:bg-amberGold selection:text-white">
+    <div id="a-overlay"></div>
+    <aside id="a-sidebar"></aside>
+    <div class="lg:pl-64 min-h-screen flex flex-col min-w-0 overflow-x-hidden">
+        <header id="a-topbar"></header>
+        <main class="flex-1 min-w-0 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-6 lg:py-10 pb-28 lg:pb-14 space-y-8">
+
+            
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+                <div><span class="text-[11px] font-extrabold tracking-[0.18em] text-amberGold uppercase">Shop</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">Orders</h2></div>
+                <button onclick="exportCsv()" class="px-4 py-2.5 bg-white border border-slate-200 hover:border-amberGold text-slate-700 font-bold rounded-full text-xs transition-all self-start"><i class="fa-solid fa-file-csv text-amberGold mr-1.5"></i>Export</button>
+            </div>
+            <section id="summary" class="grid grid-cols-2 lg:grid-cols-4 gap-4"></section>
+            <section class="space-y-3">
+                <div id="chips" class="flex flex-wrap gap-2"></div>
+                <div class="relative"><i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i><input id="q" oninput="render()" placeholder="Search order no., customer, phone or email" class="w-full bg-white border border-slate-200 rounded-xl pl-10 pr-4 py-3 text-xs focus:outline-none focus:border-amberGold"></div>
+            </section>
+            <section id="list" class="space-y-4"></section>
+
+        </main>
+    </div>
+    <nav id="a-bottomnav" aria-label="Primary"></nav>
+
+    <div id="ship-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeShip()"></div>
+        <div class="relative bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl space-y-4">
+            <h3 class="font-serif text-xl font-bold text-slate-900"><i class="fa-solid fa-truck-fast text-amberGold mr-2"></i>Ship order <span id="ship-id"></span></h3>
+            <div class="space-y-3 text-xs">
+                <div><label class="block font-semibold text-slate-600 uppercase mb-1">Courier</label><select id="ship-courier" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold"><option>Pos Laju</option><option>J&amp;T Express</option><option>Ninja Van</option><option>DHL eCommerce</option><option>GDex</option><option>City-Link</option></select></div>
+                <div><label class="block font-semibold text-slate-600 uppercase mb-1">Tracking number</label><input id="ship-no" placeholder="e.g. EP123456789MY" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold"></div>
+            </div>
+            <div class="flex gap-3 pt-1"><button onclick="saveShip()" class="flex-1 py-3 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl text-xs shadow">Mark as shipped</button><button onclick="closeShip()" class="px-5 py-3 bg-slate-100 text-slate-700 font-bold rounded-xl text-xs">Cancel</button></div>
+        </div>
+    </div>
+
+    <script src="js/nbca-config.js"></script>
+    <script src="js/admin-shell.js"></script>
+    <script>
+
+        const S = AdminShell, esc = S.esc, money = S.money;
+        const TONE = { good: 'bg-emerald-100 text-emerald-700', warn: 'bg-amber-100 text-amber-700', info: 'bg-blue-100 text-blue-700', bad: 'bg-red-100 text-red-700', muted: 'bg-slate-100 text-slate-600' };
+        const pill = (txt, tone) => '<span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider whitespace-nowrap ' + TONE[tone || 'muted'] + '">' + esc(txt) + '</span>';
+        const btn = (label, onclick, kind) => '<button onclick="' + onclick + '" class="px-3.5 py-2 rounded-xl text-[11px] font-bold transition-all whitespace-nowrap ' +
+            ({ primary: 'bg-amberGold hover:bg-royalBlue text-white shadow', good: 'bg-emerald-600 hover:bg-emerald-700 text-white shadow', danger: 'bg-white hover:bg-red-50 text-red-600 border border-red-200', ghost: 'bg-white hover:bg-slate-50 text-slate-700 border border-slate-200' }[kind || 'ghost']) + '">' + label + '</button>';
+        const empty = (icon, title, text) => '<div class="bg-white rounded-3xl border border-dashed border-slate-300 p-10 text-center space-y-2"><div class="w-14 h-14 rounded-2xl bg-blue-50 text-amberGold flex items-center justify-center mx-auto text-2xl"><i class="fa-solid ' + icon + '"></i></div><h3 class="font-serif text-lg font-bold text-slate-900">' + title + '</h3><p class="text-xs text-slate-500 max-w-sm mx-auto">' + text + '</p></div>';
+        const chip = (label, count, active, onclick) => '<button onclick="' + onclick + '" class="px-4 py-2 rounded-full text-xs font-bold border transition-all ' + (active ? 'bg-amberGold text-white border-amberGold shadow' : 'bg-white text-slate-700 border-slate-200 hover:border-amberGold') + '">' + label + ' <span class="ml-1 opacity-70">' + count + '</span></button>';
+        const param = k => new URLSearchParams(location.search).get(k);
+        const avatar = n => '<span class="w-11 h-11 rounded-full bg-blue-100 text-amberGold font-bold text-sm flex items-center justify-center shrink-0">' + esc(S.initials(n)) + '</span>';
+
+        let statusF = param('status') || 'all', shipId = null;
+        const STATUS = { 'Pending Payment': 'warn', Processing: 'info', Shipped: 'info', Completed: 'good', Cancelled: 'muted' };
+        const ORDER = Object.keys(STATUS);
+
+        function filtered() {
+            const q = (document.getElementById('q').value || '').toLowerCase().trim();
+            return S.orders().filter(o => (statusF === 'all' || o.status === statusF) &&
+                (!q || [o.id, o.name, o.phone, o.email].some(v => (v || '').toLowerCase().includes(q)))).sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
+        }
+        function render() {
+            const all = S.orders();
+            const paid = all.filter(o => o.paymentStatus === 'Paid');
+            document.getElementById('summary').innerHTML = [
+                ['fa-bag-shopping', 'bg-blue-100 text-amberGold', all.length, 'Total orders'],
+                ['fa-box', 'bg-amber-100 text-amber-600', all.filter(o => o.status === 'Processing').length, 'To ship'],
+                ['fa-truck', 'bg-violet-100 text-violet-600', all.filter(o => o.status === 'Shipped').length, 'In transit'],
+                ['fa-wallet', 'bg-emerald-100 text-emerald-600', money(paid.reduce((a, o) => a + Number(o.total), 0)), 'Paid revenue']
+            ].map(t => '<div class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-sm"><div class="w-10 h-10 rounded-xl flex items-center justify-center mb-3 ' + t[1] + '"><i class="fa-solid ' + t[0] + '"></i></div><p class="text-2xl font-extrabold text-slate-900 font-serif">' + t[2] + '</p><p class="text-xs font-bold text-slate-600">' + t[3] + '</p></div>').join('');
+            document.getElementById('chips').innerHTML = chip('All', all.length, statusF === 'all', "setStatus('all')") + ORDER.map(k => chip(k, all.filter(o => o.status === k).length, statusF === k, "setStatus('" + k + "')")).join('');
+            const list = filtered();
+            document.getElementById('list').innerHTML = list.length ? list.map(card).join('') :
+                empty('fa-bag-shopping', all.length ? 'No orders match' : 'No orders yet', all.length ? 'Try another status or search.' : 'Orders show up here when members check out from the shop.');
+        }
+        function card(o) {
+            const paid = o.paymentStatus === 'Paid';
+            const actions = [];
+            if (o.status === 'Pending Payment') { actions.push(btn('<i class="fa-solid fa-check mr-1.5"></i>Mark as paid', "markPaid('" + o.id + "')", 'good')); actions.push(btn('Cancel order', "cancelOrder('" + o.id + "')", 'danger')); }
+            if (o.status === 'Processing') { actions.push(btn('<i class="fa-solid fa-truck-fast mr-1.5"></i>Add tracking &amp; ship', "openShip('" + o.id + "')", 'primary')); actions.push(btn('Cancel order', "cancelOrder('" + o.id + "')", 'danger')); }
+            if (o.status === 'Shipped') actions.push(btn('<i class="fa-solid fa-flag-checkered mr-1.5"></i>Mark completed', "complete('" + o.id + "')", 'good'));
+            const wa = S.waLink(o.phone, 'Hi ' + o.name + ', regarding your Nb.CA Academy order ' + o.id + '. ');
+            const items = (o.items || []).map(i => '<div class="flex items-center gap-3"><img src="' + esc(i.image) + '" alt="" class="w-11 h-11 rounded-lg object-cover border border-slate-200 bg-slate-100 shrink-0"><span class="flex-1 min-w-0 text-xs text-slate-700 truncate">' + esc(i.name) + '</span><span class="text-xs text-slate-500">x' + i.qty + '</span><span class="text-xs font-bold text-slate-900 w-20 text-right">' + money(i.price * i.qty) + '</span></div>').join('');
+            return '<article class="bg-white rounded-3xl border border-slate-200 shadow-sm p-5 sm:p-6 hover:shadow-md transition-all space-y-4">' +
+                '<div class="flex flex-wrap items-center gap-2"><strong class="font-serif text-lg text-slate-900">' + esc(o.id) + '</strong>' + pill(o.status, STATUS[o.status] || 'muted') + pill(paid ? 'Paid' : 'Unpaid', paid ? 'good' : 'warn') +
+                '<span class="ml-auto text-[11px] text-slate-500">' + S.fmtDate(o.createdAt) + '</span></div>' +
+                '<div class="grid lg:grid-cols-5 gap-5"><div class="lg:col-span-3 space-y-2">' + items + '<div class="flex justify-between text-[11px] text-slate-500 pt-2 border-t border-slate-100"><span>Shipping</span><span>' + money(o.shipping) + '</span></div><div class="flex justify-between text-sm font-bold text-slate-900"><span>Total</span><span class="text-amberGold">' + money(o.total) + '</span></div></div>' +
+                '<div class="lg:col-span-2 rounded-2xl bg-slate-50 border border-slate-200 p-4 space-y-1.5 text-xs"><div class="font-bold text-slate-900">' + esc(o.name) + '</div><div class="text-slate-600"><i class="fa-solid fa-phone text-slate-400 mr-1.5"></i>' + esc(o.phone) + '</div><div class="text-slate-600 leading-relaxed"><i class="fa-solid fa-location-dot text-slate-400 mr-1.5"></i>' + esc(o.address) + '</div>' +
+                (o.tracking ? '<div class="pt-2 mt-2 border-t border-slate-200 text-slate-700"><i class="fa-solid fa-truck text-amberGold mr-1.5"></i>' + esc(o.tracking.courier) + ': <strong class="font-mono">' + esc(o.tracking.number) + '</strong></div>' : '') + '</div></div>' +
+                '<div class="flex flex-wrap items-center gap-2 pt-4 border-t border-slate-100">' + actions.join('') + '<span class="ml-auto flex flex-wrap gap-2">' + btn('<i class="fa-solid fa-copy mr-1.5"></i>Copy address', "copyAddr('" + o.id + "')", 'ghost') + btn('<i class="fa-solid fa-print mr-1.5"></i>Print', 'window.print()', 'ghost') + (wa ? '<a href="' + wa + '" target="_blank" rel="noopener" class="px-3.5 py-2 rounded-xl text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 transition-all"><i class="fa-brands fa-whatsapp mr-1.5"></i>WhatsApp</a>' : '') + '</span></div></article>';
+        }
+        const upd = (id, p) => { S.update('rp_member_orders', id, p); render(); };
+        const find = id => S.orders().find(o => o.id === id);
+        function setStatus(k) { statusF = k; render(); }
+        async function markPaid(id) {
+            const o = find(id);
+            if (await S.confirm({ title: 'Mark order as paid?', message: 'Use this only if you received ' + money(o.total) + ' from ' + o.name + ' outside the gateway. The order moves to Processing.', ok: 'Mark as paid' })) { upd(id, { paymentStatus: 'Paid', status: 'Processing', paidAt: new Date().toISOString() }); S.toast('Order marked as paid.'); }
+        }
+        async function cancelOrder(id) {
+            const o = find(id);
+            if (await S.confirm({ title: 'Cancel order ' + id + '?', message: 'This cancels the order for ' + o.name + '. If it was paid, refund it separately.', ok: 'Cancel order' })) { upd(id, { status: 'Cancelled' }); S.toast('Order cancelled.'); }
+        }
+        function openShip(id) { shipId = id; document.getElementById('ship-id').innerText = id; document.getElementById('ship-no').value = ''; document.getElementById('ship-modal').classList.remove('hidden'); }
+        function closeShip() { document.getElementById('ship-modal').classList.add('hidden'); }
+        function saveShip() {
+            const no = document.getElementById('ship-no').value.trim();
+            if (!no) { S.toast('Enter a tracking number first.'); return; }
+            upd(shipId, { status: 'Shipped', tracking: { courier: document.getElementById('ship-courier').value, number: no }, shippedAt: new Date().toISOString() });
+            closeShip(); S.toast('Order marked as shipped.');
+        }
+        function complete(id) { upd(id, { status: 'Completed', completedAt: new Date().toISOString() }); S.toast('Order completed.'); }
+        function copyAddr(id) {
+            const o = find(id); const txt = o.name + '\n' + o.phone + '\n' + o.address;
+            (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(() => S.toast('Address copied.'), () => window.prompt('Copy this:', txt));
+        }
+        function exportCsv() {
+            const rows = filtered(); if (!rows.length) { S.toast('Nothing to export.'); return; }
+            S.downloadCsv('orders.csv', [['Order', 'Date', 'Customer', 'Phone', 'Email', 'Address', 'Items', 'Total', 'Payment', 'Status', 'Courier', 'Tracking']].concat(rows.map(o => [o.id, o.createdAt, o.name, o.phone, o.email, o.address, (o.items || []).map(i => i.qty + 'x ' + i.name).join('; '), o.total, o.paymentStatus, o.status, o.tracking ? o.tracking.courier : '', o.tracking ? o.tracking.number : ''])));
+        }
+        window.addEventListener('admin-ready', render);
+
+    </script>
+</body>
+</html>

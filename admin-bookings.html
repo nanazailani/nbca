@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Bookings | Nb.CA Admin</title>
+    <script>if (!localStorage.getItem('rp_admin')) { location.replace('admin-login.html'); }</script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { theme: { extend: {
+            screens: { xs: '420px' },
+            colors: { amberGold: '#2563EB', royalBlue: '#1E40AF', navy: '#172554' },
+            fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'], serif: ['Playfair Display', 'serif'] }
+        } } }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F8FAFC; }
+        h1, h2, h3, .font-serif { font-family: 'Playfair Display', serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; } .no-scrollbar { scrollbar-width: none; }
+        @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+        main > * { animation: rise .4s ease both; } main > *:nth-child(2) { animation-delay: .05s; } main > *:nth-child(3) { animation-delay: .1s; } main > *:nth-child(4) { animation-delay: .15s; }
+        @media (prefers-reduced-motion: reduce) { main > * { animation: none; } }
+        @media print { #a-sidebar, #a-topbar, #a-bottomnav, .no-print { display: none !important; } .lg\:pl-64 { padding-left: 0 !important; } }
+    </style>
+</head>
+<body data-page="bookings" data-title="Class Bookings" data-sub="Confirm seats, reschedule and export certificates" class="text-slate-800 antialiased selection:bg-amberGold selection:text-white">
+    <div id="a-overlay"></div>
+    <aside id="a-sidebar"></aside>
+    <div class="lg:pl-64 min-h-screen flex flex-col min-w-0 overflow-x-hidden">
+        <header id="a-topbar"></header>
+        <main class="flex-1 min-w-0 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-6 lg:py-10 pb-28 lg:pb-14 space-y-8">
+
+            
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+                <div><span class="text-[11px] font-extrabold tracking-[0.18em] text-amberGold uppercase">Daily class</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">Class Bookings</h2></div>
+                <div class="flex flex-wrap gap-2 self-start">
+                <div class="inline-flex p-1 rounded-full bg-white border border-slate-200 text-xs font-bold" id="view-switch"></div>
+                <button onclick="exportCsv(false)" class="px-4 py-2.5 bg-white border border-slate-200 hover:border-amberGold text-slate-700 font-bold rounded-full text-xs transition-all"><i class="fa-solid fa-file-csv text-amberGold mr-1.5"></i>Export</button>
+                <button onclick="exportCsv(true)" class="px-4 py-2.5 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-full text-xs shadow transition-all" title="Admitted students: name and IC"><i class="fa-solid fa-award mr-1.5"></i>Certificate list</button></div>
+            </div>
+
+            <section id="filters" class="space-y-3">
+                <div id="chips" class="flex flex-wrap gap-2"></div>
+                <div id="search-row" class="flex flex-col sm:flex-row gap-3">
+                    <div class="relative flex-1"><i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i><input id="q" oninput="render()" placeholder="Search name, IC, phone, email or cafe" class="w-full bg-white border border-slate-200 rounded-xl pl-10 pr-4 py-3 text-xs focus:outline-none focus:border-amberGold"></div>
+                    <select id="scope" onchange="render()" class="bg-white border border-slate-200 rounded-xl px-4 py-3 text-xs font-semibold focus:outline-none focus:border-amberGold"><option value="upcoming">Upcoming sessions</option><option value="past">Past sessions</option><option value="all">All dates</option></select>
+                </div>
+                <div id="active-slot" class="hidden"></div>
+            </section>
+
+            <section id="list" class="space-y-4"></section>
+            <section id="capacity" class="hidden space-y-4"></section>
+
+        </main>
+    </div>
+    <nav id="a-bottomnav" aria-label="Primary"></nav>
+
+    <script src="js/nbca-config.js"></script>
+    <script src="js/admin-shell.js"></script>
+    <script>
+
+        const S = AdminShell, esc = S.esc, money = S.money;
+        const TONE = { good: 'bg-emerald-100 text-emerald-700', warn: 'bg-amber-100 text-amber-700', info: 'bg-blue-100 text-blue-700', bad: 'bg-red-100 text-red-700', muted: 'bg-slate-100 text-slate-600' };
+        const pill = (txt, tone) => '<span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider whitespace-nowrap ' + TONE[tone || 'muted'] + '">' + esc(txt) + '</span>';
+        const btn = (label, onclick, kind) => '<button onclick="' + onclick + '" class="px-3.5 py-2 rounded-xl text-[11px] font-bold transition-all whitespace-nowrap ' +
+            ({ primary: 'bg-amberGold hover:bg-royalBlue text-white shadow', good: 'bg-emerald-600 hover:bg-emerald-700 text-white shadow', danger: 'bg-white hover:bg-red-50 text-red-600 border border-red-200', ghost: 'bg-white hover:bg-slate-50 text-slate-700 border border-slate-200' }[kind || 'ghost']) + '">' + label + '</button>';
+        const empty = (icon, title, text) => '<div class="bg-white rounded-3xl border border-dashed border-slate-300 p-10 text-center space-y-2"><div class="w-14 h-14 rounded-2xl bg-blue-50 text-amberGold flex items-center justify-center mx-auto text-2xl"><i class="fa-solid ' + icon + '"></i></div><h3 class="font-serif text-lg font-bold text-slate-900">' + title + '</h3><p class="text-xs text-slate-500 max-w-sm mx-auto">' + text + '</p></div>';
+        const chip = (label, count, active, onclick) => '<button onclick="' + onclick + '" class="px-4 py-2 rounded-full text-xs font-bold border transition-all ' + (active ? 'bg-amberGold text-white border-amberGold shadow' : 'bg-white text-slate-700 border-slate-200 hover:border-amberGold') + '">' + label + ' <span class="ml-1 opacity-70">' + count + '</span></button>';
+        const param = k => new URLSearchParams(location.search).get(k);
+        const avatar = n => '<span class="w-11 h-11 rounded-full bg-blue-100 text-amberGold font-bold text-sm flex items-center justify-center shrink-0">' + esc(S.initials(n)) + '</span>';
+
+        const CFG = S.CFG;
+        let statusF = param('status') || 'all', view = param('view') === 'capacity' ? 'capacity' : 'list';
+        let slot = param('date') ? { date: param('date'), session: param('session') || '' } : null;
+        let shown = [];
+
+        const STATUS = {
+            awaiting: ['Awaiting payment', 'warn'], confirm: ['Needs confirmation', 'info'], admitted: ['Admitted', 'good'],
+            reschedule: ['Reschedule', 'bad'], cancelled: ['Cancelled', 'muted']
+        };
+        function statusOf(r) {
+            if (r.classStatus === 'Cancelled') return 'cancelled';
+            if (r.classStatus === 'Reschedule') return 'reschedule';
+            if (r.classStatus === 'Admitted') return 'admitted';
+            return r.depositStatus === 'Paid' ? 'confirm' : 'awaiting';
+        }
+        const todayStr = (() => { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); })();
+
+        function filtered() {
+            const q = (document.getElementById('q').value || '').toLowerCase().trim();
+            const scope = document.getElementById('scope').value;
+            return S.regs().filter(r => {
+                if (statusF !== 'all' && statusOf(r) !== statusF) return false;
+                if (slot) { if (r.preferredDate !== slot.date || (slot.session && r.session !== slot.session)) return false; }
+                else if (scope === 'upcoming' && r.preferredDate < todayStr) return false;
+                else if (scope === 'past' && r.preferredDate >= todayStr) return false;
+                if (q && ![r.name, r.ic, r.phone, r.email, r.cafe, r.from].some(v => (v || '').toLowerCase().includes(q))) return false;
+                return true;
+            }).sort((a, b) => document.getElementById('scope').value === 'past' ? b.preferredDate.localeCompare(a.preferredDate) : a.preferredDate.localeCompare(b.preferredDate) || a.session.localeCompare(b.session));
+        }
+
+        function renderChips() {
+            const all = S.regs(); const cnt = k => all.filter(r => statusOf(r) === k).length;
+            document.getElementById('chips').innerHTML = chip('All', all.length, statusF === 'all', "setStatus('all')") +
+                Object.keys(STATUS).map(k => chip(STATUS[k][0], cnt(k), statusF === k, "setStatus('" + k + "')")).join('');
+            document.getElementById('view-switch').innerHTML =
+                ['list', 'capacity'].map(v => '<button onclick="setView(\'' + v + '\')" class="px-4 py-2 rounded-full transition-all ' + (view === v ? 'bg-amberGold text-white shadow' : 'text-slate-600 hover:text-amberGold') + '"><i class="fa-solid ' + (v === 'list' ? 'fa-list' : 'fa-table-cells') + ' mr-1.5"></i>' + (v === 'list' ? 'List' : 'Capacity') + '</button>').join('');
+            const a = document.getElementById('active-slot');
+            if (slot) { a.classList.remove('hidden'); a.innerHTML = '<span class="inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-blue-50 border border-blue-200 text-xs font-bold text-amberGold"><i class="fa-solid fa-filter"></i>' + S.fmtDate(slot.date, { weekday: 'short', day: 'numeric', month: 'short' }) + (slot.session ? ' &middot; ' + esc(slot.session) : '') + '<button onclick="clearSlot()" class="ml-1 text-slate-500 hover:text-red-600" aria-label="Clear filter"><i class="fa-solid fa-xmark"></i></button></span>'; }
+            else a.classList.add('hidden');
+        }
+
+        function card(r) {
+            const st = statusOf(r), paid = r.depositStatus === 'Paid';
+            const wa = S.waLink(r.phone, 'Hi ' + r.name + ', regarding your Nb.CA Academy class on ' + r.preferredDate + ' (' + r.session + '). ');
+            const actions = [];
+            if (st === 'confirm') actions.push(btn('<i class="fa-solid fa-check mr-1.5"></i>Admit', "admit('" + r.id + "')", 'good'));
+            if (!paid && st !== 'cancelled') actions.push(btn('Mark deposit paid', "markPaid('" + r.id + "')", 'primary'));
+            if (st !== 'cancelled' && st !== 'reschedule') actions.push(btn('Reschedule', "reschedule('" + r.id + "')", 'ghost'));
+            if (st === 'reschedule' || st === 'cancelled') actions.push(btn('Reopen', "reopen('" + r.id + "')", 'ghost'));
+            if (st !== 'cancelled') actions.push(btn('Cancel', "cancelBooking('" + r.id + "')", 'danger'));
+            const fee = Number(r.classFee || 0), dep = Number(r.deposit || 0);
+            return '<article class="bg-white rounded-3xl border border-slate-200 shadow-sm p-5 sm:p-6 hover:shadow-md transition-all">' +
+                '<div class="flex flex-col lg:flex-row lg:items-start gap-5">' +
+                '<div class="flex items-start gap-4 flex-1 min-w-0">' + avatar(r.name) +
+                '<div class="min-w-0 space-y-1.5"><div class="flex flex-wrap items-center gap-2"><strong class="text-slate-900 text-base">' + esc(r.name) + '</strong>' + pill(STATUS[st][0], STATUS[st][1]) + pill(paid ? 'Deposit paid' : 'Deposit unpaid', paid ? 'good' : 'warn') + '</div>' +
+                '<div class="flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-slate-500"><span><i class="fa-solid fa-id-card mr-1.5 text-slate-400"></i>' + esc(r.ic || '-') + '</span><span><i class="fa-solid fa-phone mr-1.5 text-slate-400"></i>' + esc(r.phone || '-') + '</span><span><i class="fa-solid fa-envelope mr-1.5 text-slate-400"></i>' + esc(r.email) + '</span>' +
+                (r.from ? '<span><i class="fa-solid fa-location-dot mr-1.5 text-slate-400"></i>' + esc(r.from) + '</span>' : '') + (r.cafe ? '<span><i class="fa-solid fa-mug-hot mr-1.5 text-slate-400"></i>' + esc(r.cafe) + '</span>' : '') + '</div></div></div>' +
+                '<div class="lg:w-64 shrink-0 rounded-2xl bg-slate-50 border border-slate-200 p-4 space-y-1 text-xs"><div class="flex items-center gap-2 font-bold text-slate-900"><i class="fa-solid fa-calendar-day text-amberGold"></i>' + S.fmtDate(r.preferredDate, { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }) + '</div>' +
+                '<div class="text-slate-600"><i class="fa-solid fa-clock text-slate-400 mr-1.5"></i>' + esc(r.session) + '</div><div class="text-slate-500 pt-1 border-t border-slate-200 mt-2">Deposit ' + money(dep) + ' of ' + money(fee) + '</div></div></div>' +
+                '<div class="flex flex-wrap items-center gap-2 mt-4 pt-4 border-t border-slate-100">' + actions.join('') +
+                '<span class="ml-auto flex flex-wrap gap-2">' + btn('<i class="fa-solid fa-copy mr-1.5"></i>Copy name &amp; IC', "copyId('" + r.id + "')", 'ghost') + (wa ? '<a href="' + wa + '" target="_blank" rel="noopener" class="px-3.5 py-2 rounded-xl text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 transition-all"><i class="fa-brands fa-whatsapp mr-1.5"></i>WhatsApp</a>' : '') + '</span></div></article>';
+        }
+
+        function renderList() {
+            shown = filtered();
+            document.getElementById('list').innerHTML = shown.length ? shown.map(card).join('') :
+                empty('fa-calendar-xmark', S.regs().length ? 'No bookings match' : 'No bookings yet', S.regs().length ? 'Try another status, date range or search.' : 'Bookings appear here as soon as a member registers for the daily class.');
+        }
+
+        // ---- capacity calendar ----
+        function renderCapacity() {
+            const days = []; const d = new Date(); d.setHours(0, 0, 0, 0);
+            for (let i = 0; i < 28 && days.length < 15; i++, d.setDate(d.getDate() + 1)) if (CFG.FC_OPEN_DAYS.includes(d.getDay())) days.push(new Date(d));
+            const ds = x => x.getFullYear() + '-' + String(x.getMonth() + 1).padStart(2, '0') + '-' + String(x.getDate()).padStart(2, '0');
+            const tone = u => u >= CFG.FC_CAPACITY ? 'bg-red-50 border-red-300 text-red-700' : u >= CFG.FC_CAPACITY * 0.7 ? 'bg-amber-50 border-amber-300 text-amber-700' : u > 0 ? 'bg-emerald-50 border-emerald-300 text-emerald-700' : 'bg-white border-slate-200 text-slate-500';
+            document.getElementById('capacity').innerHTML =
+                '<div class="flex flex-wrap gap-4 text-[11px] text-slate-600"><span><span class="inline-block w-3 h-3 rounded bg-emerald-500 mr-1.5 align-middle"></span>Seats available</span><span><span class="inline-block w-3 h-3 rounded bg-amber-400 mr-1.5 align-middle"></span>Filling up</span><span><span class="inline-block w-3 h-3 rounded bg-red-500 mr-1.5 align-middle"></span>Full (' + CFG.FC_CAPACITY + ' seats)</span><span class="text-slate-400">Tap a cell to see its students.</span></div>' +
+                '<div class="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">' + days.map(x => '<div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 space-y-3"><p class="text-xs font-extrabold text-slate-900 uppercase tracking-wide">' + x.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'short' }) + '</p><div class="grid grid-cols-2 gap-2">' +
+                    CFG.FC_SESSIONS.map(s => { const u = S.seatsUsed(ds(x), s); return '<button onclick="openSlot(\'' + ds(x) + '\', \'' + s + '\')" class="rounded-xl border p-3 text-left hover:shadow-md transition-all ' + tone(u) + '"><span class="block text-[10px] font-bold uppercase opacity-80">' + esc(s.split(' – ')[0]) + '</span><strong class="block text-lg font-serif">' + u + '<span class="text-xs font-sans opacity-60">/' + CFG.FC_CAPACITY + '</span></strong></button>'; }).join('') + '</div></div>').join('') + '</div>';
+        }
+
+        function render() {
+            renderChips();
+            document.getElementById('search-row').classList.toggle('hidden', view === 'capacity');
+            document.getElementById('list').classList.toggle('hidden', view !== 'list');
+            document.getElementById('capacity').classList.toggle('hidden', view !== 'capacity');
+            if (view === 'capacity') renderCapacity(); else renderList();
+        }
+        function setStatus(k) { statusF = k; render(); }
+        function setView(v) { view = v; render(); }
+        function clearSlot() { slot = null; render(); }
+        function openSlot(date, session) { slot = { date, session }; statusF = 'all'; view = 'list'; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+
+        // ---- actions ----
+        const upd = (id, patch) => { S.update('rp_fixed_class_students', id, patch); render(); };
+        const find = id => S.regs().find(r => r.id === id);
+        function admit(id) { const r = find(id); if (r.depositStatus !== 'Paid') { S.toast('Deposit is not paid yet.'); return; } upd(id, { classStatus: 'Admitted', admittedAt: new Date().toISOString() }); S.toast(r.name + ' admitted.'); }
+        async function markPaid(id) {
+            const r = find(id);
+            if (await S.confirm({ title: 'Mark deposit as paid?', message: 'Use this only if you have received ' + money(r.deposit) + ' from ' + r.name + ' outside the gateway (e.g. bank transfer).', ok: 'Mark as paid' })) {
+                upd(id, { depositStatus: 'Paid', paidAt: new Date().toISOString(), classStatus: r.classStatus === 'Awaiting Payment' ? 'Pending Confirmation' : r.classStatus }); S.toast('Deposit marked as paid.');
+            }
+        }
+        async function reschedule(id) {
+            const r = find(id);
+            if (await S.confirm({ title: 'Ask ' + r.name + ' to reschedule?', message: 'The seat is released for this session and WhatsApp opens so you can agree a new date.', ok: 'Reschedule' })) {
+                upd(id, { classStatus: 'Reschedule' });
+                const wa = S.waLink(r.phone, 'Hi ' + r.name + ', regarding your Nb.CA Academy class on ' + r.preferredDate + ' (' + r.session + '): we need to reschedule. Which other date works for you?');
+                if (wa) window.open(wa, '_blank', 'noopener');
+                S.toast('Marked for reschedule.');
+            }
+        }
+        function reopen(id) { const r = find(id); upd(id, { classStatus: r.depositStatus === 'Paid' ? 'Pending Confirmation' : 'Awaiting Payment', createdAt: new Date().toISOString() }); S.toast('Booking reopened.'); }
+        async function cancelBooking(id) {
+            const r = find(id);
+            if (await S.confirm({ title: 'Cancel this booking?', message: r.name + "'s booking on " + r.preferredDate + ' will be cancelled and the seat released. Any refund must be handled separately.', ok: 'Cancel booking' })) { upd(id, { classStatus: 'Cancelled' }); S.toast('Booking cancelled.'); }
+        }
+        function copyId(id) {
+            const r = find(id); const txt = r.name + ' - ' + (r.ic || '');
+            (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(() => S.toast('Copied: ' + txt), () => { window.prompt('Copy this:', txt); });
+        }
+        function exportCsv(certificates) {
+            if (certificates) {
+                const rows = S.regs().filter(r => r.classStatus === 'Admitted').sort((a, b) => a.preferredDate.localeCompare(b.preferredDate));
+                if (!rows.length) { S.toast('No admitted students to export yet.'); return; }
+                S.downloadCsv('certificate-list.csv', [['Name', 'IC / Passport', 'Class date', 'Session']].concat(rows.map(r => [r.name, r.ic, r.preferredDate, r.session])));
+            } else {
+                const rows = filtered();
+                if (!rows.length) { S.toast('Nothing to export for this filter.'); return; }
+                S.downloadCsv('class-bookings.csv', [['Name', 'IC / Passport', 'Phone', 'Email', 'Cafe', 'From', 'Date', 'Session', 'Deposit', 'Deposit status', 'Status']].concat(rows.map(r => [r.name, r.ic, r.phone, r.email, r.cafe, r.from, r.preferredDate, r.session, r.deposit, r.depositStatus, STATUS[statusOf(r)][0]])));
+            }
+        }
+
+        window.addEventListener('admin-ready', () => {
+            if (slot) document.getElementById('scope').value = 'all';
+            render();
+        });
+
+    </script>
+</body>
+</html>
