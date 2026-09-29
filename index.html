@@ -1082,6 +1082,10 @@
                     <input type="text" id="fc-student-name" required placeholder="Ahmad Zaki" class="w-full bg-roast-50 border border-roast-200 text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
                 </div>
                 <div>
+                    <label class="block font-semibold text-roast-600 uppercase mb-1">IC / Passport Number * <span class="normal-case font-normal text-roast-400">(for your certificate)</span></label>
+                    <input type="text" id="fc-student-ic" required placeholder="e.g. 990101-01-1234" class="w-full bg-roast-50 border border-roast-200 text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                </div>
+                <div>
                     <label class="block font-semibold text-roast-600 uppercase mb-1">Cafe Ownership <span class="normal-case font-normal text-roast-400">(optional)</span></label>
                     <input type="text" id="fc-student-cafe" placeholder="Cafe name, if you own or run one" class="w-full bg-roast-50 border border-roast-200 text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
                 </div>
@@ -1721,12 +1725,13 @@
             e.preventDefault();
             fcDetails = {
                 name: document.getElementById('fc-student-name').value.trim(),
+                ic: document.getElementById('fc-student-ic').value.trim(),
                 cafe: document.getElementById('fc-student-cafe').value.trim(),
                 phone: document.getElementById('fc-student-phone').value.trim(),
                 email: document.getElementById('fc-student-email').value.trim(),
                 from: document.getElementById('fc-student-from').value.trim()
             };
-            if (!fcDetails.name || !fcDetails.phone || !fcDetails.email || !fcDetails.from) {
+            if (!fcDetails.name || !fcDetails.ic || !fcDetails.phone || !fcDetails.email || !fcDetails.from) {
                 alert('Please complete all required fields.');
                 return;
             }
@@ -1828,6 +1833,7 @@
             regs.push({
                 id: 'FC-' + Date.now(),
                 name: fcDetails.name,
+                ic: fcDetails.ic,
                 cafe: fcDetails.cafe,
                 phone: fcDetails.phone,
                 email: fcDetails.email,
