@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Workshop Enrollments | Nb.CA Admin</title>
+    <title>Schedule & Instructors | Nb.CA Admin</title>
     <script>if (!localStorage.getItem('rp_admin')) { location.replace('admin-login.html'); }</script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -27,19 +27,18 @@
         @media print { #a-sidebar, #a-topbar, #a-bottomnav, .no-print { display: none !important; } .lg\:pl-64 { padding-left: 0 !important; } }
     </style>
 </head>
-<body data-page="workshops" data-title="Workshop Enrollments" data-sub="Who signed up, who paid" class="text-slate-800 antialiased selection:bg-amberGold selection:text-white">
+<body data-page="schedule" data-title="Schedule & Instructors" data-sub="Who teaches which class" class="text-slate-800 antialiased selection:bg-amberGold selection:text-white">
     <div id="a-overlay"></div>
     <aside id="a-sidebar"></aside>
     <div class="lg:pl-64 min-h-screen flex flex-col min-w-0 overflow-x-hidden">
         <header id="a-topbar"></header>
         <main class="flex-1 min-w-0 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-6 lg:py-10 pb-28 lg:pb-14 space-y-8">
             <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
-                <div><span class="text-[11px] font-extrabold tracking-[0.18em] text-amberGold uppercase">Workshops</span><h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">Workshop Enrollments</h2></div>
-                <div class="flex flex-wrap gap-2 self-start"><button type="button" onclick="Workshops.exportCsv()" class="px-4 py-2.5 bg-white border border-slate-200 hover:border-amberGold text-slate-700 font-bold rounded-full text-xs transition-all"><i class="fa-solid fa-file-csv text-amberGold mr-1.5"></i>Export</button></div>
+                <div><span class="text-[11px] font-extrabold tracking-[0.18em] text-amberGold uppercase">Programs</span><h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">Schedule &amp; Instructors</h2></div>
+                
             </div>
-            <section id="summary" class="grid grid-cols-2 lg:grid-cols-4 gap-4"></section>
-            <section class="space-y-3"><div id="chips" class="flex flex-wrap gap-2"></div><div class="flex flex-col sm:flex-row gap-3"><div class="relative flex-1"><i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i><input id="q" oninput="Workshops.render()" placeholder="Search member, email or ticket ref" class="w-full bg-white border border-slate-200 rounded-xl pl-10 pr-4 py-3 text-xs focus:outline-none focus:border-amberGold"></div><select id="ws" onchange="Workshops.render()" class="bg-white border border-slate-200 rounded-xl px-4 py-3 text-xs font-semibold focus:outline-none focus:border-amberGold"></select></div></section>
-            <section id="list" class="space-y-4"></section>
+            <div id="tabs"></div>
+            <div id="body" class="space-y-4"></div>
         </main>
     </div>
     <nav id="a-bottomnav" aria-label="Primary"></nav>
@@ -49,6 +48,6 @@
     <script src="js/catalog.js"></script>
     <script src="js/admin/shell.js"></script>
     <script src="js/admin/ui.js"></script>
-    <script src="js/admin/workshops.js"></script>
+    <script src="js/admin/schedule.js"></script>
 </body>
 </html>

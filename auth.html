@@ -220,6 +220,7 @@
 
     </div> 
 
+    <script src="js/nbca-data.js"></script>
     <!-- JAVASCRIPT LOGIC --> 
     <script> 
         function switchTab(tab) { 
@@ -275,11 +276,11 @@
         // Where to go after login/register. Only same-site relative pages are allowed.
         function getNextUrl() {
             const next = new URLSearchParams(window.location.search).get('next') || '';
-            return /^[a-z0-9_-]+.html(#[w-]*)?$/i.test(next) ? next : 'dashboard.html';
+            return /^[a-z0-9_-]+\.html(\?[\w=&-]*)?(#[\w-]*)?$/i.test(next) ? next : 'dashboard.html';
         }
 
         // Already signed in? Skip the form.
-        if (localStorage.getItem('rp_logged_user')) {
+        if (NBCA_DATA.session.account()) {
             window.location.replace(getNextUrl());
         }
 
@@ -298,11 +299,17 @@
                 showAlert('Please fill in all registration fields.');
                 return;
             }
-
-            // rp_user = the account record, rp_logged_user = the active session.
-            const userData = { name, email, password };
-            localStorage.setItem('rp_user', JSON.stringify(userData));
-            localStorage.setItem('rp_logged_user', JSON.stringify(userData));
+            if (password.length < 6) {
+                showAlert('Password must be at least 6 characters.');
+                return;
+            }
+            const res = NBCA_DATA.accounts.create({ name, email, password });
+            if (!res.ok) {
+                showAlert(res.error === 'exists' ? 'An account with this email already exists. Please log in instead.' : 'Please fill in all registration fields.');
+                return;
+            }
+            NBCA_DATA.accounts.authenticate(email, password);        // records the first login / activity
+            NBCA_DATA.session.start(res.account);
             showAlert('Account created! Redirecting...', false);
             setTimeout(() => { window.location.href = getNextUrl(); }, 1000);
         }
@@ -312,19 +319,14 @@
             const email = document.getElementById('login-email').value.trim();
             const password = document.getElementById('login-password').value.trim();
 
-            let savedUser = null;
-            try { savedUser = JSON.parse(localStorage.getItem('rp_user')); } catch (err) {}
-
-            if (savedUser && savedUser.email === email && savedUser.password === password) {
-                localStorage.setItem('rp_logged_user', JSON.stringify(savedUser));
-            } else if (!savedUser && email === 'member@nbca.academy' && password === '123456') {
-                const demoUser = { name: 'Nana Zailani', email: email };
-                localStorage.setItem('rp_user', JSON.stringify(demoUser));
-                localStorage.setItem('rp_logged_user', JSON.stringify(demoUser));
-            } else {
-                showAlert('Invalid email or password. Please check your details or register an account.');
+            const res = NBCA_DATA.accounts.authenticate(email, password);
+            if (!res.ok) {
+                showAlert(res.error === 'suspended'
+                    ? 'This account has been suspended. Please contact Nb.CA Academy.'
+                    : 'Invalid email or password. Please check your details or register an account.');
                 return;
             }
+            NBCA_DATA.session.start(res.account);
             showAlert('Login successful! Redirecting...', false);
             setTimeout(() => { window.location.href = getNextUrl(); }, 800);
         }

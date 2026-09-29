@@ -118,6 +118,7 @@
                             <div class="flex justify-between"><span class="text-roast-600">Date</span><strong id="fc-sum-date" class="text-roast-950"></strong></div>
                             <div class="flex justify-between"><span class="text-roast-600">Session</span><strong id="fc-sum-session" class="text-roast-950"></strong></div>
                         </div>
+                        <div id="fc-voucher-box"></div>
                         <div class="bg-roast-50 rounded-xl p-4 border border-roast-200 space-y-1.5">
                             <div class="flex justify-between"><span class="text-roast-600">Class fee</span><span id="fc-sum-fee" class="font-bold text-roast-950"></span></div>
                             <div class="flex justify-between text-amberGold font-bold"><span>Deposit due now</span><span id="fc-sum-deposit"></span></div>
@@ -145,6 +146,7 @@
     <nav id="m-bottomnav" aria-label="Primary"></nav>
 
     <script src="js/nbca-config.js"></script>
+    <script src="js/nbca-data.js"></script>
     <script src="js/billplz.js"></script>
     <script src="js/member-shell.js"></script>
     <script>
@@ -155,6 +157,17 @@
         let fcDetails = null;
         let fcPicked = { date: null, session: null };
         let fcViewMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+
+        // Price after an optional class voucher (percent off the fee; the deposit keeps the same share of the fee).
+        let fcVoucher = null;
+        function fcPricing() {
+            const base = fcGetFees();
+            const v = NBCA_DATA.loyalty.available((MemberShell.user() || {}).email, 'class').find(x => x.code === fcVoucher) || null;
+            const discount = NBCA_DATA.loyalty.discount(v, { subtotal: base.fee, shipping: 0 });
+            const fee = base.fee - discount;
+            return { list: base.fee, fee, deposit: Math.round(fee * (base.deposit / base.fee) * 100) / 100, discount, voucher: v };
+        }
+        function fcSetVoucher(code) { fcVoucher = code || null; fcGoToStep3(); }
 
         function fcGetFees() {
             let fee = 150, pct = 50;
@@ -279,11 +292,15 @@
 
         function fcGoToStep3() {
             if (!fcPicked.date || !fcPicked.session) return;
-            const { fee, deposit } = fcGetFees();
+            const P = fcPricing(), fee = P.fee, deposit = P.deposit;
+            const mine = NBCA_DATA.loyalty.available((MemberShell.user() || {}).email, 'class');
+            document.getElementById('fc-voucher-box').innerHTML = mine.length
+                ? '<label class="block font-semibold text-roast-600 uppercase mb-1 text-xs"><i class="fa-solid fa-ticket text-amberGold mr-1"></i>Voucher</label><select onchange="fcSetVoucher(this.value)" class="w-full bg-white border border-roast-200 rounded-xl px-3.5 py-2.5 text-xs focus:outline-none focus:border-amberGold"><option value="">No voucher</option>' + mine.map(v => '<option value="' + v.code + '" ' + (v.code === fcVoucher ? 'selected' : '') + '>' + v.title + ' (' + v.code + ')</option>').join('') + '</select>'
+                : '';
             document.getElementById('fc-sum-name').innerText = fcDetails.name;
             document.getElementById('fc-sum-date').innerText = new Date(fcPicked.date + 'T00:00:00').toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
             document.getElementById('fc-sum-session').innerText = fcPicked.session;
-            document.getElementById('fc-sum-fee').innerText = 'RM ' + fee.toFixed(2);
+            document.getElementById('fc-sum-fee').innerText = (P.discount ? 'RM ' + P.list.toFixed(2) + ' - RM ' + P.discount.toFixed(2) + ' = ' : '') + 'RM ' + fee.toFixed(2);
             document.getElementById('fc-sum-deposit').innerText = 'RM ' + deposit.toFixed(2);
             document.getElementById('fc-sum-balance').innerText = 'RM ' + (fee - deposit).toFixed(2);
             fcShowStep(3);
@@ -297,7 +314,7 @@
                 fcShowStep(2);
                 return;
             }
-            const { fee, deposit } = fcGetFees();
+            const P = fcPricing(), fee = P.fee, deposit = P.deposit;
             const regs = fcLoadRegistrations();
             const rec = {
                 id: 'FC-' + Date.now(),
@@ -310,6 +327,9 @@
                 preferredDate: fcPicked.date,
                 session: fcPicked.session,
                 classFee: fee,
+                listFee: P.list,
+                discount: P.discount,
+                voucher: P.voucher ? { code: P.voucher.code, title: P.voucher.title } : null,
                 deposit: deposit,
                 depositStatus: 'Pending',
                 classStatus: 'Awaiting Payment',
@@ -317,6 +337,7 @@
             };
             regs.push(rec);
             localStorage.setItem('rp_fixed_class_students', JSON.stringify(regs));
+            if (P.voucher) NBCA_DATA.loyalty.use(P.voucher.code, rec.id);
             NBCA_PAY.checkout({ type: 'fixed', refId: rec.id, amount: deposit, description: 'Class deposit ' + rec.preferredDate + ' - Nb.CA Academy', name: rec.name, email: rec.email, phone: rec.phone, returnTo: 'classes.html' });
         }
 

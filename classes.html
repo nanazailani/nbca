@@ -153,6 +153,7 @@
 
     
     <script src="js/nbca-config.js"></script>
+    <script src="js/nbca-data.js"></script>
     <script src="js/billplz.js"></script>
     <script src="js/member-shell.js"></script>
     <script>
@@ -184,6 +185,8 @@
             });
         }
 
+        const instructorName = i => i ? MemberShell.esc(i.name) : '<span class="font-normal text-roast-500">To be announced</span>';
+
         function renderWorkshops() {
             const box = document.getElementById('ws-list');
             const list = MemberShell.myWorkshops();
@@ -195,7 +198,7 @@
                 '<div class="bg-white rounded-3xl p-6 border border-roast-200 shadow-sm space-y-4 hover:shadow-lg hover:border-amberGold/40 transition-all">' +
                 '<div class="flex justify-between items-center"><span class="px-3 py-1 bg-blue-500/10 text-blue-600 text-[10px] font-bold rounded-full uppercase tracking-wider">' + MemberShell.esc(w.status) + '</span><span class="text-xs font-bold text-amberGold">RM ' + Number(w.price).toFixed(2) + '</span></div>' +
                 '<h3 class="font-serif text-xl font-bold text-roast-950">' + MemberShell.esc(w.title) + '</h3>' +
-                '<div class="bg-roast-50 p-4 rounded-2xl border border-roast-200 space-y-2 text-xs text-roast-700"><div class="flex justify-between gap-3"><span>Slot</span><strong class="text-roast-950 text-right">' + MemberShell.esc(w.slot) + '</strong></div><div class="flex justify-between gap-3"><span>Mode</span><strong class="text-roast-950">' + MemberShell.esc(w.modeLabel) + '</strong></div><div class="flex justify-between gap-3"><span>Location</span><strong class="text-roast-950 text-right">' + MemberShell.esc(w.location) + '</strong></div></div>' +
+                '<div class="bg-roast-50 p-4 rounded-2xl border border-roast-200 space-y-2 text-xs text-roast-700"><div class="flex justify-between gap-3"><span>Slot</span><strong class="text-roast-950 text-right">' + MemberShell.esc(w.slot) + '</strong></div><div class="flex justify-between gap-3"><span>Mode</span><strong class="text-roast-950">' + MemberShell.esc(w.modeLabel) + '</strong></div><div class="flex justify-between gap-3"><span>Location</span><strong class="text-roast-950 text-right">' + MemberShell.esc(w.location) + '</strong></div><div class="flex justify-between gap-3"><span>Instructor</span><strong class="text-roast-950 text-right">' + instructorName(NBCA_DATA.assign.get(NBCA_DATA.assign.wsKey(w.workshopId, w.slot))) + '</strong></div></div>' +
                 (w.status === 'Confirmed'
                     ? '<button onclick="openETicketModal(' + i + ')" class="w-full py-2.5 bg-roast-100 hover:bg-amberGold hover:text-white text-roast-900 font-bold rounded-xl text-xs transition-all border border-roast-200"><i class="fa-solid fa-qrcode mr-1"></i> View e-ticket</button>'
                     : w.status === 'Cancelled' ? '<p class="text-xs text-slate-500 text-center py-2">This enrollment was cancelled.</p>' : '<button onclick="payNow(\'workshop\', \'' + w.id + '\')" class="w-full py-2.5 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl text-xs shadow"><i class="fa-solid fa-lock mr-1"></i> Pay RM ' + Number(w.price).toFixed(2) + ' with Billplz</button>') + '</div>').join('');
@@ -239,6 +242,7 @@
                             '<div class="flex items-start justify-between max-w-md">' + stepDot(true, false, 'fa-pen', 'Registered') + bar(paid) + stepDot(paid, !paid, 'fa-credit-card', 'Deposit paid') + bar(admitted) + stepDot(admitted, paid && !admitted && !resched, 'fa-circle-check', 'Seat confirmed') + '</div>' +
                             (resched ? '<div class="rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs p-3 flex gap-2"><i class="fa-solid fa-triangle-exclamation mt-0.5"></i><span>We need to move your session. Our team will contact you on <strong>' + MemberShell.esc(r.phone || 'your phone') + '</strong> to agree a new date.</span></div>' : '') +
                             (!paid && r.classStatus !== 'Cancelled' ? '<div class="rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs p-3 flex flex-wrap items-center justify-between gap-3"><span>Pay the deposit to secure your seat.</span><button onclick="payNow(\'fixed\', \'' + r.id + '\')" class="px-4 py-2 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-lg whitespace-nowrap">Pay RM ' + Number(r.deposit).toFixed(2) + ' with Billplz</button></div>' : '') +
+                            '<p class="text-xs text-roast-600"><i class="fa-solid fa-chalkboard-user text-amberGold mr-1.5"></i>Instructor: ' + instructorName(NBCA_DATA.assign.get(NBCA_DATA.assign.fixedKey(r.preferredDate, r.session))) + '</p>' +
                             '<div class="grid grid-cols-3 gap-3 text-xs bg-roast-50 border border-roast-200 rounded-2xl p-3.5">' +
                                 '<div><span class="block text-[10px] text-roast-500 uppercase">Class fee</span><strong class="text-roast-950">RM ' + Number(r.classFee).toFixed(2) + '</strong></div>' +
                                 '<div><span class="block text-[10px] text-roast-500 uppercase">Deposit</span><strong class="text-roast-950">RM ' + Number(r.deposit).toFixed(2) + '</strong></div>' +

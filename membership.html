@@ -41,123 +41,129 @@
         @media print { #m-sidebar, #m-topbar, #m-bottomnav { display: none !important; } }
     </style>
 </head>
-<body data-page="membership" data-title="Membership & Points" data-sub="Collect points and redeem rewards" class="text-roast-900 antialiased selection:bg-amberGold selection:text-white">
+<body data-page="membership" data-title="Membership & Points" data-sub="Collect points, unlock tiers and redeem rewards" class="text-roast-900 antialiased selection:bg-amberGold selection:text-white">
     <div id="m-overlay"></div>
     <aside id="m-sidebar"></aside>
     <div class="lg:pl-72 min-h-screen flex flex-col min-w-0 overflow-x-hidden">
         <header id="m-topbar"></header>
         <main class="flex-1 min-w-0 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-10 py-6 lg:py-10 pb-28 lg:pb-14 space-y-10">
 
-            <section class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-roast-950 via-royalBlue to-amberGold text-white p-6 sm:p-8 shadow-xl">
-                <div class="absolute -right-10 -top-10 w-56 h-56 rounded-full bg-white/10 blur-2xl"></div>
-                <div class="relative grid md:grid-cols-2 gap-6 items-center">
-                    <div class="space-y-4">
-                        <div class="flex justify-between items-center"><span class="font-serif font-extrabold uppercase text-sm tracking-wider">Nb.CA Academy Pass</span><span class="px-3 py-1 bg-white text-amberGold text-[10px] font-extrabold rounded-full uppercase">Gold tier</span></div>
-                        <div><span class="text-[10px] uppercase tracking-widest text-blue-200">Available balance</span><div class="text-4xl sm:text-5xl font-extrabold font-serif mt-1">350 <span class="text-lg font-medium text-blue-200">points</span></div></div>
-                        <div class="flex justify-between items-end pt-3 border-t border-white/20 text-xs"><div><span class="block text-[10px] text-blue-200">MEMBER</span><strong id="card-member-name"></strong></div><span class="font-mono text-[10px] text-blue-200">#RP-GOLD-882</span></div>
-                    </div>
-                    <div class="rounded-2xl bg-white/12 border border-white/25 backdrop-blur-md p-5 space-y-3">
-                        <p class="text-[10px] font-extrabold uppercase tracking-widest text-blue-200">Next tier: Platinum</p>
-                        <div class="h-2 rounded-full bg-white/25 overflow-hidden"><div class="h-full w-[58%] bg-white rounded-full"></div></div>
-                        <p class="text-xs text-blue-100">Earn <strong class="text-white">250 more points</strong> from beans or classes to level up.</p>
-                        <a href="book-class.html" class="inline-flex items-center gap-2 text-xs font-bold text-white hover:underline">Earn points with a class <i class="fa-solid fa-arrow-right text-[10px]"></i></a>
-                    </div>
-                </div>
+            <section id="pass" class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-roast-950 via-royalBlue to-amberGold text-white p-6 sm:p-8 shadow-xl"></section>
+
+            <section>
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-5">
+                <div><span class="text-[11px] font-extrabold tracking-[0.18em] text-amberGold uppercase">Redeem</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-roast-950 mt-1">Rewards</h2></div>
+                <p id="earn-rule" class="text-xs text-roast-600 max-w-sm sm:text-right"></p>
+            </div>
+                <div id="rewards" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-5"></div>
             </section>
-            <div class="space-y-10">
-            <div class="space-y-6">
-                <div class="flex justify-between items-end">
-                    <div>
-                        <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Redeem Rewards</span>
-                        <h2 class="text-2xl sm:text-3xl font-extrabold text-roast-950 mt-1">Available Vouchers</h2>
-                    </div>
-                </div>
-                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div class="bg-white p-6 rounded-3xl border border-roast-200 shadow-sm space-y-4 hover:border-amberGold/40 hover:shadow-lg hover:-translate-y-1 transition-all flex flex-col justify-between">
-                        <div class="space-y-2">
-                            <span class="px-3 py-1 bg-amberGold/10 text-amberGold text-[10px] font-bold rounded-full">RM 10 OFF</span>
-                            <h3 class="text-lg font-bold text-roast-950 font-serif">Coffee Beans Discount Voucher</h3>
-                            <p class="text-xs text-roast-700 font-light">Use this RM10 discount voucher on any single-origin coffee bean bag.</p>
-                        </div>
-                        <div class="pt-4 border-t border-roast-200 flex justify-between items-center">
-                            <span class="text-amberGold font-bold text-sm">150 Points</span>
-                            <button onclick="redeemVoucher('RM 10 Coffee Voucher', 150)" class="px-4 py-2 bg-amberGold hover:bg-royalBlue text-roast-50 font-bold rounded-xl text-xs transition-all shadow">Redeem</button>
-                        </div>
-                    </div>
 
-                    <div class="bg-white p-6 rounded-3xl border border-roast-200 shadow-sm space-y-4 hover:border-amberGold/40 hover:shadow-lg hover:-translate-y-1 transition-all flex flex-col justify-between">
-                        <div class="space-y-2">
-                            <span class="px-3 py-1 bg-amberGold/10 text-amberGold text-[10px] font-bold rounded-full">FREE SHIPPING</span>
-                            <h3 class="text-lg font-bold text-roast-950 font-serif">Free Delivery Voucher</h3>
-                            <p class="text-xs text-roast-700 font-light">Enjoy free delivery on orders worth more than RM50.</p>
-                        </div>
-                        <div class="pt-4 border-t border-roast-200 flex justify-between items-center">
-                            <span class="text-amberGold font-bold text-sm">200 Points</span>
-                            <button onclick="redeemVoucher('Free Delivery Voucher', 200)" class="px-4 py-2 bg-amberGold hover:bg-royalBlue text-roast-50 font-bold rounded-xl text-xs transition-all shadow">Redeem</button>
-                        </div>
-                    </div>
-
-                    <div class="bg-white p-6 rounded-3xl border border-roast-200 shadow-sm space-y-4 hover:border-amberGold/40 hover:shadow-lg hover:-translate-y-1 transition-all flex flex-col justify-between">
-                        <div class="space-y-2">
-                            <span class="px-3 py-1 bg-amberGold/10 text-amberGold text-[10px] font-bold rounded-full">CLASS PASS</span>
-                            <h3 class="text-lg font-bold text-roast-950 font-serif">50% Off Roasting Workshop</h3>
-                            <p class="text-xs text-roast-700 font-light">Get 50% off your enrollment for any professional coffee-making class.</p>
-                        </div>
-                        <div class="pt-4 border-t border-roast-200 flex justify-between items-center">
-                            <span class="text-amberGold font-bold text-sm">500 Points</span>
-                            <button onclick="redeemVoucher('50% Off Workshop', 500)" class="px-4 py-2 bg-roast-200 hover:bg-roast-300 text-roast-700 font-bold rounded-xl text-xs transition-all border border-roast-300 cursor-not-allowed" disabled>Not Enough Points</button>
-                        </div>
-                    </div>
-                </div>
+            <section>
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-5">
+                <div><span class="text-[11px] font-extrabold tracking-[0.18em] text-amberGold uppercase">Wallet</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-roast-950 mt-1">My Vouchers</h2></div>
+                
             </div>
+                <div id="my-vouchers" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-5"></div>
+            </section>
 
-            <div class="space-y-6 pt-6">
-                <div>
-                    <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Activity Log</span>
-                    <h2 class="text-2xl font-extrabold text-roast-950 mt-1">Points History</h2>
-                </div>
-                <div class="bg-white rounded-3xl border border-roast-200 shadow-sm p-6 space-y-4">
-                    <div class="flex justify-between items-center pb-3 border-b border-roast-200 text-xs">
-                        <div>
-                            <strong class="text-roast-950 block text-sm font-serif">Order #RP-2026-9081</strong>
-                            <span class="text-roast-600">Purchased Merah Saga Blend (2x)</span>
-                        </div>
-                        <span class="text-green-400 font-bold text-sm">+120 Points</span>
-                    </div>
-                    <div class="flex justify-between items-center pb-3 border-b border-roast-200 text-xs">
-                        <div>
-                            <strong class="text-roast-950 block text-sm font-serif">Coffee Brewing Masterclass</strong>
-                            <span class="text-roast-600">Enrolled Workshop Ticket</span>
-                        </div>
-                        <span class="text-green-400 font-bold text-sm">+180 Points</span>
-                    </div>
-                    <div class="flex justify-between items-center text-xs">
-                        <div>
-                            <strong class="text-roast-950 block text-sm font-serif">Welcome Bonus</strong>
-                            <span class="text-roast-600">Account Registration</span>
-                        </div>
-                        <span class="text-green-400 font-bold text-sm">+50 Points</span>
-                    </div>
-                </div>
+            <section>
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-5">
+                <div><span class="text-[11px] font-extrabold tracking-[0.18em] text-amberGold uppercase">Activity</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-roast-950 mt-1">Points History</h2></div>
+                
             </div>
-
-            </div>
+                <div id="history" class="bg-white rounded-3xl border border-roast-200 shadow-sm mt-5 divide-y divide-roast-100"></div>
+            </section>
 
         </main>
     </div>
     <nav id="m-bottomnav" aria-label="Primary"></nav>
 
+    <div id="rd-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeRedeem()"></div>
+        <div class="relative bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl space-y-4 text-center">
+            <div class="w-14 h-14 rounded-2xl bg-blue-50 text-amberGold flex items-center justify-center mx-auto text-2xl"><i class="fa-solid fa-gift"></i></div>
+            <h3 id="rd-title" class="font-serif text-xl font-bold text-roast-950"></h3>
+            <p id="rd-text" class="text-xs text-roast-600 leading-relaxed"></p>
+            <div class="flex gap-3 pt-1"><button id="rd-ok" class="flex-1 py-3 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl text-xs shadow">Redeem</button><button onclick="closeRedeem()" class="px-5 py-3 bg-roast-100 text-roast-800 font-bold rounded-xl text-xs">Cancel</button></div>
+        </div>
+    </div>
+
     <script src="js/nbca-config.js"></script>
+    <script src="js/nbca-data.js"></script>
     <script src="js/billplz.js"></script>
     <script src="js/member-shell.js"></script>
     <script>
 
-        function redeemVoucher(title, cost) {
-            showToast('Redeemed "' + title + '" for ' + cost + ' points!');
+        const L = NBCA_DATA.loyalty, esc = MemberShell.esc;
+        const email = () => (MemberShell.user() || {}).email;
+        const ICON = { amount: 'fa-tag', shipping: 'fa-truck-fast', percent: 'fa-percent' };
+        const LABEL = v => v.type === 'amount' ? 'RM ' + v.value + ' OFF' : v.type === 'shipping' ? 'FREE DELIVERY' : v.value + '% OFF';
+        const WHERE = { shop: 'Use at shop checkout', class: 'Use when booking a class or workshop' };
+        const fmt = d => new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+
+        function render() {
+            const u = MemberShell.user() || {}, bal = L.balance(email()), t = L.tier(email()), S = L.settings();
+            document.getElementById('pass').innerHTML =
+                '<div class="absolute -right-10 -top-10 w-56 h-56 rounded-full bg-white/10 blur-2xl"></div>' +
+                '<div class="relative grid md:grid-cols-2 gap-6 items-center"><div class="space-y-4">' +
+                '<div class="flex justify-between items-center"><span class="font-serif font-extrabold uppercase text-sm tracking-wider">Nb.CA Academy Pass</span><span class="px-3 py-1 bg-white text-amberGold text-[10px] font-extrabold rounded-full uppercase">' + esc(t.name) + ' tier</span></div>' +
+                '<div><span class="text-[10px] uppercase tracking-widest text-blue-200">Available balance</span><div class="text-4xl sm:text-5xl font-extrabold font-serif mt-1">' + bal.toLocaleString('en-MY') + ' <span class="text-lg font-medium text-blue-200">points</span></div></div>' +
+                '<div class="flex justify-between items-end pt-3 border-t border-white/20 text-xs"><div><span class="block text-[10px] text-blue-200">MEMBER</span><strong>' + esc(u.name || 'Member') + '</strong></div><span class="font-mono text-[10px] text-blue-200">#' + esc(String(u.id || '').slice(-6).toUpperCase()) + '</span></div></div>' +
+                '<div class="rounded-2xl bg-white/12 border border-white/25 backdrop-blur-md p-5 space-y-3">' +
+                (t.next ? '<p class="text-[10px] font-extrabold uppercase tracking-widest text-blue-200">Next tier: ' + esc(t.next.name) + '</p><div class="h-2 rounded-full bg-white/25 overflow-hidden"><div class="h-full bg-white rounded-full transition-all duration-700" style="width:' + t.progress + '%"></div></div><p class="text-xs text-blue-100">Earn <strong class="text-white">' + t.toNext.toLocaleString('en-MY') + ' more points</strong> to reach ' + esc(t.next.name) + '.</p>'
+                        : '<p class="text-[10px] font-extrabold uppercase tracking-widest text-blue-200">Top tier</p><p class="text-sm text-white font-semibold">You have reached ' + esc(t.name) + '. Thank you for being part of the academy!</p>') +
+                '<a href="book-class.html" class="inline-flex items-center gap-2 text-xs font-bold text-white hover:underline">Earn points with a class <i class="fa-solid fa-arrow-right text-[10px]"></i></a></div></div>';
+            document.getElementById('earn-rule').innerText = 'Earn ' + S.earnPerRM + ' point' + (S.earnPerRM === 1 ? '' : 's') + ' for every RM1 you pay on classes, workshops and shop orders.';
+
+            const rewards = L.vouchers().filter(v => v.active).sort((a, b) => a.cost - b.cost);
+            document.getElementById('rewards').innerHTML = rewards.length ? rewards.map(v => {
+                const left = L.remaining(v), can = bal >= v.cost && left > 0;
+                return '<div class="bg-white p-6 rounded-3xl border border-roast-200 shadow-sm space-y-4 hover:border-amberGold/40 hover:shadow-lg transition-all flex flex-col justify-between"><div class="space-y-2">' +
+                    '<div class="flex items-center justify-between"><span class="w-11 h-11 rounded-xl bg-blue-50 text-amberGold flex items-center justify-center"><i class="fa-solid ' + ICON[v.type] + '"></i></span><span class="px-3 py-1 bg-amberGold/10 text-amberGold text-[10px] font-extrabold rounded-full">' + LABEL(v) + '</span></div>' +
+                    '<h3 class="text-lg font-bold text-roast-950 font-serif">' + esc(v.title) + '</h3><p class="text-xs text-roast-600">' + esc(v.description) + '</p><p class="text-[11px] text-roast-500"><i class="fa-solid fa-circle-info mr-1"></i>' + WHERE[v.scope] + (left !== Infinity ? ' &middot; ' + left + ' left' : '') + '</p></div>' +
+                    '<div class="pt-4 border-t border-roast-100 flex justify-between items-center"><span class="text-amberGold font-extrabold text-sm">' + v.cost.toLocaleString('en-MY') + ' pts</span>' +
+                    (can ? '<button onclick="openRedeem(\'' + v.id + '\')" class="px-4 py-2 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl text-xs shadow transition-all">Redeem</button>'
+                         : '<span class="px-3 py-2 bg-roast-100 text-roast-500 font-bold rounded-xl text-[11px]">' + (left <= 0 ? 'Out of stock' : (v.cost - bal).toLocaleString('en-MY') + ' pts to go') + '</span>') + '</div></div>';
+            }).join('') : '<p class="text-sm text-roast-500 sm:col-span-3">No rewards are available right now.</p>';
+
+            const mine = L.redemptionsOf(email());
+            document.getElementById('my-vouchers').innerHTML = mine.length ? mine.map(r => {
+                const st = { Available: 'bg-emerald-100 text-emerald-700', Used: 'bg-roast-100 text-roast-600', Cancelled: 'bg-red-100 text-red-600' }[r.status];
+                return '<div class="bg-white rounded-2xl border border-dashed ' + (r.status === 'Available' ? 'border-amberGold' : 'border-roast-300 opacity-75') + ' p-5 space-y-3"><div class="flex items-center justify-between"><span class="text-[10px] font-extrabold uppercase text-amberGold">' + esc(WHERE[r.scope]) + '</span><span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold ' + st + '">' + r.status + '</span></div>' +
+                    '<h4 class="font-serif font-bold text-roast-950">' + esc(r.title) + '</h4>' +
+                    '<div class="flex items-center justify-between rounded-xl bg-roast-50 border border-roast-200 px-3.5 py-2.5"><span class="font-mono font-bold tracking-wider text-roast-950">' + esc(r.code) + '</span><button onclick="copyCode(\'' + r.code + '\')" class="text-[11px] font-bold text-amberGold hover:underline">Copy</button></div>' +
+                    '<p class="text-[11px] text-roast-500">' + (r.status === 'Used' ? 'Used ' + fmt(r.usedAt) : 'Redeemed ' + fmt(r.createdAt)) + '</p></div>';
+            }).join('') : '<div class="sm:col-span-2 lg:col-span-3 bg-white rounded-3xl border border-dashed border-roast-300 p-8 text-center text-xs text-roast-500">Vouchers you redeem appear here. Apply them at checkout or when booking.</div>';
+
+            const led = L.ledger(email()).slice(0, 20);
+            document.getElementById('history').innerHTML = led.length ? led.map(r =>
+                '<div class="flex items-center justify-between gap-3 px-5 py-3.5"><div class="min-w-0"><p class="text-sm font-bold text-roast-950 truncate">' + esc(r.reason) + '</p><p class="text-[11px] text-roast-500">' + fmt(r.at) + '</p></div><span class="font-extrabold text-sm ' + (r.points >= 0 ? 'text-emerald-600' : 'text-red-500') + '">' + (r.points >= 0 ? '+' : '') + r.points.toLocaleString('en-MY') + '</span></div>').join('')
+                : '<p class="p-6 text-center text-xs text-roast-500">No points activity yet.</p>';
         }
-        window.addEventListener('member-ready', () => {
-            document.getElementById('card-member-name').innerText = (MemberShell.user() || {}).name || 'Member';
-        });
+
+        let pending = null;
+        function openRedeem(id) {
+            const v = L.voucher(id); pending = id;
+            document.getElementById('rd-title').innerText = 'Redeem ' + v.title + '?';
+            document.getElementById('rd-text').innerText = v.cost.toLocaleString('en-MY') + ' points will be deducted. ' + WHERE[v.scope] + '.';
+            document.getElementById('rd-ok').onclick = doRedeem;
+            document.getElementById('rd-modal').classList.remove('hidden');
+        }
+        function closeRedeem() { document.getElementById('rd-modal').classList.add('hidden'); pending = null; }
+        function doRedeem() {
+            const res = L.redeem(email(), pending);
+            closeRedeem();
+            if (!res.ok) { showToast(res.error); return; }
+            showToast('Redeemed! Your code is ' + res.redemption.code);
+            setTimeout(() => location.reload(), 900);       // refreshes the points shown in the sidebar too
+        }
+        function copyCode(code) {
+            (navigator.clipboard ? navigator.clipboard.writeText(code) : Promise.reject()).then(() => showToast('Code copied.'), () => window.prompt('Copy this code:', code));
+        }
+        window.addEventListener('member-ready', render);
 
     </script>
 </body>

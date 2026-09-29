@@ -71,7 +71,7 @@
             <section class="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 <a href="membership.html" class="bg-white rounded-2xl border border-roast-200 p-4 sm:p-5 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all">
                     <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center mb-3"><i class="fa-solid fa-coins"></i></div>
-                    <p class="text-2xl font-extrabold text-roast-950 font-serif">350</p><p class="text-[11px] text-roast-500 font-semibold">Reward points &middot; Gold</p></a>
+                    <p id="stat-points" class="text-2xl font-extrabold text-roast-950 font-serif">0</p><p id="stat-points-sub" class="text-[11px] text-roast-500 font-semibold">Reward points</p></a>
                 <a href="classes.html" class="bg-white rounded-2xl border border-roast-200 p-4 sm:p-5 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all">
                     <div class="w-10 h-10 rounded-xl bg-blue-100 text-amberGold flex items-center justify-center mb-3"><i class="fa-solid fa-graduation-cap"></i></div>
                     <p id="stat-classes" class="text-2xl font-extrabold text-roast-950 font-serif">0</p><p class="text-[11px] text-roast-500 font-semibold">Class bookings</p></a>
@@ -80,7 +80,7 @@
                     <p id="stat-orders" class="text-2xl font-extrabold text-roast-950 font-serif">0</p><p class="text-[11px] text-roast-500 font-semibold">Orders placed</p></a>
                 <a href="membership.html" class="bg-white rounded-2xl border border-roast-200 p-4 sm:p-5 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all">
                     <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-500 flex items-center justify-center mb-3"><i class="fa-solid fa-ticket"></i></div>
-                    <p class="text-2xl font-extrabold text-roast-950 font-serif">3</p><p class="text-[11px] text-roast-500 font-semibold">Vouchers to redeem</p></a>
+                    <p id="stat-vouchers" class="text-2xl font-extrabold text-roast-950 font-serif">0</p><p class="text-[11px] text-roast-500 font-semibold">Vouchers ready to use</p></a>
             </section>
 
             <!-- FEATURED PROMOTIONS -->
@@ -106,10 +106,10 @@
                         <a href="membership.html" class="group relative rounded-3xl p-6 bg-gradient-to-br from-amber-400 to-orange-500 text-white shadow-lg overflow-hidden">
                             <i class="fa-solid fa-crown absolute -right-3 -bottom-4 text-8xl text-white/20 rotate-12"></i>
                             <span class="text-[10px] font-extrabold uppercase tracking-widest text-amber-100">Members only</span>
-                            <h3 class="font-serif text-xl font-extrabold mt-1">50% off a workshop</h3>
-                            <p class="text-[11px] text-amber-50 mt-1 mb-3">Redeem with 500 points.</p>
-                            <div class="h-1.5 rounded-full bg-white/30 overflow-hidden mb-1"><div class="h-full w-[70%] bg-white rounded-full"></div></div>
-                            <p class="text-[10px] font-bold">350 / 500 pts</p>
+                            <h3 id="promo-rw-title" class="font-serif text-xl font-extrabold mt-1">Rewards</h3>
+                            <p id="promo-rw-sub" class="text-[11px] text-amber-50 mt-1 mb-3">Earn points on every class and order.</p>
+                            <div class="h-1.5 rounded-full bg-white/30 overflow-hidden mb-1"><div id="promo-rw-bar" class="h-full w-0 bg-white rounded-full transition-all duration-700"></div></div>
+                            <p id="promo-rw-pts" class="text-[10px] font-bold"></p>
                         </a>
                         <a href="shop.html?tab=merch" class="group relative rounded-3xl p-6 bg-white border border-roast-200 shadow-sm hover:shadow-lg transition-all overflow-hidden">
                             <i class="fa-solid fa-shirt absolute -right-2 -bottom-3 text-7xl text-amberGold/10 -rotate-12"></i>
@@ -194,7 +194,7 @@
                 <a id="latest-order-card" href="orders.html" class="bg-white rounded-2xl border border-roast-200 p-5 shadow-sm hover:shadow-lg transition-all flex items-center gap-4"></a>
                 <a href="membership.html" class="bg-white rounded-2xl border border-roast-200 p-5 shadow-sm hover:shadow-lg transition-all flex items-center gap-4">
                     <div class="w-12 h-12 rounded-xl bg-blue-100 text-amberGold flex items-center justify-center text-lg shrink-0"><i class="fa-solid fa-gift"></i></div>
-                    <div class="flex-1 min-w-0"><p class="text-[10px] font-extrabold uppercase tracking-widest text-roast-400">Next reward</p><h3 class="font-serif text-base font-bold text-roast-950">Free Delivery Voucher</h3><p class="text-[11px] text-roast-500">150 more points to go</p></div>
+                    <div class="flex-1 min-w-0"><p class="text-[10px] font-extrabold uppercase tracking-widest text-roast-400">Next reward</p><h3 id="nr-title" class="font-serif text-base font-bold text-roast-950">Rewards</h3><p id="nr-sub" class="text-[11px] text-roast-500"></p></div>
                     <i class="fa-solid fa-arrow-right text-roast-400"></i></a>
             </section>
         </main>
@@ -202,11 +202,29 @@
     <nav id="m-bottomnav" aria-label="Primary"></nav>
 
     <script src="js/nbca-config.js"></script>
+    <script src="js/nbca-data.js"></script>
     <script src="js/billplz.js"></script>
     <script src="js/member-shell.js"></script>
     <script>
 
         window.addEventListener('member-ready', () => {
+            // real points, tier and rewards from the loyalty program
+            (function () {
+                const email = (MemberShell.user() || {}).email, L = NBCA_DATA.loyalty, bal = L.balance(email), tier = L.tier(email);
+                document.getElementById('stat-points').innerText = bal.toLocaleString('en-MY');
+                document.getElementById('stat-points-sub').innerText = 'Reward points · ' + tier.name;
+                document.getElementById('stat-vouchers').innerText = L.available(email).length;
+                const rewards = L.vouchers().filter(v => v.active && L.remaining(v) > 0).sort((a, b) => a.cost - b.cost);
+                const t = rewards.find(v => v.cost > bal) || rewards[rewards.length - 1];
+                if (!t) { document.getElementById('nr-title').innerText = 'No rewards yet'; document.getElementById('nr-sub').innerText = 'Check back soon.'; return; }
+                const can = bal >= t.cost;
+                document.getElementById('promo-rw-title').innerText = t.title;
+                document.getElementById('promo-rw-sub').innerText = can ? 'You can redeem this now!' : 'Redeem with ' + t.cost + ' points.';
+                document.getElementById('promo-rw-bar').style.width = Math.min(100, Math.round(bal / t.cost * 100)) + '%';
+                document.getElementById('promo-rw-pts').innerText = bal + ' / ' + t.cost + ' pts';
+                document.getElementById('nr-title').innerText = t.title;
+                document.getElementById('nr-sub').innerText = can ? 'Ready to redeem' : (t.cost - bal) + ' more points to go';
+            })();
             const u = MemberShell.user() || {};
             const first = (u.name || 'Member').split(/\s+/)[0];
             document.getElementById('hero-welcome-title').innerText = 'Hello, ' + first + '!';

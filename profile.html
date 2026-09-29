@@ -100,6 +100,7 @@
     </div>
 
     <script src="js/nbca-config.js"></script>
+    <script src="js/nbca-data.js"></script>
     <script src="js/billplz.js"></script>
     <script src="js/member-shell.js"></script>
     <script>
@@ -115,8 +116,9 @@
             document.getElementById('pf-name').value = u.name || '';
             document.getElementById('pf-email').value = u.email || '';
             document.getElementById('pf-phone').value = MemberShell.getProfile().phone || '';
-            // accounts created through the demo login have no password to verify
-            document.getElementById('pf-cur-wrap').classList.toggle('hidden', !u.password);
+            // (the demo account is created with a password too, so this is only hidden for password-less legacy accounts)
+            const acct = NBCA_DATA.accounts.get(u.email) || {};
+            document.getElementById('pf-cur-wrap').classList.toggle('hidden', !acct.password);
         }
 
         // eye button: show / hide what was typed
@@ -129,20 +131,16 @@
             btn.title = show ? 'Hide password' : 'Show password';
         }
 
-        function setAccount(mutate) {
-            const cur = MemberShell.user() || {};
-            mutate(cur);
-            localStorage.setItem('rp_user', JSON.stringify(cur));
-            localStorage.setItem('rp_logged_user', JSON.stringify(cur));
-        }
-
         function saveDetails(e) {
             e.preventDefault();
+            const u = MemberShell.user() || {};
             const name = document.getElementById('pf-name').value.trim();
             if (!name) return;
-            setAccount(u => { u.name = name; });
+            const phone = document.getElementById('pf-phone').value.trim();
+            const acct = NBCA_DATA.accounts.update(u.email, { name, phone });
+            NBCA_DATA.session.start(acct);
             const p = MemberShell.getProfile();
-            p.phone = document.getElementById('pf-phone').value.trim();
+            p.phone = phone;
             MemberShell.saveProfile(p);
             showToast('Details saved.');
             setTimeout(() => location.reload(), 600);
@@ -154,10 +152,10 @@
             const cur = document.getElementById('pf-cur').value;
             const nw = document.getElementById('pf-new').value;
             const cf = document.getElementById('pf-confirm').value;
-            if (u.password && cur !== u.password) { showToast('Current password is incorrect.'); return; }
             if (nw.length < 6) { showToast('New password must be at least 6 characters.'); return; }
             if (nw !== cf) { showToast('New passwords do not match.'); return; }
-            setAccount(a => { a.password = nw; });
+            const res = NBCA_DATA.accounts.changePassword(u.email, cur, nw);
+            if (!res.ok) { showToast('Current password is incorrect.'); return; }
             ['pf-cur', 'pf-new', 'pf-confirm'].forEach(id => { const el = document.getElementById(id); el.value = ''; if (el.type === 'text') el.nextElementSibling.click(); });
             showToast('Password updated.');
             loadHeader();

@@ -71,13 +71,17 @@
 
     <script src="js/catalog.js"></script>
     <script src="js/nbca-config.js"></script>
+    <script src="js/nbca-data.js"></script>
     <script src="js/billplz.js"></script>
     <script src="js/member-shell.js"></script>
     <script>
 
         const C = window.NBCA_CATALOG.workshops;
-        let cur = null, curMode = null, curSlot = null;
+        let cur = null, curMode = null, curSlot = null, curVoucher = null;
         const esc = MemberShell.esc;
+
+        const seatsUsed = (w, slot) => JSON.parse(localStorage.getItem('rp_workshop_enrollments') || '[]').filter(x => x.workshopId === w.id && x.slot === slot && x.status !== 'Cancelled').length;
+        const slotList = () => NBCA_DATA.slots.forWorkshop(cur)[curMode] || [];
 
         function renderGrid() {
             document.getElementById('ws-grid').innerHTML = C.map(w =>
@@ -90,16 +94,27 @@
         function openWorkshop(id) {
             cur = C.find(w => w.id === id);
             curMode = Object.keys(cur.modes)[0];
-            curSlot = null;
+            curSlot = null; curVoucher = null;
             renderModal();
             document.getElementById('ws-modal').classList.remove('hidden');
         }
         function closeWorkshop() { document.getElementById('ws-modal').classList.add('hidden'); }
 
+        function pricing() {
+            const v = NBCA_DATA.loyalty.available((MemberShell.user() || {}).email, 'class').find(x => x.code === curVoucher) || null;
+            const discount = NBCA_DATA.loyalty.discount(v, { subtotal: cur.price, shipping: 0 });
+            return { list: cur.price, price: cur.price - discount, discount, voucher: v };
+        }
+
         function renderModal() {
-            const w = cur;
+            const w = cur, cap = NBCA_DATA.slots.capacity(w), P = pricing();
+            const mine = NBCA_DATA.loyalty.available((MemberShell.user() || {}).email, 'class');
             const modes = Object.keys(w.modes).map(k => '<button onclick="pickMode(\'' + k + '\')" class="px-4 py-2.5 rounded-xl text-xs font-bold border transition-all ' + (k === curMode ? 'bg-amberGold text-white border-amberGold shadow' : 'bg-roast-50 text-roast-700 border-roast-200 hover:border-amberGold') + '">' + esc(w.modes[k].label) + '</button>').join('');
-            const slots = (w.slots[curMode] || []).map((s, i) => '<button onclick="pickSlot(' + i + ')" class="px-4 py-2.5 rounded-xl text-xs font-semibold border text-left transition-all ' + (curSlot === s ? 'bg-emerald-50 border-emerald-400 text-emerald-700 ring-2 ring-emerald-300' : 'bg-white text-roast-700 border-roast-200 hover:border-amberGold') + '">' + esc(s) + '</button>').join('');
+            const slots = slotList().map((s, i) => {
+                const left = cap - seatsUsed(w, s), full = left <= 0;
+                return '<button ' + (full ? 'disabled' : 'onclick="pickSlot(' + i + ')"') + ' class="px-4 py-2.5 rounded-xl text-xs font-semibold border text-left transition-all ' + (full ? 'bg-roast-100 border-roast-200 text-roast-400 cursor-not-allowed' : curSlot === s ? 'bg-emerald-50 border-emerald-400 text-emerald-700 ring-2 ring-emerald-300' : 'bg-white text-roast-700 border-roast-200 hover:border-amberGold') + '">' + esc(s) + '<span class="block text-[10px] font-medium ' + (full ? 'text-red-500' : 'text-roast-500') + '">' + (full ? 'Fully booked' : left + ' seat' + (left > 1 ? 's' : '') + ' left') + '</span></button>';
+            }).join('') || '<p class="text-xs text-roast-500 sm:col-span-2">No sessions scheduled yet. Please check back soon.</p>';
+            const voucherBox = mine.length ? '<div class="space-y-1.5"><p class="text-[11px] font-bold uppercase text-roast-500"><i class="fa-solid fa-ticket text-amberGold mr-1"></i>Voucher</p><select onchange="pickVoucher(this.value)" class="w-full bg-white border border-roast-200 rounded-xl px-3.5 py-2.5 text-xs focus:outline-none focus:border-amberGold"><option value="">No voucher</option>' + mine.map(v => '<option value="' + esc(v.code) + '" ' + (v.code === curVoucher ? 'selected' : '') + '>' + esc(v.title) + ' (' + esc(v.code) + ')</option>').join('') + '</select></div>' : '';
             document.getElementById('ws-modal-body').innerHTML =
                 '<div class="grid md:grid-cols-5">' +
                 '<div class="md:col-span-2 h-48 md:h-auto"><img src="' + esc(w.image) + '" alt="" class="w-full h-full object-cover md:rounded-l-3xl"></div>' +
@@ -108,12 +123,14 @@
                     '<ul class="grid grid-cols-2 gap-x-3 gap-y-1.5 text-[11px] text-roast-700">' + w.highlights.map(h => '<li><i class="fa-solid fa-check text-amberGold text-[9px] mr-1.5"></i>' + esc(h) + '</li>').join('') + '</ul>' +
                     '<div class="space-y-2"><p class="text-[11px] font-bold uppercase text-roast-500">Mode</p><div class="flex flex-wrap gap-2">' + modes + '</div><p class="text-[11px] text-roast-500">' + esc(w.modes[curMode].note) + '</p></div>' +
                     '<div class="space-y-2"><p class="text-[11px] font-bold uppercase text-roast-500">Choose a slot</p><div class="grid sm:grid-cols-2 gap-2">' + slots + '</div></div>' +
-                    '<div class="flex items-center justify-between pt-4 border-t border-roast-100"><div><span class="block text-[10px] uppercase text-roast-500">Fee</span><strong class="font-serif text-2xl text-amberGold">RM ' + w.price.toFixed(2) + '</strong></div>' +
+                    voucherBox +
+                    '<div class="flex items-center justify-between pt-4 border-t border-roast-100"><div><span class="block text-[10px] uppercase text-roast-500">Fee</span><strong class="font-serif text-2xl text-amberGold">RM ' + P.price.toFixed(2) + '</strong>' + (P.discount ? '<span class="ml-2 text-xs text-roast-400 line-through">RM ' + P.list.toFixed(2) + '</span>' : '') + '</div>' +
                     '<button onclick="enroll()" ' + (curSlot ? '' : 'disabled') + ' class="px-6 py-3 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl text-xs shadow-lg disabled:opacity-40 disabled:cursor-not-allowed">Enroll &amp; pay with Billplz</button></div>' +
                 '</div></div>';
         }
         function pickMode(k) { curMode = k; curSlot = null; renderModal(); }
-        function pickSlot(i) { curSlot = cur.slots[curMode][i]; renderModal(); }
+        function pickSlot(i) { curSlot = slotList()[i]; renderModal(); }
+        function pickVoucher(code) { curVoucher = code || null; renderModal(); }
 
         // Creates the enrolment as "Pending Payment", then sends the member to Billplz. Paid = Confirmed.
         function enroll() {
@@ -124,18 +141,22 @@
                 showToast('You already have this slot. Check My Classes.');
                 return;
             }
+            if (seatsUsed(cur, curSlot) >= NBCA_DATA.slots.capacity(cur)) { showToast('Sorry, that slot just filled up.'); renderModal(); return; }
+            const P = pricing();
             const rec = {
                 id: 'WS-' + Date.now(), ref: 'RP-WS-' + String(Date.now()).slice(-6),
                 email: u.email, name: u.name, workshopId: cur.id, title: cur.title,
                 mode: curMode, modeLabel: cur.modes[curMode].label, location: cur.modes[curMode].location,
-                slot: curSlot, price: cur.price, status: 'Pending Payment', paymentStatus: 'Unpaid', createdAt: new Date().toISOString()
+                slot: curSlot, price: P.price, listPrice: P.list, discount: P.discount,
+                voucher: P.voucher ? { code: P.voucher.code, title: P.voucher.title } : null,
+                status: 'Pending Payment', paymentStatus: 'Unpaid', createdAt: new Date().toISOString()
             };
             all.push(rec);
             localStorage.setItem('rp_workshop_enrollments', JSON.stringify(all));
+            if (P.voucher) NBCA_DATA.loyalty.use(P.voucher.code, rec.id);
             NBCA_PAY.checkout({ type: 'workshop', refId: rec.id, amount: rec.price, description: rec.title + ' - Nb.CA Academy', name: rec.name, email: rec.email, phone: MemberShell.getProfile().phone, returnTo: 'classes.html' });
         }
         renderGrid();
-
     </script>
 </body>
 </html>

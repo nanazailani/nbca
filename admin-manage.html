@@ -293,92 +293,6 @@
                 </form>
             </div>
 
-            <!-- TAB 4: MANAGE CLASSES -->
-            <div id="view-classes" class="admin-view space-y-6 hidden">
-                <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-                    <div>
-                        <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Workshops & Masterclasses</span>
-                        <h3 class="text-2xl font-extrabold text-roast-950 font-serif mt-1">Class Slot Management</h3>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <button onclick="openAddClassModal()" class="px-4 py-2.5 bg-amberGold text-adminBg font-extrabold rounded-xl text-xs shadow hover:opacity-90 flex items-center gap-2">
-                            <i class="fa-solid fa-plus"></i> Add Class Slot
-                        </button>
-                    </div>
-                </div>
-
-                <div class="flex flex-col sm:flex-row sm:items-center gap-3">
-                    <div class="relative sm:max-w-xs w-full">
-                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-roast-400 text-xs"></i>
-                        <input type="text" id="class-search" oninput="filterClassesTable()" placeholder="Search class name..." class="w-full bg-adminCard border border-adminBorder text-roast-950 text-xs rounded-xl pl-10 pr-4 py-2.5 focus:outline-none focus:border-amberGold">
-                    </div>
-                    <select id="class-month-filter" onchange="filterClassesTable()" class="bg-adminCard border border-adminBorder text-roast-200 text-xs rounded-xl px-4 py-2.5 focus:outline-none focus:border-amberGold">
-                        <option value="all">All Months</option>
-                        <option value="01">January</option>
-                        <option value="02">February</option>
-                        <option value="03">March</option>
-                        <option value="04">April</option>
-                        <option value="05">May</option>
-                        <option value="06">June</option>
-                        <option value="07">July</option>
-                        <option value="08">August</option>
-                        <option value="09">September</option>
-                        <option value="10">October</option>
-                        <option value="11">November</option>
-                        <option value="12">December</option>
-                    </select>
-                    <select id="class-year-filter" onchange="filterClassesTable()" class="bg-adminCard border border-adminBorder text-roast-200 text-xs rounded-xl px-4 py-2.5 focus:outline-none focus:border-amberGold">
-                        <option value="all">All Years</option>
-                        <option value="2026">2026</option>
-                        <option value="2027">2027</option>
-                    </select>
-                </div>
-
-                <div class="bg-transparent sm:bg-adminCard rounded-none sm:rounded-3xl border-0 sm:border sm:border-adminBorder overflow-visible sm:overflow-hidden shadow-none sm:shadow-2xl p-0 sm:p-0">
-                    <div class="overflow-x-auto">
-                        <table class="responsive-table w-full min-w-[960px] text-left text-xs" id="classes-table">
-                            <thead class="bg-[#F8FAFC] text-roast-300 uppercase tracking-wider border-b border-adminBorder">
-                                <tr>
-                                    <th class="p-4 font-bold">Class Name</th>
-                                    <th class="p-4 font-bold">Format</th>
-                                    <th class="p-4 font-bold">Schedule</th>
-                                    <th class="p-4 font-bold">Price</th>
-                                    <th class="p-4 font-bold">Location / Meeting Link</th>
-                                    <th class="p-4 font-bold">Max Pax</th>
-                                    <th class="p-4 font-bold text-right">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-adminBorder" id="classes-tbody">
-                                <tr class="hover:bg-adminCardHover class-row" data-month="09" data-year="2026">
-                                    <td class="p-4 font-bold text-roast-950 class-name" data-label="Class Name">Coffee Brewing Masterclass</td>
-                                    <td class="p-4 whitespace-nowrap class-format" data-label="Format"><span class="whitespace-nowrap inline-flex items-center px-2.5 py-0.5 bg-blue-500/20 text-blue-300 font-bold text-[10px] rounded-full"><i class="fa-solid fa-people-roof mr-1"></i>Face-to-Face</span></td>
-                                    <td class="p-4 text-roast-300 whitespace-nowrap class-schedule" data-label="Schedule">Sat, 6 Sep 2026 — 10:00 AM</td>
-                                    <td class="p-4 text-amberGold font-serif class-price" data-label="Price">RM 120.00</td>
-                                    <td class="p-4 text-roast-300 class-location" data-label="Location / Meeting Link">Nb.CA Academy, Sungai Petani, Kedah</td>
-                                    <td class="p-4 font-bold text-roast-950 class-pax" data-label="Max Pax">8 pax</td>
-                                    <td class="p-4 text-right space-x-2" data-label="Actions">
-                                        <button onclick="openEditClassModal(this)" class="px-3 py-1.5 bg-adminBg border border-adminBorder text-roast-100 font-bold rounded-lg shadow hover:bg-adminCardHover" title="Edit"><i class="fa-solid fa-pen"></i></button>
-                                        <button onclick="deleteClassRow(this)" class="px-3 py-1.5 bg-red-500/10 text-red-400 border border-red-500/30 font-bold rounded-lg shadow hover:bg-red-500/20" title="Delete"><i class="fa-solid fa-trash"></i></button>
-                                    </td>
-                                </tr>
-                                <tr class="hover:bg-adminCardHover class-row" data-month="09" data-year="2026">
-                                    <td class="p-4 font-bold text-roast-950 class-name" data-label="Class Name">Coffee Cupping Experience</td>
-                                    <td class="p-4 whitespace-nowrap class-format" data-label="Format"><span class="whitespace-nowrap inline-flex items-center px-2.5 py-0.5 bg-purple-500/20 text-purple-300 font-bold text-[10px] rounded-full"><i class="fa-solid fa-video mr-1"></i>Online</span></td>
-                                    <td class="p-4 text-roast-300 whitespace-nowrap class-schedule" data-label="Schedule">Thu, 11 Sep 2026 — 8:00 PM</td>
-                                    <td class="p-4 text-amberGold font-serif class-price" data-label="Price">RM 80.00</td>
-                                    <td class="p-4 text-roast-300 class-location" data-label="Location / Meeting Link"><a href="#" class="text-amberGold hover:underline break-all">https://zoom.us/j/1234567890</a></td>
-                                    <td class="p-4 font-bold text-roast-950 class-pax" data-label="Max Pax">10 pax</td>
-                                    <td class="p-4 text-right space-x-2" data-label="Actions">
-                                        <button onclick="openEditClassModal(this)" class="px-3 py-1.5 bg-adminBg border border-adminBorder text-roast-100 font-bold rounded-lg shadow hover:bg-adminCardHover" title="Edit"><i class="fa-solid fa-pen"></i></button>
-                                        <button onclick="deleteClassRow(this)" class="px-3 py-1.5 bg-red-500/10 text-red-400 border border-red-500/30 font-bold rounded-lg shadow hover:bg-red-500/20" title="Delete"><i class="fa-solid fa-trash"></i></button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
             <!-- TAB 5: MANAGE BLOG -->
             <div id="view-blog" class="admin-view space-y-6 hidden">
                 <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
@@ -497,74 +411,6 @@
         </div>
     </div>
 
-    <!-- MODAL: ADD / EDIT CLASS SLOT -->
-    <div id="class-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-adminCard border border-adminBorder rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl relative space-y-6 text-roast-100 my-8">
-            <button onclick="closeClassModal()" class="absolute top-5 right-5 text-roast-400 hover:text-roast-950 p-2">
-                <i class="fa-solid fa-xmark text-lg"></i>
-            </button>
-            <div class="text-center space-y-1">
-                <div class="w-14 h-14 rounded-2xl bg-amberGold/20 border border-amberGold/40 text-amberGold flex items-center justify-center mx-auto text-2xl shadow">
-                    <i class="fa-solid fa-chalkboard-user"></i>
-                </div>
-                <h3 id="class-modal-title" class="text-xl font-bold font-serif text-roast-950">Add Class Slot</h3>
-                <p class="text-xs text-roast-300">Fill in the class & slot details below</p>
-            </div>
-            <div class="space-y-4 text-xs">
-                <input type="hidden" id="edit-class-index" value="">
-                <div>
-                    <label class="block font-semibold text-roast-300 uppercase mb-1">Class Name</label>
-                    <input type="text" id="input-class-name" list="class-name-suggestions" placeholder="e.g. Latte Art Workshop" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
-                    <datalist id="class-name-suggestions">
-                        <option value="Coffee Brewing Masterclass">
-                        <option value="Latte Art Workshop">
-                        <option value="Coffee Cupping Experience">
-                    </datalist>
-                </div>
-
-                <div>
-                    <label class="block font-semibold text-roast-300 uppercase mb-1">Class Format</label>
-                    <select id="input-class-format" onchange="toggleClassLocationField()" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
-                        <option value="face-to-face">Face-to-Face</option>
-                        <option value="online">Online</option>
-                    </select>
-                </div>
-
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block font-semibold text-roast-300 uppercase mb-1">Price (RM)</label>
-                        <input type="number" step="0.01" id="input-class-price" placeholder="120.00" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
-                    </div>
-                    <div>
-                        <label class="block font-semibold text-roast-300 uppercase mb-1">Max Pax</label>
-                        <input type="number" id="input-class-pax" placeholder="8" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block font-semibold text-roast-300 uppercase mb-1">Slot Date & Time</label>
-                    <input type="text" id="input-class-schedule" placeholder="e.g. Sat, 6 Sep 2026 — 10:00 AM" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
-                </div>
-
-                <!-- Face-to-Face: Location field -->
-                <div id="field-class-location">
-                    <label class="block font-semibold text-roast-300 uppercase mb-1">Location</label>
-                    <input type="text" id="input-class-location-val" placeholder="e.g. Nb.CA Academy, Sungai Petani, Kedah" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
-                </div>
-
-                <!-- Online: Meeting Link field -->
-                <div id="field-class-link" class="hidden">
-                    <label class="block font-semibold text-roast-300 uppercase mb-1">Meeting Link</label>
-                    <input type="url" id="input-class-link-val" placeholder="e.g. https://zoom.us/j/1234567890" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
-                </div>
-            </div>
-            <div class="flex gap-3 pt-2">
-                <button onclick="saveClassData()" class="flex-1 py-3 bg-amberGold text-adminBg font-extrabold rounded-xl text-xs shadow hover:opacity-90">Save Slot</button>
-                <button onclick="closeClassModal()" class="px-5 py-3 bg-adminBg text-roast-300 font-bold rounded-xl border border-adminBorder text-xs">Cancel</button>
-            </div>
-        </div>
-    </div>
-
     <!-- MODAL: ADD / EDIT BLOG POST -->
     <div id="blog-post-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-adminCard border border-adminBorder rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl relative space-y-6 text-roast-100 my-8">
@@ -633,13 +479,15 @@
     </div>
 
     <script src="js/nbca-config.js"></script>
-    <script src="js/admin-shell.js"></script>
+    <script src="js/nbca-data.js"></script>
+    <script src="js/admin/shell.js"></script>
+    <script src="js/admin/ui.js"></script>
     <!-- SCRIPT LOGIC -->
     <script>
         let activeStockRow = null;
 
         // ===================== TABS =====================
-        const TABS = [['fixed', 'fixedclass', 'Fixed Class Settings', 'fa-sliders'], ['slots', 'classes', 'Workshop Slots', 'fa-clock'], ['inventory', 'inventory', 'Inventory', 'fa-boxes-stacked'], ['blog', 'blog', 'Announcements', 'fa-bullhorn'], ['admins', 'admins', 'Admin Accounts', 'fa-user-shield']];
+        const TABS = [['fixed', 'fixedclass', 'Fixed Class Settings', 'fa-sliders'], ['inventory', 'inventory', 'Inventory', 'fa-boxes-stacked'], ['blog', 'blog', 'Announcements', 'fa-bullhorn'], ['admins', 'admins', 'Admin Accounts', 'fa-user-shield']];
         function showTab(key) {
             const t = TABS.find(x => x[0] === key) || TABS[0];
             document.querySelectorAll('.admin-view').forEach(el => el.classList.add('hidden'));
@@ -670,7 +518,7 @@
         }
         async function removeAdmin(i) {
             const list = loadAdminAccounts(), a = list[i];
-            if (await AdminShell.confirm({ title: 'Remove ' + a.name + '?', message: 'They will no longer be able to sign in to the admin console.', ok: 'Remove admin' })) { list.splice(i, 1); localStorage.setItem('rp_admin_accounts', JSON.stringify(list)); renderAdmins(); AdminShell.toast('Admin removed.'); }
+            if (await UI.confirm({ title: 'Remove ' + a.name + '?', message: 'They will no longer be able to sign in to the admin console.', ok: 'Remove admin' })) { list.splice(i, 1); localStorage.setItem('rp_admin_accounts', JSON.stringify(list)); renderAdmins(); AdminShell.toast('Admin removed.'); }
         }
         function togglePw(id, btn) {
             const input = document.getElementById(id), show = input.type === 'password';
@@ -979,184 +827,16 @@
         }
 
         // --- CLASS SLOT MANAGEMENT FUNCTIONS ---
-        let activeClassRow = null;
 
-        function toggleClassLocationField() {
-            const format = document.getElementById('input-class-format').value;
-            const locationField = document.getElementById('field-class-location');
-            const linkField = document.getElementById('field-class-link');
 
-            if (format === 'online') {
-                locationField.classList.add('hidden');
-                linkField.classList.remove('hidden');
-            } else {
-                locationField.classList.remove('hidden');
-                linkField.classList.add('hidden');
-            }
-        }
 
-        function openAddClassModal() {
-            activeClassRow = null;
-            document.getElementById('class-modal-title').innerText = "Add Class Slot";
-            document.getElementById('edit-class-index').value = "";
-            document.getElementById('input-class-name').value = "";
-            document.getElementById('input-class-format').value = "face-to-face";
-            document.getElementById('input-class-price').value = "";
-            document.getElementById('input-class-pax').value = "";
-            document.getElementById('input-class-schedule').value = "";
-            document.getElementById('input-class-location-val').value = "";
-            document.getElementById('input-class-link-val').value = "";
-            toggleClassLocationField();
-            document.getElementById('class-modal').classList.remove('hidden');
-        }
 
-        function openEditClassModal(btn) {
-            const row = btn.closest('tr');
-            activeClassRow = row;
 
-            const name = row.querySelector('.class-name').innerText;
-            const formatBadge = row.querySelector('.class-format').innerText.trim();
-            const isOnline = formatBadge.toLowerCase().includes('online');
-            const schedule = row.querySelector('.class-schedule').innerText;
-            const price = row.querySelector('.class-price').innerText.replace('RM ', '');
-            const pax = row.querySelector('.class-pax').innerText.replace(' pax', '');
-            const locationCell = row.querySelector('.class-location');
-            const linkEl = locationCell.querySelector('a');
-            const locationValue = linkEl ? linkEl.getAttribute('href') : locationCell.innerText.trim();
-
-            document.getElementById('class-modal-title').innerText = "Edit Class Slot";
-            document.getElementById('edit-class-index').value = "edit";
-            document.getElementById('input-class-name').value = name;
-            document.getElementById('input-class-format').value = isOnline ? 'online' : 'face-to-face';
-            document.getElementById('input-class-price').value = price;
-            document.getElementById('input-class-pax').value = pax;
-            document.getElementById('input-class-schedule').value = schedule;
-
-            if (isOnline) {
-                document.getElementById('input-class-link-val').value = locationValue;
-                document.getElementById('input-class-location-val').value = "";
-            } else {
-                document.getElementById('input-class-location-val').value = locationValue;
-                document.getElementById('input-class-link-val').value = "";
-            }
-
-            toggleClassLocationField();
-            document.getElementById('class-modal').classList.remove('hidden');
-        }
-
-        function closeClassModal() {
-            document.getElementById('class-modal').classList.add('hidden');
-            activeClassRow = null;
-        }
-
-        function saveClassData() {
-            const name = document.getElementById('input-class-name').value.trim();
-            const format = document.getElementById('input-class-format').value;
-            const price = parseFloat(document.getElementById('input-class-price').value).toFixed(2);
-            const pax = parseInt(document.getElementById('input-class-pax').value);
-            const schedule = document.getElementById('input-class-schedule').value.trim();
-            const isEdit = document.getElementById('edit-class-index').value === "edit";
-
-            const locationVal = document.getElementById('input-class-location-val').value.trim();
-            const linkVal = document.getElementById('input-class-link-val').value.trim();
-
-            if (!name || !schedule || isNaN(price) || isNaN(pax)) {
-                alert('Sila lengkapkan semua maklumat kelas dengan betul.');
-                return;
-            }
-            if (format === 'online' && !linkVal) {
-                alert('Sila masukkan meeting link untuk kelas online.');
-                return;
-            }
-            if (format === 'face-to-face' && !locationVal) {
-                alert('Sila masukkan lokasi untuk kelas face-to-face.');
-                return;
-            }
-
-            const formatHtml = format === 'online'
-                ? '<span class="whitespace-nowrap inline-flex items-center px-2.5 py-0.5 bg-purple-500/20 text-purple-300 font-bold text-[10px] rounded-full"><i class="fa-solid fa-video mr-1"></i>Online</span>'
-                : '<span class="whitespace-nowrap inline-flex items-center px-2.5 py-0.5 bg-blue-500/20 text-blue-300 font-bold text-[10px] rounded-full"><i class="fa-solid fa-people-roof mr-1"></i>Face-to-Face</span>';
-
-            const locationHtml = format === 'online'
-                ? `<a href="${linkVal}" target="_blank" class="text-amberGold hover:underline break-all">${linkVal}</a>`
-                : `${locationVal}`;
-
-            const parsedDate = parseMonthYearFromSchedule(schedule);
-
-            if (isEdit && activeClassRow) {
-                activeClassRow.querySelector('.class-name').innerText = name;
-                activeClassRow.querySelector('.class-format').innerHTML = formatHtml;
-                activeClassRow.querySelector('.class-schedule').innerText = schedule;
-                activeClassRow.querySelector('.class-price').innerText = `RM ${price}`;
-                activeClassRow.querySelector('.class-location').innerHTML = locationHtml;
-                activeClassRow.querySelector('.class-pax').innerText = `${pax} pax`;
-                if (parsedDate.month) activeClassRow.setAttribute('data-month', parsedDate.month);
-                if (parsedDate.year) activeClassRow.setAttribute('data-year', parsedDate.year);
-                showAdminToast(`Class slot for "${name}" successfully updated.`);
-            } else {
-                const tbody = document.getElementById('classes-tbody');
-                const newRow = document.createElement('tr');
-                newRow.className = "hover:bg-adminCardHover class-row";
-                if (parsedDate.month) newRow.setAttribute('data-month', parsedDate.month);
-                if (parsedDate.year) newRow.setAttribute('data-year', parsedDate.year);
-                newRow.innerHTML = `
-                    <td class="p-4 font-bold text-roast-950 class-name" data-label="Class Name">${name}</td>
-                    <td class="p-4 whitespace-nowrap class-format" data-label="Format">${formatHtml}</td>
-                    <td class="p-4 text-roast-300 whitespace-nowrap class-schedule" data-label="Schedule">${schedule}</td>
-                    <td class="p-4 text-amberGold font-serif class-price" data-label="Price">RM ${price}</td>
-                    <td class="p-4 text-roast-300 class-location" data-label="Location / Meeting Link">${locationHtml}</td>
-                    <td class="p-4 font-bold text-roast-950 class-pax" data-label="Max Pax">${pax} pax</td>
-                    <td class="p-4 text-right space-x-2" data-label="Actions">
-                        <button onclick="openEditClassModal(this)" class="px-3 py-1.5 bg-adminBg border border-adminBorder text-roast-100 font-bold rounded-lg shadow hover:bg-adminCardHover" title="Edit"><i class="fa-solid fa-pen"></i></button>
-                        <button onclick="deleteClassRow(this)" class="px-3 py-1.5 bg-red-500/10 text-red-400 border border-red-500/30 font-bold rounded-lg shadow hover:bg-red-500/20" title="Delete"><i class="fa-solid fa-trash"></i></button>
-                    </td>
-                `;
-                tbody.appendChild(newRow);
-                showAdminToast(`New class slot for "${name}" successfully added.`);
-            }
-
-            closeClassModal();
-            filterClassesTable();
-        }
 
         // Extracts month (01-12) and year (yyyy) from a free-text schedule string 
         // like "Sat, 6 Sep 2026 — 10:00 AM" so it can be filtered by Month/Year. 
-        function parseMonthYearFromSchedule(scheduleText) {
-            const monthMap = { jan: '01', feb: '02', mar: '03', apr: '04', may: '05', jun: '06', jul: '07', aug: '08', sep: '09', oct: '10', nov: '11', dec: '12' };
-            const monthMatch = scheduleText.match(/\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\w*/i);
-            const yearMatch = scheduleText.match(/\b(20\d{2})\b/);
-            return {
-                month: monthMatch ? monthMap[monthMatch[1].toLowerCase()] : null,
-                year: yearMatch ? yearMatch[1] : null
-            };
-        }
 
-        function filterClassesTable() {
-            const query = document.getElementById('class-search').value.toLowerCase();
-            const monthFilter = document.getElementById('class-month-filter').value;
-            const yearFilter = document.getElementById('class-year-filter').value;
-            const rows = document.querySelectorAll('.class-row');
 
-            rows.forEach(row => {
-                const name = row.querySelector('.class-name').innerText.toLowerCase();
-                const rowMonth = row.getAttribute('data-month');
-                const rowYear = row.getAttribute('data-year');
-
-                const matchesQuery = name.includes(query);
-                const matchesMonth = (monthFilter === 'all' || rowMonth === monthFilter);
-                const matchesYear = (yearFilter === 'all' || rowYear === yearFilter);
-
-                row.style.display = (matchesQuery && matchesMonth && matchesYear) ? '' : 'none';
-            });
-        }
-
-        function deleteClassRow(btn) {
-            if (confirm('Adakah anda pasti mahu memadam slot kelas ini?')) {
-                const row = btn.closest('tr');
-                row.remove();
-                showAdminToast('Class slot successfully deleted.');
-            }
-        }
 
         // ===================== BLOG POST MANAGEMENT (shared with customer site via localStorage) ===================== 
         // Same "rp_blog_posts" localStorage key used by index.html. Whichever page runs first 

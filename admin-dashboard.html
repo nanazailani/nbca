@@ -28,175 +28,56 @@
         @media print { #a-sidebar, #a-topbar, #a-bottomnav, .no-print { display: none !important; } .lg\:pl-64 { padding-left: 0 !important; } }
     </style>
 </head>
-<body data-page="dashboard" data-title="Dashboard" data-sub="Today at a glance" class="text-slate-800 antialiased selection:bg-amberGold selection:text-white">
+<body data-page="dashboard" data-title="Dashboard" data-sub="How the academy is doing" class="text-slate-800 antialiased selection:bg-amberGold selection:text-white">
     <div id="a-overlay"></div>
     <aside id="a-sidebar"></aside>
     <div class="lg:pl-64 min-h-screen flex flex-col min-w-0 overflow-x-hidden">
         <header id="a-topbar"></header>
         <main class="flex-1 min-w-0 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-6 lg:py-10 pb-28 lg:pb-14 space-y-8">
 
-            <!-- greeting -->
-            <section class="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
-                <div><p id="today" class="text-[11px] font-extrabold tracking-[0.18em] text-amberGold uppercase"></p>
-                <h2 id="greet" class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1"></h2></div>
-                <div class="flex flex-wrap gap-2"><a href="admin-bookings.html" class="px-4 py-2.5 bg-white border border-slate-200 hover:border-amberGold text-slate-700 font-bold rounded-full text-xs transition-all"><i class="fa-solid fa-calendar-check text-amberGold mr-1.5"></i>Bookings</a><a href="admin-orders.html" class="px-4 py-2.5 bg-white border border-slate-200 hover:border-amberGold text-slate-700 font-bold rounded-full text-xs transition-all"><i class="fa-solid fa-bag-shopping text-amberGold mr-1.5"></i>Orders</a></div>
+            <section class="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
+                <div><p id="today" class="text-[11px] font-extrabold tracking-[0.18em] text-amberGold uppercase"></p><h2 id="greet" class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1"></h2></div>
+                <div class="space-y-2 lg:text-right">
+                    <div id="period-pills" class="inline-flex p-1 rounded-full bg-white border border-slate-200 shadow-sm"></div>
+                    <div id="custom-range" class="hidden flex flex-wrap items-center gap-2 lg:justify-end text-xs"><input id="d-from" type="date" class="bg-white border border-slate-200 rounded-xl px-3 py-2 focus:outline-none focus:border-amberGold"><span class="text-slate-400">to</span><input id="d-to" type="date" class="bg-white border border-slate-200 rounded-xl px-3 py-2 focus:outline-none focus:border-amberGold"><button type="button" onclick="Dash.applyCustom()" class="px-4 py-2 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl">Apply</button></div>
+                    <p id="period-label" class="text-[11px] text-slate-500"></p>
+                </div>
             </section>
 
-            <!-- KPIs -->
-            <section id="kpis" class="grid grid-cols-2 lg:grid-cols-4 gap-4"></section>
+            <section id="kpis" class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4"></section>
 
             <div class="grid lg:grid-cols-3 gap-6">
-                <!-- attention -->
-                <section class="lg:col-span-2 bg-white rounded-3xl border border-slate-200 shadow-sm p-5 sm:p-6 space-y-4">
-                    <div class="flex items-center justify-between"><h3 class="font-serif text-lg font-bold text-slate-900"><i class="fa-solid fa-bolt text-amber-500 mr-2"></i>Needs your attention</h3><span id="attn-count" class="text-xs font-bold text-slate-500"></span></div>
-                    <div id="attention" class="space-y-2.5"></div>
-                </section>
-                <!-- sessions -->
-                <section class="bg-white rounded-3xl border border-slate-200 shadow-sm p-5 sm:p-6 space-y-4">
-                    <div class="flex items-center justify-between"><h3 class="font-serif text-lg font-bold text-slate-900"><i class="fa-solid fa-calendar-days text-amberGold mr-2"></i>Upcoming sessions</h3><a href="admin-bookings.html?view=capacity" class="text-[11px] font-bold text-amberGold hover:underline">Full calendar</a></div>
-                    <div id="sessions" class="space-y-3"></div>
-                </section>
+<section class="lg:col-span-2 bg-white rounded-3xl border border-slate-200 shadow-sm p-5 sm:p-6 space-y-4"><div class="flex items-center justify-between gap-3"><h3 class="font-serif text-lg font-bold text-slate-900"><i class="fa-solid fa-chart-line text-amberGold mr-2"></i>Revenue trend</h3><span class="text-[11px] text-slate-500">Paid only</span></div><div class="relative h-64"><canvas id="c-revenue"></canvas><div data-empty class="hidden absolute inset-0 flex items-center justify-center text-center text-xs text-slate-400 px-6">No data for this period yet.</div></div></section>
+<section class=" bg-white rounded-3xl border border-slate-200 shadow-sm p-5 sm:p-6 space-y-4"><div class="flex items-center justify-between gap-3"><h3 class="font-serif text-lg font-bold text-slate-900"><i class="fa-solid fa-chart-pie text-amberGold mr-2"></i>Sales mix</h3></div><div class="relative h-64"><canvas id="c-mix"></canvas><div data-empty class="hidden absolute inset-0 flex items-center justify-center text-center text-xs text-slate-400 px-6">No data for this period yet.</div></div></section>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-6">
+<section class=" bg-white rounded-3xl border border-slate-200 shadow-sm p-5 sm:p-6 space-y-4"><div class="flex items-center justify-between gap-3"><h3 class="font-serif text-lg font-bold text-slate-900"><i class="fa-solid fa-user-plus text-amberGold mr-2"></i>New sign-ups</h3><span id="signup-cap" class="text-[11px] text-slate-500"></span></div><div class="relative h-56"><canvas id="c-signups"></canvas><div data-empty class="hidden absolute inset-0 flex items-center justify-center text-center text-xs text-slate-400 px-6">No data for this period yet.</div></div></section>
+<section class=" bg-white rounded-3xl border border-slate-200 shadow-sm p-5 sm:p-6 space-y-4"><div class="flex items-center justify-between gap-3"><h3 class="font-serif text-lg font-bold text-slate-900"><i class="fa-solid fa-bolt text-amberGold mr-2"></i>Active members</h3><span class="text-[11px] text-slate-500">Unique members seen per day</span></div><div class="relative h-56"><canvas id="c-active"></canvas><div data-empty class="hidden absolute inset-0 flex items-center justify-center text-center text-xs text-slate-400 px-6">No data for this period yet.</div></div></section>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-6">
+<section class=" bg-white rounded-3xl border border-slate-200 shadow-sm p-5 sm:p-6 space-y-4"><div class="flex items-center justify-between gap-3"><h3 class="font-serif text-lg font-bold text-slate-900"><i class="fa-solid fa-box text-amberGold mr-2"></i>Order status</h3><span class="text-[11px] text-slate-500">All time</span></div><div class="relative h-52"><canvas id="c-status"></canvas><div data-empty class="hidden absolute inset-0 flex items-center justify-center text-center text-xs text-slate-400 px-6">No data for this period yet.</div></div></section>
+<section class=" bg-white rounded-3xl border border-slate-200 shadow-sm p-5 sm:p-6 space-y-4"><div class="flex items-center justify-between gap-3"><h3 class="font-serif text-lg font-bold text-slate-900"><i class="fa-solid fa-mug-hot text-amberGold mr-2"></i>Top products</h3><span class="text-[11px] text-slate-500">Units sold</span></div><div class="relative h-52"><canvas id="c-products"></canvas><div data-empty class="hidden absolute inset-0 flex items-center justify-center text-center text-xs text-slate-400 px-6">No data for this period yet.</div></div></section>
+<section class=" bg-white rounded-3xl border border-slate-200 shadow-sm p-5 sm:p-6 space-y-4"><div class="flex items-center justify-between gap-3"><h3 class="font-serif text-lg font-bold text-slate-900"><i class="fa-solid fa-crown text-amberGold mr-2"></i>Member tiers</h3></div><div class="relative h-52"><canvas id="c-tiers"></canvas><div data-empty class="hidden absolute inset-0 flex items-center justify-center text-center text-xs text-slate-400 px-6">No data for this period yet.</div></div></section>
             </div>
 
             <div class="grid lg:grid-cols-5 gap-6">
-                <section class="lg:col-span-3 bg-white rounded-3xl border border-slate-200 shadow-sm p-5 sm:p-6 space-y-4">
-                    <div class="flex items-center justify-between"><h3 class="font-serif text-lg font-bold text-slate-900"><i class="fa-solid fa-chart-column text-amberGold mr-2"></i>Revenue, last 6 months</h3><span class="text-[11px] text-slate-500">Paid only</span></div>
-                    <div class="relative h-64"><canvas id="revChart"></canvas></div>
-                    <div id="rev-empty" class="hidden text-center text-xs text-slate-500 py-10">No paid transactions yet. Revenue appears here once members pay.</div>
-                </section>
-                <section class="lg:col-span-2 bg-white rounded-3xl border border-slate-200 shadow-sm p-5 sm:p-6 space-y-4">
-                    <h3 class="font-serif text-lg font-bold text-slate-900"><i class="fa-solid fa-clock-rotate-left text-amberGold mr-2"></i>Recent activity</h3>
-                    <div id="activity" class="space-y-3"></div>
-                </section>
+<section class="lg:col-span-3 bg-white rounded-3xl border border-slate-200 shadow-sm p-5 sm:p-6 space-y-4"><div class="flex items-center justify-between gap-3"><h3 class="font-serif text-lg font-bold text-slate-900"><i class="fa-solid fa-bolt text-amberGold mr-2"></i>Needs your attention</h3><span id="attn-count" class="text-xs font-bold text-slate-500"></span></div><div id="attention" class="space-y-2.5"></div></section>
+<section class="lg:col-span-2 bg-white rounded-3xl border border-slate-200 shadow-sm p-5 sm:p-6 space-y-4"><div class="flex items-center justify-between gap-3"><h3 class="font-serif text-lg font-bold text-slate-900"><i class="fa-solid fa-calendar-days text-amberGold mr-2"></i>Upcoming sessions</h3><a href="admin-schedule.html" class="text-[11px] font-bold text-amberGold hover:underline">Schedule</a></div><div id="sessions" class="space-y-3"></div></section>
             </div>
+
+<section class=" bg-white rounded-3xl border border-slate-200 shadow-sm p-5 sm:p-6 space-y-4"><div class="flex items-center justify-between gap-3"><h3 class="font-serif text-lg font-bold text-slate-900"><i class="fa-solid fa-clock-rotate-left text-amberGold mr-2"></i>Recent activity</h3></div><div id="activity" class="grid sm:grid-cols-2 gap-x-8 gap-y-3"></div></section>
 
         </main>
     </div>
     <nav id="a-bottomnav" aria-label="Primary"></nav>
 
     <script src="js/nbca-config.js"></script>
-    <script src="js/admin-shell.js"></script>
-    <script>
-
-        const S = AdminShell, esc = S.esc, money = S.money;
-        const TONE = { good: 'bg-emerald-100 text-emerald-700', warn: 'bg-amber-100 text-amber-700', info: 'bg-blue-100 text-blue-700', bad: 'bg-red-100 text-red-700', muted: 'bg-slate-100 text-slate-600' };
-        const pill = (txt, tone) => '<span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider whitespace-nowrap ' + TONE[tone || 'muted'] + '">' + esc(txt) + '</span>';
-        const btn = (label, onclick, kind) => '<button onclick="' + onclick + '" class="px-3.5 py-2 rounded-xl text-[11px] font-bold transition-all whitespace-nowrap ' +
-            ({ primary: 'bg-amberGold hover:bg-royalBlue text-white shadow', good: 'bg-emerald-600 hover:bg-emerald-700 text-white shadow', danger: 'bg-white hover:bg-red-50 text-red-600 border border-red-200', ghost: 'bg-white hover:bg-slate-50 text-slate-700 border border-slate-200' }[kind || 'ghost']) + '">' + label + '</button>';
-        const empty = (icon, title, text) => '<div class="bg-white rounded-3xl border border-dashed border-slate-300 p-10 text-center space-y-2"><div class="w-14 h-14 rounded-2xl bg-blue-50 text-amberGold flex items-center justify-center mx-auto text-2xl"><i class="fa-solid ' + icon + '"></i></div><h3 class="font-serif text-lg font-bold text-slate-900">' + title + '</h3><p class="text-xs text-slate-500 max-w-sm mx-auto">' + text + '</p></div>';
-        const chip = (label, count, active, onclick) => '<button onclick="' + onclick + '" class="px-4 py-2 rounded-full text-xs font-bold border transition-all ' + (active ? 'bg-amberGold text-white border-amberGold shadow' : 'bg-white text-slate-700 border-slate-200 hover:border-amberGold') + '">' + label + ' <span class="ml-1 opacity-70">' + count + '</span></button>';
-        const param = k => new URLSearchParams(location.search).get(k);
-        const avatar = n => '<span class="w-11 h-11 rounded-full bg-blue-100 text-amberGold font-bold text-sm flex items-center justify-center shrink-0">' + esc(S.initials(n)) + '</span>';
-
-        const CFG = S.CFG;
-        const now = new Date();
-        const monthKey = d => { const x = new Date(d); return x.getFullYear() + '-' + String(x.getMonth() + 1).padStart(2, '0'); };
-
-        // ---- paid money events across orders, class deposits and workshops ----
-        function paidEvents() {
-            const ev = [];
-            S.orders().forEach(o => { if (o.paymentStatus === 'Paid') ev.push({ t: o.paidAt || o.createdAt, amt: Number(o.total), src: 'Orders' }); });
-            S.regs().forEach(r => { if (r.depositStatus === 'Paid') ev.push({ t: r.paidAt || r.createdAt, amt: Number(r.deposit), src: 'Class deposits' }); });
-            S.enrolls().forEach(w => { if (w.paymentStatus === 'Paid') ev.push({ t: w.paidAt || w.createdAt, amt: Number(w.price), src: 'Workshops' }); });
-            return ev;
-        }
-
-        function renderKpis() {
-            const ev = paidEvents();
-            const cur = monthKey(now), prev = monthKey(new Date(now.getFullYear(), now.getMonth() - 1, 1));
-            const sum = k => ev.filter(e => monthKey(e.t) === k).reduce((a, e) => a + e.amt, 0);
-            const rev = sum(cur), revPrev = sum(prev);
-            const delta = revPrev ? Math.round((rev - revPrev) / revPrev * 100) : null;
-            const c = S.counts();
-            const tiles = [
-                ['fa-wallet', 'bg-emerald-100 text-emerald-600', money(rev), 'Revenue this month', delta === null ? 'No data last month' : (delta >= 0 ? '+' : '') + delta + '% vs last month', 'admin-dashboard.html'],
-                ['fa-calendar-check', 'bg-amber-100 text-amber-600', c.admit, 'Bookings to admit', 'Deposit paid, awaiting you', 'admin-bookings.html?status=confirm'],
-                ['fa-box', 'bg-blue-100 text-amberGold', c.ship, 'Orders to ship', 'Paid and ready to pack', 'admin-orders.html?status=Processing'],
-                ['fa-users', 'bg-violet-100 text-violet-600', S.members().length, 'Members', 'With activity so far', 'admin-members.html']
-            ];
-            document.getElementById('kpis').innerHTML = tiles.map(t =>
-                '<a href="' + t[5] + '" class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all">' +
-                '<div class="w-10 h-10 rounded-xl flex items-center justify-center mb-3 ' + t[1] + '"><i class="fa-solid ' + t[0] + '"></i></div>' +
-                '<p class="text-2xl font-extrabold text-slate-900 font-serif">' + t[2] + '</p><p class="text-xs font-bold text-slate-700">' + t[3] + '</p><p class="text-[11px] text-slate-500 mt-0.5">' + t[4] + '</p></a>').join('');
-        }
-
-        function nextOpenDays(n) {
-            const out = []; const d = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-            for (let i = 0; i < 30 && out.length < n; i++, d.setDate(d.getDate() + 1)) {
-                if (CFG.FC_OPEN_DAYS.includes(d.getDay())) out.push(new Date(d));
-            }
-            return out;
-        }
-        const dstr = d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
-        const barTone = used => used >= CFG.FC_CAPACITY ? 'bg-red-500' : used >= CFG.FC_CAPACITY * 0.7 ? 'bg-amber-400' : 'bg-emerald-500';
-
-        function renderSessions() {
-            document.getElementById('sessions').innerHTML = nextOpenDays(4).map(d => {
-                const ds = dstr(d);
-                return '<div class="space-y-1.5"><p class="text-[11px] font-extrabold text-slate-700 uppercase tracking-wide">' + d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' }) + '</p>' +
-                    CFG.FC_SESSIONS.map(s => {
-                        const used = S.seatsUsed(ds, s);
-                        return '<a href="admin-bookings.html?date=' + ds + '&session=' + encodeURIComponent(s) + '" class="block group"><div class="flex items-center justify-between text-[11px] text-slate-600 mb-1"><span>' + esc(s.split(' – ')[0]) + ' session</span><strong class="text-slate-900">' + used + '/' + CFG.FC_CAPACITY + '</strong></div>' +
-                            '<div class="h-2 rounded-full bg-slate-100 overflow-hidden"><div class="h-full rounded-full ' + barTone(used) + '" style="width:' + Math.min(100, used / CFG.FC_CAPACITY * 100) + '%"></div></div></a>';
-                    }).join('') + '</div>';
-            }).join('');
-        }
-
-        function renderAttention() {
-            const c = S.counts();
-            const dayOld = S.orders().filter(o => o.status === 'Pending Payment' && now - new Date(o.createdAt) > 86400000).length;
-            const items = [];
-            if (c.admit) items.push(['fa-circle-check', 'bg-emerald-100 text-emerald-600', c.admit + ' paid deposit' + (c.admit > 1 ? 's' : '') + ' waiting for confirmation', 'Admit the student so they get a confirmed seat.', 'admin-bookings.html?status=confirm', 'Review']);
-            if (c.reschedule) items.push(['fa-rotate', 'bg-red-100 text-red-600', c.reschedule + ' booking' + (c.reschedule > 1 ? 's' : '') + ' flagged for reschedule', 'Contact the member to agree a new date.', 'admin-bookings.html?status=reschedule', 'Open']);
-            if (c.ship) items.push(['fa-truck-fast', 'bg-blue-100 text-amberGold', c.ship + ' order' + (c.ship > 1 ? 's' : '') + ' ready to ship', 'Paid orders waiting for a tracking number.', 'admin-orders.html?status=Processing', 'Ship']);
-            if (dayOld) items.push(['fa-hourglass-half', 'bg-amber-100 text-amber-600', dayOld + ' unpaid order' + (dayOld > 1 ? 's' : '') + ' older than a day', 'Follow up or cancel to keep the queue tidy.', 'admin-orders.html?status=Pending Payment', 'Check']);
-            nextOpenDays(7).forEach(d => CFG.FC_SESSIONS.forEach(s => {
-                if (S.seatsUsed(dstr(d), s) >= CFG.FC_CAPACITY) items.push(['fa-users-slash', 'bg-slate-100 text-slate-600', 'Session full: ' + d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' }) + ', ' + s.split(' – ')[0], 'No seats left for this session.', 'admin-bookings.html?date=' + dstr(d) + '&session=' + encodeURIComponent(s), 'View']);
-            }));
-            document.getElementById('attn-count').innerText = items.length ? items.length + ' item' + (items.length > 1 ? 's' : '') : '';
-            document.getElementById('attention').innerHTML = items.length ? items.map(i =>
-                '<a href="' + i[4] + '" class="flex items-center gap-4 p-3.5 rounded-2xl border border-slate-200 hover:border-amberGold hover:bg-blue-50/40 transition-all">' +
-                '<span class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ' + i[1] + '"><i class="fa-solid ' + i[0] + '"></i></span>' +
-                '<span class="flex-1 min-w-0"><strong class="block text-sm text-slate-900">' + i[2] + '</strong><span class="block text-[11px] text-slate-500">' + i[3] + '</span></span>' +
-                '<span class="text-[11px] font-bold text-amberGold whitespace-nowrap">' + i[5] + ' <i class="fa-solid fa-arrow-right text-[9px]"></i></span></a>').join('')
-                : '<div class="text-center py-10 space-y-2"><div class="w-14 h-14 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto text-2xl"><i class="fa-solid fa-check"></i></div><p class="text-sm font-bold text-slate-900">All caught up</p><p class="text-xs text-slate-500">Nothing needs your action right now.</p></div>';
-        }
-
-        function renderActivity() {
-            const ev = [];
-            S.regs().forEach(r => ev.push({ t: r.createdAt, icon: 'fa-calendar-plus', tone: 'bg-blue-100 text-amberGold', text: '<strong>' + esc(r.name) + '</strong> booked ' + S.fmtDate(r.preferredDate, { day: 'numeric', month: 'short' }) + ' (' + esc(r.session.split(' – ')[0]) + ')' }));
-            S.enrolls().forEach(w => ev.push({ t: w.createdAt, icon: 'fa-chalkboard-user', tone: 'bg-violet-100 text-violet-600', text: '<strong>' + esc(w.name) + '</strong> enrolled in ' + esc(w.title) }));
-            S.orders().forEach(o => ev.push({ t: o.createdAt, icon: 'fa-bag-shopping', tone: 'bg-amber-100 text-amber-600', text: '<strong>' + esc(o.name) + '</strong> placed order ' + esc(o.id) + ' (' + money(o.total) + ')' }));
-            paidEvents().forEach(p => ev.push({ t: p.t, icon: 'fa-circle-check', tone: 'bg-emerald-100 text-emerald-600', text: 'Payment received: ' + money(p.amt) + ' <span class="text-slate-400">&middot; ' + esc(p.src) + '</span>' }));
-            ev.sort((a, b) => (b.t || '').localeCompare(a.t || ''));
-            const rel = t => { const m = Math.round((now - new Date(t)) / 60000); return m < 1 ? 'just now' : m < 60 ? m + ' min ago' : m < 1440 ? Math.round(m / 60) + ' h ago' : S.fmtDate(t, { day: 'numeric', month: 'short' }); };
-            document.getElementById('activity').innerHTML = ev.length ? ev.slice(0, 8).map(e =>
-                '<div class="flex items-start gap-3"><span class="w-9 h-9 rounded-full flex items-center justify-center shrink-0 text-xs ' + e.tone + '"><i class="fa-solid ' + e.icon + '"></i></span><div class="min-w-0"><p class="text-xs text-slate-700 leading-snug">' + e.text + '</p><p class="text-[10px] text-slate-400 mt-0.5">' + rel(e.t) + '</p></div></div>').join('')
-                : '<p class="text-xs text-slate-500 py-6 text-center">Nothing yet. Activity shows up as members book, order and pay.</p>';
-        }
-
-        function renderChart() {
-            const months = [];
-            for (let i = 5; i >= 0; i--) { const d = new Date(now.getFullYear(), now.getMonth() - i, 1); months.push({ key: monthKey(d), label: d.toLocaleDateString('en-GB', { month: 'short' }) }); }
-            const ev = paidEvents();
-            const series = ['Orders', 'Class deposits', 'Workshops'];
-            const colors = ['#2563EB', '#10B981', '#8B5CF6'];
-            if (!ev.length) { document.getElementById('rev-empty').classList.remove('hidden'); document.getElementById('revChart').classList.add('hidden'); return; }
-            new Chart(document.getElementById('revChart'), {
-                type: 'bar',
-                data: { labels: months.map(m => m.label), datasets: series.map((s, i) => ({ label: s, backgroundColor: colors[i], borderRadius: 6, data: months.map(m => ev.filter(e => e.src === s && monthKey(e.t) === m.key).reduce((a, e) => a + e.amt, 0)) })) },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 11 } } }, tooltip: { callbacks: { label: c => c.dataset.label + ': RM ' + c.parsed.y.toFixed(2) } } }, scales: { x: { stacked: true, grid: { display: false } }, y: { stacked: true, ticks: { callback: v => 'RM ' + v }, grid: { color: '#E2E8F0' } } } }
-            });
-        }
-
-        window.addEventListener('admin-ready', () => {
-            const a = S.admin() || {};
-            const h = now.getHours();
-            document.getElementById('today').innerText = now.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-            document.getElementById('greet').innerText = (h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening') + ', ' + (a.name || 'Admin');
-            renderKpis(); renderAttention(); renderSessions(); renderActivity(); renderChart();
-        });
-
-    </script>
+    <script src="js/nbca-data.js"></script>
+    <script src="js/catalog.js"></script>
+    <script src="js/admin/shell.js"></script>
+    <script src="js/admin/ui.js"></script>
+    <script src="js/admin/dashboard.js"></script>
 </body>
 </html>

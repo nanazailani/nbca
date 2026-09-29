@@ -3,15 +3,12 @@
  * Page markup needs: <body data-page="dashboard" data-title="..." data-sub="...">, #m-sidebar, #m-overlay, #m-topbar, #m-bottomnav.
  * Session = localStorage.rp_logged_user, account record = rp_user (see auth.html). */
 (function () {
-    const SAMPLE_POINTS = 350;          // placeholder until points are stored per member
-    const SAMPLE_TIER = 'Gold';
-
-    const NAV = [
+    const navGroups = () => [
         { group: 'Member', items: [
             { id: 'dashboard', label: 'Dashboard', icon: 'fa-house', href: 'dashboard.html' },
             { id: 'classes', label: 'My Classes', icon: 'fa-graduation-cap', href: 'classes.html', badge: 'classes' },
             { id: 'orders', label: 'My Orders', icon: 'fa-box-open', href: 'orders.html' },
-            { id: 'membership', label: 'Membership', icon: 'fa-crown', href: 'membership.html', pill: SAMPLE_POINTS + ' pts' },
+            { id: 'membership', label: 'Membership', icon: 'fa-crown', href: 'membership.html', pill: points() + ' pts' },
             { id: 'profile', label: 'My Profile', icon: 'fa-user', href: 'profile.html' }
         ]},
         { group: 'Discover', items: [
@@ -24,12 +21,16 @@
 
     const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
+    // The signed-in member. A suspended or deleted account counts as signed out.
     function user() {
-        try { return JSON.parse(localStorage.getItem('rp_logged_user') || 'null'); } catch (e) { return null; }
+        const a = NBCA_DATA.session.account();
+        return a ? { id: a.id, name: a.name, email: a.email, phone: a.phone } : null;
     }
+    const points = () => NBCA_DATA.loyalty.balance((user() || {}).email);
 
     // Guard: members only. (Also done inline in <head> to avoid a flash of content.)
     if (!user()) {
+        NBCA_DATA.session.end();
         window.location.replace('auth.html?next=' + encodeURIComponent(location.pathname.split('/').pop() || 'dashboard.html'));
         return;
     }
@@ -47,6 +48,7 @@
 
     const page = document.body.dataset.page || '';
     const u = user();
+    NBCA_DATA.activity.touch(u.email);          // feeds the admin's active-user numbers
 
     function navItem(it) {
         const active = it.id === page;
@@ -77,7 +79,7 @@
                 '<button onclick="MemberShell.closeMenu()" class="lg:hidden w-9 h-9 rounded-full hover:bg-roast-100 text-roast-600" aria-label="Close menu"><i class="fa-solid fa-xmark"></i></button>' +
             '</div>' +
             '<nav class="flex-1 overflow-y-auto px-4 py-5 space-y-6" aria-label="Member navigation">' +
-                NAV.map(g => '<div class="space-y-1"><p class="px-3.5 mb-2 text-[10px] font-extrabold tracking-[0.18em] uppercase text-roast-400">' + g.group + '</p>' + g.items.map(navItem).join('') + '</div>').join('') +
+                navGroups().map(g => '<div class="space-y-1"><p class="px-3.5 mb-2 text-[10px] font-extrabold tracking-[0.18em] uppercase text-roast-400">' + g.group + '</p>' + g.items.map(navItem).join('') + '</div>').join('') +
                 '<a href="book-class.html" class="block rounded-2xl p-4 bg-gradient-to-br from-roast-950 to-royalBlue text-white shadow-lg relative overflow-hidden">' +
                     '<i class="fa-solid fa-mug-hot absolute -right-3 -bottom-3 text-6xl text-white/10"></i>' +
                     '<span class="text-[10px] font-bold uppercase tracking-widest text-blue-200">Now open</span>' +
@@ -108,7 +110,7 @@
                 '<p class="hidden sm:block text-[11px] text-roast-500 truncate">' + esc(document.body.dataset.sub || '') + '</p></div>' +
             '</div>' +
             '<div class="flex items-center gap-2 sm:gap-3 shrink-0">' +
-                '<a href="membership.html" class="hidden sm:flex items-center gap-2 px-3.5 py-2 rounded-full bg-white border border-roast-200 text-xs font-bold text-roast-800 hover:border-amberGold transition-all"><i class="fa-solid fa-coins text-amberGold"></i> ' + SAMPLE_POINTS + ' pts</a>' +
+                '<a href="membership.html" class="hidden sm:flex items-center gap-2 px-3.5 py-2 rounded-full bg-white border border-roast-200 text-xs font-bold text-roast-800 hover:border-amberGold transition-all"><i class="fa-solid fa-coins text-amberGold"></i> ' + points() + ' pts</a>' +
                 '<a href="book-class.html" class="flex items-center gap-2 px-4 py-2.5 rounded-full bg-amberGold hover:bg-royalBlue text-white text-xs font-bold shadow-md transition-all"><i class="fa-solid fa-user-pen text-[11px]"></i> <span class="hidden xs:inline sm:inline">Book a Class</span></a>' +
                 '<button onclick="openCart()" class="relative w-10 h-10 rounded-full bg-white border border-roast-200 text-roast-800 hover:border-amberGold flex items-center justify-center" aria-label="Cart"><i class="fa-solid fa-bag-shopping text-sm"></i><span id="cart-badge" class="hidden absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-amberGold text-white text-[10px] font-bold items-center justify-center">0</span></button>' +
                 '<button onclick="openProfileModal()" class="w-10 h-10 rounded-full bg-amberGold text-white font-bold text-xs flex items-center justify-center shadow-md" aria-label="Profile">' + esc(initials(u.name)) + '</button>' +
@@ -170,7 +172,7 @@
     };
 
     window.logoutUser = function () {
-        localStorage.removeItem('rp_logged_user');   // keep rp_user: that's the account itself
+        NBCA_DATA.session.end();
         window.location.href = 'index.html';
     };
 
@@ -273,7 +275,8 @@
     Object.assign(MemberShell, { getProfile, saveProfile, fmtAddress, addressFormHtml, readAddressForm, STATES });
 
     // ---- basket + checkout ----
-    let coAddrId = null, coNew = false;
+    let coAddrId = null, coNew = false, coVoucher = null;
+    window.coSetVoucher = function (code) { coVoucher = code || null; renderCart('checkout'); };
     window.coPick = function (id) { coAddrId = id; coNew = false; renderCart('checkout'); };
     window.coToggleNew = function (on) { coNew = on; renderCart('checkout'); };
 
@@ -285,6 +288,10 @@
             foot.innerHTML = ''; return;
         }
         const sub = cart.reduce((a, i) => a + i.price * i.qty, 0);
+        const myVouchers = NBCA_DATA.loyalty.available((user() || {}).email, 'shop');
+        const chosen = step === 'checkout' ? (myVouchers.find(v => v.code === coVoucher) || null) : null;
+        const discount = NBCA_DATA.loyalty.discount(chosen, { subtotal: sub, shipping: SHIPPING });
+        const total = sub + SHIPPING - discount;
         body.innerHTML = cart.map(i =>
             '<div class="flex gap-3 items-center bg-roast-50 rounded-2xl p-3 border border-roast-200"><img src="' + esc(i.image) + '" alt="" class="w-16 h-16 rounded-xl object-cover shrink-0">' +
             '<div class="flex-1 min-w-0"><p class="text-xs font-bold text-roast-950 leading-snug">' + esc(i.name) + '</p><p class="text-xs text-amberGold font-bold mt-0.5">' + money(i.price) + '</p></div>' +
@@ -303,11 +310,15 @@
                 (showForm ? '<div class="rounded-2xl border border-roast-200 p-4 space-y-3 bg-roast-50">' + addressFormHtml('co') +
                     '<label class="flex items-center gap-2 text-roast-700"><input id="co-default" type="checkbox" ' + (addrs.length ? '' : 'checked disabled') + ' class="accent-blue-600"> Set as default address</label>' +
                     (addrs.length ? '<button type="button" onclick="coToggleNew(false)" class="text-roast-500 hover:text-roast-950">Cancel</button>' : '') + '</div>' : '') +
+                '<div class="space-y-2"><p class="font-bold text-roast-950 uppercase tracking-wider text-[11px]"><i class="fa-solid fa-ticket text-amberGold mr-1.5"></i>Voucher</p>' +
+                    (myVouchers.length
+                        ? '<select onchange="coSetVoucher(this.value)" class="w-full bg-white border border-roast-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-amberGold"><option value="">No voucher</option>' + myVouchers.map(v => '<option value="' + esc(v.code) + '" ' + (v.code === coVoucher ? 'selected' : '') + '>' + esc(v.title) + ' (' + esc(v.code) + ')</option>').join('') + '</select>'
+                        : '<a href="membership.html" class="block rounded-xl border border-dashed border-roast-300 px-3.5 py-2.5 text-roast-500 hover:border-amberGold hover:text-amberGold">No vouchers yet. Redeem rewards with your points &rarr;</a>') + '</div>' +
                 '<div class="rounded-xl border border-amberGold bg-blue-50 p-3.5"><p class="font-bold text-roast-950 flex items-center gap-1.5"><i class="fa-solid fa-credit-card text-amberGold"></i> Billplz Payment Gateway</p><p class="text-[10px] text-roast-600 mt-0.5">Online banking (FPX), e-wallet or card. You will be redirected to complete payment.</p></div></div>';
         }
-        foot.innerHTML = '<div class="space-y-1 text-xs"><div class="flex justify-between text-roast-600"><span>Subtotal</span><span>' + money(sub) + '</span></div><div class="flex justify-between text-roast-600"><span>Shipping</span><span>' + money(SHIPPING) + '</span></div><div class="flex justify-between text-sm font-bold text-roast-950 pt-1"><span>Total</span><span class="text-amberGold">' + money(sub + SHIPPING) + '</span></div></div>' +
+        foot.innerHTML = '<div class="space-y-1 text-xs"><div class="flex justify-between text-roast-600"><span>Subtotal</span><span>' + money(sub) + '</span></div><div class="flex justify-between text-roast-600"><span>Shipping</span><span>' + money(SHIPPING) + '</span></div>' + (discount ? '<div class="flex justify-between text-emerald-600 font-semibold"><span>Voucher</span><span>&minus;' + money(discount) + '</span></div>' : '') + '<div class="flex justify-between text-sm font-bold text-roast-950 pt-1"><span>Total</span><span class="text-amberGold">' + money(total) + '</span></div></div>' +
             (step === 'checkout'
-                ? '<button onclick="placeOrder()" class="w-full py-3.5 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl text-sm shadow-lg"><i class="fa-solid fa-lock text-xs mr-1.5"></i>Pay ' + money(sub + SHIPPING) + ' with Billplz</button><button onclick="renderCartStep()" class="w-full text-xs text-roast-500 hover:text-roast-950">Back to basket</button>'
+                ? '<button onclick="placeOrder()" class="w-full py-3.5 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl text-sm shadow-lg"><i class="fa-solid fa-lock text-xs mr-1.5"></i>Pay ' + money(total) + ' with Billplz</button><button onclick="renderCartStep()" class="w-full text-xs text-roast-500 hover:text-roast-950">Back to basket</button>'
                 : '<button onclick="renderCartStep(\'checkout\')" class="w-full py-3.5 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl text-sm shadow-lg">Checkout</button>');
     }
     window.renderCartStep = renderCart;
@@ -335,17 +346,20 @@
         if (!addr) { showToast('Please choose a delivery address.'); return; }
 
         const sub = cart.reduce((a, i) => a + i.price * i.qty, 0);
+        const chosen = NBCA_DATA.loyalty.available((user() || {}).email, 'shop').find(v => v.code === coVoucher) || null;
+        const discount = NBCA_DATA.loyalty.discount(chosen, { subtotal: sub, shipping: SHIPPING });
         const orders = (() => { try { return JSON.parse(localStorage.getItem('rp_member_orders') || '[]'); } catch (x) { return []; } })();
         const order = {
             id: 'ORD' + String(Date.now()).slice(-6),
             email: (user() || {}).email,
             name: addr.name, phone: addr.phone, address: fmtAddress(addr),
-            items: cart, subtotal: sub, shipping: SHIPPING, total: sub + SHIPPING,
+            items: cart, subtotal: sub, shipping: SHIPPING, discount, voucher: chosen ? { code: chosen.code, title: chosen.title } : null, total: sub + SHIPPING - discount,
             status: 'Pending Payment', paymentStatus: 'Unpaid',
             createdAt: new Date().toISOString()
         };
         orders.push(order);
         localStorage.setItem('rp_member_orders', JSON.stringify(orders));
+        if (chosen) { NBCA_DATA.loyalty.use(chosen.code, order.id); coVoucher = null; }
         setCart([]);
         NBCA_PAY.checkout({ type: 'order', refId: order.id, amount: order.total, description: 'Order ' + order.id + ' - Nb.CA Academy', name: order.name, email: order.email, phone: order.phone, returnTo: 'orders.html' });
     };

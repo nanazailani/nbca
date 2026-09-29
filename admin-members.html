@@ -27,93 +27,34 @@
         @media print { #a-sidebar, #a-topbar, #a-bottomnav, .no-print { display: none !important; } .lg\:pl-64 { padding-left: 0 !important; } }
     </style>
 </head>
-<body data-page="members" data-title="Members" data-sub="Everyone who has booked, enrolled or ordered" class="text-slate-800 antialiased selection:bg-amberGold selection:text-white">
+<body data-page="members" data-title="Members" data-sub="Manage member accounts" class="text-slate-800 antialiased selection:bg-amberGold selection:text-white">
     <div id="a-overlay"></div>
     <aside id="a-sidebar"></aside>
     <div class="lg:pl-64 min-h-screen flex flex-col min-w-0 overflow-x-hidden">
         <header id="a-topbar"></header>
         <main class="flex-1 min-w-0 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-6 lg:py-10 pb-28 lg:pb-14 space-y-8">
-
-            
             <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
-                <div><span class="text-[11px] font-extrabold tracking-[0.18em] text-amberGold uppercase">People</span>
-                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">Members</h2></div>
-                <button onclick="exportCsv()" class="px-4 py-2.5 bg-white border border-slate-200 hover:border-amberGold text-slate-700 font-bold rounded-full text-xs transition-all self-start"><i class="fa-solid fa-file-csv text-amberGold mr-1.5"></i>Export</button>
+                <div><span class="text-[11px] font-extrabold tracking-[0.18em] text-amberGold uppercase">People</span><h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">Members</h2></div>
+                <div class="flex flex-wrap gap-2 self-start"><button type="button" onclick="Members.add()" class="px-4 py-2.5 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-full text-xs shadow transition-all"><i class="fa-solid fa-plus mr-1.5"></i>Add member</button><button type="button" onclick="Members.exportCsv()" class="px-4 py-2.5 bg-white border border-slate-200 hover:border-amberGold text-slate-700 font-bold rounded-full text-xs transition-all"><i class="fa-solid fa-file-csv text-amberGold mr-1.5"></i>Export</button></div>
             </div>
             <section id="summary" class="grid grid-cols-2 lg:grid-cols-4 gap-4"></section>
-            <div class="relative"><i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i><input id="q" oninput="render()" placeholder="Search name, email, phone or IC" class="w-full bg-white border border-slate-200 rounded-xl pl-10 pr-4 py-3 text-xs focus:outline-none focus:border-amberGold"></div>
+            <section class="space-y-3"><div id="chips" class="flex flex-wrap gap-2"></div><div class="flex flex-col sm:flex-row gap-3"><div class="relative flex-1"><i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i><input id="q" oninput="Members.render()" placeholder="Search name, email, phone or IC" class="w-full bg-white border border-slate-200 rounded-xl pl-10 pr-4 py-3 text-xs focus:outline-none focus:border-amberGold"></div><select id="sort" onchange="Members.render()" class="bg-white border border-slate-200 rounded-xl px-4 py-3 text-xs font-semibold focus:outline-none focus:border-amberGold"><option value="recent">Recently active</option><option value="newest">Newest first</option><option value="points">Most points</option><option value="spend">Highest spend</option><option value="name">Name A–Z</option></select></div></section>
             <section id="list" class="grid md:grid-cols-2 xl:grid-cols-3 gap-4"></section>
-
         </main>
     </div>
     <nav id="a-bottomnav" aria-label="Primary"></nav>
-
     <div id="drawer" class="fixed inset-0 z-50 hidden">
-        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeDrawer()"></div>
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="Members.closeDrawer()"></div>
         <div class="absolute right-0 top-0 bottom-0 w-full max-w-lg bg-white shadow-2xl flex flex-col">
-            <div class="h-16 px-6 flex items-center justify-between border-b border-slate-100 shrink-0"><h3 class="font-serif text-lg font-bold text-slate-900">Member details</h3><button onclick="closeDrawer()" class="w-9 h-9 rounded-full hover:bg-slate-100 text-slate-600" aria-label="Close"><i class="fa-solid fa-xmark"></i></button></div>
+            <div class="h-16 px-6 flex items-center justify-between border-b border-slate-100 shrink-0"><h3 class="font-serif text-lg font-bold text-slate-900">Member details</h3><button type="button" onclick="Members.closeDrawer()" class="w-9 h-9 rounded-full hover:bg-slate-100 text-slate-600" aria-label="Close"><i class="fa-solid fa-xmark"></i></button></div>
             <div id="drawer-body" class="flex-1 overflow-y-auto p-6 space-y-6"></div>
         </div>
     </div>
-
     <script src="js/nbca-config.js"></script>
-    <script src="js/admin-shell.js"></script>
-    <script>
-
-        const S = AdminShell, esc = S.esc, money = S.money;
-        const TONE = { good: 'bg-emerald-100 text-emerald-700', warn: 'bg-amber-100 text-amber-700', info: 'bg-blue-100 text-blue-700', bad: 'bg-red-100 text-red-700', muted: 'bg-slate-100 text-slate-600' };
-        const pill = (txt, tone) => '<span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider whitespace-nowrap ' + TONE[tone || 'muted'] + '">' + esc(txt) + '</span>';
-        const btn = (label, onclick, kind) => '<button onclick="' + onclick + '" class="px-3.5 py-2 rounded-xl text-[11px] font-bold transition-all whitespace-nowrap ' +
-            ({ primary: 'bg-amberGold hover:bg-royalBlue text-white shadow', good: 'bg-emerald-600 hover:bg-emerald-700 text-white shadow', danger: 'bg-white hover:bg-red-50 text-red-600 border border-red-200', ghost: 'bg-white hover:bg-slate-50 text-slate-700 border border-slate-200' }[kind || 'ghost']) + '">' + label + '</button>';
-        const empty = (icon, title, text) => '<div class="bg-white rounded-3xl border border-dashed border-slate-300 p-10 text-center space-y-2"><div class="w-14 h-14 rounded-2xl bg-blue-50 text-amberGold flex items-center justify-center mx-auto text-2xl"><i class="fa-solid ' + icon + '"></i></div><h3 class="font-serif text-lg font-bold text-slate-900">' + title + '</h3><p class="text-xs text-slate-500 max-w-sm mx-auto">' + text + '</p></div>';
-        const chip = (label, count, active, onclick) => '<button onclick="' + onclick + '" class="px-4 py-2 rounded-full text-xs font-bold border transition-all ' + (active ? 'bg-amberGold text-white border-amberGold shadow' : 'bg-white text-slate-700 border-slate-200 hover:border-amberGold') + '">' + label + ' <span class="ml-1 opacity-70">' + count + '</span></button>';
-        const param = k => new URLSearchParams(location.search).get(k);
-        const avatar = n => '<span class="w-11 h-11 rounded-full bg-blue-100 text-amberGold font-bold text-sm flex items-center justify-center shrink-0">' + esc(S.initials(n)) + '</span>';
-
-        let list = [];
-        function filtered() {
-            const q = (document.getElementById('q').value || '').toLowerCase().trim();
-            return S.members().filter(m => !q || [m.name, m.email, m.phone, m.ic].some(v => (v || '').toLowerCase().includes(q)));
-        }
-        function render() {
-            const all = S.members();
-            document.getElementById('summary').innerHTML = [
-                ['fa-users', 'bg-blue-100 text-amberGold', all.length, 'Members'],
-                ['fa-graduation-cap', 'bg-emerald-100 text-emerald-600', all.filter(m => m.bookings.length || m.workshops.length).length, 'Have booked a class'],
-                ['fa-bag-shopping', 'bg-amber-100 text-amber-600', all.filter(m => m.orders.length).length, 'Have ordered'],
-                ['fa-wallet', 'bg-violet-100 text-violet-600', money(all.reduce((a, m) => a + m.spend, 0)), 'Total paid']
-            ].map(t => '<div class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-sm"><div class="w-10 h-10 rounded-xl flex items-center justify-center mb-3 ' + t[1] + '"><i class="fa-solid ' + t[0] + '"></i></div><p class="text-2xl font-extrabold text-slate-900 font-serif">' + t[2] + '</p><p class="text-xs font-bold text-slate-600">' + t[3] + '</p></div>').join('');
-            list = filtered();
-            document.getElementById('list').innerHTML = list.length ? list.map((m, i) =>
-                '<button onclick="openMember(' + i + ')" class="text-left bg-white rounded-3xl border border-slate-200 shadow-sm p-5 hover:shadow-lg hover:border-amberGold/40 hover:-translate-y-0.5 transition-all space-y-4">' +
-                '<div class="flex items-center gap-3">' + avatar(m.name) + '<div class="min-w-0"><strong class="block text-slate-900 truncate">' + esc(m.name || m.email) + '</strong><span class="block text-[11px] text-slate-500 truncate">' + esc(m.email) + '</span></div></div>' +
-                '<div class="grid grid-cols-3 gap-2 text-center"><div class="rounded-xl bg-slate-50 py-2"><p class="text-base font-extrabold text-slate-900">' + m.bookings.length + '</p><p class="text-[10px] text-slate-500 font-semibold">Bookings</p></div><div class="rounded-xl bg-slate-50 py-2"><p class="text-base font-extrabold text-slate-900">' + m.workshops.length + '</p><p class="text-[10px] text-slate-500 font-semibold">Workshops</p></div><div class="rounded-xl bg-slate-50 py-2"><p class="text-base font-extrabold text-slate-900">' + m.orders.length + '</p><p class="text-[10px] text-slate-500 font-semibold">Orders</p></div></div>' +
-                '<div class="flex items-center justify-between text-[11px] text-slate-500"><span>Paid <strong class="text-amberGold">' + money(m.spend) + '</strong></span><span>' + (m.last ? 'Active ' + S.fmtDate(m.last, { day: 'numeric', month: 'short' }) : '') + '</span></div></button>').join('')
-                : '<div class="md:col-span-2 xl:col-span-3">' + empty('fa-users', all.length ? 'No members match' : 'No members yet', all.length ? 'Try a different search.' : 'Members appear here once they book a class, enroll or place an order.') + '</div>';
-        }
-        function statusPill(s) { return pill(s, { Admitted: 'good', Confirmed: 'good', Completed: 'good', 'Pending Confirmation': 'info', Processing: 'info', Shipped: 'info', Reschedule: 'bad', Cancelled: 'muted' }[s] || 'warn'); }
-        function openMember(i) {
-            const m = list[i];
-            const wa = S.waLink(m.phone, 'Hi ' + m.name + ', ');
-            const row = (l, r, s) => '<div class="flex items-center justify-between gap-3 py-2.5 border-b border-slate-100 last:border-0"><div class="min-w-0"><p class="text-xs font-bold text-slate-900 truncate">' + l + '</p><p class="text-[11px] text-slate-500 truncate">' + r + '</p></div>' + s + '</div>';
-            document.getElementById('drawer-body').innerHTML =
-                '<div class="flex items-center gap-4">' + avatar(m.name).replace('w-11 h-11', 'w-16 h-16 text-lg') + '<div class="min-w-0"><h4 class="font-serif text-xl font-bold text-slate-900 truncate">' + esc(m.name || m.email) + '</h4><p class="text-xs text-slate-500 truncate">' + esc(m.email) + '</p></div></div>' +
-                '<div class="flex flex-wrap gap-2">' + (wa ? '<a href="' + wa + '" target="_blank" rel="noopener" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100"><i class="fa-brands fa-whatsapp mr-1.5"></i>WhatsApp</a>' : '') + '<a href="mailto:' + esc(m.email) + '" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-white text-slate-700 border border-slate-200 hover:border-amberGold"><i class="fa-solid fa-envelope mr-1.5"></i>Email</a></div>' +
-                '<div class="rounded-2xl bg-slate-50 border border-slate-200 p-4 grid grid-cols-2 gap-3 text-xs"><div><span class="block text-[10px] uppercase text-slate-500">Phone</span><strong>' + esc(m.phone || '-') + '</strong></div><div><span class="block text-[10px] uppercase text-slate-500">IC / Passport</span><strong>' + esc(m.ic || '-') + '</strong></div><div><span class="block text-[10px] uppercase text-slate-500">From</span><strong>' + esc(m.from || '-') + '</strong></div><div><span class="block text-[10px] uppercase text-slate-500">Cafe</span><strong>' + esc(m.cafe || '-') + '</strong></div></div>' +
-                '<div><h5 class="text-[11px] font-extrabold uppercase tracking-wider text-slate-500 mb-2">Addresses (' + m.addresses.length + ')</h5>' + (m.addresses.length ? m.addresses.map(a => '<div class="rounded-xl border ' + (a.isDefault ? 'border-amberGold bg-blue-50/50' : 'border-slate-200') + ' p-3 mb-2 text-xs"><div class="flex items-center gap-2"><strong class="text-slate-900">' + esc(a.name) + '</strong><span class="text-slate-500">' + esc(a.phone) + '</span>' + (a.isDefault ? '<span class="ml-auto px-2 py-0.5 rounded-full bg-amberGold text-white text-[9px] font-bold">Default</span>' : '') + '</div><p class="text-slate-600 mt-1">' + esc([a.line1, a.line2, a.postcode + ' ' + a.city, a.state].filter(Boolean).join(', ')) + '</p></div>').join('') : '<p class="text-xs text-slate-500">No saved addresses.</p>') + '</div>' +
-                '<div><h5 class="text-[11px] font-extrabold uppercase tracking-wider text-slate-500 mb-1">Class bookings (' + m.bookings.length + ')</h5>' + (m.bookings.length ? m.bookings.map(r => row(S.fmtDate(r.preferredDate, { weekday: 'short', day: 'numeric', month: 'short' }), esc(r.session), statusPill(r.classStatus || 'Pending Confirmation'))).join('') : '<p class="text-xs text-slate-500">None.</p>') + '</div>' +
-                '<div><h5 class="text-[11px] font-extrabold uppercase tracking-wider text-slate-500 mb-1">Workshops (' + m.workshops.length + ')</h5>' + (m.workshops.length ? m.workshops.map(w => row(esc(w.title), esc(w.slot), statusPill(w.status))).join('') : '<p class="text-xs text-slate-500">None.</p>') + '</div>' +
-                '<div><h5 class="text-[11px] font-extrabold uppercase tracking-wider text-slate-500 mb-1">Orders (' + m.orders.length + ')</h5>' + (m.orders.length ? m.orders.map(o => row(esc(o.id) + ' &middot; ' + money(o.total), S.fmtDate(o.createdAt), statusPill(o.status))).join('') : '<p class="text-xs text-slate-500">None.</p>') + '</div>';
-            document.getElementById('drawer').classList.remove('hidden');
-        }
-        function closeDrawer() { document.getElementById('drawer').classList.add('hidden'); }
-        function exportCsv() {
-            const rows = filtered(); if (!rows.length) { S.toast('Nothing to export.'); return; }
-            S.downloadCsv('members.csv', [['Name', 'Email', 'Phone', 'IC / Passport', 'From', 'Cafe', 'Bookings', 'Workshops', 'Orders', 'Paid (RM)']].concat(rows.map(m => [m.name, m.email, m.phone, m.ic, m.from, m.cafe, m.bookings.length, m.workshops.length, m.orders.length, m.spend.toFixed(2)])));
-        }
-        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
-        window.addEventListener('admin-ready', render);
-
-    </script>
+    <script src="js/nbca-data.js"></script>
+    <script src="js/catalog.js"></script>
+    <script src="js/admin/shell.js"></script>
+    <script src="js/admin/ui.js"></script>
+    <script src="js/admin/members.js"></script>
 </body>
 </html>
