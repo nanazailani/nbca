@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website & Demo | Nb.CA Admin</title>
+    <script>if (!localStorage.getItem('rp_admin')) { location.replace('admin-login.html'); }</script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { theme: { extend: {
+            screens: { xs: '420px' },
+            colors: { amberGold: '#2563EB', royalBlue: '#1E40AF', navy: '#172554' },
+            fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'], serif: ['Playfair Display', 'serif'] }
+        } } }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F8FAFC; }
+        h1, h2, h3, .font-serif { font-family: 'Playfair Display', serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; } .no-scrollbar { scrollbar-width: none; }
+        @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+        main > * { animation: rise .4s ease both; } main > *:nth-child(2) { animation-delay: .05s; } main > *:nth-child(3) { animation-delay: .1s; } main > *:nth-child(4) { animation-delay: .15s; }
+        @media (prefers-reduced-motion: reduce) { main > * { animation: none; } }
+        @media print { #a-sidebar, #a-topbar, #a-bottomnav, .no-print { display: none !important; } .lg\:pl-64 { padding-left: 0 !important; } }
+    </style>
+</head>
+<body data-page="website" data-title="Website & Demo" data-sub="What the homepage shows, and demo tools" class="text-slate-800 antialiased selection:bg-amberGold selection:text-white">
+    <div id="a-overlay"></div>
+    <aside id="a-sidebar"></aside>
+    <div class="lg:pl-64 min-h-screen flex flex-col min-w-0 overflow-x-hidden">
+        <header id="a-topbar"></header>
+        <main class="flex-1 min-w-0 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-6 lg:py-10 pb-28 lg:pb-14 space-y-8">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+                <div><span class="text-[11px] font-extrabold tracking-[0.18em] text-amberGold uppercase">Content</span><h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">Website &amp; Demo</h2></div>
+                
+            </div>
+            <div id="tabs"></div>
+            <div id="body"></div>
+        </main>
+    </div>
+    <nav id="a-bottomnav" aria-label="Primary"></nav>
+
+    <script src="js/nbca-config.js"></script>
+    <script src="js/nbca-data.js"></script>
+    <script src="js/catalog.js"></script>
+    <script src="js/demo-data.js"></script>
+    <script src="js/admin/shell.js"></script>
+    <script src="js/admin/ui.js"></script>
+    <script src="js/admin/website.js"></script>
+</body>
+</html>

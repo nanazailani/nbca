@@ -49,23 +49,45 @@
         box.classList.remove('hidden'); ok.focus();
     });
 
-    // field spec: {id, label, type: text|email|tel|number|password|date|select|textarea|checkbox, value, options, required, placeholder, hint, min, step, half}
+    // field spec: {id, label, type: text|email|tel|number|password|date|select|textarea|checkbox|images, value, options, required, placeholder, hint, min, step, half, max}
     function fieldHtml(f) {
         const id = 'uf-' + f.id, val = f.value == null ? '' : f.value, req = f.required ? ' required' : '';
         const label = f.type === 'checkbox' ? '' : '<label for="' + id + '" class="block text-[11px] font-semibold text-slate-600 uppercase tracking-wide mb-1">' + esc(f.label) + (f.required ? ' *' : '') + '</label>';
         let control;
         if (f.type === 'select') control = '<select id="' + id + '" class="' + INPUT + '"' + req + '>' + (f.options || []).map(o => { const v = typeof o === 'object' ? o.value : o, l = typeof o === 'object' ? o.label : o; return '<option value="' + esc(v) + '"' + (String(v) === String(val) ? ' selected' : '') + '>' + esc(l) + '</option>'; }).join('') + '</select>';
         else if (f.type === 'textarea') control = '<textarea id="' + id + '" rows="' + (f.rows || 3) + '" class="' + INPUT + '" placeholder="' + esc(f.placeholder || '') + '"' + req + '>' + esc(val) + '</textarea>';
+        else if (f.type === 'images') control = '<div id="' + id + '" data-images class="space-y-2"><div data-thumbs class="flex flex-wrap gap-2"></div><label class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-dashed border-slate-300 text-xs font-bold text-slate-600 hover:border-amberGold hover:text-amberGold cursor-pointer transition-all"><i class="fa-solid fa-image"></i> Add photo<input type="file" accept="image/*" multiple class="hidden"></label></div>';
         else if (f.type === 'checkbox') control = '<label class="flex items-center gap-2.5 text-sm text-slate-700 cursor-pointer"><input id="' + id + '" type="checkbox" class="w-4 h-4 accent-blue-600"' + (val ? ' checked' : '') + '> ' + esc(f.label) + '</label>';
         else if (f.type === 'password') control = '<div class="relative"><input id="' + id + '" type="password" autocomplete="new-password" class="' + INPUT + ' pr-11" placeholder="' + esc(f.placeholder || '') + '" value="' + esc(val) + '"' + req + '><button type="button" onclick="UI.togglePw(\'' + id + '\', this)" class="absolute inset-y-0 right-0 px-3.5 text-slate-500 hover:text-amberGold" aria-label="Show password"><i class="fa-solid fa-eye"></i></button></div>';
         else control = '<input id="' + id + '" type="' + (f.type || 'text') + '" class="' + INPUT + '" placeholder="' + esc(f.placeholder || '') + '" value="' + esc(val) + '"' + req + (f.min != null ? ' min="' + f.min + '"' : '') + (f.step ? ' step="' + f.step + '"' : '') + '>';
         return '<div class="' + (f.half ? '' : 'sm:col-span-2') + '">' + label + control + (f.hint ? '<p class="text-[10px] text-slate-500 mt-1">' + f.hint + '</p>' : '') + '</div>';
+    }
+    // Photos are resized in the browser (max 700px JPEG) so they stay small enough for localStorage.
+    const resizeImage = (file, max) => new Promise((ok, fail) => {
+        const r = new FileReader();
+        r.onload = () => { const img = new Image(); img.onload = () => { const k = Math.min(1, max / Math.max(img.width, img.height)), c = document.createElement('canvas'); c.width = Math.round(img.width * k); c.height = Math.round(img.height * k); c.getContext('2d').drawImage(img, 0, 0, c.width, c.height); ok(c.toDataURL('image/jpeg', .8)); }; img.onerror = fail; img.src = r.result; };
+        r.onerror = fail; r.readAsDataURL(file);
+    });
+    function initImages(box, f) {
+        const wrap = box.querySelector('#uf-' + f.id), thumbs = wrap.querySelector('[data-thumbs]'), input = wrap.querySelector('input[type=file]'), max = f.max || 3;
+        box._images = box._images || {}; box._images[f.id] = (f.value || []).slice();
+        const paint = () => {
+            thumbs.innerHTML = box._images[f.id].map((src, i) => '<div class="relative w-20 h-20 rounded-xl overflow-hidden border border-slate-200 bg-slate-100"><img src="' + esc(src) + '" alt="" class="w-full h-full object-cover"><button type="button" data-rm="' + i + '" class="absolute top-1 right-1 w-5 h-5 rounded-full bg-black/60 text-white text-[10px] flex items-center justify-center hover:bg-red-600" aria-label="Remove photo"><i class="fa-solid fa-xmark"></i></button></div>').join('');
+            thumbs.querySelectorAll('[data-rm]').forEach(b => b.onclick = () => { box._images[f.id].splice(Number(b.dataset.rm), 1); paint(); });
+            wrap.querySelector('label').classList.toggle('hidden', box._images[f.id].length >= max);
+        };
+        input.onchange = async () => {
+            for (const file of [...input.files]) { if (box._images[f.id].length >= max) break; try { box._images[f.id].push(await resizeImage(file, 700)); } catch (e) { S.toast('That file could not be read as an image.'); } }
+            input.value = ''; paint();
+        };
+        paint();
     }
     const formDialog = o => new Promise(res => {
         const box = dialogShell('ui-form', '<form novalidate class="space-y-5"><div><h3 class="font-serif text-xl font-bold text-slate-900"></h3><p data-desc class="text-xs text-slate-500 mt-1 hidden"></p></div><div data-fields class="grid sm:grid-cols-2 gap-4"></div><p data-error class="hidden text-xs font-semibold text-red-600 bg-red-50 border border-red-200 rounded-xl px-3.5 py-2.5"></p><div class="flex gap-3"><button type="submit" class="flex-1 py-3 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl text-xs shadow"></button><button type="button" data-close class="px-5 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs">Cancel</button></div></form>', o.wide ? 'max-w-xl' : 'max-w-md');
         box.querySelector('h3').innerText = o.title;
         if (o.description) { const d = box.querySelector('[data-desc]'); d.innerText = o.description; d.classList.remove('hidden'); }
         box.querySelector('[data-fields]').innerHTML = o.fields.map(fieldHtml).join('');
+        box._images = {}; o.fields.filter(f => f.type === 'images').forEach(f => initImages(box, f));
         box.querySelector('[type=submit]').innerText = o.submit || 'Save';
         const err = box.querySelector('[data-error]'), form = box.querySelector('form');
         const close = v => { box.classList.add('hidden'); res(v); };
@@ -74,6 +96,7 @@
             e.preventDefault();
             const values = {};
             for (const f of o.fields) {
+                if (f.type === 'images') { values[f.id] = (box._images[f.id] || []).slice(); continue; }
                 const el = document.getElementById('uf-' + f.id);
                 let v = f.type === 'checkbox' ? el.checked : el.value.trim();
                 if (f.type === 'password') v = el.value;

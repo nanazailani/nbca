@@ -108,7 +108,7 @@
                 <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
                     <div>
                         <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Inventory</span>
-                        <h3 class="text-2xl font-extrabold text-roast-950 font-serif mt-1">Roastery Stock Control</h3>
+                        <h3 class="text-2xl font-extrabold text-roast-950 font-serif mt-1">Roastery Stock Control</h3><p class="text-[11px] font-semibold text-amber-600 mt-1"><i class="fa-solid fa-flask mr-1"></i>Sample stock list for now. It is not connected to the shop yet.</p>
                     </div>
                     <div class="flex items-center gap-3">
                         <button onclick="openAddProductModal()" class="px-4 py-2.5 bg-amberGold text-adminBg font-extrabold rounded-xl text-xs shadow hover:opacity-90 flex items-center gap-2">
@@ -210,6 +210,7 @@
 
                         <div class="bg-adminCard rounded-3xl border border-adminBorder p-6 sm:p-8 shadow-xl space-y-5">
                             <h4 class="text-sm font-bold text-roast-950 uppercase tracking-wider border-b border-adminBorder pb-3">Schedule</h4>
+                            <p class="text-[11px] text-roast-400 -mt-2">Sessions and open days are shared with booking and the schedule, so they are shown here read-only. Ask the developer to change them.</p>
                             <div class="grid sm:grid-cols-2 gap-4">
                                 <div>
                                     <label class="block font-semibold text-roast-300 uppercase mb-1">Morning Session</label>
@@ -561,9 +562,11 @@
             document.getElementById('fcs-image').value = s.image;
             document.getElementById('fcs-image-filename').innerText = s.image ? 'Current image (upload a new one to replace)' : 'Choose an image to upload';
             document.getElementById('fcs-image-file').value = '';
-            document.getElementById('fcs-morning').value = s.morningSession;
-            document.getElementById('fcs-afternoon').value = s.afternoonSession;
-            document.getElementById('fcs-closed-day').value = String(s.closedDay);
+            document.getElementById('fcs-morning').value = NBCA_CFG.FC_SESSIONS[0];
+            document.getElementById('fcs-afternoon').value = NBCA_CFG.FC_SESSIONS[1];
+            document.getElementById('fcs-closed-day').value = '5';
+            ['fcs-morning', 'fcs-afternoon'].forEach(id => { const el = document.getElementById(id); el.readOnly = true; el.classList.add('opacity-70', 'cursor-not-allowed'); });
+            const cd = document.getElementById('fcs-closed-day'); cd.disabled = true; cd.classList.add('opacity-70', 'cursor-not-allowed');
             document.getElementById('fcs-fee').value = s.fee;
             document.getElementById('fcs-deposit-pct').value = s.depositPct;
             updateFixedClassPreview();
@@ -574,7 +577,7 @@
             if (!file) return;
 
             if (!file.type.startsWith('image/')) {
-                alert('Sila pilih fail imej yang sah.');
+                AdminShell.toast('Please choose a valid image file.');
                 event.target.value = '';
                 return;
             }
@@ -597,7 +600,7 @@
             const image = document.getElementById('fcs-image').value;
             const morning = document.getElementById('fcs-morning').value || '10:00 AM – 12:00 PM';
             const afternoon = document.getElementById('fcs-afternoon').value || '2:00 PM – 4:00 PM';
-            const closedDay = FCS_DAY_NAMES[parseInt(document.getElementById('fcs-closed-day').value)] || 'Friday';
+            const closedDay = 'Friday & Saturday';
             const fee = parseFloat(document.getElementById('fcs-fee').value) || 0;
             const pct = parseFloat(document.getElementById('fcs-deposit-pct').value) || 0;
             const deposit = (fee * pct / 100);
@@ -618,7 +621,7 @@
             e.preventDefault();
             const image = document.getElementById('fcs-image').value.trim();
             if (!image) {
-                alert('Sila upload gambar cover untuk Fixed Class.');
+                AdminShell.toast('Please upload a cover image for the daily class.');
                 return;
             }
             const settings = {
@@ -634,7 +637,7 @@
             try {
                 localStorage.setItem('rp_fixed_class_settings', JSON.stringify(settings));
             } catch (err) {
-                alert('Imej terlalu besar untuk disimpan. Sila cuba imej dengan saiz fail yang lebih kecil.');
+                AdminShell.toast('That image is too large to save. Please try a smaller one.');
                 return;
             }
             showAdminToast('Fixed Class settings saved. The homepage will reflect these changes.');
@@ -709,7 +712,7 @@
             const isEdit = document.getElementById('edit-row-index').value === "edit";
 
             if (!name || isNaN(price) || isNaN(stock)) {
-                alert('Sila lengkapkan semua maklumat produk dengan betul.');
+                AdminShell.toast('Please complete all product details.');
                 return;
             }
 
@@ -765,7 +768,7 @@
         function confirmAddStock() {
             const qtyToAdd = parseInt(document.getElementById('input-add-stock-qty').value);
             if (isNaN(qtyToAdd) || qtyToAdd <= 0) {
-                alert('Sila masukkan kuantiti stok yang sah.');
+                AdminShell.toast('Please enter a valid stock quantity.');
                 return;
             }
 
@@ -787,8 +790,8 @@
             closeAddStockModal();
         }
 
-        function deleteInventoryRow(btn) {
-            if (confirm('Adakah anda pasti mahu memadam produk ini dari inventori?')) {
+        async function deleteInventoryRow(btn) {
+            if (await UI.confirm({ title: 'Delete this product?', message: 'It is removed from the inventory list.', ok: 'Delete product', danger: true })) {
                 const row = btn.closest('tr');
                 row.remove();
                 showAdminToast('Product successfully deleted.');
@@ -894,7 +897,7 @@
             if (!file) return;
 
             if (!file.type.startsWith('image/')) {
-                alert('Sila pilih fail imej yang sah.');
+                AdminShell.toast('Please choose a valid image file.');
                 event.target.value = "";
                 return;
             }
@@ -1051,7 +1054,7 @@
             const isEdit = document.getElementById('edit-blog-id').value !== "";
 
             if (!title || !image || !excerpt || !rawContent) {
-                alert('Sila lengkapkan semua maklumat pos (tajuk, gambar, excerpt, dan kandungan).');
+                AdminShell.toast('Please complete the title, image, excerpt and content.');
                 return;
             }
 
@@ -1081,7 +1084,7 @@
             try {
                 saveBlogPostsToStorage();
             } catch (e) {
-                alert('Imej terlalu besar untuk disimpan. Sila cuba imej dengan saiz fail yang lebih kecil.');
+                AdminShell.toast('That image is too large to save. Please try a smaller one.');
                 return;
             }
 
@@ -1091,8 +1094,8 @@
             closeBlogPostModal();
         }
 
-        function deleteBlogPost(id) {
-            if (confirm('Adakah anda pasti mahu memadam announcement ini? Ia akan hilang dari laman web customer.')) {
+        async function deleteBlogPost(id) {
+            if (await UI.confirm({ title: 'Delete this announcement?', message: 'It disappears from the public homepage straight away.', ok: 'Delete announcement', danger: true })) {
                 blogPosts = blogPosts.filter(p => p.id !== id);
                 saveBlogPostsToStorage();
                 renderBlogTable();

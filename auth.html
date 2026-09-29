@@ -170,6 +170,11 @@
                             Login to Portal 
                         </button> 
                     </form> 
+                    <!-- DEMO ONLY: remove this block before launch -->
+                    <div data-demo class="mt-4 rounded-2xl border border-dashed border-amber-300 bg-amber-50 p-3.5 text-[11px] text-amber-900 flex items-center justify-between gap-3">
+                        <span><strong class="uppercase tracking-wider">Demo</strong> member: <span class="font-mono">member@nbca.academy</span> / <span class="font-mono">123456</span></span>
+                        <button type="button" onclick="fillDemo()" class="shrink-0 px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-white font-bold transition-all">Fill in</button>
+                    </div>
                 </div> 
 
                 <!-- REGISTER FORM --> 
@@ -252,6 +257,12 @@
             btn.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
             btn.title = show ? 'Hide password' : 'Show password';
         }
+
+        // DEMO ONLY
+        function fillDemo() { document.getElementById('login-email').value = 'member@nbca.academy'; document.getElementById('login-password').value = '123456'; }
+
+        // DEMO ONLY
+        function fillDemo() { document.getElementById('login-email').value = 'member@nbca.academy'; document.getElementById('login-password').value = '123456'; }
 
         function showAlert(message, isError = true) { 
             const alertBox = document.getElementById('auth-alert'); 

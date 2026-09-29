@@ -158,6 +158,7 @@
     function render() { const r = buildRange(); paintPeriod(); renderKpis(r); renderCharts(r); }
     window.Dash = {
         setPeriod(p) { period = p; if (p === 'custom' && !custom.from) { custom.to = D.dayOf(); custom.from = D.dayOf(new Date(Date.now() - 13 * DAY)); $('d-from').value = custom.from; $('d-to').value = custom.to; } render(); },
+        loadDemo() { NBCA_DEMO.seed(); S.toast('Sample data loaded.'); setTimeout(() => location.reload(), 700); },
         applyCustom() { custom.from = $('d-from').value; custom.to = $('d-to').value; if (!custom.from || !custom.to) { S.toast('Choose both dates.'); return; } if (custom.to < custom.from) { S.toast('End date must be after the start date.'); return; } render(); }
     };
 
@@ -166,5 +167,9 @@
         $('today').innerText = new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
         $('greet').innerText = (h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening') + ', ' + (a.name || 'Admin');
         render(); renderAttention(); renderSessions(); renderActivity();
+        // first run: nothing to look at yet, so offer the sample data
+        if (!D.accounts.list().length && !S.regs().length && !S.orders().length && window.NBCA_DEMO) {
+            document.querySelector('main').insertAdjacentHTML('afterbegin', '<section class="rounded-3xl bg-gradient-to-br from-navy to-royalBlue text-white p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center gap-5 shadow-xl"><div class="w-14 h-14 rounded-2xl bg-white/15 flex items-center justify-center text-2xl shrink-0"><i class="fa-solid fa-wand-magic-sparkles"></i></div><div class="flex-1"><h3 class="font-serif text-xl font-bold">Welcome to the admin console</h3><p class="text-sm text-blue-100 mt-1">There is no data yet, so the charts are empty. Load a sample set of members, bookings and orders to see how everything works.</p></div><div class="flex gap-2"><button type="button" onclick="Dash.loadDemo()" class="px-5 py-3 bg-white text-amberGold font-bold rounded-xl text-xs shadow">Load sample data</button></div></section>');
+        }
     });
 })();

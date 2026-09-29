@@ -281,7 +281,7 @@
                             <i class="fa-solid fa-chalkboard-user me-2"></i> Browse Classes 
                         </a> 
                     </div> 
-                    <div class="hero-anim-5 flex flex-wrap justify-center gap-3 pt-2"> 
+                    <div id="hero-stats" class="hero-anim-5 flex flex-wrap justify-center gap-3 pt-2"> 
                         <div class="bg-white/85 backdrop-blur-sm rounded-2xl px-5 py-3 border border-roast-200 shadow-sm"> 
                             <span class="block text-2xl font-bold font-serif text-amberGold leading-none">500+</span> 
                             <span class="text-[10px] text-roast-600 font-semibold uppercase tracking-wider">Students Trained</span> 
@@ -376,45 +376,45 @@
                 <div class="bg-white rounded-3xl border border-roast-200 shadow-lg overflow-hidden">
                     <div class="grid md:grid-cols-2">
                         <div class="relative h-56 md:h-auto">
-                            <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=800&q=80" alt="Fixed Coffee Class" class="w-full h-full object-cover">
+                            <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=800&q=80" alt="Fixed Coffee Class" id="fx-img" class="w-full h-full object-cover">
                             <span class="absolute top-4 left-4 px-3 py-1 bg-amberGold text-roast-50 text-[10px] font-bold uppercase rounded-full">Walk-In Friendly</span>
                         </div>
                         <div class="p-6 sm:p-8 space-y-5">
                             <div>
-                                <h3 class="text-xl font-bold text-roast-950 font-serif">Coffee Fundamentals — Daily Class</h3>
-                                <p class="text-xs text-roast-600 mt-1">Hands-on brewing basics for beginners, run every operating day.</p>
+                                <h3 id="fx-title" class="text-xl font-bold text-roast-950 font-serif">Coffee Fundamentals — Daily Class</h3>
+                                <p id="fx-desc" class="text-xs text-roast-600 mt-1">Hands-on brewing basics for beginners, run every operating day.</p>
                             </div>
 
                             <div class="space-y-2">
                                 <div class="flex items-center gap-2 text-xs text-roast-700">
                                     <i class="fa-solid fa-clock text-amberGold w-4"></i>
-                                    <span><strong class="text-roast-950">Morning Session:</strong> 10:00 AM – 12:00 PM</span>
+                                    <span id="fx-s1"><strong class="text-roast-950">Morning Session:</strong> 10:00 AM – 12:00 PM</span>
                                 </div>
                                 <div class="flex items-center gap-2 text-xs text-roast-700">
                                     <i class="fa-solid fa-clock text-amberGold w-4"></i>
-                                    <span><strong class="text-roast-950">Afternoon Session:</strong> 2:00 PM – 4:00 PM</span>
+                                    <span id="fx-s2"><strong class="text-roast-950">Afternoon Session:</strong> 2:00 PM – 4:00 PM</span>
                                 </div>
                                 <div class="flex items-center gap-2 text-xs text-roast-700">
                                     <i class="fa-solid fa-calendar-xmark text-amberGold w-4"></i>
-                                    <span>Open <strong class="text-roast-950">Sunday – Thursday</strong> (closed Fri &amp; Sat)</span>
+                                    <span id="fx-days">Open <strong class="text-roast-950">Sunday – Thursday</strong> (closed Fri &amp; Sat)</span>
                                 </div>
                             </div>
 
                             <div class="flex items-center justify-between py-3 border-y border-roast-100">
                                 <div>
                                     <span class="text-[10px] text-roast-500 uppercase tracking-wider block">Class Fee</span>
-                                    <span class="text-2xl font-extrabold text-amberGold font-serif">RM 150.00</span>
+                                    <span id="fx-fee" class="text-2xl font-extrabold text-amberGold font-serif">RM 150.00</span>
                                 </div>
                                 <div class="text-right">
-                                    <span class="text-[10px] text-roast-500 uppercase tracking-wider block">Deposit Required (50%)</span>
-                                    <span class="text-lg font-bold text-roast-950">RM 75.00</span>
+                                    <span id="fx-dep-label" class="text-[10px] text-roast-500 uppercase tracking-wider block">Deposit Required (50%)</span>
+                                    <span id="fx-dep" class="text-lg font-bold text-roast-950">RM 75.00</span>
                                 </div>
                             </div>
 
                             <button onclick="openFixedClassModal()" class="btn-anim w-full py-3 bg-amberGold hover:bg-royalBlue text-roast-50 font-bold rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-2">
                                 <i class="fa-solid fa-user-pen"></i> Sign in to Register
                             </button>
-                            <p class="text-[10px] text-roast-500 text-center">A 50% deposit is required to confirm your seat. Balance is payable on class day. You will need to log in or create an account first.</p>
+                            <p id="fx-note" class="text-[10px] text-roast-500 text-center">A 50% deposit is required to confirm your seat. Balance is payable on class day. You will need to log in or create an account first.</p>
                         </div>
                     </div>
                 </div>
@@ -726,7 +726,7 @@
                             </div> 
                             <div> 
                                 <h4 class="font-bold text-roast-950 text-sm">Nb.CA Academy</h4> 
-                                <p class="text-xs text-roast-600 mt-1">10, Lengkok Cempaka 1, Bandar Amanjaya, 08000 Sungai Petani, Kedah, Malaysia</p> 
+                                <p id="site-address" class="text-xs text-roast-600 mt-1">10, Lengkok Cempaka 1, Bandar Amanjaya, 08000 Sungai Petani, Kedah, Malaysia</p> 
                             </div> 
                         </div> 
                     </div> 
@@ -770,7 +770,7 @@
                             <i class="fa-solid fa-bag-shopping text-base"></i> 
                         </a> 
                     </div> 
-                    <p class="text-xs text-white font-medium tracking-wide">@nbca.academy</p> 
+                    <p id="site-handle" class="text-xs text-white font-medium tracking-wide">@nbca.academy</p> 
                 </div> 
                 <div class="space-y-4 md:text-right"> 
                     <h3 class="font-serif text-lg font-bold text-white tracking-wide">Contact Us</h3> 
@@ -1189,6 +1189,9 @@
         </div> 
     </div> 
 
+    <script src="js/nbca-config.js"></script>
+    <script src="js/nbca-data.js"></script>
+    <script src="js/catalog.js"></script>
     <!-- JAVASCRIPT LOGIC --> 
     <script> 
         let cart = []; 
@@ -1199,13 +1202,14 @@
 
         document.addEventListener('DOMContentLoaded', () => { 
             const savedUser = localStorage.getItem('rp_logged_user'); 
-            if (savedUser) { 
+            if (savedUser && !new URLSearchParams(location.search).has('preview')) { 
                 window.location.replace('dashboard.html'); 
                 return; 
             } 
             updateAuthNavbarUI();
             loadBlogPosts(); 
             renderBlogGrid(); 
+            applySiteContent();
             renderTeamGrid(); 
             initScrollReveal(); 
         }); 
@@ -1737,7 +1741,7 @@
 
         // ===================== MEET THE TEAM (placeholder — replace with real data & photos) ===================== 
         // Each member has 4-5 photos that the visitor can slide through via the carousel below. 
-        const teamMembersData = [ 
+        const teamFallback = [ 
             { 
                 name: "Instructor Name 1", 
                 role: "Head Instructor", 
@@ -1774,6 +1778,13 @@
             } 
         ]; 
 
+        const escHtml = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        const DEFAULT_TEAM_PHOTO = 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=700&q=80';
+        // Managed in the admin under Class Schedule > Instructors ("Show on the homepage").
+        const teamMembersData = (() => {
+            const list = NBCA_DATA.instructors.publicList();
+            return list.length ? list.map(i => ({ name: i.name, role: i.roleTitle || i.specialty || 'Instructor', bio: i.bio || '', photos: i.photos && i.photos.length ? i.photos : [DEFAULT_TEAM_PHOTO] })) : teamFallback;
+        })();
         let teamSlideIndex = teamMembersData.map(() => 0); 
 
         function renderTeamGrid() { 
@@ -1783,7 +1794,7 @@
                 <div class="card-lift bg-white/55 backdrop-blur-lg rounded-2xl border border-white/70 shadow-lg overflow-hidden"> 
                     <div class="relative h-72 sm:h-80 bg-roast-200 overflow-hidden" id="team-carousel-${mIdx}"> 
                         ${member.photos.map((photo, pIdx) => ` 
-                            <img src="${photo}" alt="${member.name} photo ${pIdx + 1}" class="team-slide absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${pIdx === 0 ? 'opacity-100' : 'opacity-0 pointer-events-none'}"> 
+                            <img src="${escHtml(photo)}" alt="${escHtml(member.name)} photo ${pIdx + 1}" class="team-slide absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${pIdx === 0 ? 'opacity-100' : 'opacity-0 pointer-events-none'}"> 
                         `).join('')} 
                         <div class="absolute inset-0 bg-gradient-to-t from-roast-950/40 via-transparent to-transparent pointer-events-none"></div> 
                         ${member.photos.length > 1 ? ` 
@@ -1801,9 +1812,9 @@
                         ` : ''} 
                     </div> 
                     <div class="p-5 space-y-1.5"> 
-                        <h3 class="text-lg font-bold text-roast-950 font-serif">${member.name}</h3> 
-                        <p class="text-xs text-amberGold font-semibold uppercase tracking-wider">${member.role}</p> 
-                        <p class="text-sm text-roast-700 font-light leading-relaxed">${member.bio}</p> 
+                        <h3 class="text-lg font-bold text-roast-950 font-serif">${escHtml(member.name)}</h3> 
+                        <p class="text-xs text-amberGold font-semibold uppercase tracking-wider">${escHtml(member.role)}</p> 
+                        <p class="text-sm text-roast-700 font-light leading-relaxed">${escHtml(member.bio)}</p> 
                     </div> 
                 </div> 
             `).join(''); 
@@ -1845,7 +1856,42 @@
             const prev = (teamSlideIndex[memberIdx] - 1 + total) % total; 
             teamGoToSlide(memberIdx, prev); 
         } 
-        // ===================== END MEET THE TEAM ===================== 
+        // ===================== END MEET THE TEAM =====================
+
+        // ===================== ADMIN-CONTROLLED CONTENT =====================
+        // Contact/social/hero figures (admin: Website & Demo), the daily class card (admin: Fixed Class Settings)
+        // and workshop sessions (admin: Class Schedule) are read from the shared data layer.
+        function applySiteContent() {
+            const site = NBCA_DATA.site.get(), CFG = NBCA_CFG, esc = escHtml;
+            document.querySelectorAll('a[href^="https://wa.me/"]').forEach(a => { a.href = a.href.replace(/wa\.me\/\d+/, 'wa.me/' + site.whatsapp); });
+            document.querySelectorAll('a[href*="tiktok.com"]').forEach(a => { a.href = site.tiktok; });
+            const set = (id, txt) => { const el = document.getElementById(id); if (el) el.textContent = txt; };
+            set('site-address', site.address); set('site-handle', site.handle);
+            const map = document.querySelector('iframe[src*="google.com/maps"]');
+            if (map) map.src = 'https://www.google.com/maps?q=' + encodeURIComponent(site.address) + '&output=embed';
+            const hs = document.getElementById('hero-stats');
+            if (hs) hs.innerHTML = site.stats.map(t => '<div class="bg-white/85 backdrop-blur-sm rounded-2xl px-5 py-3 border border-roast-200 shadow-sm"><span class="block text-2xl font-bold font-serif text-amberGold leading-none">' + esc(t.value) + '</span><span class="text-[10px] text-roast-600 font-semibold uppercase tracking-wider">' + esc(t.label) + '</span></div>').join('');
+
+            // daily class card
+            let fx = null; try { fx = JSON.parse(localStorage.getItem('rp_fixed_class_settings') || 'null'); } catch (e) {}
+            const fee = fx && Number(fx.fee) > 0 ? Number(fx.fee) : 150, pct = fx && Number(fx.depositPct) > 0 ? Number(fx.depositPct) : 50;
+            if (fx && fx.name) set('fx-title', fx.name);
+            if (fx && fx.description) set('fx-desc', fx.description);
+            if (fx && fx.image) { const im = document.getElementById('fx-img'); if (im) im.src = fx.image; }
+            set('fx-fee', 'RM ' + fee.toFixed(2)); set('fx-dep', 'RM ' + (fee * pct / 100).toFixed(2)); set('fx-dep-label', 'Deposit Required (' + pct + '%)');
+            const note = document.getElementById('fx-note'); if (note) note.textContent = note.textContent.replace(/A \d+% deposit/, 'A ' + pct + '% deposit');
+            const sess = (id, label, t) => { const el = document.getElementById(id); if (el && t) el.innerHTML = '<strong class="text-roast-950">' + label + ':</strong> ' + esc(t); };
+            sess('fx-s1', 'Morning Session', CFG.FC_SESSIONS[0]); sess('fx-s2', 'Afternoon Session', CFG.FC_SESSIONS[1]);
+            const names = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'], open = CFG.FC_OPEN_DAYS, closed = names.filter((n, i) => !open.includes(i));
+            const daysEl = document.getElementById('fx-days');
+            if (daysEl) daysEl.innerHTML = 'Open <strong class="text-roast-950">' + names[open[0]] + (open.length > 1 ? ' – ' + names[open[open.length - 1]] : '') + '</strong>' + (closed.length ? ' (closed ' + closed.map(n => n.slice(0, 3)).join(' &amp; ') + ')' : '');
+
+            // workshop sessions added by the admin
+            if (window.NBCA_CATALOG && typeof classesCatalog !== 'undefined') {
+                Object.keys(classesCatalog).forEach(id => { const w = NBCA_CATALOG.workshops.find(x => x.id === id); if (w) classesCatalog[id].slots = NBCA_DATA.slots.forWorkshop(w); });
+            }
+        }
+
 
         const BLOG_DATA_VERSION = 'v2-blue-theme';
 
@@ -2166,7 +2212,7 @@
                 msg += `\nNotes: ${currentOrderData.notes}`; 
             } 
             const encoded = encodeURIComponent(msg); 
-            window.open(`https://wa.me/60123456789?text=${encoded}`, '_blank'); 
+            window.open(`https://wa.me/${NBCA_DATA.site.get().whatsapp}?text=${encoded}`, '_blank'); 
         } 
 
         function closeSuccessModal() { 

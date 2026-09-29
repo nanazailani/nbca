@@ -15,7 +15,7 @@
     const K = {
         accounts: 'rp_accounts', session: 'rp_logged_user', legacyUser: 'rp_user',
         activity: 'rp_activity_log',
-        instructors: 'rp_instructors', assignments: 'rp_assignments', slots: 'rp_workshop_slots_extra',
+        instructors: 'rp_instructors', site: 'rp_site_settings', assignments: 'rp_assignments', slots: 'rp_workshop_slots_extra',
         ledger: 'rp_points_ledger', loyalty: 'rp_loyalty_settings', vouchers: 'rp_vouchers', redemptions: 'rp_redemptions',
         regs: 'rp_fixed_class_students', orders: 'rp_member_orders', enrolls: 'rp_workshop_enrollments', profiles: 'rp_member_profiles'
     };
@@ -100,7 +100,9 @@
         list() { return read(K.instructors, []); },
         active() { return instructors.list().filter(i => i.status !== 'inactive'); },
         get(id) { return instructors.list().find(i => i.id === id) || null; },
-        create(p) { const i = { id: uid('I'), name: p.name.trim(), phone: p.phone || '', email: p.email || '', specialty: p.specialty || '', status: 'active', createdAt: nowIso() }; write(K.instructors, instructors.list().concat(i)); return i; },
+        create(p) { const i = { showOnWebsite: false, photos: [], ...p, id: uid('I'), name: p.name.trim(), status: 'active', createdAt: nowIso() }; write(K.instructors, instructors.list().concat(i)); return i; },
+        // instructors shown in the homepage "Meet the team" section
+        publicList() { return instructors.list().filter(i => i.status !== 'inactive' && i.showOnWebsite); },
         update(id, patch) { write(K.instructors, instructors.list().map(i => i.id === id ? { ...i, ...patch, id } : i)); },
         remove(id) { write(K.instructors, instructors.list().filter(i => i.id !== id)); const a = read(K.assignments, {}); Object.keys(a).forEach(k => { if (a[k] === id) delete a[k]; }); write(K.assignments, a); },
         assignedCount(id) { return Object.values(read(K.assignments, {})).filter(v => v === id).length; }
@@ -214,6 +216,20 @@
         }
     };
 
+    // ============================ WEBSITE SETTINGS (homepage content the admin can change) ============================
+    const DEFAULT_SITE = {
+        whatsapp: '60123456789',
+        address: '10, Lengkok Cempaka 1, Bandar Amanjaya, 08000 Sungai Petani, Kedah, Malaysia',
+        tiktok: 'https://www.tiktok.com/@nbca_academy',
+        handle: '@nbca.academy',
+        stats: [{ value: '500+', label: 'Students Trained' }, { value: '3', label: 'Expert-Led Classes' }, { value: '4.9★', label: 'Average Rating' }]
+    };
+    const site = {
+        get() { const s = read(K.site, {}); return { ...DEFAULT_SITE, ...s, stats: Array.isArray(s.stats) && s.stats.length ? s.stats : DEFAULT_SITE.stats }; },
+        save(s) { write(K.site, s); },
+        defaults: DEFAULT_SITE
+    };
+
     accounts.migrate();
-    window.NBCA_DATA = { K, read, write, uid, norm, dayOf, accounts, session, activity, instructors, assign, slots, loyalty };
+    window.NBCA_DATA = { K, read, write, uid, norm, dayOf, accounts, session, activity, instructors, assign, slots, loyalty, site };
 })();

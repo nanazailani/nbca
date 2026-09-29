@@ -247,7 +247,9 @@
             loBox.href = lo ? 'orders.html' : 'shop.html?tab=beans';
             const regs = MemberShell.registrations().filter(r => r.classStatus !== 'Cancelled');
             document.getElementById('stat-classes').innerText = regs.length + MemberShell.myWorkshops().length;
-            const latest = regs[regs.length - 1];
+            // the next class still to come; only if there is none, fall back to the most recent one
+            const today = NBCA_DATA.dayOf(), upcomingFirst = regs.filter(r => r.preferredDate >= today).sort((x, y) => x.preferredDate.localeCompare(y.preferredDate))[0];
+            const latest = upcomingFirst || regs.slice().sort((x, y) => y.preferredDate.localeCompare(x.preferredDate))[0];
             const card = document.getElementById('next-up-card');
             if (!latest) {
                 card.innerHTML = '<p class="text-[10px] font-extrabold uppercase tracking-widest text-blue-200">Next up</p>' +
@@ -259,7 +261,7 @@
             const d = new Date(latest.preferredDate + 'T00:00:00');
             const status = latest.depositStatus !== 'Paid' ? ['Payment pending', 'bg-amber-300 text-amber-950'] : latest.classStatus === 'Admitted' ? ['Confirmed', 'bg-emerald-400 text-emerald-950'] :
                 latest.classStatus === 'Reschedule' ? ['Reschedule needed', 'bg-red-400 text-red-950'] : ['Awaiting confirmation', 'bg-amber-300 text-amber-950'];
-            card.innerHTML = '<div class="flex items-center justify-between"><p class="text-[10px] font-extrabold uppercase tracking-widest text-blue-200">Your class</p>' +
+            card.innerHTML = '<div class="flex items-center justify-between"><p class="text-[10px] font-extrabold uppercase tracking-widest text-blue-200">' + (upcomingFirst ? 'Your next class' : 'Your last class') + '</p>' +
                 '<span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold ' + status[1] + '">' + status[0] + '</span></div>' +
                 '<h3 class="font-serif text-xl font-bold">' + d.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'short' }) + '</h3>' +
                 '<p class="text-xs text-blue-100"><i class="fa-solid fa-clock mr-1.5"></i>' + MemberShell.esc(latest.session) + '</p>' +

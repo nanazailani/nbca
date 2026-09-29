@@ -94,7 +94,8 @@
         { group: 'Content', items: [
             { id: 'm-fixed', label: 'Fixed Class Settings', icon: 'fa-sliders', href: 'admin-manage.html?tab=fixed' },
             { id: 'm-inventory', label: 'Inventory', icon: 'fa-boxes-stacked', href: 'admin-manage.html?tab=inventory' },
-            { id: 'm-blog', label: 'Announcements', icon: 'fa-bullhorn', href: 'admin-manage.html?tab=blog' }
+            { id: 'm-blog', label: 'Announcements', icon: 'fa-bullhorn', href: 'admin-manage.html?tab=blog' },
+            { id: 'website', label: 'Website & Demo', icon: 'fa-globe', href: 'admin-website.html' }
         ]}
     ];
     const page = document.body.dataset.page || '';
@@ -128,7 +129,7 @@
             '<div class="flex items-center gap-3 min-w-0"><button onclick="AdminShell.openMenu()" class="lg:hidden w-10 h-10 rounded-xl bg-white border border-slate-200 text-slate-800 flex items-center justify-center shadow-sm" aria-label="Open menu"><i class="fa-solid fa-bars"></i></button>' +
             '<div class="min-w-0"><h1 class="font-serif text-lg lg:text-2xl font-extrabold text-slate-900 truncate">' + esc(document.body.dataset.title || '') + '</h1><p class="hidden sm:block text-[11px] text-slate-500 truncate">' + esc(document.body.dataset.sub || '') + '</p></div></div>' +
             '<div class="flex items-center gap-2 sm:gap-3 shrink-0"><span class="hidden md:flex items-center gap-2 px-3.5 py-2 rounded-full bg-white border border-slate-200 text-xs font-bold text-slate-700" title="Members active in the last 5 minutes"><span class="w-2 h-2 rounded-full ' + (D.activity.onlineNow(5) ? 'bg-emerald-500 animate-pulse' : 'bg-slate-300') + '"></span>' + D.activity.onlineNow(5) + ' online</span>' +
-            '<a href="index.html" target="_blank" rel="noopener" class="hidden sm:flex items-center gap-2 px-3.5 py-2 rounded-full bg-white border border-slate-200 text-xs font-bold text-slate-700 hover:border-amberGold transition-all"><i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-amberGold"></i> View site</a>' +
+            '<a href="index.html?preview=1" target="_blank" rel="noopener" class="hidden sm:flex items-center gap-2 px-3.5 py-2 rounded-full bg-white border border-slate-200 text-xs font-bold text-slate-700 hover:border-amberGold transition-all"><i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-amberGold"></i> View site</a>' +
             '<a href="admin-dashboard.html" class="relative w-10 h-10 rounded-full bg-white border border-slate-200 text-slate-700 hover:border-amberGold flex items-center justify-center" aria-label="Needs attention"><i class="fa-solid fa-bell text-sm"></i>' +
             (attention ? '<span class="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-amber-400 text-slate-900 text-[10px] font-extrabold flex items-center justify-center">' + attention + '</span>' : '') + '</a></div>';
     }

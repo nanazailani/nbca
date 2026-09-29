@@ -59,7 +59,7 @@
         if (!list.length) return UI.empty('fa-user-tie', 'No instructors yet', 'Add the people who teach so you can assign them to each class and see who is responsible.', add);
         return '<div class="flex justify-end">' + add + '</div><div class="grid md:grid-cols-2 xl:grid-cols-3 gap-4">' + list.map(i => {
             const inactive = i.status === 'inactive', n = D.instructors.assignedCount(i.id);
-            return '<article class="bg-white rounded-3xl border border-slate-200 shadow-sm p-5 space-y-4 ' + (inactive ? 'opacity-70' : '') + '"><div class="flex items-start gap-3">' + UI.avatar(i.name) + '<div class="min-w-0 flex-1"><div class="flex items-center gap-2 flex-wrap"><strong class="text-slate-900">' + esc(i.name) + '</strong>' + UI.pill(inactive ? 'Inactive' : 'Active', inactive ? 'muted' : 'good') + '</div><span class="block text-[11px] text-slate-500">' + esc(i.specialty || 'No specialty set') + '</span></div></div>' +
+            return '<article class="bg-white rounded-3xl border border-slate-200 shadow-sm p-5 space-y-4 ' + (inactive ? 'opacity-70' : '') + '"><div class="flex items-start gap-3">' + (i.photos && i.photos[0] ? '<img src="' + esc(i.photos[0]) + '" alt="" class="w-11 h-11 rounded-full object-cover shrink-0 border border-slate-200">' : UI.avatar(i.name)) + '<div class="min-w-0 flex-1"><div class="flex items-center gap-2 flex-wrap"><strong class="text-slate-900">' + esc(i.name) + '</strong>' + UI.pill(inactive ? 'Inactive' : 'Active', inactive ? 'muted' : 'good') + (i.showOnWebsite && !inactive ? UI.pill('On website', 'info') : '') + '</div><span class="block text-[11px] text-slate-500">' + esc(i.roleTitle || i.specialty || 'No title set') + '</span></div></div>' +
                 '<div class="text-[11px] text-slate-600 space-y-1"><div><i class="fa-solid fa-phone w-4 text-slate-400"></i> ' + esc(i.phone || '-') + '</div><div class="truncate"><i class="fa-solid fa-envelope w-4 text-slate-400"></i> ' + esc(i.email || '-') + '</div></div>' +
                 '<div class="rounded-xl bg-slate-50 p-3 flex items-center justify-between text-xs"><span class="text-slate-500">Sessions assigned</span><strong class="text-slate-900">' + n + ' <span class="font-normal text-slate-400">(' + upcomingWorkload(i.id) + ' upcoming)</span></strong></div>' +
                 '<div class="flex items-center gap-2 pt-3 border-t border-slate-100"><span class="flex gap-1.5 ml-auto">' + UI.iconBtn('fa-pen', 'Edit', "Schedule.editInstructor('" + i.id + "')") + UI.iconBtn(inactive ? 'fa-toggle-off' : 'fa-toggle-on', inactive ? 'Activate' : 'Deactivate', "Schedule.toggleInstructor('" + i.id + "')") + UI.iconBtn('fa-trash', 'Delete', "Schedule.removeInstructor('" + i.id + "')", true) + '</span></div></article>';
@@ -71,7 +71,20 @@
         $('body').innerHTML = tab === 'workshops' ? renderWorkshops() : tab === 'instructors' ? renderInstructors() : renderFixed();
     }
 
-    const instructorFields = i => [{ id: 'name', label: 'Full name', required: true, value: i && i.name }, { id: 'specialty', label: 'Specialty', value: i && i.specialty, placeholder: 'e.g. Espresso, latte art' }, { id: 'phone', label: 'Phone', type: 'tel', half: true, value: i && i.phone }, { id: 'email', label: 'Email', type: 'email', half: true, value: i && i.email }];
+    const instructorFields = i => [
+        { id: 'name', label: 'Full name', required: true, value: i && i.name },
+        { id: 'roleTitle', label: 'Title on the website', half: true, value: i && i.roleTitle, placeholder: 'e.g. Head Instructor' },
+        { id: 'specialty', label: 'Specialty', half: true, value: i && i.specialty, placeholder: 'e.g. Espresso, latte art' },
+        { id: 'bio', label: 'Short bio', type: 'textarea', rows: 3, value: i && i.bio, hint: 'Shown on the homepage under "Meet the team".' },
+        { id: 'photos', label: 'Photos', type: 'images', max: 3, value: (i && i.photos) || [], hint: 'Up to 3. The first is the main photo. Photos are shrunk automatically.' },
+        { id: 'phone', label: 'Phone', type: 'tel', half: true, value: i && i.phone },
+        { id: 'email', label: 'Email', type: 'email', half: true, value: i && i.email },
+        { id: 'showOnWebsite', label: 'Show on the homepage "Meet the team"', type: 'checkbox', value: i ? !!i.showOnWebsite : true }
+    ];
+    const saveInstructor = (id, v) => {
+        try { id ? D.instructors.update(id, v) : D.instructors.create(v); return true; }
+        catch (e) { S.toast('Could not save: the photos are too large for browser storage. Try fewer or smaller photos.'); return false; }
+    };
 
     window.Schedule = {
         render, setTab(t) { tab = t; render(); }, toggleBooked(v) { onlyBooked = v; render(); },
@@ -95,8 +108,8 @@
             if (S.workshopSeats(x.workshopId, x.slot) > 0) { S.toast('People are enrolled in this session. Cancel their enrollments first.'); return; }
             if (await UI.confirm({ title: 'Remove this session?', message: x.slot, ok: 'Remove', danger: true })) { D.assign.set(D.assign.wsKey(x.workshopId, x.slot), ''); D.slots.removeExtra(id); S.toast('Session removed.'); render(); }
         },
-        async addInstructor() { const v = await UI.form({ title: 'Add an instructor', submit: 'Add instructor', fields: instructorFields() }); if (!v) return; D.instructors.create(v); S.toast(v.name + ' added.'); render(); },
-        async editInstructor(id) { const v = await UI.form({ title: 'Edit instructor', submit: 'Save changes', fields: instructorFields(D.instructors.get(id)) }); if (!v) return; D.instructors.update(id, v); S.toast('Instructor updated.'); render(); },
+        async addInstructor() { const v = await UI.form({ title: 'Add an instructor', submit: 'Add instructor', wide: true, fields: instructorFields() }); if (!v) return; if (saveInstructor(null, v)) { S.toast(v.name + ' added.'); render(); } },
+        async editInstructor(id) { const v = await UI.form({ title: 'Edit instructor', submit: 'Save changes', wide: true, fields: instructorFields(D.instructors.get(id)) }); if (!v) return; if (saveInstructor(id, v)) { S.toast('Instructor updated.'); render(); } },
         toggleInstructor(id) { const i = D.instructors.get(id), next = i.status === 'inactive' ? 'active' : 'inactive'; D.instructors.update(id, { status: next }); S.toast(i.name + (next === 'active' ? ' activated.' : ' deactivated. Existing assignments stay.')); render(); },
         async removeInstructor(id) {
             const i = D.instructors.get(id), n = D.instructors.assignedCount(id);
