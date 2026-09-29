@@ -339,7 +339,7 @@
         let wishlist = [];
 
         document.addEventListener('DOMContentLoaded', () => {
-            const user = JSON.parse(localStorage.getItem('rp_user') || localStorage.getItem('rp_logged_user') || '{}');
+            const user = JSON.parse(localStorage.getItem('rp_logged_user') || '{}');
             if (user && user.name) {
                 document.getElementById('card-member-name').innerText = user.name;
                 const nameInput = document.getElementById('input-profile-name');
@@ -352,7 +352,6 @@
         });
 
         function logoutUser() {
-            localStorage.removeItem('rp_user');
             localStorage.removeItem('rp_logged_user');
             window.location.href = 'auth.html';
         }
@@ -390,7 +389,7 @@
                 return;
             }
             
-            let userStr = localStorage.getItem('rp_user') || localStorage.getItem('rp_logged_user');
+            let userStr = localStorage.getItem('rp_logged_user');
             let userData = userStr ? JSON.parse(userStr) : {};
             userData.name = name;
             userData.email = email;

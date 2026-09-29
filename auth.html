@@ -260,51 +260,62 @@
             document.getElementById('auth-alert').classList.add('hidden'); 
         } 
 
-        function handleRegister(e) { 
-            e.preventDefault(); 
-            const name = document.getElementById('reg-name').value.trim(); 
-            const email = document.getElementById('reg-email').value.trim(); 
-            const password = document.getElementById('reg-password').value.trim(); 
+        // Where to go after login/register. Only same-site relative pages are allowed.
+        function getNextUrl() {
+            const next = new URLSearchParams(window.location.search).get('next') || '';
+            return /^[a-z0-9_-]+.html(#[w-]*)?$/i.test(next) ? next : 'dashboard.html';
+        }
 
-            if (!name || !email || !password) { 
-                showAlert('Please fill in all registration fields.'); 
-                return; 
-            } 
+        // Already signed in? Skip the form.
+        if (localStorage.getItem('rp_logged_user')) {
+            window.location.replace(getNextUrl());
+        }
 
-            const userData = { name, email, password }; 
-            localStorage.setItem('rp_user', JSON.stringify(userData)); 
-            showAlert('Registration successful! You can now log in.', false); 
+        // Coming from a protected action (e.g. class registration): explain why.
+        if (new URLSearchParams(window.location.search).get('next')) {
+            showAlert('Please log in or create an account first to continue.', false);
+        }
 
-            setTimeout(() => { 
-                switchTab('login'); 
-                document.getElementById('login-email').value = email; 
-            }, 1500); 
-        } 
+        function handleRegister(e) {
+            e.preventDefault();
+            const name = document.getElementById('reg-name').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
+            const password = document.getElementById('reg-password').value.trim();
 
-        function handleLogin(e) { 
-            e.preventDefault(); 
-            const email = document.getElementById('login-email').value.trim(); 
-            const password = document.getElementById('login-password').value.trim(); 
+            if (!name || !email || !password) {
+                showAlert('Please fill in all registration fields.');
+                return;
+            }
 
-            const savedUser = JSON.parse(localStorage.getItem('rp_user')); 
+            // rp_user = the account record, rp_logged_user = the active session.
+            const userData = { name, email, password };
+            localStorage.setItem('rp_user', JSON.stringify(userData));
+            localStorage.setItem('rp_logged_user', JSON.stringify(userData));
+            showAlert('Account created! Redirecting...', false);
+            setTimeout(() => { window.location.href = getNextUrl(); }, 1000);
+        }
 
-            if (savedUser && savedUser.email === email && savedUser.password === password) { 
-                localStorage.setItem('rp_logged_user', JSON.stringify(savedUser)); 
-                showAlert('Login successful! Redirecting to dashboard...', false); 
-                setTimeout(() => { 
-                    window.location.href = 'dashboard.html'; 
-                }, 1000); 
-            } else { 
-                if (!savedUser && email === 'member@nbca.academy' && password === '123456') { 
-                    const demoUser = { name: 'Nana Zailani', email: email }; 
-                    localStorage.setItem('rp_user', JSON.stringify(demoUser)); 
-                    localStorage.setItem('rp_logged_user', JSON.stringify(demoUser)); 
-                    window.location.href = 'dashboard.html'; 
-                } else { 
-                    showAlert('Invalid email or password. Please check your details or register an account.'); 
-                } 
-            } 
-        } 
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value.trim();
+
+            let savedUser = null;
+            try { savedUser = JSON.parse(localStorage.getItem('rp_user')); } catch (err) {}
+
+            if (savedUser && savedUser.email === email && savedUser.password === password) {
+                localStorage.setItem('rp_logged_user', JSON.stringify(savedUser));
+            } else if (!savedUser && email === 'member@nbca.academy' && password === '123456') {
+                const demoUser = { name: 'Nana Zailani', email: email };
+                localStorage.setItem('rp_user', JSON.stringify(demoUser));
+                localStorage.setItem('rp_logged_user', JSON.stringify(demoUser));
+            } else {
+                showAlert('Invalid email or password. Please check your details or register an account.');
+                return;
+            }
+            showAlert('Login successful! Redirecting...', false);
+            setTimeout(() => { window.location.href = getNextUrl(); }, 800);
+        }
     </script> 
 </body> 
 </html>

@@ -62,7 +62,7 @@
     <nav class="fixed top-0 left-0 right-0 z-50 bg-roast-50/90 backdrop-blur-md border-b border-roast-100 transition-all duration-300" id="navbar">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
-                <a href="index.html" class="flex items-center gap-3 group">
+                <a href="dashboard.html" class="flex items-center gap-3 group">
                     <img src="images/logo.png" alt="Nb.CA Academy Logo" class="w-12 h-12 object-contain group-hover:scale-105 transition-transform">
                     <div class="flex flex-col">
                         <span class="font-serif text-xl font-extrabold tracking-wider text-roast-950 uppercase">Nb.CA Academy</span>
@@ -71,7 +71,7 @@
                 </a>
 
                 <div class="hidden md:flex items-center space-x-8 text-sm font-medium">
-                    <a href="index.html" class="text-amberGold font-bold hover:underline transition-colors">Home</a>
+                    <a href="dashboard.html" class="text-amberGold font-bold hover:underline transition-colors">Home</a>
                     <a href="orders.html" class="text-roast-800 hover:text-amberGold transition-colors"><i class="fa-solid fa-box-open me-1"></i> My Orders</a>
                 </div>
 
@@ -104,7 +104,7 @@
     <!-- BOTTOM NAVIGATION (Mobile & Tablet only) -->
     <!-- ============================================================ -->
     <nav id="bottom-nav" class="md:hidden fixed bottom-0 inset-x-0 z-50 bg-roast-50 border-t border-roast-100 flex items-stretch justify-around shadow-[0_-8px_24px_rgba(0,0,0,0.35)]" style="padding-bottom: env(safe-area-inset-bottom);">
-        <a href="index.html" class="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-amberGold transition-all">
+        <a href="dashboard.html" class="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-amberGold transition-all">
             <i class="fa-solid fa-house text-base"></i>
             <span class="text-[10px] font-bold">Home</span>
         </a>
@@ -320,7 +320,7 @@
         let wishlist = [];
 
         document.addEventListener('DOMContentLoaded', () => {
-            const user = localStorage.getItem('rp_user') || localStorage.getItem('rp_logged_user');
+            const user = localStorage.getItem('rp_logged_user');
             if (!user) {
                 window.location.href = 'auth.html';
                 return;
@@ -345,7 +345,7 @@
             const card = document.getElementById('fixed-class-glance-card');
             if (!card) return;
 
-            const userData = JSON.parse(localStorage.getItem('rp_user') || localStorage.getItem('rp_logged_user') || '{}');
+            const userData = JSON.parse(localStorage.getItem('rp_logged_user') || '{}');
             const userEmail = (userData.email || '').toLowerCase();
 
             let allStudents = [];
@@ -355,7 +355,7 @@
                 allStudents = [];
             }
 
-            const myRegistration = allStudents.find(s => (s.email || '').toLowerCase() === userEmail);
+            const myRegistration = allStudents.filter(s => (s.email || '').toLowerCase() === userEmail).pop();
 
             if (!myRegistration) {
                 card.innerHTML = `
@@ -389,7 +389,7 @@
                         <span class="px-2.5 py-1 ${statusClass} text-[10px] font-bold rounded-full">Deposit ${myRegistration.depositStatus}</span>
                     </div>
                     <div>
-                        <h3 class="text-base font-bold text-roast-950 font-serif">Fixed Class Booked</h3>
+                        <h3 class="text-base font-bold text-roast-950 font-serif">Fixed Class ${myRegistration.classStatus === 'Admitted' ? 'Confirmed' : myRegistration.classStatus === 'Reschedule' ? '— Reschedule Needed' : 'Awaiting Confirmation'}</h3>
                         <p class="text-xs text-roast-600 mt-0.5">${myRegistration.preferredDate} · ${myRegistration.session}</p>
                     </div>
                 </div>
@@ -400,7 +400,6 @@
         }
 
         function logoutUser() {
-            localStorage.removeItem('rp_user');
             localStorage.removeItem('rp_logged_user');
             window.location.href = 'auth.html';
         }
@@ -422,7 +421,7 @@
                 return;
             }
             
-            let userStr = localStorage.getItem('rp_user') || localStorage.getItem('rp_logged_user');
+            let userStr = localStorage.getItem('rp_logged_user');
             let userData = userStr ? JSON.parse(userStr) : {};
             userData.name = name;
             userData.email = email;

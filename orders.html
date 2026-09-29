@@ -492,7 +492,7 @@
         let wishlist = [];
 
         document.addEventListener('DOMContentLoaded', () => { 
-            const user = localStorage.getItem('rp_user') || localStorage.getItem('rp_logged_user'); 
+            const user = localStorage.getItem('rp_logged_user'); 
             if (!user) { 
                 window.location.href = 'auth.html'; 
                 return; 
@@ -509,7 +509,7 @@
             const container = document.getElementById('fixed-class-registrations-container');
             if (!container) return;
 
-            const userData = JSON.parse(localStorage.getItem('rp_user') || localStorage.getItem('rp_logged_user') || '{}');
+            const userData = JSON.parse(localStorage.getItem('rp_logged_user') || '{}');
             const userEmail = (userData.email || '').toLowerCase();
 
             let allStudents = [];
@@ -542,6 +542,7 @@
                     <div class="space-y-2">
                         <div class="flex justify-between items-center">
                             <span class="px-3 py-1 ${statusClass} text-[10px] font-bold rounded-full uppercase tracking-wider">Deposit ${reg.depositStatus}</span>
+                            <span class="px-3 py-1 ${reg.classStatus === 'Admitted' ? 'bg-green-500/10 text-green-600' : reg.classStatus === 'Reschedule' ? 'bg-red-500/10 text-red-600' : 'bg-blue-500/10 text-blue-600'} text-[10px] font-bold rounded-full uppercase tracking-wider">${reg.classStatus === 'Reschedule' ? 'Reschedule Needed' : (reg.classStatus || 'Pending Confirmation')}</span>
                             <span class="text-xs font-bold text-amberGold">RM ${Number(reg.classFee).toFixed(2)}</span>
                         </div>
                         <h3 class="font-serif text-xl font-bold text-roast-950">Coffee Fundamentals — Daily Class</h3>
@@ -557,8 +558,7 @@
             }).join('') + `</div>`;
         }
 
-        function logoutUser() { 
-            localStorage.removeItem('rp_user'); 
+        function logoutUser() {
             localStorage.removeItem('rp_logged_user'); 
             window.location.href = 'auth.html'; 
         } 
@@ -602,7 +602,7 @@
             const data = workshopTicketsData[ticketId];
             if (!data) return;
 
-            const userData = JSON.parse(localStorage.getItem('rp_user') || localStorage.getItem('rp_logged_user') || '{}');
+            const userData = JSON.parse(localStorage.getItem('rp_logged_user') || '{}');
             const attendeeName = userData.name || 'Guest';
 
             document.getElementById('et-class-name').innerText = data.className;
@@ -624,7 +624,7 @@
         }
 
         function openProfileModal() {
-            const user = JSON.parse(localStorage.getItem('rp_user') || localStorage.getItem('rp_logged_user') || '{}');
+            const user = JSON.parse(localStorage.getItem('rp_logged_user') || '{}');
             document.getElementById('profile-name-input').value = user.name || '';
             document.getElementById('profile-email-input').value = user.email || '';
             document.getElementById('profile-password-input').value = '';
@@ -641,7 +641,7 @@
             const newEmail = document.getElementById('profile-email-input').value;
             const newPassword = document.getElementById('profile-password-input').value;
 
-            const userData = JSON.parse(localStorage.getItem('rp_user') || localStorage.getItem('rp_logged_user') || '{}');
+            const userData = JSON.parse(localStorage.getItem('rp_logged_user') || '{}');
             userData.name = newName;
             userData.email = newEmail;
             if (newPassword) {

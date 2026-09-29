@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Command Center | Nb.CA Academy</title>
     <!-- Tailwind CSS CDN -->
+    <script>if (!localStorage.getItem('rp_admin')) { window.location.replace('admin-login.html'); }</script>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -713,7 +714,7 @@
                                 </div>
                                 <div>
                                     <label class="block font-semibold text-roast-300 uppercase mb-1">Afternoon Session</label>
-                                    <input type="text" id="fcs-afternoon" required placeholder="2:00 PM – 5:00 PM" oninput="updateFixedClassPreview()" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                                    <input type="text" id="fcs-afternoon" required placeholder="2:00 PM – 4:00 PM" oninput="updateFixedClassPreview()" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
                                 </div>
                             </div>
                             <div>
@@ -769,7 +770,7 @@
                                     </div>
                                     <div class="space-y-1.5 text-[11px] text-roast-600">
                                         <div class="flex items-center gap-2"><i class="fa-solid fa-clock text-amberGold w-3.5"></i> <span id="fcs-preview-morning">10:00 AM – 12:00 PM</span></div>
-                                        <div class="flex items-center gap-2"><i class="fa-solid fa-clock text-amberGold w-3.5"></i> <span id="fcs-preview-afternoon">2:00 PM – 5:00 PM</span></div>
+                                        <div class="flex items-center gap-2"><i class="fa-solid fa-clock text-amberGold w-3.5"></i> <span id="fcs-preview-afternoon">2:00 PM – 4:00 PM</span></div>
                                         <div class="flex items-center gap-2"><i class="fa-solid fa-calendar-xmark text-amberGold w-3.5"></i> Closed <span id="fcs-preview-closed-day">Friday</span></div>
                                     </div>
                                     <div class="flex items-center justify-between py-2.5 border-y border-adminBorder">
@@ -1530,7 +1531,7 @@
             description: 'Hands-on brewing basics for beginners, run every operating day.',
             image: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=800&q=80',
             morningSession: '10:00 AM – 12:00 PM',
-            afternoonSession: '2:00 PM – 5:00 PM',
+            afternoonSession: '2:00 PM – 4:00 PM',
             closedDay: 5,
             fee: 150.00,
             depositPct: 50
@@ -1587,7 +1588,7 @@
             const description = document.getElementById('fcs-description').value || 'Hands-on brewing basics for beginners.';
             const image = document.getElementById('fcs-image').value;
             const morning = document.getElementById('fcs-morning').value || '10:00 AM – 12:00 PM';
-            const afternoon = document.getElementById('fcs-afternoon').value || '2:00 PM – 5:00 PM';
+            const afternoon = document.getElementById('fcs-afternoon').value || '2:00 PM – 4:00 PM';
             const closedDay = FCS_DAY_NAMES[parseInt(document.getElementById('fcs-closed-day').value)] || 'Friday';
             const fee = parseFloat(document.getElementById('fcs-fee').value) || 0;
             const pct = parseFloat(document.getElementById('fcs-deposit-pct').value) || 0;
@@ -1816,13 +1817,14 @@
                             <div class="w-11 h-11 rounded-full bg-blue-500/15 text-blue-600 font-bold flex items-center justify-center font-serif shrink-0">${initials}</div>
                             <div class="space-y-1">
                                 <div class="flex items-center gap-2 flex-wrap">
-                                    <strong class="student-name text-roast-950 text-sm">${s.name}</strong>
+                                    <strong class="student-name text-roast-950 text-sm">${adminEsc(s.name)}</strong>
                                     <span class="px-2 py-0.5 ${statusClass} text-[10px] font-bold rounded-full uppercase">Deposit ${s.depositStatus}</span>
+                                    <span class="px-2 py-0.5 ${classBadge(s.classStatus)} text-[10px] font-bold rounded-full uppercase">${s.classStatus || "Pending Confirmation"}</span>
                                 </div>
                                 <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-roast-400">
-                                    <span><i class="fa-solid fa-envelope mr-1 text-roast-500"></i>${s.email}</span>
-                                    <span><i class="fa-solid fa-phone mr-1 text-roast-500"></i>${s.phone}</span>
-                                    <span><i class="fa-solid fa-id-card mr-1 text-roast-500"></i>${s.ic}</span>
+                                    <span><i class="fa-solid fa-envelope mr-1 text-roast-500"></i>${adminEsc(s.email)}</span>
+                                    <span><i class="fa-solid fa-phone mr-1 text-roast-500"></i>${adminEsc(s.phone)}</span>
+                                    <span><i class="fa-solid fa-location-dot mr-1 text-roast-500"></i>${adminEsc(s.from || "-")}</span>${s.cafe ? `<span><i class="fa-solid fa-mug-hot mr-1 text-roast-500"></i>${adminEsc(s.cafe)}</span>` : ""}
                                 </div>
                                 <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-roast-400">
                                     <span><i class="fa-solid fa-calendar-day mr-1 text-roast-500"></i>${s.preferredDate} — ${s.session}</span>
@@ -1831,10 +1833,45 @@
                         </div>
                         <div class="flex items-center justify-between sm:justify-end gap-4 pl-14 sm:pl-0">
                             <span class="text-amberGold font-bold text-sm font-serif whitespace-nowrap">RM ${Number(s.deposit).toFixed(2)}</span>
-                            <button onclick="toggleDepositStatus('${s.id}')" class="px-4 py-2 bg-adminBg text-roast-100 font-bold rounded-xl border border-adminBorder text-xs hover:bg-adminCardHover whitespace-nowrap">Mark ${isPaid ? 'Pending' : 'Paid'}</button>
+                            <div class="flex flex-wrap gap-2 justify-end">
+                                <button onclick="admitStudent('${s.id}')" class="px-3 py-2 bg-green-600 text-white font-bold rounded-xl text-xs hover:opacity-90 whitespace-nowrap">Admit</button>
+                                <button onclick="rescheduleStudent('${s.id}')" class="px-3 py-2 bg-adminBg text-roast-100 font-bold rounded-xl border border-adminBorder text-xs hover:bg-adminCardHover whitespace-nowrap">Reschedule</button>
+                                <button onclick="toggleDepositStatus('${s.id}')" class="px-3 py-2 bg-adminBg text-roast-100 font-bold rounded-xl border border-adminBorder text-xs hover:bg-adminCardHover whitespace-nowrap">Mark ${isPaid ? 'Pending' : 'Paid'}</button>
+                            </div>
                         </div>
                     </div>`;
                 }).join('') + `</div>`;
+        }
+
+        function adminEsc(v) {
+            return String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        }
+
+        function classBadge(status) {
+            if (status === 'Admitted') return 'bg-green-500/15 text-green-600';
+            if (status === 'Reschedule') return 'bg-red-500/15 text-red-600';
+            return 'bg-blue-500/15 text-blue-600';
+        }
+
+        // Admin confirms the payment and admits the student into the class.
+        function admitStudent(id) {
+            const students = loadFixedClassStudents().map(s => s.id === id ? { ...s, depositStatus: 'Paid', classStatus: 'Admitted' } : s);
+            saveFixedClassStudents(students);
+            renderStudentsList();
+            showAdminToast('Student admitted to class.');
+        }
+
+        // Flags the booking as needing a new date and opens WhatsApp to the client. Frees the seat.
+        function rescheduleStudent(id) {
+            const students = loadFixedClassStudents();
+            const s = students.find(x => x.id === id);
+            if (!s) return;
+            saveFixedClassStudents(students.map(x => x.id === id ? { ...x, classStatus: 'Reschedule' } : x));
+            renderStudentsList();
+            const phone = String(s.phone || '').replace(/[^0-9]/g, '').replace(/^0/, '60');
+            const msg = 'Hi ' + s.name + ', regarding your Nb.CA Academy class on ' + s.preferredDate + ' (' + s.session + '): we need to reschedule. Which other date works for you?';
+            if (phone) window.open('https://wa.me/' + phone + '?text=' + encodeURIComponent(msg), '_blank');
+            showAdminToast('Marked for reschedule.');
         }
 
         function toggleDepositStatus(id) {
@@ -2783,7 +2820,8 @@
         }
 
         function logoutAdmin() {
-            window.location.href = 'auth.html';
+            localStorage.removeItem('rp_admin');
+            window.location.href = 'admin-login.html';
         }
 
         function openPointsModal(name, pts) {
