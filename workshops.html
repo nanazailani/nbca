@@ -70,6 +70,7 @@
     </div>
 
     <script src="js/catalog.js"></script>
+    <script src="js/billplz.js"></script>
     <script src="js/member-shell.js"></script>
     <script>
 
@@ -107,31 +108,30 @@
                     '<div class="space-y-2"><p class="text-[11px] font-bold uppercase text-roast-500">Mode</p><div class="flex flex-wrap gap-2">' + modes + '</div><p class="text-[11px] text-roast-500">' + esc(w.modes[curMode].note) + '</p></div>' +
                     '<div class="space-y-2"><p class="text-[11px] font-bold uppercase text-roast-500">Choose a slot</p><div class="grid sm:grid-cols-2 gap-2">' + slots + '</div></div>' +
                     '<div class="flex items-center justify-between pt-4 border-t border-roast-100"><div><span class="block text-[10px] uppercase text-roast-500">Fee</span><strong class="font-serif text-2xl text-amberGold">RM ' + w.price.toFixed(2) + '</strong></div>' +
-                    '<button onclick="enroll()" ' + (curSlot ? '' : 'disabled') + ' class="px-6 py-3 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl text-xs shadow-lg disabled:opacity-40 disabled:cursor-not-allowed">Enroll this slot</button></div>' +
+                    '<button onclick="enroll()" ' + (curSlot ? '' : 'disabled') + ' class="px-6 py-3 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl text-xs shadow-lg disabled:opacity-40 disabled:cursor-not-allowed">Enroll &amp; pay with Billplz</button></div>' +
                 '</div></div>';
         }
         function pickMode(k) { curMode = k; curSlot = null; renderModal(); }
         function pickSlot(i) { curSlot = cur.slots[curMode][i]; renderModal(); }
 
-        // NOTE: no payment gateway is connected yet; the enrolment is recorded as awaiting payment verification.
+        // Creates the enrolment as "Pending Payment", then sends the member to Billplz. Paid = Confirmed.
         function enroll() {
             if (!curSlot) return;
             const u = MemberShell.user() || {};
             const all = (() => { try { return JSON.parse(localStorage.getItem('rp_workshop_enrollments') || '[]'); } catch (e) { return []; } })();
-            if (all.some(x => (x.email || '').toLowerCase() === (u.email || '').toLowerCase() && x.workshopId === cur.id && x.slot === curSlot)) {
-                showToast('You are already enrolled in this slot.');
+            if (all.some(x => (x.email || '').toLowerCase() === (u.email || '').toLowerCase() && x.workshopId === cur.id && x.slot === curSlot && x.status !== 'Cancelled')) {
+                showToast('You already have this slot. Check My Classes.');
                 return;
             }
-            all.push({
+            const rec = {
                 id: 'WS-' + Date.now(), ref: 'RP-WS-' + String(Date.now()).slice(-6),
                 email: u.email, name: u.name, workshopId: cur.id, title: cur.title,
                 mode: curMode, modeLabel: cur.modes[curMode].label, location: cur.modes[curMode].location,
-                slot: curSlot, price: cur.price, status: 'Awaiting Payment Verification', createdAt: new Date().toISOString()
-            });
+                slot: curSlot, price: cur.price, status: 'Pending Payment', paymentStatus: 'Unpaid', createdAt: new Date().toISOString()
+            };
+            all.push(rec);
             localStorage.setItem('rp_workshop_enrollments', JSON.stringify(all));
-            closeWorkshop();
-            showToast('Enrolled! Your ticket is in My Classes.');
-            setTimeout(() => { window.location.href = 'classes.html'; }, 1200);
+            NBCA_PAY.checkout({ type: 'workshop', refId: rec.id, amount: rec.price, description: rec.title + ' - Nb.CA Academy', name: rec.name, email: rec.email, phone: MemberShell.getProfile().phone, returnTo: 'classes.html' });
         }
         renderGrid();
 

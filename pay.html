@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment (Demo) | Nb.CA Academy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { theme: { extend: { colors: { roast: { 50: '#F8FAFC', 100: '#F1F5F9', 200: '#E2E8F0', 300: '#CBD5E1', 400: '#94A3B8', 500: '#64748B', 600: '#475569', 700: '#334155', 950: '#172554' }, amberGold: '#2563EB', royalBlue: '#1E40AF' }, fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] } } } }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>body { font-family: 'Plus Jakarta Sans', sans-serif; }</style>
+</head>
+<body class="bg-roast-100 min-h-screen antialiased">
+    <!-- Demo banner: this page stands in for the hosted Billplz payment page -->
+    <div class="bg-amber-400 text-amber-950 text-center text-[11px] font-bold py-2 px-4">
+        <i class="fa-solid fa-flask mr-1"></i> DEMO MODE &mdash; simulates the Billplz hosted payment page. No real payment is made.
+    </div>
+
+    <main class="max-w-lg mx-auto px-4 py-8 sm:py-12 space-y-5">
+        <div id="missing" class="hidden bg-white rounded-3xl border border-roast-200 p-8 text-center space-y-3">
+            <p class="font-bold text-roast-950">This payment link is not valid.</p>
+            <a href="dashboard.html" class="inline-block px-5 py-2.5 bg-amberGold text-white text-xs font-bold rounded-full">Back to my account</a>
+        </div>
+
+        <div id="pay-ui" class="hidden space-y-5">
+            <div class="bg-white rounded-3xl border border-roast-200 shadow-sm p-6 space-y-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3"><img src="images/logo.png" alt="" class="w-10 h-10 object-contain"><div><p class="text-sm font-extrabold text-roast-950">Nb.CA Academy</p><p id="desc" class="text-[11px] text-roast-500"></p></div></div>
+                    <span class="text-[10px] font-bold text-roast-500 border border-roast-200 rounded-full px-2.5 py-1">Billplz (demo)</span>
+                </div>
+                <div class="rounded-2xl bg-roast-50 border border-roast-200 p-4 flex items-end justify-between">
+                    <div><p class="text-[10px] uppercase tracking-wider text-roast-500">Amount to pay</p><p id="amount" class="text-3xl font-extrabold text-roast-950"></p></div>
+                    <p class="text-[11px] text-roast-500">Bill <span id="bill-id" class="font-mono font-bold text-roast-700"></span></p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-3xl border border-roast-200 shadow-sm p-6 space-y-4">
+                <p class="text-xs font-bold uppercase tracking-wider text-roast-700">Choose payment method</p>
+                <div class="grid grid-cols-3 gap-2 text-[11px] font-bold" id="method-tabs">
+                    <button data-m="fpx" class="py-2.5 rounded-xl border">Online Banking (FPX)</button>
+                    <button data-m="ewallet" class="py-2.5 rounded-xl border">e-Wallet</button>
+                    <button data-m="card" class="py-2.5 rounded-xl border">Card</button>
+                </div>
+                <div id="method-body" class="space-y-2 text-xs"></div>
+
+                <div class="rounded-xl border border-dashed border-amber-400 bg-amber-50 p-3 space-y-2">
+                    <p class="text-[10px] font-extrabold uppercase tracking-wider text-amber-800">Demo: choose the outcome</p>
+                    <div class="grid grid-cols-2 gap-2 text-[11px] font-bold" id="outcome">
+                        <button data-o="success" class="py-2 rounded-lg border">Payment succeeds</button>
+                        <button data-o="fail" class="py-2 rounded-lg border">Payment fails</button>
+                    </div>
+                </div>
+
+                <button id="pay-btn" class="w-full py-3.5 bg-amberGold hover:bg-royalBlue text-white font-extrabold rounded-xl text-sm shadow-lg transition-all"></button>
+                <button id="cancel-btn" class="w-full text-xs text-roast-500 hover:text-roast-950">Cancel and go back</button>
+            </div>
+        </div>
+
+        <div id="processing" class="hidden bg-white rounded-3xl border border-roast-200 shadow-sm p-10 text-center space-y-4">
+            <div id="proc-icon" class="w-16 h-16 rounded-full bg-blue-50 text-amberGold flex items-center justify-center mx-auto text-2xl"><i class="fa-solid fa-circle-notch fa-spin"></i></div>
+            <p id="proc-title" class="text-lg font-extrabold text-roast-950">Processing payment&hellip;</p>
+            <p id="proc-sub" class="text-xs text-roast-500">Please do not close this page.</p>
+        </div>
+    </main>
+
+    <script src="js/billplz.js"></script>
+    <script>
+        // members only, like the rest of the portal
+        if (!localStorage.getItem('rp_logged_user')) location.replace('auth.html');
+
+        const bill = NBCA_PAY.getBill(new URLSearchParams(location.search).get('bill'));
+        const $ = id => document.getElementById(id);
+        let method = 'fpx', outcome = 'success', selected = 0;
+
+        const METHODS = {
+            fpx: ['Maybank2u', 'CIMB Clicks', 'Public Bank', 'RHB Now', 'Hong Leong Connect', 'AmOnline'],
+            ewallet: ["Touch 'n Go eWallet", 'GrabPay', 'Boost'],
+            card: ['Visa / Mastercard']
+        };
+        const RM = c => 'RM ' + (c / 100).toFixed(2);
+
+        function paintTabs() {
+            document.querySelectorAll('#method-tabs button').forEach(b => {
+                const on = b.dataset.m === method;
+                b.className = 'py-2.5 rounded-xl border transition-all ' + (on ? 'bg-amberGold text-white border-amberGold' : 'bg-white text-roast-700 border-roast-200 hover:border-amberGold');
+            });
+            document.querySelectorAll('#outcome button').forEach(b => {
+                const on = b.dataset.o === outcome;
+                b.className = 'py-2 rounded-lg border transition-all ' + (on ? (outcome === 'success' ? 'bg-emerald-500 text-white border-emerald-500' : 'bg-red-500 text-white border-red-500') : 'bg-white text-roast-700 border-roast-200');
+            });
+            $('method-body').innerHTML = METHODS[method].map((n, i) =>
+                '<label class="flex items-center gap-3 p-3 rounded-xl border cursor-pointer ' + (i === selected ? 'border-amberGold bg-blue-50' : 'border-roast-200 hover:border-amberGold') + '">' +
+                '<input type="radio" name="opt" ' + (i === selected ? 'checked' : '') + ' onchange="selected=' + i + ';paintTabs()" class="accent-blue-600"><span class="font-semibold text-roast-800">' + n + '</span></label>').join('') +
+                (method === 'card' ? '<p class="text-[10px] text-roast-500 pt-1">Demo only &mdash; no card details are collected.</p>' : '');
+        }
+
+        if (!bill) {
+            $('missing').classList.remove('hidden');
+        } else if (bill.paid) {
+            NBCA_PAY.redirectBack(bill);
+        } else {
+            $('pay-ui').classList.remove('hidden');
+            $('desc').innerText = bill.description;
+            $('amount').innerText = RM(bill.amount);
+            $('bill-id').innerText = '#' + bill.id;
+            $('pay-btn').innerText = 'Pay ' + RM(bill.amount);
+            document.querySelectorAll('#method-tabs button').forEach(b => b.onclick = () => { method = b.dataset.m; selected = 0; paintTabs(); });
+            document.querySelectorAll('#outcome button').forEach(b => b.onclick = () => { outcome = b.dataset.o; paintTabs(); });
+            paintTabs();
+
+            $('pay-btn').onclick = () => {
+                $('pay-ui').classList.add('hidden');
+                $('processing').classList.remove('hidden');
+                setTimeout(() => {
+                    const paid = outcome === 'success';
+                    const done = NBCA_PAY.settle(bill.id, paid);
+                    $('proc-icon').className = 'w-16 h-16 rounded-full flex items-center justify-center mx-auto text-2xl ' + (paid ? 'bg-emerald-100 text-emerald-600' : 'bg-red-100 text-red-600');
+                    $('proc-icon').innerHTML = '<i class="fa-solid ' + (paid ? 'fa-check' : 'fa-xmark') + '"></i>';
+                    $('proc-title').innerText = paid ? 'Payment successful' : 'Payment failed';
+                    $('proc-sub').innerText = 'Taking you back to Nb.CA Academy…';
+                    setTimeout(() => NBCA_PAY.redirectBack(done), 1400);
+                }, 1600);
+            };
+            $('cancel-btn').onclick = () => NBCA_PAY.redirectBack(bill);   // paid=false
+        }
+    </script>
+</body>
+</html>

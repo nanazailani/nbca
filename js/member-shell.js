@@ -1,5 +1,5 @@
 /* Nb.CA Academy — shared member portal shell.
- * Injects the sidebar, mobile drawer, topbar, bottom nav, profile modal and toast into every member page.
+ * Injects the sidebar, mobile drawer, topbar, bottom nav, basket/checkout drawer and toast into every member page.
  * Page markup needs: <body data-page="dashboard" data-title="..." data-sub="...">, #m-sidebar, #m-overlay, #m-topbar, #m-bottomnav.
  * Session = localStorage.rp_logged_user, account record = rp_user (see auth.html). */
 (function () {
@@ -11,7 +11,8 @@
             { id: 'dashboard', label: 'Dashboard', icon: 'fa-house', href: 'dashboard.html' },
             { id: 'classes', label: 'My Classes', icon: 'fa-graduation-cap', href: 'classes.html', badge: 'classes' },
             { id: 'orders', label: 'My Orders', icon: 'fa-box-open', href: 'orders.html' },
-            { id: 'membership', label: 'Membership', icon: 'fa-crown', href: 'membership.html', pill: SAMPLE_POINTS + ' pts' }
+            { id: 'membership', label: 'Membership', icon: 'fa-crown', href: 'membership.html', pill: SAMPLE_POINTS + ' pts' },
+            { id: 'profile', label: 'My Profile', icon: 'fa-user', href: 'profile.html' }
         ]},
         { group: 'Discover', items: [
             { id: 'fixed', label: 'Fixed Classes', icon: 'fa-calendar-days', href: 'book-class.html' },
@@ -131,26 +132,12 @@
                 '<i class="fa-solid ' + t[2] + ' text-base"></i><span class="text-[10px] font-bold">' + t[1] + '</span>' +
                 (on ? '<span class="absolute top-0 w-8 h-0.5 rounded-full bg-amberGold"></span>' : '') + '</a>';
         }).join('') +
-        '<button onclick="openProfileModal()" class="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-roast-500"><i class="fa-solid fa-user text-base"></i><span class="text-[10px] font-bold">Profile</span></button>';
+        '<a href="profile.html" class="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 ' + (page === 'profile' ? 'text-amberGold' : 'text-roast-500') + '"><i class="fa-solid fa-user text-base"></i><span class="text-[10px] font-bold">Profile</span></a>';
     }
 
     function injectOverlays() {
         const wrap = document.createElement('div');
         wrap.innerHTML =
-            '<div id="profile-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">' +
-                '<div class="bg-white border border-roast-200 rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl relative space-y-6">' +
-                    '<button onclick="closeProfileModal()" class="absolute top-5 right-5 text-roast-500 hover:text-roast-950 p-2" aria-label="Close"><i class="fa-solid fa-xmark text-lg"></i></button>' +
-                    '<div class="text-center space-y-1"><div class="w-16 h-16 rounded-full bg-amberGold text-white flex items-center justify-center mx-auto text-xl font-bold shadow" id="pm-avatar"></div>' +
-                    '<h3 class="text-xl font-bold font-serif text-roast-950 pt-2">Profile &amp; Security</h3><p class="text-xs text-roast-500">Update your account details.</p></div>' +
-                    '<form onsubmit="saveProfileChanges(event)" class="space-y-4 text-xs">' +
-                        '<div><label class="block font-semibold text-roast-700 uppercase mb-1">Full Name</label><input type="text" id="profile-name-input" required class="w-full bg-roast-50 border border-roast-200 text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold"></div>' +
-                        '<div><label class="block font-semibold text-roast-700 uppercase mb-1">Email Address</label><input type="email" id="profile-email-input" readonly class="w-full bg-roast-100 border border-roast-200 text-roast-600 rounded-xl px-4 py-3 cursor-not-allowed"><p class="text-[10px] text-roast-500 mt-1">Your email links your class registrations, so it can\'t be changed here.</p></div>' +
-                        '<div><label class="block font-semibold text-roast-700 uppercase mb-1">New Password <span class="normal-case font-normal text-roast-400">(leave blank to keep current)</span></label><input type="password" id="profile-password-input" placeholder="••••••••" class="w-full bg-roast-50 border border-roast-200 text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold"></div>' +
-                        '<div class="flex gap-3 pt-2"><button type="submit" class="flex-1 py-3 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl transition-all shadow-md">Save Changes</button>' +
-                        '<button type="button" onclick="closeProfileModal()" class="px-5 py-3 bg-roast-100 hover:bg-roast-200 text-roast-700 font-bold rounded-xl border border-roast-200">Cancel</button></div>' +
-                    '</form>' +
-                '</div>' +
-            '</div>' +
             '<div id="cart-drawer" class="fixed inset-0 z-50 hidden">' +
                 '<div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeCart()"></div>' +
                 '<div class="absolute right-0 top-0 bottom-0 w-full max-w-md bg-white shadow-2xl flex flex-col">' +
@@ -187,31 +174,9 @@
         window.location.href = 'index.html';
     };
 
-    window.openProfileModal = function () {
-        const cur = user() || {};
-        document.getElementById('pm-avatar').innerText = initials(cur.name);
-        document.getElementById('profile-name-input').value = cur.name || '';
-        document.getElementById('profile-email-input').value = cur.email || '';
-        document.getElementById('profile-password-input').value = '';
-        document.getElementById('profile-modal').classList.remove('hidden');
-    };
-
-    window.closeProfileModal = function () {
-        document.getElementById('profile-modal').classList.add('hidden');
-    };
-
-    window.saveProfileChanges = function (e) {
-        e.preventDefault();
-        const cur = user() || {};
-        cur.name = document.getElementById('profile-name-input').value.trim() || cur.name;
-        const pw = document.getElementById('profile-password-input').value;
-        if (pw) cur.password = pw;
-        localStorage.setItem('rp_user', JSON.stringify(cur));
-        localStorage.setItem('rp_logged_user', JSON.stringify(cur));
-        closeProfileModal();
-        showToast('Profile updated.');
-        setTimeout(() => location.reload(), 700);
-    };
+    // profile lives on its own page now
+    window.openProfileModal = function () { window.location.href = 'profile.html'; };
+    window.closeProfileModal = function () {};
 
     window.showToast = function (message) {
         const toast = document.getElementById('app-toast');
@@ -265,6 +230,53 @@
     window.openCart = function () { renderCart(); document.getElementById('cart-drawer').classList.remove('hidden'); };
     window.closeCart = function () { document.getElementById('cart-drawer').classList.add('hidden'); };
 
+    // ---- profile + address book (stored per member email, Shopee-style default address) ----
+    const STATES = ['Johor', 'Kedah', 'Kelantan', 'Melaka', 'Negeri Sembilan', 'Pahang', 'Perak', 'Perlis', 'Pulau Pinang', 'Sabah', 'Sarawak', 'Selangor', 'Terengganu', 'Kuala Lumpur', 'Labuan', 'Putrajaya'];
+    function allProfiles() { try { return JSON.parse(localStorage.getItem('rp_member_profiles') || '{}'); } catch (e) { return {}; } }
+    function profileKey() { return ((user() || {}).email || '').toLowerCase(); }
+    function getProfile() {
+        const p = allProfiles()[profileKey()] || {};
+        return { phone: p.phone || '', addresses: Array.isArray(p.addresses) ? p.addresses : [] };
+    }
+    function saveProfile(p) {
+        const all = allProfiles();
+        all[profileKey()] = p;
+        localStorage.setItem('rp_member_profiles', JSON.stringify(all));
+    }
+    function fmtAddress(a) {
+        return [a.line1, a.line2, (a.postcode + ' ' + a.city).trim(), a.state].filter(Boolean).join(', ');
+    }
+
+    // shared address form (used in the profile page and in checkout); p = id prefix
+    function addressFormHtml(p, a) {
+        a = a || {};
+        const inp = (id, label, val, extra) => '<div><label class="block font-semibold text-roast-600 uppercase mb-1">' + label + '</label><input id="' + p + '-' + id + '" value="' + esc(val || '') + '" ' + (extra || '') + ' class="w-full bg-roast-50 border border-roast-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-amberGold"></div>';
+        return '<div class="space-y-3 text-xs">' +
+            '<div class="grid sm:grid-cols-2 gap-3">' + inp('name', 'Full name *', a.name || (user() || {}).name) + inp('phone', 'Phone *', a.phone || getProfile().phone, 'type="tel"') + '</div>' +
+            inp('line1', 'Address line 1 *', a.line1, 'placeholder="Unit / house no., street"') +
+            inp('line2', 'Address line 2 <span class="normal-case font-normal text-roast-400">(optional)</span>', a.line2, 'placeholder="Taman, building"') +
+            '<div class="grid grid-cols-3 gap-3">' + inp('postcode', 'Postcode *', a.postcode, 'inputmode="numeric" maxlength="5"') + '<div class="col-span-2">' + inp('city', 'City *', a.city) + '</div></div>' +
+            '<div class="grid sm:grid-cols-2 gap-3"><div><label class="block font-semibold text-roast-600 uppercase mb-1">State *</label><select id="' + p + '-state" class="w-full bg-roast-50 border border-roast-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-amberGold"><option value="">Select state</option>' +
+            STATES.map(s => '<option ' + (a.state === s ? 'selected' : '') + '>' + s + '</option>').join('') + '</select></div>' +
+            '<div><label class="block font-semibold text-roast-600 uppercase mb-1">Label</label><select id="' + p + '-label" class="w-full bg-roast-50 border border-roast-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-amberGold">' +
+            ['Home', 'Work', 'Other'].map(s => '<option ' + (a.label === s ? 'selected' : '') + '>' + s + '</option>').join('') + '</select></div></div>' +
+            '</div>';
+    }
+    function readAddressForm(p) {
+        const v = id => (document.getElementById(p + '-' + id).value || '').trim();
+        const d = { name: v('name'), phone: v('phone'), line1: v('line1'), line2: v('line2'), postcode: v('postcode'), city: v('city'), state: v('state'), label: v('label') || 'Home' };
+        if (!d.name || !d.phone || !d.line1 || !d.city || !d.state) return { ok: false, error: 'Please complete all required address fields.' };
+        if (!/^\d{5}$/.test(d.postcode)) return { ok: false, error: 'Postcode must be 5 digits.' };
+        if (!/^[+\d][\d\s-]{7,}$/.test(d.phone)) return { ok: false, error: 'Please enter a valid phone number.' };
+        return { ok: true, data: d };
+    }
+    Object.assign(MemberShell, { getProfile, saveProfile, fmtAddress, addressFormHtml, readAddressForm, STATES });
+
+    // ---- basket + checkout ----
+    let coAddrId = null, coNew = false;
+    window.coPick = function (id) { coAddrId = id; coNew = false; renderCart('checkout'); };
+    window.coToggleNew = function (on) { coNew = on; renderCart('checkout'); };
+
     function renderCart(step) {
         const cart = getCart();
         const body = document.getElementById('cart-body'), foot = document.getElementById('cart-foot');
@@ -277,43 +289,65 @@
             '<div class="flex gap-3 items-center bg-roast-50 rounded-2xl p-3 border border-roast-200"><img src="' + esc(i.image) + '" alt="" class="w-16 h-16 rounded-xl object-cover shrink-0">' +
             '<div class="flex-1 min-w-0"><p class="text-xs font-bold text-roast-950 leading-snug">' + esc(i.name) + '</p><p class="text-xs text-amberGold font-bold mt-0.5">' + money(i.price) + '</p></div>' +
             '<div class="flex items-center gap-2"><button onclick="changeQty(\'' + i.id + '\', -1)" class="w-7 h-7 rounded-full bg-white border border-roast-200 text-roast-700" aria-label="Less">&minus;</button><span class="text-xs font-bold w-4 text-center">' + i.qty + '</span><button onclick="changeQty(\'' + i.id + '\', 1)" class="w-7 h-7 rounded-full bg-white border border-roast-200 text-roast-700" aria-label="More">+</button></div></div>').join('');
+
         if (step === 'checkout') {
-            const u2 = user() || {};
-            body.innerHTML += '<form id="checkout-form" onsubmit="placeOrder(event)" class="space-y-3 text-xs pt-2">' +
-                '<p class="font-bold text-roast-950 uppercase tracking-wider text-[11px]">Delivery details</p>' +
-                '<input id="co-name" required value="' + esc(u2.name || '') + '" placeholder="Full name" class="w-full bg-roast-50 border border-roast-200 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">' +
-                '<input id="co-phone" required type="tel" placeholder="Phone number" class="w-full bg-roast-50 border border-roast-200 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">' +
-                '<textarea id="co-address" required rows="3" placeholder="Delivery address" class="w-full bg-roast-50 border border-roast-200 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold"></textarea></form>';
+            const addrs = getProfile().addresses;
+            if (!addrs.some(a => a.id === coAddrId)) { const d = addrs.find(a => a.isDefault) || addrs[0]; coAddrId = d ? d.id : null; }
+            const showForm = !addrs.length || coNew;
+            body.innerHTML += '<div class="pt-3 space-y-3 text-xs"><p class="font-bold text-roast-950 uppercase tracking-wider text-[11px]"><i class="fa-solid fa-location-dot text-amberGold mr-1.5"></i>Delivery address</p>' +
+                (showForm ? '' : addrs.map(a =>
+                    '<button type="button" onclick="coPick(\'' + a.id + '\')" class="w-full text-left rounded-2xl border p-3.5 space-y-1 transition-all ' + (a.id === coAddrId ? 'border-amberGold bg-blue-50 ring-2 ring-blue-100' : 'border-roast-200 bg-white hover:border-amberGold') + '">' +
+                    '<div class="flex items-center gap-2"><strong class="text-roast-950">' + esc(a.name) + '</strong><span class="text-roast-500">' + esc(a.phone) + '</span>' + (a.isDefault ? '<span class="ml-auto px-2 py-0.5 rounded-full bg-amberGold text-white text-[9px] font-bold">Default</span>' : '') + '</div>' +
+                    '<p class="text-roast-600 leading-relaxed">' + esc(fmtAddress(a)) + '</p><span class="inline-block px-2 py-0.5 rounded-full bg-roast-100 text-roast-600 text-[9px] font-bold">' + esc(a.label || 'Home') + '</span></button>').join('')) +
+                (!showForm ? '<button type="button" onclick="coToggleNew(true)" class="w-full py-2.5 rounded-xl border border-dashed border-roast-300 text-amberGold font-bold hover:border-amberGold">+ Add a new address</button>' : '') +
+                (showForm ? '<div class="rounded-2xl border border-roast-200 p-4 space-y-3 bg-roast-50">' + addressFormHtml('co') +
+                    '<label class="flex items-center gap-2 text-roast-700"><input id="co-default" type="checkbox" ' + (addrs.length ? '' : 'checked disabled') + ' class="accent-blue-600"> Set as default address</label>' +
+                    (addrs.length ? '<button type="button" onclick="coToggleNew(false)" class="text-roast-500 hover:text-roast-950">Cancel</button>' : '') + '</div>' : '') +
+                '<div class="rounded-xl border border-amberGold bg-blue-50 p-3.5"><p class="font-bold text-roast-950 flex items-center gap-1.5"><i class="fa-solid fa-credit-card text-amberGold"></i> Billplz Payment Gateway</p><p class="text-[10px] text-roast-600 mt-0.5">Online banking (FPX), e-wallet or card. You will be redirected to complete payment.</p></div></div>';
         }
         foot.innerHTML = '<div class="space-y-1 text-xs"><div class="flex justify-between text-roast-600"><span>Subtotal</span><span>' + money(sub) + '</span></div><div class="flex justify-between text-roast-600"><span>Shipping</span><span>' + money(SHIPPING) + '</span></div><div class="flex justify-between text-sm font-bold text-roast-950 pt-1"><span>Total</span><span class="text-amberGold">' + money(sub + SHIPPING) + '</span></div></div>' +
             (step === 'checkout'
-                ? '<button type="submit" form="checkout-form" class="w-full py-3.5 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl text-sm shadow-lg">Place order</button><button onclick="renderCartStep()" class="w-full text-xs text-roast-500 hover:text-roast-950">Back to basket</button>'
+                ? '<button onclick="placeOrder()" class="w-full py-3.5 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl text-sm shadow-lg"><i class="fa-solid fa-lock text-xs mr-1.5"></i>Pay ' + money(sub + SHIPPING) + ' with Billplz</button><button onclick="renderCartStep()" class="w-full text-xs text-roast-500 hover:text-roast-950">Back to basket</button>'
                 : '<button onclick="renderCartStep(\'checkout\')" class="w-full py-3.5 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl text-sm shadow-lg">Checkout</button>');
     }
     window.renderCartStep = renderCart;
 
-    // NOTE: no payment gateway is connected yet, so the order is recorded as awaiting payment verification.
-    window.placeOrder = function (e) {
-        e.preventDefault();
+    // Creates the order as "Pending Payment", then sends the member to the Billplz bill. Paid = Processing.
+    window.placeOrder = function () {
         const cart = getCart();
         if (!cart.length) return;
+        const prof = getProfile();
+        let addr;
+        if (!prof.addresses.length || coNew) {
+            const r = readAddressForm('co');
+            if (!r.ok) { showToast(r.error); return; }
+            const first = !prof.addresses.length;
+            const makeDefault = first || document.getElementById('co-default').checked;
+            if (makeDefault) prof.addresses.forEach(a => { a.isDefault = false; });
+            addr = { ...r.data, id: 'A' + Date.now(), isDefault: makeDefault };
+            prof.addresses.push(addr);
+            if (!prof.phone) prof.phone = addr.phone;
+            saveProfile(prof);
+            coNew = false;
+        } else {
+            addr = prof.addresses.find(a => a.id === coAddrId);
+        }
+        if (!addr) { showToast('Please choose a delivery address.'); return; }
+
         const sub = cart.reduce((a, i) => a + i.price * i.qty, 0);
         const orders = (() => { try { return JSON.parse(localStorage.getItem('rp_member_orders') || '[]'); } catch (x) { return []; } })();
-        orders.push({
+        const order = {
             id: 'ORD' + String(Date.now()).slice(-6),
             email: (user() || {}).email,
-            name: document.getElementById('co-name').value.trim(),
-            phone: document.getElementById('co-phone').value.trim(),
-            address: document.getElementById('co-address').value.trim(),
+            name: addr.name, phone: addr.phone, address: fmtAddress(addr),
             items: cart, subtotal: sub, shipping: SHIPPING, total: sub + SHIPPING,
-            status: 'Awaiting Payment Verification',
+            status: 'Pending Payment', paymentStatus: 'Unpaid',
             createdAt: new Date().toISOString()
-        });
+        };
+        orders.push(order);
         localStorage.setItem('rp_member_orders', JSON.stringify(orders));
         setCart([]);
-        closeCart();
-        showToast('Order placed! Track it in My Orders.');
-        setTimeout(() => { window.location.href = 'orders.html'; }, 1200);
+        NBCA_PAY.checkout({ type: 'order', refId: order.id, amount: order.total, description: 'Order ' + order.id + ' - Nb.CA Academy', name: order.name, email: order.email, phone: order.phone, returnTo: 'orders.html' });
     };
 
     buildSidebar();
@@ -321,6 +355,8 @@
     buildBottomNav();
     injectOverlays();
     refreshCartBadge();
+    const payReturn = window.NBCA_PAY && NBCA_PAY.readReturn();
+    if (payReturn) setTimeout(() => showToast(payReturn.paid ? 'Payment successful. Thank you!' : 'Payment was not completed. You can retry from the page.'), 400);
     const overlay = document.getElementById('m-overlay');
     if (overlay) {
         overlay.className = 'hidden lg:hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-30';

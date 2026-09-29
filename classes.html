@@ -152,6 +152,7 @@
     </div>
 
     
+    <script src="js/billplz.js"></script>
     <script src="js/member-shell.js"></script>
     <script>
 
@@ -170,6 +171,18 @@
             document.getElementById('eticket-modal').classList.remove('hidden');
         }
 
+        function payNow(type, id) {
+            const u = MemberShell.user() || {};
+            const rec = type === 'fixed' ? MemberShell.registrations().find(r => r.id === id) : MemberShell.myWorkshops().find(w => w.id === id);
+            if (!rec) return;
+            NBCA_PAY.checkout({
+                type, refId: id,
+                amount: Number(type === 'fixed' ? rec.deposit : rec.price),
+                description: type === 'fixed' ? 'Class deposit ' + rec.preferredDate + ' - Nb.CA Academy' : rec.title + ' - Nb.CA Academy',
+                name: rec.name || u.name, email: u.email, phone: rec.phone || MemberShell.getProfile().phone || '', returnTo: 'classes.html'
+            });
+        }
+
         function renderWorkshops() {
             const box = document.getElementById('ws-list');
             const list = MemberShell.myWorkshops();
@@ -182,7 +195,9 @@
                 '<div class="flex justify-between items-center"><span class="px-3 py-1 bg-blue-500/10 text-blue-600 text-[10px] font-bold rounded-full uppercase tracking-wider">' + MemberShell.esc(w.status) + '</span><span class="text-xs font-bold text-amberGold">RM ' + Number(w.price).toFixed(2) + '</span></div>' +
                 '<h3 class="font-serif text-xl font-bold text-roast-950">' + MemberShell.esc(w.title) + '</h3>' +
                 '<div class="bg-roast-50 p-4 rounded-2xl border border-roast-200 space-y-2 text-xs text-roast-700"><div class="flex justify-between gap-3"><span>Slot</span><strong class="text-roast-950 text-right">' + MemberShell.esc(w.slot) + '</strong></div><div class="flex justify-between gap-3"><span>Mode</span><strong class="text-roast-950">' + MemberShell.esc(w.modeLabel) + '</strong></div><div class="flex justify-between gap-3"><span>Location</span><strong class="text-roast-950 text-right">' + MemberShell.esc(w.location) + '</strong></div></div>' +
-                '<button onclick="openETicketModal(' + i + ')" class="w-full py-2.5 bg-roast-100 hover:bg-amberGold hover:text-white text-roast-900 font-bold rounded-xl text-xs transition-all border border-roast-200"><i class="fa-solid fa-qrcode mr-1"></i> View e-ticket</button></div>').join('');
+                (w.status === 'Confirmed'
+                    ? '<button onclick="openETicketModal(' + i + ')" class="w-full py-2.5 bg-roast-100 hover:bg-amberGold hover:text-white text-roast-900 font-bold rounded-xl text-xs transition-all border border-roast-200"><i class="fa-solid fa-qrcode mr-1"></i> View e-ticket</button>'
+                    : '<button onclick="payNow(\'workshop\', \'' + w.id + '\')" class="w-full py-2.5 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl text-xs shadow"><i class="fa-solid fa-lock mr-1"></i> Pay RM ' + Number(w.price).toFixed(2) + ' with Billplz</button>') + '</div>').join('');
         }
         function closeETicketModal() { document.getElementById('eticket-modal').classList.add('hidden'); }
 
@@ -210,7 +225,7 @@
                 const resched = r.classStatus === 'Reschedule';
                 const d = new Date(r.preferredDate + 'T00:00:00');
                 const balance = (Number(r.classFee) - Number(r.deposit)).toFixed(2);
-                const badge = admitted ? ['Confirmed', 'bg-emerald-500/10 text-emerald-600'] : resched ? ['Reschedule needed', 'bg-red-500/10 text-red-600'] : ['Awaiting confirmation', 'bg-blue-500/10 text-blue-600'];
+                const badge = !paid ? ['Payment pending', 'bg-amber-500/10 text-amber-600'] : admitted ? ['Confirmed', 'bg-emerald-500/10 text-emerald-600'] : resched ? ['Reschedule needed', 'bg-red-500/10 text-red-600'] : ['Awaiting confirmation', 'bg-blue-500/10 text-blue-600'];
                 return '<article class="bg-white rounded-3xl border border-roast-200 shadow-sm overflow-hidden">' +
                     '<div class="p-5 sm:p-6 grid sm:grid-cols-12 gap-5">' +
                         '<div class="sm:col-span-3 flex sm:flex-col items-center sm:items-start gap-3">' +
@@ -222,86 +237,7 @@
                             '<span class="px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider ' + badge[1] + '">' + badge[0] + '</span></div>' +
                             '<div class="flex items-start justify-between max-w-md">' + stepDot(true, false, 'fa-pen', 'Registered') + bar(paid) + stepDot(paid, !paid, 'fa-credit-card', 'Deposit paid') + bar(admitted) + stepDot(admitted, paid && !admitted && !resched, 'fa-circle-check', 'Seat confirmed') + '</div>' +
                             (resched ? '<div class="rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs p-3 flex gap-2"><i class="fa-solid fa-triangle-exclamation mt-0.5"></i><span>We need to move your session. Our team will contact you on <strong>' + MemberShell.esc(r.phone || 'your phone') + '</strong> to agree a new date.</span></div>' : '') +
-                            '<div class="grid grid-cols-3 gap-3 text-xs bg-roast-50 border border-roast-200 rounded-2xl p-3.5">' +
-                                '<div><span class="block text-[10px] text-roast-500 uppercase">Class fee</span><strong class="text-roast-950">RM ' + Number(r.classFee).toFixed(2) + '</strong></div>' +
-                                '<div><span class="block text-[10px] text-roast-500 uppercase">Deposit</span><strong class="text-roast-950">RM ' + Number(r.deposit).toFixed(2) + '</strong></div>' +
-                                '<div><span class="block text-[10px] text-roast-500 uppercase">Balance on the day</span><strong class="text-amberGold">RM ' + balance + '</strong></div>' +
-                            '</div>' +
-                        '</div>' +
-                    '</div></article>';
-            }).join('');
-        }
-        window.addEventListener('member-ready', () => { renderRegistrations(); renderWorkshops(); });
-
-    </script>
-</body>
-</html>        function openETicketModal(idx) {
-            const w = MemberShell.myWorkshops()[idx];
-            if (!w) return;
-            const attendee = w.name || (MemberShell.user() || {}).name || 'Guest';
-            document.getElementById('et-class-name').innerText = w.title;
-            document.getElementById('et-attendee').innerText = attendee;
-            document.getElementById('et-datetime').innerText = w.slot;
-            document.getElementById('et-duration').innerText = w.modeLabel;
-            document.getElementById('et-location').innerText = w.location;
-            document.getElementById('et-fee').innerText = 'RM ' + Number(w.price).toFixed(2) + ' (' + w.status + ')';
-            document.getElementById('et-ticket-ref').innerText = w.ref;
-            document.getElementById('et-qr-code').src = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(w.ref + '|' + w.title + '|' + attendee);
-            document.getElementById('eticket-modal').classList.remove('hidden');
-        }
-
-        function renderWorkshops() {
-            const box = document.getElementById('ws-list');
-            const list = MemberShell.myWorkshops();
-            if (!list.length) {
-                box.innerHTML = '<div class="md:col-span-2 bg-white rounded-3xl border border-dashed border-roast-300 p-8 text-center space-y-2"><p class="text-sm font-bold text-roast-950">No workshop tickets yet</p><p class="text-xs text-roast-500">Enroll in a brewing, latte art or cupping workshop and your e-ticket shows up here.</p></div>';
-                return;
-            }
-            box.innerHTML = list.map((w, i) =>
-                '<div class="bg-white rounded-3xl p-6 border border-roast-200 shadow-sm space-y-4 hover:shadow-lg hover:border-amberGold/40 transition-all">' +
-                '<div class="flex justify-between items-center"><span class="px-3 py-1 bg-blue-500/10 text-blue-600 text-[10px] font-bold rounded-full uppercase tracking-wider">' + MemberShell.esc(w.status) + '</span><span class="text-xs font-bold text-amberGold">RM ' + Number(w.price).toFixed(2) + '</span></div>' +
-                '<h3 class="font-serif text-xl font-bold text-roast-950">' + MemberShell.esc(w.title) + '</h3>' +
-                '<div class="bg-roast-50 p-4 rounded-2xl border border-roast-200 space-y-2 text-xs text-roast-700"><div class="flex justify-between gap-3"><span>Slot</span><strong class="text-roast-950 text-right">' + MemberShell.esc(w.slot) + '</strong></div><div class="flex justify-between gap-3"><span>Mode</span><strong class="text-roast-950">' + MemberShell.esc(w.modeLabel) + '</strong></div><div class="flex justify-between gap-3"><span>Location</span><strong class="text-roast-950 text-right">' + MemberShell.esc(w.location) + '</strong></div></div>' +
-                '<button onclick="openETicketModal(' + i + ')" class="w-full py-2.5 bg-roast-100 hover:bg-amberGold hover:text-white text-roast-900 font-bold rounded-xl text-xs transition-all border border-roast-200"><i class="fa-solid fa-qrcode mr-1"></i> View e-ticket</button></div>').join('');
-        }
-        function closeETicketModal() { document.getElementById('eticket-modal').classList.add('hidden'); }
-
-        function stepDot(done, active, icon, label) {
-            const cls = done ? 'bg-emerald-500 text-white' : active ? 'bg-amberGold text-white ring-4 ring-blue-100' : 'bg-roast-200 text-roast-500';
-            return '<div class="flex flex-col items-center gap-1.5 text-center w-20"><span class="w-9 h-9 rounded-full flex items-center justify-center text-xs ' + cls + '"><i class="fa-solid ' + (done ? 'fa-check' : icon) + '"></i></span>' +
-                '<span class="text-[10px] font-bold ' + (done || active ? 'text-roast-950' : 'text-roast-400') + '">' + label + '</span></div>';
-        }
-        const bar = on => '<div class="flex-1 h-0.5 mt-[17px] ' + (on ? 'bg-emerald-500' : 'bg-roast-200') + '"></div>';
-
-        function renderRegistrations() {
-            const box = document.getElementById('reg-list');
-            const regs = MemberShell.registrations().slice().reverse();
-            if (!regs.length) {
-                box.innerHTML = '<div class="bg-white rounded-3xl border border-dashed border-roast-300 p-10 text-center space-y-3">' +
-                    '<div class="w-14 h-14 rounded-2xl bg-blue-50 text-amberGold flex items-center justify-center mx-auto text-2xl"><i class="fa-solid fa-calendar-plus"></i></div>' +
-                    '<h3 class="font-serif text-xl font-bold text-roast-950">No class registered yet</h3>' +
-                    '<p class="text-xs text-roast-500 max-w-sm mx-auto">Pick a date (Sunday to Thursday) and a session, pay the deposit and we will confirm your seat.</p>' +
-                    '<a href="book-class.html" class="inline-flex items-center gap-2 px-5 py-2.5 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-full text-xs shadow">Register for a class <i class="fa-solid fa-arrow-right text-[10px]"></i></a></div>';
-                return;
-            }
-            box.innerHTML = regs.map(r => {
-                const paid = r.depositStatus === 'Paid';
-                const admitted = r.classStatus === 'Admitted';
-                const resched = r.classStatus === 'Reschedule';
-                const d = new Date(r.preferredDate + 'T00:00:00');
-                const balance = (Number(r.classFee) - Number(r.deposit)).toFixed(2);
-                const badge = admitted ? ['Confirmed', 'bg-emerald-500/10 text-emerald-600'] : resched ? ['Reschedule needed', 'bg-red-500/10 text-red-600'] : ['Awaiting confirmation', 'bg-blue-500/10 text-blue-600'];
-                return '<article class="bg-white rounded-3xl border border-roast-200 shadow-sm overflow-hidden">' +
-                    '<div class="p-5 sm:p-6 grid sm:grid-cols-12 gap-5">' +
-                        '<div class="sm:col-span-3 flex sm:flex-col items-center sm:items-start gap-3">' +
-                            '<div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-roast-950 to-amberGold text-white flex flex-col items-center justify-center shrink-0"><span class="text-[10px] font-bold uppercase">' + d.toLocaleDateString('en-GB', { month: 'short' }) + '</span><span class="text-2xl font-extrabold leading-none">' + d.getDate() + '</span></div>' +
-                            '<div><p class="text-xs font-bold text-roast-950">' + d.toLocaleDateString('en-GB', { weekday: 'long' }) + '</p><p class="text-[11px] text-roast-500">' + MemberShell.esc(r.session) + '</p></div>' +
-                        '</div>' +
-                        '<div class="sm:col-span-9 space-y-4">' +
-                            '<div class="flex flex-wrap items-center justify-between gap-2"><h3 class="font-serif text-lg font-bold text-roast-950">Coffee Fundamentals &mdash; Daily Class</h3>' +
-                            '<span class="px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider ' + badge[1] + '">' + badge[0] + '</span></div>' +
-                            '<div class="flex items-start justify-between max-w-md">' + stepDot(true, false, 'fa-pen', 'Registered') + bar(paid) + stepDot(paid, !paid, 'fa-credit-card', 'Deposit paid') + bar(admitted) + stepDot(admitted, paid && !admitted && !resched, 'fa-circle-check', 'Seat confirmed') + '</div>' +
-                            (resched ? '<div class="rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs p-3 flex gap-2"><i class="fa-solid fa-triangle-exclamation mt-0.5"></i><span>We need to move your session. Our team will contact you on <strong>' + MemberShell.esc(r.phone || 'your phone') + '</strong> to agree a new date.</span></div>' : '') +
+                            (!paid ? '<div class="rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs p-3 flex flex-wrap items-center justify-between gap-3"><span>Pay the deposit to secure your seat.</span><button onclick="payNow(\'fixed\', \'' + r.id + '\')" class="px-4 py-2 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-lg whitespace-nowrap">Pay RM ' + Number(r.deposit).toFixed(2) + ' with Billplz</button></div>' : '') +
                             '<div class="grid grid-cols-3 gap-3 text-xs bg-roast-50 border border-roast-200 rounded-2xl p-3.5">' +
                                 '<div><span class="block text-[10px] text-roast-500 uppercase">Class fee</span><strong class="text-roast-950">RM ' + Number(r.classFee).toFixed(2) + '</strong></div>' +
                                 '<div><span class="block text-[10px] text-roast-500 uppercase">Deposit</span><strong class="text-roast-950">RM ' + Number(r.deposit).toFixed(2) + '</strong></div>' +

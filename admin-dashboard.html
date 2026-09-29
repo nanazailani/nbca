@@ -1855,7 +1855,9 @@
 
         // Admin confirms the payment and admits the student into the class.
         function admitStudent(id) {
-            const students = loadFixedClassStudents().map(s => s.id === id ? { ...s, depositStatus: 'Paid', classStatus: 'Admitted' } : s);
+            const cur = loadFixedClassStudents().find(s => s.id === id);
+            if (cur && cur.depositStatus !== 'Paid') { alert('Deposit has not been paid yet. Wait for the Billplz payment or mark it as paid first.'); return; }
+            const students = loadFixedClassStudents().map(s => s.id === id ? { ...s, classStatus: 'Admitted' } : s);
             saveFixedClassStudents(students);
             renderStudentsList();
             showAdminToast('Student admitted to class.');
@@ -1876,7 +1878,11 @@
 
         function toggleDepositStatus(id) {
             let students = loadFixedClassStudents();
-            students = students.map(s => s.id === id ? { ...s, depositStatus: s.depositStatus === 'Paid' ? 'Pending' : 'Paid' } : s);
+            students = students.map(s => {
+                if (s.id !== id) return s;
+                const nowPaid = s.depositStatus !== 'Paid';
+                return { ...s, depositStatus: nowPaid ? 'Paid' : 'Pending', classStatus: nowPaid ? (s.classStatus === 'Awaiting Payment' ? 'Pending Confirmation' : s.classStatus) : (s.classStatus === 'Admitted' ? s.classStatus : 'Awaiting Payment') };
+            });
             saveFixedClassStudents(students);
             renderStudentsList();
             showAdminToast('Deposit status updated.');

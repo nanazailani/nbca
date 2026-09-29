@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile | Nb.CA Academy</title>
+    <script>if (!localStorage.getItem('rp_logged_user')) { location.replace('auth.html?next=' + encodeURIComponent(location.pathname.split('/').pop() || 'dashboard.html')); }</script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    screens: { xs: '420px' },
+                    colors: {
+                        roast: {
+                            50: '#F8FAFC', 100: '#F1F5F9', 200: '#E2E8F0', 300: '#CBD5E1', 400: '#94A3B8',
+                            500: '#64748B', 600: '#475569', 700: '#334155', 800: '#1E293B', 900: '#1E40AF', 950: '#172554'
+                        },
+                        amberGold: '#2563EB',
+                        royalBlue: '#1E40AF',
+                        navy: '#172554'
+                    },
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'], serif: ['Playfair Display', 'serif'] }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F8FAFC;
+            background-image: radial-gradient(circle at 8% 5%, rgba(37,99,235,0.06) 0%, transparent 30%), radial-gradient(circle at 95% 8%, rgba(30,64,175,0.05) 0%, transparent 28%);
+            background-attachment: fixed; }
+        h1, h2, h3, .font-serif { font-family: 'Playfair Display', serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; } .no-scrollbar { scrollbar-width: none; }
+        @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+        main > * { animation: rise .45s ease both; } main > *:nth-child(2) { animation-delay: .06s; } main > *:nth-child(3) { animation-delay: .12s; } main > *:nth-child(4) { animation-delay: .18s; }
+        @media (prefers-reduced-motion: reduce) { main > * { animation: none; } }
+        @media print { #m-sidebar, #m-topbar, #m-bottomnav { display: none !important; } }
+    </style>
+</head>
+<body data-page="profile" data-title="My Profile" data-sub="Your details, password and delivery addresses" class="text-roast-900 antialiased selection:bg-amberGold selection:text-white">
+    <div id="m-overlay"></div>
+    <aside id="m-sidebar"></aside>
+    <div class="lg:pl-72 min-h-screen flex flex-col min-w-0 overflow-x-hidden">
+        <header id="m-topbar"></header>
+        <main class="flex-1 min-w-0 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-10 py-6 lg:py-10 pb-28 lg:pb-14 space-y-10">
+
+            <section class="bg-white rounded-3xl border border-roast-200 shadow-sm p-5 sm:p-6 flex items-center gap-4">
+                <div id="pf-avatar" class="w-16 h-16 rounded-full bg-amberGold text-white font-bold text-xl flex items-center justify-center shrink-0"></div>
+                <div class="min-w-0"><h2 id="pf-name-title" class="font-serif text-xl font-extrabold text-roast-950 truncate"></h2><p id="pf-email-title" class="text-xs text-roast-500 truncate"></p><span class="inline-block mt-1.5 px-2.5 py-0.5 bg-amber-100 text-amber-700 text-[10px] font-extrabold rounded-full uppercase">Gold member</span></div>
+            </section>
+
+            <div class="grid lg:grid-cols-2 gap-6">
+                <section class="bg-white rounded-3xl border border-roast-200 shadow-sm p-5 sm:p-6 space-y-4">
+                    <h3 class="font-serif text-lg font-bold text-roast-950"><i class="fa-solid fa-id-card text-amberGold mr-2"></i>Personal details</h3>
+                    <form onsubmit="saveDetails(event)" class="space-y-3 text-xs">
+                        <div><label class="block font-semibold text-roast-600 uppercase mb-1">Full name</label><input id="pf-name" required class="w-full bg-roast-50 border border-roast-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-amberGold"></div>
+                        <div><label class="block font-semibold text-roast-600 uppercase mb-1">Email</label><input id="pf-email" readonly class="w-full bg-roast-100 border border-roast-200 text-roast-600 rounded-xl px-3.5 py-2.5 cursor-not-allowed"><p class="text-[10px] text-roast-500 mt-1">Your email links your bookings and orders, so it can't be changed here.</p></div>
+                        <div><label class="block font-semibold text-roast-600 uppercase mb-1">Phone</label><input id="pf-phone" type="tel" placeholder="+60 12-345 6789" class="w-full bg-roast-50 border border-roast-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-amberGold"></div>
+                        <button class="px-5 py-2.5 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl shadow transition-all">Save details</button>
+                    </form>
+                </section>
+
+                <section class="bg-white rounded-3xl border border-roast-200 shadow-sm p-5 sm:p-6 space-y-4">
+                    <h3 class="font-serif text-lg font-bold text-roast-950"><i class="fa-solid fa-lock text-amberGold mr-2"></i>Change password</h3>
+                    <form onsubmit="savePassword(event)" class="space-y-3 text-xs">
+                        <div id="pf-cur-wrap"><label class="block font-semibold text-roast-600 uppercase mb-1">Current password</label><input id="pf-cur" type="password" autocomplete="current-password" class="w-full bg-roast-50 border border-roast-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-amberGold"></div>
+                        <div><label class="block font-semibold text-roast-600 uppercase mb-1">New password</label><input id="pf-new" type="password" autocomplete="new-password" required minlength="6" class="w-full bg-roast-50 border border-roast-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-amberGold"><p class="text-[10px] text-roast-500 mt-1">At least 6 characters.</p></div>
+                        <div><label class="block font-semibold text-roast-600 uppercase mb-1">Confirm new password</label><input id="pf-confirm" type="password" autocomplete="new-password" required class="w-full bg-roast-50 border border-roast-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-amberGold"></div>
+                        <button class="px-5 py-2.5 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl shadow transition-all">Update password</button>
+                    </form>
+                </section>
+            </div>
+
+            <section>
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-5">
+                <div><span class="text-[11px] font-extrabold tracking-[0.18em] text-amberGold uppercase">Delivery</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-roast-950 mt-1">My Addresses</h2></div>
+                <button onclick="openAddressModal()" class="inline-flex items-center gap-2 px-4 py-2.5 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-full text-xs shadow transition-all self-start"><i class="fa-solid fa-plus text-[10px]"></i> Add new address</button>
+            </div>
+                <div id="addr-list" class="grid md:grid-cols-2 gap-4"></div>
+            </section>
+
+        </main>
+    </div>
+    <nav id="m-bottomnav" aria-label="Primary"></nav>
+
+    <div id="addr-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeAddressModal()"></div>
+        <div class="relative bg-white rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl p-6 sm:p-8 space-y-4">
+            <button onclick="closeAddressModal()" class="absolute top-4 right-4 text-roast-500 hover:text-roast-950 p-2" aria-label="Close"><i class="fa-solid fa-xmark text-lg"></i></button>
+            <h3 id="addr-modal-title" class="font-serif text-xl font-bold text-roast-950"></h3>
+            <div id="addr-form-host"></div>
+            <label class="flex items-center gap-2 text-xs text-roast-700"><input id="pf-default" type="checkbox" class="accent-blue-600"> Set as default address</label>
+            <div class="flex gap-3 pt-1"><button onclick="saveAddress()" class="flex-1 py-3 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl text-xs shadow">Save address</button><button onclick="closeAddressModal()" class="px-5 py-3 bg-roast-100 text-roast-800 font-bold rounded-xl text-xs border border-roast-200">Cancel</button></div>
+        </div>
+    </div>
+
+    <script src="js/billplz.js"></script>
+    <script src="js/member-shell.js"></script>
+    <script>
+
+        const esc = MemberShell.esc;
+        let editingId = null;
+
+        function loadHeader() {
+            const u = MemberShell.user() || {};
+            document.getElementById('pf-avatar').innerText = MemberShell.initials(u.name);
+            document.getElementById('pf-name-title').innerText = u.name || 'Member';
+            document.getElementById('pf-email-title').innerText = u.email || '';
+            document.getElementById('pf-name').value = u.name || '';
+            document.getElementById('pf-email').value = u.email || '';
+            document.getElementById('pf-phone').value = MemberShell.getProfile().phone || '';
+            // accounts created through the demo login have no password to verify
+            document.getElementById('pf-cur-wrap').classList.toggle('hidden', !u.password);
+        }
+
+        function setAccount(mutate) {
+            const cur = MemberShell.user() || {};
+            mutate(cur);
+            localStorage.setItem('rp_user', JSON.stringify(cur));
+            localStorage.setItem('rp_logged_user', JSON.stringify(cur));
+        }
+
+        function saveDetails(e) {
+            e.preventDefault();
+            const name = document.getElementById('pf-name').value.trim();
+            if (!name) return;
+            setAccount(u => { u.name = name; });
+            const p = MemberShell.getProfile();
+            p.phone = document.getElementById('pf-phone').value.trim();
+            MemberShell.saveProfile(p);
+            showToast('Details saved.');
+            setTimeout(() => location.reload(), 600);
+        }
+
+        function savePassword(e) {
+            e.preventDefault();
+            const u = MemberShell.user() || {};
+            const cur = document.getElementById('pf-cur').value;
+            const nw = document.getElementById('pf-new').value;
+            const cf = document.getElementById('pf-confirm').value;
+            if (u.password && cur !== u.password) { showToast('Current password is incorrect.'); return; }
+            if (nw.length < 6) { showToast('New password must be at least 6 characters.'); return; }
+            if (nw !== cf) { showToast('New passwords do not match.'); return; }
+            setAccount(a => { a.password = nw; });
+            ['pf-cur', 'pf-new', 'pf-confirm'].forEach(id => document.getElementById(id).value = '');
+            showToast('Password updated.');
+            loadHeader();
+        }
+
+        function renderAddresses() {
+            const list = MemberShell.getProfile().addresses.slice().sort((a, b) => (b.isDefault ? 1 : 0) - (a.isDefault ? 1 : 0));
+            const box = document.getElementById('addr-list');
+            if (!list.length) {
+                box.innerHTML = '<div class="md:col-span-2 bg-white rounded-3xl border border-dashed border-roast-300 p-8 text-center space-y-2"><div class="w-12 h-12 rounded-2xl bg-blue-50 text-amberGold flex items-center justify-center mx-auto text-xl"><i class="fa-solid fa-location-dot"></i></div><p class="text-sm font-bold text-roast-950">No saved addresses</p><p class="text-xs text-roast-500">Add one now and it will be ready at checkout.</p></div>';
+                return;
+            }
+            box.innerHTML = list.map(a =>
+                '<article class="bg-white rounded-2xl border p-4 space-y-2 ' + (a.isDefault ? 'border-amberGold ring-2 ring-blue-100' : 'border-roast-200') + '">' +
+                '<div class="flex items-center gap-2 flex-wrap"><strong class="text-sm text-roast-950">' + esc(a.name) + '</strong><span class="text-xs text-roast-500">' + esc(a.phone) + '</span>' +
+                (a.isDefault ? '<span class="ml-auto px-2.5 py-0.5 rounded-full bg-amberGold text-white text-[10px] font-bold">Default</span>' : '') + '</div>' +
+                '<p class="text-xs text-roast-600 leading-relaxed">' + esc(MemberShell.fmtAddress(a)) + '</p>' +
+                '<div class="flex items-center justify-between pt-2 border-t border-roast-100"><span class="px-2 py-0.5 rounded-full bg-roast-100 text-roast-600 text-[10px] font-bold">' + esc(a.label || 'Home') + '</span>' +
+                '<div class="flex items-center gap-3 text-xs font-bold">' +
+                    (a.isDefault ? '' : '<button onclick="setDefault(\'' + a.id + '\')" class="text-amberGold hover:underline">Set as default</button>') +
+                    '<button onclick="openAddressModal(\'' + a.id + '\')" class="text-roast-700 hover:text-amberGold">Edit</button>' +
+                    '<button onclick="deleteAddress(\'' + a.id + '\')" class="text-red-500 hover:text-red-700">Delete</button></div></div></article>').join('');
+        }
+
+        function openAddressModal(id) {
+            editingId = id || null;
+            const p = MemberShell.getProfile();
+            const a = id ? p.addresses.find(x => x.id === id) : null;
+            document.getElementById('addr-modal-title').innerText = a ? 'Edit address' : 'Add new address';
+            document.getElementById('addr-form-host').innerHTML = MemberShell.addressFormHtml('pf', a || {});
+            const def = document.getElementById('pf-default');
+            def.checked = a ? !!a.isDefault : !p.addresses.length;
+            def.disabled = !!(a && a.isDefault) || !p.addresses.length;   // there must always be a default
+            document.getElementById('addr-modal').classList.remove('hidden');
+        }
+        function closeAddressModal() { document.getElementById('addr-modal').classList.add('hidden'); }
+
+        function saveAddress() {
+            const r = MemberShell.readAddressForm('pf');
+            if (!r.ok) { showToast(r.error); return; }
+            const p = MemberShell.getProfile();
+            const makeDefault = document.getElementById('pf-default').checked || !p.addresses.length;
+            if (makeDefault) p.addresses.forEach(x => { x.isDefault = false; });
+            if (editingId) {
+                p.addresses = p.addresses.map(x => x.id === editingId ? { ...x, ...r.data, isDefault: makeDefault || x.isDefault } : x);
+            } else {
+                p.addresses.push({ ...r.data, id: 'A' + Date.now(), isDefault: makeDefault });
+            }
+            if (!p.phone) p.phone = r.data.phone;
+            MemberShell.saveProfile(p);
+            closeAddressModal();
+            renderAddresses();
+            showToast('Address saved.');
+        }
+
+        function setDefault(id) {
+            const p = MemberShell.getProfile();
+            p.addresses.forEach(a => { a.isDefault = a.id === id; });
+            MemberShell.saveProfile(p);
+            renderAddresses();
+            showToast('Default address updated.');
+        }
+
+        function deleteAddress(id) {
+            if (!confirm('Delete this address?')) return;
+            const p = MemberShell.getProfile();
+            const wasDefault = (p.addresses.find(a => a.id === id) || {}).isDefault;
+            p.addresses = p.addresses.filter(a => a.id !== id);
+            if (wasDefault && p.addresses.length) p.addresses[0].isDefault = true;   // promote the next one
+            MemberShell.saveProfile(p);
+            renderAddresses();
+        }
+
+        window.addEventListener('member-ready', () => { loadHeader(); renderAddresses(); });
+
+    </script>
+</body>
+</html>

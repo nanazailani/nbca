@@ -123,10 +123,11 @@
                             <div class="flex justify-between text-amberGold font-bold"><span>Deposit due now</span><span id="fc-sum-deposit"></span></div>
                             <div class="flex justify-between text-roast-500"><span>Balance on class day</span><span id="fc-sum-balance"></span></div>
                         </div>
+                        <div class="rounded-xl border border-amberGold bg-blue-50 p-3.5 text-xs"><p class="font-bold text-roast-950"><i class="fa-solid fa-credit-card text-amberGold mr-1.5"></i>Billplz Payment Gateway</p><p class="text-[10px] text-roast-600 mt-0.5">Online banking (FPX), e-wallet or card. Your seat is held for 30 minutes while you pay.</p></div>
                         <p class="text-[10px] text-roast-500 text-center">After payment our team reviews it and confirms your seat, or contacts you to reschedule if needed.</p>
                         <div class="flex gap-3">
                             <button type="button" onclick="fcShowStep(2)" class="flex-1 py-3 bg-roast-100 hover:bg-roast-200 text-roast-700 font-bold rounded-xl border border-roast-200">Back</button>
-                            <button type="button" onclick="fcPayDeposit()" class="flex-[2] py-3 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl uppercase tracking-wider"><i class="fa-solid fa-lock text-[10px] mr-1"></i> Pay deposit</button>
+                            <button type="button" onclick="fcPayDeposit()" class="flex-[2] py-3 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl uppercase tracking-wider"><i class="fa-solid fa-lock text-[10px] mr-1"></i> Pay deposit with Billplz</button>
                         </div>
                     </div>
 
@@ -143,6 +144,7 @@
     </div>
     <nav id="m-bottomnav" aria-label="Primary"></nav>
 
+    <script src="js/billplz.js"></script>
     <script src="js/member-shell.js"></script>
     <script>
 
@@ -168,8 +170,11 @@
             try { return JSON.parse(localStorage.getItem('rp_fixed_class_students') || '[]'); } catch (e) { return []; }
         }
 
+        // Unpaid bookings hold a seat for 30 minutes, then the seat is released.
         function fcBookedCount(dateStr, session) {
-            return fcLoadRegistrations().filter(r => r.preferredDate === dateStr && r.session === session && !FC_INACTIVE.includes(r.classStatus)).length;
+            const now = Date.now();
+            return fcLoadRegistrations().filter(r => r.preferredDate === dateStr && r.session === session && !FC_INACTIVE.includes(r.classStatus) &&
+                !(r.classStatus === 'Awaiting Payment' && now - new Date(r.createdAt).getTime() > 30 * 60 * 1000)).length;
         }
 
         function fcDateStr(d) {
@@ -285,8 +290,8 @@
             fcShowStep(3);
         }
 
-        // NOTE: no live payment gateway is connected on this static site yet, so this records the deposit
-        // as paid and leaves it for the admin to verify and admit. Replace with a real gateway callback.
+        // Saves the booking as "Awaiting Payment", then sends the member to Billplz for the deposit.
+        // Billplz settlement (js/billplz.js) flips it to Paid / Pending Confirmation.
         function fcPayDeposit() {
             if (fcBookedCount(fcPicked.date, fcPicked.session) >= FC_CAPACITY) {
                 alert('Sorry, that session just became fully booked. Please choose another.');
@@ -295,7 +300,7 @@
             }
             const { fee, deposit } = fcGetFees();
             const regs = fcLoadRegistrations();
-            regs.push({
+            const rec = {
                 id: 'FC-' + Date.now(),
                 name: fcDetails.name,
                 ic: fcDetails.ic,
@@ -307,15 +312,14 @@
                 session: fcPicked.session,
                 classFee: fee,
                 deposit: deposit,
-                depositStatus: 'Paid',
-                classStatus: 'Pending Confirmation',
+                depositStatus: 'Pending',
+                classStatus: 'Awaiting Payment',
                 createdAt: new Date().toISOString()
-            });
+            };
+            regs.push(rec);
             localStorage.setItem('rp_fixed_class_students', JSON.stringify(regs));
-            document.getElementById('fc-done-text').innerText = 'Deposit received for ' + fcPicked.date + ' (' + fcPicked.session + '). We will confirm your seat shortly - you can track it in My Classes.';
-            fcShowStep(4);
+            NBCA_PAY.checkout({ type: 'fixed', refId: rec.id, amount: deposit, description: 'Class deposit ' + rec.preferredDate + ' - Nb.CA Academy', name: rec.name, email: rec.email, phone: rec.phone, returnTo: 'classes.html' });
         }
-
 
         window.addEventListener('member-ready', () => {
             const u = MemberShell.user() || {};

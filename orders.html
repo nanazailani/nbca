@@ -71,10 +71,11 @@
         </div>
     </div>
 
+    <script src="js/billplz.js"></script>
     <script src="js/member-shell.js"></script>
     <script>
 
-        const STEPS = [['Awaiting Payment Verification', 'fa-hourglass-half', 'Payment check'], ['Processing', 'fa-box', 'Processing'], ['Shipped', 'fa-truck-fast', 'Shipped'], ['Completed', 'fa-check', 'Completed']];
+        const STEPS = [['Pending Payment', 'fa-credit-card', 'Payment'], ['Processing', 'fa-box', 'Processing'], ['Shipped', 'fa-truck-fast', 'Shipped'], ['Completed', 'fa-check', 'Completed']];
         const esc = MemberShell.esc, money = MemberShell.money;
         let orders = [];
 
@@ -98,9 +99,15 @@
                     '<div class="flex flex-wrap items-center justify-between gap-3"><div><h3 class="font-serif text-xl font-extrabold text-roast-950">' + esc(o.id) + '</h3><p class="text-xs text-roast-500 mt-0.5">' + new Date(o.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) + ' &middot; ' + count + ' item' + (count > 1 ? 's' : '') + ' &middot; ' + money(o.total) + '</p></div>' +
                     '<button onclick="openReceipt(' + idx + ')" class="px-4 py-2 bg-roast-100 hover:bg-roast-200 text-amberGold text-xs font-bold rounded-xl border border-roast-200"><i class="fa-solid fa-receipt mr-1.5"></i>View receipt</button></div>' +
                     '<div class="flex items-start justify-between overflow-x-auto min-w-0"><div class="flex items-start justify-between w-full min-w-[420px]">' + stepper + '</div></div>' +
+                    (o.status === 'Pending Payment' ? '<div class="rounded-xl bg-amber-50 border border-amberGold/30 text-amber-800 text-xs p-3 flex flex-wrap items-center justify-between gap-3"><span>This order is waiting for payment.</span><button onclick="payOrder(\'' + o.id + '\')" class="px-4 py-2 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-lg whitespace-nowrap">Pay ' + money(o.total) + ' with Billplz</button></div>' : '') +
                     '<div class="flex gap-3 overflow-x-auto no-scrollbar">' + o.items.map(i => '<img src="' + esc(i.image) + '" alt="' + esc(i.name) + '" title="' + esc(i.name) + ' x' + i.qty + '" class="w-14 h-14 rounded-xl object-cover border border-roast-200 shrink-0">').join('') + '</div>' +
                 '</article>';
             }).join('');
+        }
+        function payOrder(id) {
+            const o = MemberShell.myOrders().find(x => x.id === id);
+            if (!o) return;
+            NBCA_PAY.checkout({ type: 'order', refId: o.id, amount: o.total, description: 'Order ' + o.id + ' - Nb.CA Academy', name: o.name, email: o.email, phone: o.phone, returnTo: 'orders.html' });
         }
         function openReceipt(i) {
             const o = orders[i];
