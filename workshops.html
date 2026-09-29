@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workshops | Nb.CA Academy</title>
+    <script>if (!localStorage.getItem('rp_logged_user')) { location.replace('auth.html?next=' + encodeURIComponent(location.pathname.split('/').pop() || 'dashboard.html')); }</script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    screens: { xs: '420px' },
+                    colors: {
+                        roast: {
+                            50: '#F8FAFC', 100: '#F1F5F9', 200: '#E2E8F0', 300: '#CBD5E1', 400: '#94A3B8',
+                            500: '#64748B', 600: '#475569', 700: '#334155', 800: '#1E293B', 900: '#1E40AF', 950: '#172554'
+                        },
+                        amberGold: '#2563EB',
+                        royalBlue: '#1E40AF',
+                        navy: '#172554'
+                    },
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'], serif: ['Playfair Display', 'serif'] }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F8FAFC;
+            background-image: radial-gradient(circle at 8% 5%, rgba(37,99,235,0.06) 0%, transparent 30%), radial-gradient(circle at 95% 8%, rgba(30,64,175,0.05) 0%, transparent 28%);
+            background-attachment: fixed; }
+        h1, h2, h3, .font-serif { font-family: 'Playfair Display', serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; } .no-scrollbar { scrollbar-width: none; }
+        @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+        main > * { animation: rise .45s ease both; } main > *:nth-child(2) { animation-delay: .06s; } main > *:nth-child(3) { animation-delay: .12s; } main > *:nth-child(4) { animation-delay: .18s; }
+        @media (prefers-reduced-motion: reduce) { main > * { animation: none; } }
+        @media print { #m-sidebar, #m-topbar, #m-bottomnav { display: none !important; } }
+    </style>
+</head>
+<body data-page="workshops" data-title="Workshops" data-sub="Professional coffee workshops, in person or online" class="text-roast-900 antialiased selection:bg-amberGold selection:text-white">
+    <div id="m-overlay"></div>
+    <aside id="m-sidebar"></aside>
+    <div class="lg:pl-72 min-h-screen flex flex-col min-w-0 overflow-x-hidden">
+        <header id="m-topbar"></header>
+        <main class="flex-1 min-w-0 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-10 py-6 lg:py-10 pb-28 lg:pb-14 space-y-10">
+
+            <section>
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-5">
+                <div><span class="text-[11px] font-extrabold tracking-[0.18em] text-amberGold uppercase">Level up</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-roast-950 mt-1">Workshops</h2></div>
+                
+            </div>
+                <div id="ws-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+            </section>
+
+        </main>
+    </div>
+    <nav id="m-bottomnav" aria-label="Primary"></nav>
+
+    <div id="ws-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeWorkshop()"></div>
+        <div class="relative bg-white rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+            <button onclick="closeWorkshop()" class="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/90 border border-roast-200 text-roast-800 flex items-center justify-center shadow" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+            <div id="ws-modal-body"></div>
+        </div>
+    </div>
+
+    <script src="js/catalog.js"></script>
+    <script src="js/member-shell.js"></script>
+    <script>
+
+        const C = window.NBCA_CATALOG.workshops;
+        let cur = null, curMode = null, curSlot = null;
+        const esc = MemberShell.esc;
+
+        function renderGrid() {
+            document.getElementById('ws-grid').innerHTML = C.map(w =>
+                '<button onclick="openWorkshop(\'' + w.id + '\')" class="group text-left bg-white rounded-2xl border border-roast-200 overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-amberGold/40 transition-all">' +
+                '<div class="relative h-44 overflow-hidden"><img src="' + esc(w.image) + '" alt="' + esc(w.title) + '" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"><span class="absolute top-3 left-3 px-2.5 py-1 bg-white/95 text-amberGold text-[10px] font-bold rounded-full">' + esc(w.badge) + '</span></div>' +
+                '<div class="p-5 space-y-2"><h3 class="font-serif text-lg font-bold text-roast-950">' + esc(w.title) + '</h3><p class="text-[11px] text-roast-500">' + esc(w.subtitle) + '</p><p class="text-xs text-roast-600 line-clamp-2">' + esc(w.description) + '</p>' +
+                '<div class="flex items-center justify-between pt-3"><span class="text-amberGold font-extrabold">RM ' + w.price.toFixed(2) + '</span><span class="text-[11px] font-bold text-amberGold">View &amp; enroll <i class="fa-solid fa-arrow-right text-[9px]"></i></span></div></div></button>').join('');
+        }
+
+        function openWorkshop(id) {
+            cur = C.find(w => w.id === id);
+            curMode = Object.keys(cur.modes)[0];
+            curSlot = null;
+            renderModal();
+            document.getElementById('ws-modal').classList.remove('hidden');
+        }
+        function closeWorkshop() { document.getElementById('ws-modal').classList.add('hidden'); }
+
+        function renderModal() {
+            const w = cur;
+            const modes = Object.keys(w.modes).map(k => '<button onclick="pickMode(\'' + k + '\')" class="px-4 py-2.5 rounded-xl text-xs font-bold border transition-all ' + (k === curMode ? 'bg-amberGold text-white border-amberGold shadow' : 'bg-roast-50 text-roast-700 border-roast-200 hover:border-amberGold') + '">' + esc(w.modes[k].label) + '</button>').join('');
+            const slots = (w.slots[curMode] || []).map((s, i) => '<button onclick="pickSlot(' + i + ')" class="px-4 py-2.5 rounded-xl text-xs font-semibold border text-left transition-all ' + (curSlot === s ? 'bg-emerald-50 border-emerald-400 text-emerald-700 ring-2 ring-emerald-300' : 'bg-white text-roast-700 border-roast-200 hover:border-amberGold') + '">' + esc(s) + '</button>').join('');
+            document.getElementById('ws-modal-body').innerHTML =
+                '<div class="grid md:grid-cols-5">' +
+                '<div class="md:col-span-2 h-48 md:h-auto"><img src="' + esc(w.image) + '" alt="" class="w-full h-full object-cover md:rounded-l-3xl"></div>' +
+                '<div class="md:col-span-3 p-6 sm:p-8 space-y-5">' +
+                    '<div><span class="text-[10px] font-extrabold tracking-widest text-amberGold uppercase">' + esc(w.subtitle) + '</span><h3 class="font-serif text-2xl font-extrabold text-roast-950 mt-1">' + esc(w.title) + '</h3><p class="text-xs text-roast-600 mt-2">' + esc(w.description) + '</p></div>' +
+                    '<ul class="grid grid-cols-2 gap-x-3 gap-y-1.5 text-[11px] text-roast-700">' + w.highlights.map(h => '<li><i class="fa-solid fa-check text-amberGold text-[9px] mr-1.5"></i>' + esc(h) + '</li>').join('') + '</ul>' +
+                    '<div class="space-y-2"><p class="text-[11px] font-bold uppercase text-roast-500">Mode</p><div class="flex flex-wrap gap-2">' + modes + '</div><p class="text-[11px] text-roast-500">' + esc(w.modes[curMode].note) + '</p></div>' +
+                    '<div class="space-y-2"><p class="text-[11px] font-bold uppercase text-roast-500">Choose a slot</p><div class="grid sm:grid-cols-2 gap-2">' + slots + '</div></div>' +
+                    '<div class="flex items-center justify-between pt-4 border-t border-roast-100"><div><span class="block text-[10px] uppercase text-roast-500">Fee</span><strong class="font-serif text-2xl text-amberGold">RM ' + w.price.toFixed(2) + '</strong></div>' +
+                    '<button onclick="enroll()" ' + (curSlot ? '' : 'disabled') + ' class="px-6 py-3 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl text-xs shadow-lg disabled:opacity-40 disabled:cursor-not-allowed">Enroll this slot</button></div>' +
+                '</div></div>';
+        }
+        function pickMode(k) { curMode = k; curSlot = null; renderModal(); }
+        function pickSlot(i) { curSlot = cur.slots[curMode][i]; renderModal(); }
+
+        // NOTE: no payment gateway is connected yet; the enrolment is recorded as awaiting payment verification.
+        function enroll() {
+            if (!curSlot) return;
+            const u = MemberShell.user() || {};
+            const all = (() => { try { return JSON.parse(localStorage.getItem('rp_workshop_enrollments') || '[]'); } catch (e) { return []; } })();
+            if (all.some(x => (x.email || '').toLowerCase() === (u.email || '').toLowerCase() && x.workshopId === cur.id && x.slot === curSlot)) {
+                showToast('You are already enrolled in this slot.');
+                return;
+            }
+            all.push({
+                id: 'WS-' + Date.now(), ref: 'RP-WS-' + String(Date.now()).slice(-6),
+                email: u.email, name: u.name, workshopId: cur.id, title: cur.title,
+                mode: curMode, modeLabel: cur.modes[curMode].label, location: cur.modes[curMode].location,
+                slot: curSlot, price: cur.price, status: 'Awaiting Payment Verification', createdAt: new Date().toISOString()
+            });
+            localStorage.setItem('rp_workshop_enrollments', JSON.stringify(all));
+            closeWorkshop();
+            showToast('Enrolled! Your ticket is in My Classes.');
+            setTimeout(() => { window.location.href = 'classes.html'; }, 1200);
+        }
+        renderGrid();
+
+    </script>
+</body>
+</html>

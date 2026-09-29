@@ -41,164 +41,81 @@
         @media print { #m-sidebar, #m-topbar, #m-bottomnav { display: none !important; } }
     </style>
 </head>
-<body data-page="orders" data-title="My Orders" data-sub="Track shipments and view receipts" class="text-roast-900 antialiased selection:bg-amberGold selection:text-white">
+<body data-page="orders" data-title="My Orders" data-sub="Track your coffee and merchandise orders" class="text-roast-900 antialiased selection:bg-amberGold selection:text-white">
     <div id="m-overlay"></div>
     <aside id="m-sidebar"></aside>
     <div class="lg:pl-72 min-h-screen flex flex-col min-w-0 overflow-x-hidden">
         <header id="m-topbar"></header>
         <main class="flex-1 min-w-0 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-10 py-6 lg:py-10 pb-28 lg:pb-14 space-y-10">
-            <div class="space-y-6"> 
-                <div class="flex flex-col md:flex-row md:items-end justify-between"> 
-                    <div> 
-                        <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Order Tracking & History</span> 
-                        <h2 class="text-3xl font-extrabold text-roast-950 mt-1">Product Shipments</h2> 
-                    </div> 
-                    <p class="text-xs text-roast-600 mt-2 md:mt-0">Review shipment statuses and purchase records.</p> 
-                </div> 
 
-                <div class="bg-white text-roast-900 rounded-3xl p-6 sm:p-8 shadow-md border border-roast-200 space-y-6"> 
-                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4 border-b border-roast-200"> 
-                        <div> 
-                            <h3 class="font-serif text-xl font-extrabold text-roast-950">ORD1001</h3> 
-                            <p class="text-xs text-roast-600 font-medium mt-0.5">2026-08-09 · 3 items · RM2,040.00</p> 
-                        </div> 
-                        <button onclick="openReceiptModal()" class="px-4 py-2 bg-roast-200 hover:bg-roast-300 text-amberGold text-xs font-bold rounded-xl transition-all flex items-center gap-2 border border-roast-300 shadow-sm"> 
-                            <i class="fa-solid fa-receipt"></i> View Receipt 
-                        </button> 
-                    </div> 
-
-                    <div class="py-4 px-2 overflow-x-auto">
-                        <div class="min-w-[550px] flex items-center justify-between relative">
-                            <div class="flex flex-col items-center text-center relative z-10 space-y-2">
-                                <div class="w-12 h-12 rounded-full bg-amberGold text-roast-50 flex items-center justify-center shadow-md font-bold text-base">
-                                    <i class="fa-solid fa-hourglass-half"></i>
-                                </div>
-                                <span class="text-xs font-bold text-amberGold">Awaiting Payment Verification</span>
-                            </div>
-                            <div class="flex-1 h-1 bg-amberGold mx-2 -mt-6"></div>
-                            <div class="flex flex-col items-center text-center relative z-10 space-y-2 opacity-50">
-                                <div class="w-12 h-12 rounded-full bg-roast-200 text-roast-600 flex items-center justify-center font-bold text-base border border-roast-300">
-                                    <i class="fa-solid fa-box"></i>
-                                </div>
-                                <span class="text-xs font-medium text-roast-600">Processing</span>
-                            </div>
-                            <div class="flex-1 h-1 bg-roast-200 mx-2 -mt-6"></div>
-                            <div class="flex flex-col items-center text-center relative z-10 space-y-2 opacity-50">
-                                <div class="w-12 h-12 rounded-full bg-roast-200 text-roast-600 flex items-center justify-center font-bold text-base border border-roast-300">
-                                    <i class="fa-solid fa-truck-fast"></i>
-                                </div>
-                                <span class="text-xs font-medium text-roast-600">Shipped</span>
-                            </div>
-                            <div class="flex-1 h-1 bg-roast-200 mx-2 -mt-6"></div>
-                            <div class="flex flex-col items-center text-center relative z-10 space-y-2 opacity-50">
-                                <div class="w-12 h-12 rounded-full bg-roast-200 text-roast-600 flex items-center justify-center font-bold text-base border border-roast-300">
-                                    <i class="fa-solid fa-check"></i>
-                                </div>
-                                <span class="text-xs font-medium text-roast-600">Completed</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bg-roast-50 border border-roast-200 rounded-xl p-3.5 flex items-center gap-3 text-xs font-medium text-roast-700">
-                        <i class="fa-solid fa-truck text-amberGold text-base"></i>
-                        <div>
-                            <span>Pos Laju — Tracking No: </span>
-                            <strong class="font-bold text-roast-950 tracking-wider">TRK100091</strong>
-                        </div>
-                    </div>
-
-                    <div class="space-y-3 pt-2">
-                        <button onclick="toggleTimeline()" class="w-full text-xs font-bold text-amberGold uppercase tracking-wider flex items-center justify-between bg-roast-50 hover:bg-roast-50/80 p-3.5 rounded-xl border border-roast-200 transition-all cursor-pointer">
-                            <span class="flex items-center gap-2">
-                                <i class="fa-solid fa-clock-rotate-left"></i> Status History
-                            </span>
-                            <i id="timeline-icon" class="fa-solid fa-chevron-down transition-transform duration-300"></i>
-                        </button>
-                        <div id="timeline-content" class="hidden bg-roast-50 rounded-2xl p-4 border border-roast-200 space-y-3 text-xs text-roast-700 transition-all">
-                            <div class="flex items-start gap-3 pb-2.5 border-b border-roast-100">
-                                <div class="w-2 h-2 rounded-full bg-amberGold mt-1 shrink-0"></div>
-                                <div><span class="font-semibold text-roast-950">2026-08-09</span> — Order created & awaiting payment</div>
-                            </div>
-                            <div class="flex items-start gap-3 pb-2.5 border-b border-roast-100">
-                                <div class="w-2 h-2 rounded-full bg-roast-300 mt-1 shrink-0"></div>
-                                <div><span class="font-semibold text-roast-950">2026-08-09</span> — Payment verified by admin</div>
-                            </div>
-                            <div class="flex items-start gap-3 pb-2.5 border-b border-roast-100">
-                                <div class="w-2 h-2 rounded-full bg-roast-300 mt-1 shrink-0"></div>
-                                <div><span class="font-semibold text-roast-950">2026-08-09</span> — Order received & processing</div>
-                            </div>
-                            <div class="flex items-start gap-3">
-                                <div class="w-2 h-2 rounded-full bg-roast-300 mt-1 shrink-0"></div>
-                                <div><span class="font-semibold text-roast-950">2026-08-09</span> — Shipped via Pos Laju — Tracking No: TRK100091</div>
-                            </div>
-                        </div>
-                    </div>
-                </div> 
+            <section>
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-5">
+                <div><span class="text-[11px] font-extrabold tracking-[0.18em] text-amberGold uppercase">Order tracking</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-roast-950 mt-1">My Orders</h2></div>
+                <a href="shop.html" class="inline-flex items-center gap-2 px-4 py-2.5 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-full text-xs shadow transition-all self-start"><i class="fa-solid fa-plus text-[10px]"></i> New order</a>
             </div>
-
-
-            <a href="index.html#coffee-beans" class="group flex items-center gap-4 rounded-3xl p-5 sm:p-6 bg-gradient-to-r from-roast-950 to-amberGold text-white shadow-lg">
-                <div class="w-12 h-12 rounded-2xl bg-white/15 flex items-center justify-center text-xl shrink-0"><i class="fa-solid fa-mug-hot"></i></div>
-                <div class="flex-1"><h3 class="font-serif text-lg font-bold">Craving fresh beans?</h3><p class="text-xs text-blue-100">In-house roasted 1st Grind blends, from RM 30.</p></div>
-                <span class="px-4 py-2 bg-white text-amberGold font-bold rounded-full text-xs group-hover:bg-blue-50 whitespace-nowrap">Shop now</span>
-            </a>
+                <div id="order-list" class="space-y-5"></div>
+            </section>
 
         </main>
     </div>
     <nav id="m-bottomnav" aria-label="Primary"></nav>
-<div id="receipt-modal" class="fixed inset-0 bg-black/75 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-roast-100 border border-roast-200 rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl relative space-y-6 text-roast-900">
-            <button onclick="closeReceiptModal()" class="absolute top-5 right-5 text-roast-600 hover:text-roast-950 p-2">
-                <i class="fa-solid fa-xmark text-lg"></i>
-            </button>
-            <div class="text-center space-y-1">
-                <div class="w-12 h-12 rounded-full bg-amberGold/20 border border-amberGold/40 text-amberGold flex items-center justify-center mx-auto text-xl shadow">
-                    <i class="fa-solid fa-receipt"></i>
-                </div>
-                <h3 class="text-xl font-bold font-serif text-roast-950">Official Receipt</h3>
-                <p class="text-xs text-roast-600">Order ID: ORD1001</p>
-            </div>
-            <div class="bg-roast-50 p-4 rounded-2xl border border-roast-200 space-y-3 text-xs">
-                <div class="flex justify-between pb-2 border-b border-roast-100">
-                    <span class="text-roast-600">Date:</span>
-                    <span class="font-medium text-roast-950">2026-08-09</span>
-                </div>
-                <div class="flex justify-between pb-2 border-b border-roast-100">
-                    <span class="text-roast-600">Payment Status:</span>
-                    <span class="font-semibold text-amberGold">Awaiting Verification</span>
-                </div>
-                <div class="space-y-1 pt-1">
-                    <span class="text-roast-600 block mb-1">Purchased Items:</span>
-                    <div class="flex justify-between text-roast-800"><span>1x Colombia Finca Milan</span> <span>RM 90.00</span></div>
-                    <div class="flex justify-between text-roast-800"><span>2x Merah Saga Espresso Blend</span> <span>RM 60.00</span></div>
-                    <div class="flex justify-between text-roast-800"><span>1x Coffee Brewing Masterclass</span> <span>RM 1,890.00</span></div>
-                </div>
-                <div class="pt-3 border-t border-roast-100 flex justify-between text-sm font-bold text-roast-950">
-                    <span>Total Amount:</span>
-                    <span class="text-amberGold">RM 2,040.00</span>
-                </div>
-            </div>
-            <div class="flex gap-3">
-                <button onclick="window.print()" class="flex-1 py-3 bg-amberGold hover:bg-royalBlue text-roast-50 font-bold rounded-xl text-xs transition-all shadow-md">
-                    <i class="fa-solid fa-print me-1"></i> Print / Download
-                </button>
-                <button onclick="closeReceiptModal()" class="px-5 py-3 bg-roast-200 hover:bg-roast-300 text-roast-900 font-bold rounded-xl text-xs transition-all">
-                    Close
-                </button>
-            </div>
+
+    <div id="receipt-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeReceipt()"></div>
+        <div class="relative bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl space-y-5 max-h-[90vh] overflow-y-auto">
+            <button onclick="closeReceipt()" class="absolute top-4 right-4 text-roast-500 hover:text-roast-950 p-2" aria-label="Close"><i class="fa-solid fa-xmark text-lg"></i></button>
+            <div class="text-center space-y-1"><div class="w-12 h-12 rounded-full bg-blue-50 text-amberGold flex items-center justify-center mx-auto"><i class="fa-solid fa-receipt"></i></div><h3 class="font-serif text-xl font-bold text-roast-950">Order Receipt</h3><p id="rc-id" class="text-xs text-roast-500"></p></div>
+            <div id="rc-body" class="bg-roast-50 p-4 rounded-2xl border border-roast-200 space-y-2 text-xs"></div>
+            <div class="flex gap-3"><button onclick="window.print()" class="flex-1 py-3 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl text-xs"><i class="fa-solid fa-print mr-1"></i> Print</button><button onclick="closeReceipt()" class="px-5 py-3 bg-roast-100 text-roast-800 font-bold rounded-xl text-xs">Close</button></div>
         </div>
     </div>
 
-    
     <script src="js/member-shell.js"></script>
     <script>
 
-        function toggleTimeline() {
-            document.getElementById('timeline-content').classList.toggle('hidden');
-            document.getElementById('timeline-icon').classList.toggle('rotate-180');
+        const STEPS = [['Awaiting Payment Verification', 'fa-hourglass-half', 'Payment check'], ['Processing', 'fa-box', 'Processing'], ['Shipped', 'fa-truck-fast', 'Shipped'], ['Completed', 'fa-check', 'Completed']];
+        const esc = MemberShell.esc, money = MemberShell.money;
+        let orders = [];
+
+        function render() {
+            orders = MemberShell.myOrders().slice().reverse();
+            const box = document.getElementById('order-list');
+            if (!orders.length) {
+                box.innerHTML = '<div class="bg-white rounded-3xl border border-dashed border-roast-300 p-10 text-center space-y-3"><div class="w-14 h-14 rounded-2xl bg-blue-50 text-amberGold flex items-center justify-center mx-auto text-2xl"><i class="fa-solid fa-box-open"></i></div><h3 class="font-serif text-xl font-bold text-roast-950">No orders yet</h3><p class="text-xs text-roast-500">Your coffee bean and merchandise orders will appear here.</p><a href="shop.html" class="inline-flex items-center gap-2 px-5 py-2.5 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-full text-xs shadow">Shop coffee beans <i class="fa-solid fa-arrow-right text-[10px]"></i></a></div>';
+                return;
+            }
+            box.innerHTML = orders.map((o, idx) => {
+                const at = Math.max(0, STEPS.findIndex(s => s[0] === o.status));
+                const stepper = STEPS.map((s, i) => {
+                    const done = i < at, active = i === at;
+                    const dot = done ? 'bg-emerald-500 text-white' : active ? 'bg-amberGold text-white ring-4 ring-blue-100' : 'bg-roast-200 text-roast-500';
+                    return '<div class="flex flex-col items-center gap-1.5 text-center w-20"><span class="w-9 h-9 rounded-full flex items-center justify-center text-xs ' + dot + '"><i class="fa-solid ' + (done ? 'fa-check' : s[1]) + '"></i></span><span class="text-[10px] font-bold ' + (done || active ? 'text-roast-950' : 'text-roast-400') + '">' + s[2] + '</span></div>' +
+                        (i < STEPS.length - 1 ? '<div class="flex-1 h-0.5 mt-[17px] ' + (done ? 'bg-emerald-500' : 'bg-roast-200') + '"></div>' : '');
+                }).join('');
+                const count = o.items.reduce((a, i) => a + i.qty, 0);
+                return '<article class="bg-white rounded-3xl border border-roast-200 shadow-sm p-5 sm:p-6 space-y-5">' +
+                    '<div class="flex flex-wrap items-center justify-between gap-3"><div><h3 class="font-serif text-xl font-extrabold text-roast-950">' + esc(o.id) + '</h3><p class="text-xs text-roast-500 mt-0.5">' + new Date(o.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) + ' &middot; ' + count + ' item' + (count > 1 ? 's' : '') + ' &middot; ' + money(o.total) + '</p></div>' +
+                    '<button onclick="openReceipt(' + idx + ')" class="px-4 py-2 bg-roast-100 hover:bg-roast-200 text-amberGold text-xs font-bold rounded-xl border border-roast-200"><i class="fa-solid fa-receipt mr-1.5"></i>View receipt</button></div>' +
+                    '<div class="flex items-start justify-between overflow-x-auto min-w-0"><div class="flex items-start justify-between w-full min-w-[420px]">' + stepper + '</div></div>' +
+                    '<div class="flex gap-3 overflow-x-auto no-scrollbar">' + o.items.map(i => '<img src="' + esc(i.image) + '" alt="' + esc(i.name) + '" title="' + esc(i.name) + ' x' + i.qty + '" class="w-14 h-14 rounded-xl object-cover border border-roast-200 shrink-0">').join('') + '</div>' +
+                '</article>';
+            }).join('');
         }
-        function openReceiptModal() { document.getElementById('receipt-modal').classList.remove('hidden'); }
-        function closeReceiptModal() { document.getElementById('receipt-modal').classList.add('hidden'); }
+        function openReceipt(i) {
+            const o = orders[i];
+            document.getElementById('rc-id').innerText = 'Order ' + o.id;
+            document.getElementById('rc-body').innerHTML =
+                '<div class="flex justify-between pb-2 border-b border-roast-200"><span class="text-roast-500">Date</span><strong>' + new Date(o.createdAt).toLocaleDateString('en-GB') + '</strong></div>' +
+                '<div class="flex justify-between pb-2 border-b border-roast-200"><span class="text-roast-500">Status</span><strong class="text-amberGold">' + esc(o.status) + '</strong></div>' +
+                '<div class="space-y-1 py-1">' + o.items.map(it => '<div class="flex justify-between text-roast-800"><span>' + it.qty + 'x ' + esc(it.name) + '</span><span>' + money(it.price * it.qty) + '</span></div>').join('') + '</div>' +
+                '<div class="flex justify-between text-roast-600 pt-2 border-t border-roast-200"><span>Shipping</span><span>' + money(o.shipping) + '</span></div>' +
+                '<div class="flex justify-between text-sm font-bold text-roast-950"><span>Total</span><span class="text-amberGold">' + money(o.total) + '</span></div>' +
+                '<div class="pt-2 border-t border-roast-200 text-roast-600"><span class="block text-[10px] uppercase">Deliver to</span>' + esc(o.name) + ', ' + esc(o.phone) + '<br>' + esc(o.address) + '</div>';
+            document.getElementById('receipt-modal').classList.remove('hidden');
+        }
+        function closeReceipt() { document.getElementById('receipt-modal').classList.add('hidden'); }
+        window.addEventListener('member-ready', render);
 
     </script>
 </body>

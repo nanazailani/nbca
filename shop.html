@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop | Nb.CA Academy</title>
+    <script>if (!localStorage.getItem('rp_logged_user')) { location.replace('auth.html?next=' + encodeURIComponent(location.pathname.split('/').pop() || 'dashboard.html')); }</script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    screens: { xs: '420px' },
+                    colors: {
+                        roast: {
+                            50: '#F8FAFC', 100: '#F1F5F9', 200: '#E2E8F0', 300: '#CBD5E1', 400: '#94A3B8',
+                            500: '#64748B', 600: '#475569', 700: '#334155', 800: '#1E293B', 900: '#1E40AF', 950: '#172554'
+                        },
+                        amberGold: '#2563EB',
+                        royalBlue: '#1E40AF',
+                        navy: '#172554'
+                    },
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'], serif: ['Playfair Display', 'serif'] }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F8FAFC;
+            background-image: radial-gradient(circle at 8% 5%, rgba(37,99,235,0.06) 0%, transparent 30%), radial-gradient(circle at 95% 8%, rgba(30,64,175,0.05) 0%, transparent 28%);
+            background-attachment: fixed; }
+        h1, h2, h3, .font-serif { font-family: 'Playfair Display', serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; } .no-scrollbar { scrollbar-width: none; }
+        @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+        main > * { animation: rise .45s ease both; } main > *:nth-child(2) { animation-delay: .06s; } main > *:nth-child(3) { animation-delay: .12s; } main > *:nth-child(4) { animation-delay: .18s; }
+        @media (prefers-reduced-motion: reduce) { main > * { animation: none; } }
+        @media print { #m-sidebar, #m-topbar, #m-bottomnav { display: none !important; } }
+    </style>
+</head>
+<body data-page="beans" data-title="Shop" data-sub="Coffee beans and merchandise" class="text-roast-900 antialiased selection:bg-amberGold selection:text-white">
+    <div id="m-overlay"></div>
+    <aside id="m-sidebar"></aside>
+    <div class="lg:pl-72 min-h-screen flex flex-col min-w-0 overflow-x-hidden">
+        <header id="m-topbar"></header>
+        <main class="flex-1 min-w-0 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-10 py-6 lg:py-10 pb-28 lg:pb-14 space-y-10">
+
+            <section>
+                <div class="flex flex-wrap items-end justify-between gap-3 mb-6">
+                    <div><span class="text-[11px] font-extrabold tracking-[0.18em] text-amberGold uppercase">Nb.CA Shop</span><h2 id="shop-title" class="text-2xl sm:text-3xl font-extrabold text-roast-950 mt-1"></h2></div>
+                    <div class="inline-flex p-1 rounded-full bg-white border border-roast-200 shadow-sm text-xs font-bold">
+                        <a id="tab-beans" href="shop.html?tab=beans" class="px-5 py-2 rounded-full"><i class="fa-solid fa-mug-hot mr-1.5"></i>Coffee Beans</a>
+                        <a id="tab-merch" href="shop.html?tab=merch" class="px-5 py-2 rounded-full"><i class="fa-solid fa-shirt mr-1.5"></i>Merchandise</a>
+                    </div>
+                </div>
+                <div id="shop-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5"></div>
+            </section>
+
+        </main>
+    </div>
+    <nav id="m-bottomnav" aria-label="Primary"></nav>
+
+    <script>document.body.dataset.page = new URLSearchParams(location.search).get('tab') === 'merch' ? 'merch' : 'beans';</script>
+    <script src="js/catalog.js"></script>
+    <script src="js/member-shell.js"></script>
+    <script>
+
+        const tab = new URLSearchParams(location.search).get('tab') === 'merch' ? 'merch' : 'beans';
+        const items = window.NBCA_CATALOG[tab];
+        const esc = MemberShell.esc;
+        document.getElementById('shop-title').innerText = tab === 'beans' ? 'Coffee Beans' : 'Merchandise';
+        [['beans', 'tab-beans'], ['merch', 'tab-merch']].forEach(([k, id]) => {
+            document.getElementById(id).className = 'px-5 py-2 rounded-full transition-all ' + (k === tab ? 'bg-amberGold text-white shadow' : 'text-roast-700 hover:text-amberGold');
+        });
+        document.getElementById('shop-grid').innerHTML = items.map(p =>
+            '<article class="group bg-white rounded-2xl border border-roast-200 overflow-hidden shadow-sm hover:shadow-xl hover:border-amberGold/40 transition-all flex flex-col">' +
+            '<div class="relative aspect-[4/3] overflow-hidden bg-roast-100"><img src="' + esc(p.image) + '" alt="' + esc(p.title) + '" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">' +
+            (p.badge ? '<span class="absolute top-3 left-3 px-2.5 py-1 bg-white/95 text-amberGold text-[10px] font-bold rounded-full">' + esc(p.badge) + '</span>' : '') + '</div>' +
+            '<div class="p-4 sm:p-5 flex-1 flex flex-col gap-2"><h3 class="font-serif text-sm sm:text-base font-bold text-roast-950 leading-snug">' + esc(p.title) + '</h3><p class="text-[11px] text-roast-500">' + esc(p.subtitle || '') + (p.weight ? ' &middot; ' + esc(p.weight) : '') + '</p>' +
+            (p.specs && p.specs['Flavor Notes'] ? '<p class="text-[11px] text-roast-600"><i class="fa-solid fa-leaf text-amberGold mr-1"></i>' + esc(p.specs['Flavor Notes']) + '</p>' : '') +
+            '<div class="mt-auto flex items-center justify-between pt-3"><span class="text-amberGold font-extrabold">RM ' + p.price.toFixed(2) + '</span>' +
+            '<button onclick="addToCart({id:\'' + p.id + '\',name:\'' + esc(p.title).replace(/&#39;/g, '') + '\',price:' + p.price + ',image:\'' + p.image + '\'})" class="px-3.5 py-2 bg-amberGold hover:bg-royalBlue text-white text-[11px] font-bold rounded-full shadow transition-all"><i class="fa-solid fa-plus mr-1 text-[9px]"></i>Add</button></div></div></article>').join('');
+
+    </script>
+</body>
+</html>

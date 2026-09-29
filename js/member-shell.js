@@ -14,10 +14,10 @@
             { id: 'membership', label: 'Membership', icon: 'fa-crown', href: 'membership.html', pill: SAMPLE_POINTS + ' pts' }
         ]},
         { group: 'Discover', items: [
-            { id: 'x-fixed', label: 'Fixed Classes', icon: 'fa-calendar-days', href: 'index.html#fixed-classes' },
-            { id: 'x-workshops', label: 'Workshops', icon: 'fa-chalkboard-user', href: 'index.html#classes' },
-            { id: 'x-beans', label: 'Coffee Beans', icon: 'fa-mug-hot', href: 'index.html#coffee-beans' },
-            { id: 'x-merch', label: 'Merchandise', icon: 'fa-shirt', href: 'index.html#merchandise' }
+            { id: 'fixed', label: 'Fixed Classes', icon: 'fa-calendar-days', href: 'book-class.html' },
+            { id: 'workshops', label: 'Workshops', icon: 'fa-chalkboard-user', href: 'workshops.html' },
+            { id: 'beans', label: 'Coffee Beans', icon: 'fa-mug-hot', href: 'shop.html?tab=beans' },
+            { id: 'merch', label: 'Merchandise', icon: 'fa-shirt', href: 'shop.html?tab=merch' }
         ]}
     ];
 
@@ -55,12 +55,10 @@
             if (n) extra = '<span class="ml-auto min-w-[20px] h-5 px-1.5 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center">' + n + '</span>';
         }
         if (it.pill) extra = '<span class="ml-auto whitespace-nowrap text-[10px] font-bold px-2 py-0.5 rounded-full ' + (active ? 'bg-white text-amberGold' : 'bg-amberGold/10 text-amberGold') + '">' + it.pill + '</span>';
-        const external = it.id.startsWith('x-');
         return '<a href="' + it.href + '" class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[13px] font-semibold transition-all ' +
             (active ? 'bg-amberGold text-white shadow-md shadow-blue-600/25' : 'text-roast-700 hover:bg-roast-100 hover:text-roast-950') + '">' +
             '<span class="w-8 h-8 rounded-lg flex items-center justify-center text-sm shrink-0 ' + (active ? 'bg-white/20' : 'bg-roast-100 group-hover:bg-white text-amberGold') + '"><i class="fa-solid ' + it.icon + '"></i></span>' +
             '<span>' + it.label + '</span>' + extra +
-            (external ? '<i class="fa-solid fa-arrow-up-right-from-square ml-auto text-[9px] text-roast-400 opacity-0 group-hover:opacity-100"></i>' : '') +
             '</a>';
     }
 
@@ -79,7 +77,7 @@
             '</div>' +
             '<nav class="flex-1 overflow-y-auto px-4 py-5 space-y-6" aria-label="Member navigation">' +
                 NAV.map(g => '<div class="space-y-1"><p class="px-3.5 mb-2 text-[10px] font-extrabold tracking-[0.18em] uppercase text-roast-400">' + g.group + '</p>' + g.items.map(navItem).join('') + '</div>').join('') +
-                '<a href="index.html#fixed-classes" class="block rounded-2xl p-4 bg-gradient-to-br from-roast-950 to-royalBlue text-white shadow-lg relative overflow-hidden">' +
+                '<a href="book-class.html" class="block rounded-2xl p-4 bg-gradient-to-br from-roast-950 to-royalBlue text-white shadow-lg relative overflow-hidden">' +
                     '<i class="fa-solid fa-mug-hot absolute -right-3 -bottom-3 text-6xl text-white/10"></i>' +
                     '<span class="text-[10px] font-bold uppercase tracking-widest text-blue-200">Now open</span>' +
                     '<p class="font-serif text-base font-bold mt-1 leading-snug">Reserve your seat in the daily class</p>' +
@@ -93,7 +91,6 @@
                     '<i class="fa-solid fa-gear text-roast-400 text-xs"></i>' +
                 '</button>' +
                 '<div class="flex gap-2">' +
-                    '<a href="index.html" class="flex-1 py-2 rounded-xl text-[11px] font-bold text-roast-700 bg-roast-100 hover:bg-roast-200 text-center transition-all"><i class="fa-solid fa-globe mr-1"></i> Website</a>' +
                     '<button onclick="logoutUser()" class="flex-1 py-2 rounded-xl text-[11px] font-bold text-red-600 bg-red-50 hover:bg-red-100 transition-all"><i class="fa-solid fa-right-from-bracket mr-1"></i> Logout</button>' +
                 '</div>' +
             '</div>';
@@ -111,7 +108,8 @@
             '</div>' +
             '<div class="flex items-center gap-2 sm:gap-3 shrink-0">' +
                 '<a href="membership.html" class="hidden sm:flex items-center gap-2 px-3.5 py-2 rounded-full bg-white border border-roast-200 text-xs font-bold text-roast-800 hover:border-amberGold transition-all"><i class="fa-solid fa-coins text-amberGold"></i> ' + SAMPLE_POINTS + ' pts</a>' +
-                '<a href="index.html#fixed-classes" class="flex items-center gap-2 px-4 py-2.5 rounded-full bg-amberGold hover:bg-royalBlue text-white text-xs font-bold shadow-md transition-all"><i class="fa-solid fa-user-pen text-[11px]"></i> <span class="hidden xs:inline sm:inline">Book a Class</span></a>' +
+                '<a href="book-class.html" class="flex items-center gap-2 px-4 py-2.5 rounded-full bg-amberGold hover:bg-royalBlue text-white text-xs font-bold shadow-md transition-all"><i class="fa-solid fa-user-pen text-[11px]"></i> <span class="hidden xs:inline sm:inline">Book a Class</span></a>' +
+                '<button onclick="openCart()" class="relative w-10 h-10 rounded-full bg-white border border-roast-200 text-roast-800 hover:border-amberGold flex items-center justify-center" aria-label="Cart"><i class="fa-solid fa-bag-shopping text-sm"></i><span id="cart-badge" class="hidden absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-amberGold text-white text-[10px] font-bold items-center justify-center">0</span></button>' +
                 '<button onclick="openProfileModal()" class="w-10 h-10 rounded-full bg-amberGold text-white font-bold text-xs flex items-center justify-center shadow-md" aria-label="Profile">' + esc(initials(u.name)) + '</button>' +
             '</div>';
     }
@@ -151,6 +149,14 @@
                         '<div class="flex gap-3 pt-2"><button type="submit" class="flex-1 py-3 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl transition-all shadow-md">Save Changes</button>' +
                         '<button type="button" onclick="closeProfileModal()" class="px-5 py-3 bg-roast-100 hover:bg-roast-200 text-roast-700 font-bold rounded-xl border border-roast-200">Cancel</button></div>' +
                     '</form>' +
+                '</div>' +
+            '</div>' +
+            '<div id="cart-drawer" class="fixed inset-0 z-50 hidden">' +
+                '<div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeCart()"></div>' +
+                '<div class="absolute right-0 top-0 bottom-0 w-full max-w-md bg-white shadow-2xl flex flex-col">' +
+                    '<div class="h-16 px-5 flex items-center justify-between border-b border-roast-100 shrink-0"><h3 class="font-serif text-lg font-bold text-roast-950"><i class="fa-solid fa-bag-shopping text-amberGold mr-2"></i>Your Basket</h3><button onclick="closeCart()" class="w-9 h-9 rounded-full hover:bg-roast-100 text-roast-600" aria-label="Close"><i class="fa-solid fa-xmark"></i></button></div>' +
+                    '<div id="cart-body" class="flex-1 overflow-y-auto p-5 space-y-3"></div>' +
+                    '<div id="cart-foot" class="border-t border-roast-100 p-5 space-y-3 shrink-0"></div>' +
                 '</div>' +
             '</div>' +
             '<div id="app-toast" class="fixed bottom-24 lg:bottom-6 right-4 lg:right-6 z-[60] transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none">' +
@@ -218,16 +224,109 @@
         }, 2500);
     };
 
+    // ---- shopping basket (stored per browser; checkout creates a member order) ----
+    const SHIPPING = 8;
+    const money = n => 'RM ' + Number(n).toFixed(2);
+    function getCart() { try { return JSON.parse(localStorage.getItem('rp_portal_cart') || '[]'); } catch (e) { return []; } }
+    function setCart(c) { localStorage.setItem('rp_portal_cart', JSON.stringify(c)); refreshCartBadge(); }
+    function refreshCartBadge() {
+        const b = document.getElementById('cart-badge');
+        if (!b) return;
+        const n = getCart().reduce((a, i) => a + i.qty, 0);
+        b.innerText = n;
+        b.classList.toggle('hidden', !n);
+        b.classList.toggle('flex', !!n);
+    }
+    function myOrders() {
+        const email = ((user() || {}).email || '').toLowerCase();
+        let all = [];
+        try { all = JSON.parse(localStorage.getItem('rp_member_orders') || '[]'); } catch (e) {}
+        return all.filter(o => (o.email || '').toLowerCase() === email);
+    }
+    function myWorkshops() {
+        const email = ((user() || {}).email || '').toLowerCase();
+        let all = [];
+        try { all = JSON.parse(localStorage.getItem('rp_workshop_enrollments') || '[]'); } catch (e) {}
+        return all.filter(w => (w.email || '').toLowerCase() === email);
+    }
+    Object.assign(MemberShell, { getCart, myOrders, myWorkshops, money });
+
+    window.addToCart = function (item) {
+        const cart = getCart();
+        const hit = cart.find(i => i.id === item.id);
+        if (hit) hit.qty += 1; else cart.push({ id: item.id, name: item.name, price: item.price, image: item.image, qty: 1 });
+        setCart(cart);
+        showToast('Added "' + item.name + '" to your basket.');
+    };
+    window.changeQty = function (id, d) {
+        let cart = getCart().map(i => i.id === id ? { ...i, qty: i.qty + d } : i).filter(i => i.qty > 0);
+        setCart(cart); renderCart();
+    };
+    window.openCart = function () { renderCart(); document.getElementById('cart-drawer').classList.remove('hidden'); };
+    window.closeCart = function () { document.getElementById('cart-drawer').classList.add('hidden'); };
+
+    function renderCart(step) {
+        const cart = getCart();
+        const body = document.getElementById('cart-body'), foot = document.getElementById('cart-foot');
+        if (!cart.length) {
+            body.innerHTML = '<div class="text-center py-16 space-y-3"><div class="w-14 h-14 rounded-2xl bg-blue-50 text-amberGold flex items-center justify-center mx-auto text-2xl"><i class="fa-solid fa-bag-shopping"></i></div><p class="text-sm font-bold text-roast-950">Your basket is empty</p><a href="shop.html" class="inline-block px-5 py-2.5 bg-amberGold text-white text-xs font-bold rounded-full">Browse the shop</a></div>';
+            foot.innerHTML = ''; return;
+        }
+        const sub = cart.reduce((a, i) => a + i.price * i.qty, 0);
+        body.innerHTML = cart.map(i =>
+            '<div class="flex gap-3 items-center bg-roast-50 rounded-2xl p-3 border border-roast-200"><img src="' + esc(i.image) + '" alt="" class="w-16 h-16 rounded-xl object-cover shrink-0">' +
+            '<div class="flex-1 min-w-0"><p class="text-xs font-bold text-roast-950 leading-snug">' + esc(i.name) + '</p><p class="text-xs text-amberGold font-bold mt-0.5">' + money(i.price) + '</p></div>' +
+            '<div class="flex items-center gap-2"><button onclick="changeQty(\'' + i.id + '\', -1)" class="w-7 h-7 rounded-full bg-white border border-roast-200 text-roast-700" aria-label="Less">&minus;</button><span class="text-xs font-bold w-4 text-center">' + i.qty + '</span><button onclick="changeQty(\'' + i.id + '\', 1)" class="w-7 h-7 rounded-full bg-white border border-roast-200 text-roast-700" aria-label="More">+</button></div></div>').join('');
+        if (step === 'checkout') {
+            const u2 = user() || {};
+            body.innerHTML += '<form id="checkout-form" onsubmit="placeOrder(event)" class="space-y-3 text-xs pt-2">' +
+                '<p class="font-bold text-roast-950 uppercase tracking-wider text-[11px]">Delivery details</p>' +
+                '<input id="co-name" required value="' + esc(u2.name || '') + '" placeholder="Full name" class="w-full bg-roast-50 border border-roast-200 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">' +
+                '<input id="co-phone" required type="tel" placeholder="Phone number" class="w-full bg-roast-50 border border-roast-200 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">' +
+                '<textarea id="co-address" required rows="3" placeholder="Delivery address" class="w-full bg-roast-50 border border-roast-200 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold"></textarea></form>';
+        }
+        foot.innerHTML = '<div class="space-y-1 text-xs"><div class="flex justify-between text-roast-600"><span>Subtotal</span><span>' + money(sub) + '</span></div><div class="flex justify-between text-roast-600"><span>Shipping</span><span>' + money(SHIPPING) + '</span></div><div class="flex justify-between text-sm font-bold text-roast-950 pt-1"><span>Total</span><span class="text-amberGold">' + money(sub + SHIPPING) + '</span></div></div>' +
+            (step === 'checkout'
+                ? '<button type="submit" form="checkout-form" class="w-full py-3.5 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl text-sm shadow-lg">Place order</button><button onclick="renderCartStep()" class="w-full text-xs text-roast-500 hover:text-roast-950">Back to basket</button>'
+                : '<button onclick="renderCartStep(\'checkout\')" class="w-full py-3.5 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl text-sm shadow-lg">Checkout</button>');
+    }
+    window.renderCartStep = renderCart;
+
+    // NOTE: no payment gateway is connected yet, so the order is recorded as awaiting payment verification.
+    window.placeOrder = function (e) {
+        e.preventDefault();
+        const cart = getCart();
+        if (!cart.length) return;
+        const sub = cart.reduce((a, i) => a + i.price * i.qty, 0);
+        const orders = (() => { try { return JSON.parse(localStorage.getItem('rp_member_orders') || '[]'); } catch (x) { return []; } })();
+        orders.push({
+            id: 'ORD' + String(Date.now()).slice(-6),
+            email: (user() || {}).email,
+            name: document.getElementById('co-name').value.trim(),
+            phone: document.getElementById('co-phone').value.trim(),
+            address: document.getElementById('co-address').value.trim(),
+            items: cart, subtotal: sub, shipping: SHIPPING, total: sub + SHIPPING,
+            status: 'Awaiting Payment Verification',
+            createdAt: new Date().toISOString()
+        });
+        localStorage.setItem('rp_member_orders', JSON.stringify(orders));
+        setCart([]);
+        closeCart();
+        showToast('Order placed! Track it in My Orders.');
+        setTimeout(() => { window.location.href = 'orders.html'; }, 1200);
+    };
+
     buildSidebar();
     buildTopbar();
     buildBottomNav();
     injectOverlays();
+    refreshCartBadge();
     const overlay = document.getElementById('m-overlay');
     if (overlay) {
         overlay.className = 'hidden lg:hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-30';
         overlay.onclick = MemberShell.closeMenu;
     }
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') { MemberShell.closeMenu(); closeProfileModal(); } });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') { MemberShell.closeMenu(); closeProfileModal(); closeCart(); } });
     // after the page's own scripts have registered their listeners
     const fireReady = () => window.dispatchEvent(new Event('member-ready'));
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fireReady); else fireReady();

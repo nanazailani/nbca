@@ -412,7 +412,7 @@
                             </div>
 
                             <button onclick="openFixedClassModal()" class="btn-anim w-full py-3 bg-amberGold hover:bg-royalBlue text-roast-50 font-bold rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-2">
-                                <i class="fa-solid fa-user-pen"></i> Register for Class
+                                <i class="fa-solid fa-user-pen"></i> Sign in to Register
                             </button>
                             <p class="text-[10px] text-roast-500 text-center">A 50% deposit is required to confirm your seat. Balance is payable on class day. You will need to log in or create an account first.</p>
                         </div>
@@ -1053,107 +1053,6 @@
 
     <!-- CLASS DETAIL / SLOT BOOKING MODAL --> 
     <!-- FIXED CLASS: STUDENT REGISTRATION MODAL (deposit-based, no cart) -->
-    <div id="fixed-class-modal" class="modal-overlay fixed inset-0 bg-black/50 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-        <div class="modal-panel bg-white rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl relative p-6 sm:p-8">
-            <button onclick="closeFixedClassModal()" class="absolute top-5 right-5 text-roast-400 hover:text-roast-950 p-2">
-                <i class="fa-solid fa-xmark text-lg"></i>
-            </button>
-            <div class="text-center space-y-1 mb-5">
-                <div class="w-14 h-14 rounded-2xl bg-amberGold/15 border border-amberGold/30 text-amberGold flex items-center justify-center mx-auto text-2xl shadow">
-                    <i class="fa-solid fa-user-graduate"></i>
-                </div>
-                <h3 class="text-xl font-bold font-serif text-roast-950">Class Registration</h3>
-                <p class="text-xs text-roast-500">Fixed Class — Coffee Fundamentals</p>
-            </div>
-
-            <!-- Progress -->
-            <div class="flex items-center justify-center gap-2 mb-6 text-[10px] font-bold uppercase tracking-wider">
-                <span id="fc-step-dot-1" class="px-3 py-1 rounded-full bg-amberGold text-roast-50">1 Details</span>
-                <span class="text-roast-300">›</span>
-                <span id="fc-step-dot-2" class="px-3 py-1 rounded-full bg-roast-100 text-roast-500">2 Date &amp; Session</span>
-                <span class="text-roast-300">›</span>
-                <span id="fc-step-dot-3" class="px-3 py-1 rounded-full bg-roast-100 text-roast-500">3 Payment</span>
-            </div>
-
-            <!-- STEP 1: DETAILS -->
-            <form id="fc-step-1" onsubmit="fcGoToStep2(event)" class="space-y-4 text-xs">
-                <div>
-                    <label class="block font-semibold text-roast-600 uppercase mb-1">Name *</label>
-                    <input type="text" id="fc-student-name" required placeholder="Ahmad Zaki" class="w-full bg-roast-50 border border-roast-200 text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
-                </div>
-                <div>
-                    <label class="block font-semibold text-roast-600 uppercase mb-1">IC / Passport Number * <span class="normal-case font-normal text-roast-400">(for your certificate)</span></label>
-                    <input type="text" id="fc-student-ic" required placeholder="e.g. 990101-01-1234" class="w-full bg-roast-50 border border-roast-200 text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
-                </div>
-                <div>
-                    <label class="block font-semibold text-roast-600 uppercase mb-1">Cafe Ownership <span class="normal-case font-normal text-roast-400">(optional)</span></label>
-                    <input type="text" id="fc-student-cafe" placeholder="Cafe name, if you own or run one" class="w-full bg-roast-50 border border-roast-200 text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
-                </div>
-                <div class="grid sm:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block font-semibold text-roast-600 uppercase mb-1">Phone *</label>
-                        <input type="tel" id="fc-student-phone" required placeholder="+60 12-345 6789" class="w-full bg-roast-50 border border-roast-200 text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
-                    </div>
-                    <div>
-                        <label class="block font-semibold text-roast-600 uppercase mb-1">Email *</label>
-                        <input type="email" id="fc-student-email" required readonly class="w-full bg-roast-100 border border-roast-200 text-roast-600 rounded-xl px-4 py-3 focus:outline-none cursor-not-allowed" title="Linked to your account">
-                    </div>
-                </div>
-                <div>
-                    <label class="block font-semibold text-roast-600 uppercase mb-1">From Where *</label>
-                    <input type="text" id="fc-student-from" required placeholder="Town / state you are travelling from" class="w-full bg-roast-50 border border-roast-200 text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
-                </div>
-                <button type="submit" class="btn-anim w-full py-3.5 bg-amberGold hover:bg-royalBlue text-roast-50 font-bold rounded-xl text-xs transition-all shadow-lg uppercase tracking-wider">Next: Choose Date &amp; Session</button>
-            </form>
-
-            <!-- STEP 2: DATE + SESSION -->
-            <div id="fc-step-2" class="hidden space-y-4 text-xs">
-                <div class="flex items-center justify-between">
-                    <button type="button" onclick="fcChangeMonth(-1)" id="fc-prev-month" class="w-9 h-9 rounded-full border border-roast-200 text-roast-700 hover:bg-roast-100"><i class="fa-solid fa-chevron-left text-[10px]"></i></button>
-                    <span id="fc-month-label" class="font-bold text-roast-950 text-sm font-serif"></span>
-                    <button type="button" onclick="fcChangeMonth(1)" class="w-9 h-9 rounded-full border border-roast-200 text-roast-700 hover:bg-roast-100"><i class="fa-solid fa-chevron-right text-[10px]"></i></button>
-                </div>
-                <div class="grid grid-cols-7 gap-1.5 text-center text-[10px] font-bold uppercase text-roast-500">
-                    <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span class="text-roast-300">Fri</span><span class="text-roast-300">Sat</span>
-                </div>
-                <div id="fc-calendar" class="grid grid-cols-7 gap-1.5"></div>
-                <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-[10px] text-roast-600">
-                    <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-emerald-500"></span> Available</span>
-                    <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-amber-400"></span> Filling up</span>
-                    <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-red-500"></span> Fully booked</span>
-                    <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-roast-200"></span> Closed</span>
-                </div>
-                <div id="fc-session-picker" class="hidden space-y-2 pt-2 border-t border-roast-100">
-                    <p class="font-semibold text-roast-600 uppercase">Sessions on <span id="fc-picked-date-label" class="text-roast-950"></span></p>
-                    <div id="fc-session-buttons" class="grid sm:grid-cols-2 gap-3"></div>
-                </div>
-                <div class="flex gap-3 pt-2">
-                    <button type="button" onclick="fcShowStep(1)" class="flex-1 py-3 bg-roast-100 hover:bg-roast-200 text-roast-700 font-bold rounded-xl border border-roast-200">Back</button>
-                    <button type="button" id="fc-continue-payment" onclick="fcGoToStep3()" disabled class="flex-[2] py-3 bg-amberGold hover:bg-royalBlue text-roast-50 font-bold rounded-xl uppercase tracking-wider disabled:opacity-40 disabled:cursor-not-allowed">Next: Payment</button>
-                </div>
-            </div>
-
-            <!-- STEP 3: PAYMENT -->
-            <div id="fc-step-3" class="hidden space-y-4 text-xs">
-                <div class="bg-roast-50 rounded-xl p-4 border border-roast-200 space-y-1.5">
-                    <div class="flex justify-between"><span class="text-roast-600">Student</span><strong id="fc-sum-name" class="text-roast-950"></strong></div>
-                    <div class="flex justify-between"><span class="text-roast-600">Date</span><strong id="fc-sum-date" class="text-roast-950"></strong></div>
-                    <div class="flex justify-between"><span class="text-roast-600">Session</span><strong id="fc-sum-session" class="text-roast-950"></strong></div>
-                </div>
-                <div class="bg-roast-50 rounded-xl p-4 border border-roast-200 space-y-1.5">
-                    <div class="flex justify-between"><span class="text-roast-600">Class Fee</span><span id="fc-sum-fee" class="font-bold text-roast-950"></span></div>
-                    <div class="flex justify-between text-amberGold font-bold"><span>Deposit Due Now</span><span id="fc-sum-deposit"></span></div>
-                    <div class="flex justify-between text-roast-500"><span>Balance on Class Day</span><span id="fc-sum-balance"></span></div>
-                </div>
-                <p class="text-[10px] text-roast-500 text-center">After payment our team will review it and confirm your seat (or contact you to reschedule if needed).</p>
-                <div class="flex gap-3">
-                    <button type="button" onclick="fcShowStep(2)" class="flex-1 py-3 bg-roast-100 hover:bg-roast-200 text-roast-700 font-bold rounded-xl border border-roast-200">Back</button>
-                    <button type="button" onclick="fcPayDeposit()" class="flex-[2] py-3 bg-amberGold hover:bg-royalBlue text-roast-50 font-bold rounded-xl uppercase tracking-wider"><i class="fa-solid fa-lock text-[10px] mr-1"></i> Pay Deposit</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div id="class-modal" class="modal-overlay fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4"> 
         <div class="modal-panel bg-gradient-to-b from-roast-100 to-roast-50 border border-roast-200 rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative text-left p-6 sm:p-8"> 
             <button onclick="closeClassModal()" class="absolute top-4 right-4 z-10 bg-roast-50/80 border border-roast-300 text-roast-800 hover:text-roast-950 p-2 rounded-full w-10 h-10 flex items-center justify-center shadow transition-all"> 
@@ -1284,7 +1183,7 @@
                 <p class="text-xs text-roast-700 mt-1">Please sign in to your account first before adding items to cart or enrolling in classes.</p> 
             </div> 
             <div class="space-y-2 pt-2"> 
-                <a href="auth.html?next=index.html" class="block w-full py-3 bg-amberGold hover:bg-royalBlue text-roast-50 font-bold rounded-xl text-xs transition-all shadow-md"> Go To Sign In </a> 
+                <a href="auth.html" class="block w-full py-3 bg-amberGold hover:bg-royalBlue text-roast-50 font-bold rounded-xl text-xs transition-all shadow-md"> Go To Sign In </a> 
                 <button onclick="closeLoginRequiredModal()" class="block w-full py-2.5 bg-roast-100 hover:bg-roast-200 text-roast-700 font-bold rounded-xl text-xs border border-roast-300"> Cancel </button> 
             </div> 
         </div> 
@@ -1301,16 +1200,10 @@
         document.addEventListener('DOMContentLoaded', () => { 
             const savedUser = localStorage.getItem('rp_logged_user'); 
             if (savedUser) { 
-                isLoggedIn = true; 
+                window.location.replace('dashboard.html'); 
+                return; 
             } 
             updateAuthNavbarUI();
-            try {
-                if (isLoggedIn && sessionStorage.getItem('nbca_open_fixed')) {
-                    sessionStorage.removeItem('nbca_open_fixed');
-                    document.getElementById('fixed-classes').scrollIntoView();
-                    openFixedClassModal();
-                }
-            } catch (e) {}
             loadBlogPosts(); 
             renderBlogGrid(); 
             renderTeamGrid(); 
@@ -1664,192 +1557,9 @@
         let classQty = 1; 
 
         // ===================== FIXED CLASS: STUDENT REGISTRATION (deposit-based, no cart) ===================== 
-        const FC_CAPACITY = 10;                       // seats per session
-        const FC_OPEN_DAYS = [0, 1, 2, 3, 4];          // Sunday – Thursday
-        const FC_SESSIONS = ['10:00 AM – 12:00 PM', '2:00 PM – 4:00 PM'];
-        const FC_INACTIVE = ['Reschedule', 'Cancelled'];
-        let fcDetails = null;
-        let fcPicked = { date: null, session: null };
-        let fcViewMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
-
-        function fcGetFees() {
-            let fee = 150, pct = 50;
-            try {
-                const st = JSON.parse(localStorage.getItem('rp_fixed_class_settings') || 'null');
-                if (st) { fee = Number(st.fee) || fee; pct = Number(st.depositPct) || pct; }
-            } catch (e) {}
-            return { fee, deposit: fee * pct / 100 };
-        }
-
-        function fcLoadRegistrations() {
-            try { return JSON.parse(localStorage.getItem('rp_fixed_class_students') || '[]'); } catch (e) { return []; }
-        }
-
-        function fcBookedCount(dateStr, session) {
-            return fcLoadRegistrations().filter(r => r.preferredDate === dateStr && r.session === session && !FC_INACTIVE.includes(r.classStatus)).length;
-        }
-
-        function fcDateStr(d) {
-            return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
-        }
-
-        // Registration requires an account: send guests to sign in / register, then bring them back here.
+        // Class registration lives in the member portal: guests sign in first, then land on the booking page.
         function openFixedClassModal() {
-            if (!isLoggedIn) {
-                try { sessionStorage.setItem('nbca_open_fixed', '1'); } catch (e) {}
-                window.location.href = 'auth.html?next=' + encodeURIComponent('index.html#fixed-classes');
-                return;
-            }
-            let user = {};
-            try { user = JSON.parse(localStorage.getItem('rp_logged_user') || '{}'); } catch (e) {}
-            document.getElementById('fc-student-name').value = user.name || '';
-            document.getElementById('fc-student-email').value = user.email || '';
-            fcPicked = { date: null, session: null };
-            fcShowStep(1);
-            openModal('fixed-class-modal');
-        }
-
-        function closeFixedClassModal() {
-            closeModal('fixed-class-modal');
-        }
-
-        function fcShowStep(n) {
-            [1, 2, 3].forEach(i => {
-                document.getElementById('fc-step-' + i).classList.toggle('hidden', i !== n);
-                document.getElementById('fc-step-dot-' + i).className = 'px-3 py-1 rounded-full ' + (i <= n ? 'bg-amberGold text-roast-50' : 'bg-roast-100 text-roast-500');
-            });
-            if (n === 2) fcRenderCalendar();
-        }
-
-        function fcGoToStep2(e) {
-            e.preventDefault();
-            fcDetails = {
-                name: document.getElementById('fc-student-name').value.trim(),
-                ic: document.getElementById('fc-student-ic').value.trim(),
-                cafe: document.getElementById('fc-student-cafe').value.trim(),
-                phone: document.getElementById('fc-student-phone').value.trim(),
-                email: document.getElementById('fc-student-email').value.trim(),
-                from: document.getElementById('fc-student-from').value.trim()
-            };
-            if (!fcDetails.name || !fcDetails.ic || !fcDetails.phone || !fcDetails.email || !fcDetails.from) {
-                alert('Please complete all required fields.');
-                return;
-            }
-            fcShowStep(2);
-        }
-
-        function fcChangeMonth(delta) {
-            fcViewMonth = new Date(fcViewMonth.getFullYear(), fcViewMonth.getMonth() + delta, 1);
-            fcRenderCalendar();
-        }
-
-        // green = plenty of seats, amber = a session is nearly full, red = every session is full
-        function fcDayState(dateStr) {
-            const counts = FC_SESSIONS.map(s => fcBookedCount(dateStr, s));
-            if (counts.every(c => c >= FC_CAPACITY)) return 'full';
-            if (counts.some(c => c >= FC_CAPACITY * 0.7)) return 'few';
-            return 'open';
-        }
-
-        function fcRenderCalendar() {
-            const y = fcViewMonth.getFullYear(), m = fcViewMonth.getMonth();
-            document.getElementById('fc-month-label').innerText = fcViewMonth.toLocaleString('en-GB', { month: 'long', year: 'numeric' });
-            const today = new Date(); today.setHours(0, 0, 0, 0);
-            const thisMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-            document.getElementById('fc-prev-month').style.visibility = fcViewMonth <= thisMonth ? 'hidden' : 'visible';
-
-            const first = new Date(y, m, 1).getDay();
-            const days = new Date(y, m + 1, 0).getDate();
-            let html = '';
-            for (let i = 0; i < first; i++) html += '<span></span>';
-            for (let d = 1; d <= days; d++) {
-                const date = new Date(y, m, d);
-                const str = fcDateStr(date);
-                const isOpen = FC_OPEN_DAYS.includes(date.getDay()) && date >= today;
-                const base = 'h-10 rounded-lg text-xs font-bold transition-all';
-                if (!isOpen) {
-                    html += '<span class="' + base + ' flex items-center justify-center bg-roast-100 text-roast-300">' + d + '</span>';
-                    continue;
-                }
-                const st = fcDayState(str);
-                const color = st === 'full' ? 'bg-red-500 text-white' : st === 'few' ? 'bg-amber-400 text-roast-950' : 'bg-emerald-500 text-white';
-                const ring = fcPicked.date === str ? ' ring-2 ring-offset-2 ring-royalBlue' : '';
-                html += '<button type="button" onclick="fcPickDate(\'' + str + '\')" class="' + base + ' ' + color + ring + ' hover:opacity-85">' + d + '</button>';
-            }
-            document.getElementById('fc-calendar').innerHTML = html;
-            fcRenderSessions();
-        }
-
-        function fcPickDate(str) {
-            fcPicked = { date: str, session: null };
-            fcRenderCalendar();
-        }
-
-        function fcRenderSessions() {
-            const box = document.getElementById('fc-session-picker');
-            const btnWrap = document.getElementById('fc-session-buttons');
-            document.getElementById('fc-continue-payment').disabled = !(fcPicked.date && fcPicked.session);
-            if (!fcPicked.date) { box.classList.add('hidden'); return; }
-            box.classList.remove('hidden');
-            document.getElementById('fc-picked-date-label').innerText = new Date(fcPicked.date + 'T00:00:00').toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' });
-            btnWrap.innerHTML = FC_SESSIONS.map(sess => {
-                const left = FC_CAPACITY - fcBookedCount(fcPicked.date, sess);
-                const full = left <= 0;
-                const few = !full && left <= FC_CAPACITY * 0.3;
-                const color = full ? 'bg-red-50 border-red-300 text-red-600 cursor-not-allowed' : few ? 'bg-amber-50 border-amber-300 text-amber-700' : 'bg-emerald-50 border-emerald-300 text-emerald-700';
-                const sel = fcPicked.session === sess ? ' ring-2 ring-royalBlue' : '';
-                const label = full ? 'Fully booked' : left + ' seat' + (left > 1 ? 's' : '') + ' left';
-                return '<button type="button" ' + (full ? 'disabled' : 'onclick="fcPickSession(\'' + sess + '\')"') + ' class="p-3 rounded-xl border text-left ' + color + sel + '"><strong class="block text-xs">' + sess + '</strong><span class="text-[10px]">' + label + '</span></button>';
-            }).join('');
-        }
-
-        function fcPickSession(sess) {
-            fcPicked.session = sess;
-            fcRenderSessions();
-        }
-
-        function fcGoToStep3() {
-            if (!fcPicked.date || !fcPicked.session) return;
-            const { fee, deposit } = fcGetFees();
-            document.getElementById('fc-sum-name').innerText = fcDetails.name;
-            document.getElementById('fc-sum-date').innerText = new Date(fcPicked.date + 'T00:00:00').toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
-            document.getElementById('fc-sum-session').innerText = fcPicked.session;
-            document.getElementById('fc-sum-fee').innerText = 'RM ' + fee.toFixed(2);
-            document.getElementById('fc-sum-deposit').innerText = 'RM ' + deposit.toFixed(2);
-            document.getElementById('fc-sum-balance').innerText = 'RM ' + (fee - deposit).toFixed(2);
-            fcShowStep(3);
-        }
-
-        // NOTE: no live payment gateway is connected on this static site yet, so this records the deposit
-        // as paid and leaves it for the admin to verify and admit. Replace with a real gateway callback.
-        function fcPayDeposit() {
-            if (fcBookedCount(fcPicked.date, fcPicked.session) >= FC_CAPACITY) {
-                alert('Sorry, that session just became fully booked. Please choose another.');
-                fcShowStep(2);
-                return;
-            }
-            const { fee, deposit } = fcGetFees();
-            const regs = fcLoadRegistrations();
-            regs.push({
-                id: 'FC-' + Date.now(),
-                name: fcDetails.name,
-                ic: fcDetails.ic,
-                cafe: fcDetails.cafe,
-                phone: fcDetails.phone,
-                email: fcDetails.email,
-                from: fcDetails.from,
-                preferredDate: fcPicked.date,
-                session: fcPicked.session,
-                classFee: fee,
-                deposit: deposit,
-                depositStatus: 'Paid',
-                classStatus: 'Pending Confirmation',
-                createdAt: new Date().toISOString()
-            });
-            localStorage.setItem('rp_fixed_class_students', JSON.stringify(regs));
-            closeFixedClassModal();
-            showToastMessage('Deposit received for ' + fcPicked.date + ' (' + fcPicked.session + '). We will confirm your seat shortly - track it in your account.', 'Registration Submitted');
-            setTimeout(() => { window.location.href = 'orders.html'; }, 2200);
+            window.location.href = 'auth.html?next=book-class.html';
         }
 
         function openClassModal(classId) { 

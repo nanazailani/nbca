@@ -52,7 +52,7 @@
             <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-5">
                 <div><span class="text-[11px] font-extrabold tracking-[0.18em] text-amberGold uppercase">Daily training</span>
                 <h2 class="text-2xl sm:text-3xl font-extrabold text-roast-950 mt-1">My Class Registrations</h2></div>
-                <a href="index.html#fixed-classes" class="inline-flex items-center gap-2 px-4 py-2.5 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-full text-xs shadow transition-all self-start"><i class="fa-solid fa-plus text-[10px]"></i> New registration</a>
+                <a href="book-class.html" class="inline-flex items-center gap-2 px-4 py-2.5 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-full text-xs shadow transition-all self-start"><i class="fa-solid fa-plus text-[10px]"></i> New registration</a>
             </div>
                 <div id="reg-list" class="space-y-4"></div>
             </section>
@@ -61,55 +61,34 @@
             <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-5">
                 <div><span class="text-[11px] font-extrabold tracking-[0.18em] text-amberGold uppercase">Workshops</span>
                 <h2 class="text-2xl sm:text-3xl font-extrabold text-roast-950 mt-1">Workshop Tickets</h2></div>
-                
+                <a href="workshops.html" class="inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-roast-200 hover:border-amberGold text-roast-800 font-bold rounded-full text-xs transition-all self-start"><i class="fa-solid fa-plus text-[10px]"></i> Enroll in a workshop</a>
             </div>
-                <div class="grid md:grid-cols-2 gap-5">
-                    <div class="bg-white rounded-3xl p-6 border border-roast-200 shadow-sm space-y-4 hover:shadow-lg hover:border-amberGold/40 transition-all">
-                        <div class="flex justify-between items-center"><span class="px-3 py-1 bg-emerald-500/10 text-emerald-600 text-[10px] font-bold rounded-full uppercase tracking-wider">Confirmed slot</span><span class="text-xs font-bold text-amberGold">RM 120.00</span></div>
-                        <div><h3 class="font-serif text-xl font-bold text-roast-950">Coffee Brewing Masterclass</h3><p class="text-xs text-roast-600 mt-1">Master V60, French Press &amp; AeroPress techniques.</p></div>
-                        <div class="bg-roast-50 p-4 rounded-2xl border border-roast-200 space-y-2 text-xs text-roast-700">
-                            <div class="flex justify-between"><span>Date &amp; time</span><strong class="text-roast-950">Saturday, 10:00 AM</strong></div>
-                            <div class="flex justify-between"><span>Duration</span><strong class="text-roast-950">2.5 hours</strong></div>
-                            <div class="flex justify-between"><span>Location</span><strong class="text-roast-950">Sungai Petani Roastery</strong></div>
-                        </div>
-                        <button onclick="openETicketModal('coffee-brewing')" class="w-full py-2.5 bg-roast-100 hover:bg-amberGold hover:text-white text-roast-900 font-bold rounded-xl text-xs transition-all border border-roast-200"><i class="fa-solid fa-qrcode mr-1"></i> View e-ticket</button>
-                    </div>
-                    <div class="bg-white rounded-3xl p-6 border border-roast-200 shadow-sm space-y-4 hover:shadow-lg hover:border-amberGold/40 transition-all">
-                        <div class="flex justify-between items-center"><span class="px-3 py-1 bg-blue-500/10 text-blue-600 text-[10px] font-bold rounded-full uppercase tracking-wider">Upcoming</span><span class="text-xs font-bold text-amberGold">RM 150.00</span></div>
-                        <div><h3 class="font-serif text-xl font-bold text-roast-950">Latte Art Workshop</h3><p class="text-xs text-roast-600 mt-1">Milk steaming and pouring: heart, rosetta and tulip.</p></div>
-                        <div class="bg-roast-50 p-4 rounded-2xl border border-roast-200 space-y-2 text-xs text-roast-700">
-                            <div class="flex justify-between"><span>Date &amp; time</span><strong class="text-roast-950">Sunday, 02:00 PM</strong></div>
-                            <div class="flex justify-between"><span>Duration</span><strong class="text-roast-950">3 hours</strong></div>
-                            <div class="flex justify-between"><span>Location</span><strong class="text-roast-950">Sungai Petani Roastery</strong></div>
-                        </div>
-                        <button onclick="openETicketModal('latte-art')" class="w-full py-2.5 bg-roast-100 hover:bg-amberGold hover:text-white text-roast-900 font-bold rounded-xl text-xs transition-all border border-roast-200"><i class="fa-solid fa-qrcode mr-1"></i> View e-ticket</button>
-                    </div>
-                </div>
+                <div id="ws-list" class="grid md:grid-cols-2 gap-5"></div>
             </section>
 
             <section>
             <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-5">
                 <div><span class="text-[11px] font-extrabold tracking-[0.18em] text-amberGold uppercase">Keep learning</span>
                 <h2 class="text-2xl sm:text-3xl font-extrabold text-roast-950 mt-1">Explore More Classes</h2></div>
-                <a href="index.html#classes" class="text-xs font-bold text-amberGold hover:underline">All workshops <i class="fa-solid fa-arrow-right text-[10px]"></i></a>
+                <a href="workshops.html" class="text-xs font-bold text-amberGold hover:underline">All workshops <i class="fa-solid fa-arrow-right text-[10px]"></i></a>
             </div>
                 <div class="flex sm:grid sm:grid-cols-3 gap-4 overflow-x-auto sm:overflow-visible snap-x no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 pb-2">
 
-                <a href="index.html#classes" class="group snap-start shrink-0 w-64 sm:w-auto bg-white rounded-2xl border border-roast-200 overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-amberGold/40 transition-all">
+                <a href="workshops.html" class="group snap-start shrink-0 w-64 sm:w-auto bg-white rounded-2xl border border-roast-200 overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-amberGold/40 transition-all">
                     <div class="relative h-36 overflow-hidden"><img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1000&q=80" alt="Coffee Fundamentals (Daily)" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                     <span class="absolute top-3 left-3 px-2.5 py-1 bg-white/95 text-amberGold text-[10px] font-bold rounded-full">Daily class</span></div>
                     <div class="p-4 space-y-1"><h3 class="font-serif text-base font-bold text-roast-950">Coffee Fundamentals (Daily)</h3><p class="text-[11px] text-roast-500">Sun &ndash; Thu &middot; 2 sessions</p>
                     <div class="flex items-center justify-between pt-2"><span class="text-amberGold font-extrabold text-sm">RM 150.00</span><span class="text-[11px] font-bold text-roast-700 group-hover:text-amberGold">View <i class="fa-solid fa-arrow-right text-[9px]"></i></span></div></div>
                 </a>
 
-                <a href="index.html#classes" class="group snap-start shrink-0 w-64 sm:w-auto bg-white rounded-2xl border border-roast-200 overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-amberGold/40 transition-all">
+                <a href="workshops.html" class="group snap-start shrink-0 w-64 sm:w-auto bg-white rounded-2xl border border-roast-200 overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-amberGold/40 transition-all">
                     <div class="relative h-36 overflow-hidden"><img src="https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=700&q=80" alt="Coffee Cupping Experience" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                     <span class="absolute top-3 left-3 px-2.5 py-1 bg-white/95 text-amberGold text-[10px] font-bold rounded-full">Beginner</span></div>
                     <div class="p-4 space-y-1"><h3 class="font-serif text-base font-bold text-roast-950">Coffee Cupping Experience</h3><p class="text-[11px] text-roast-500">1.5 hours &middot; Max 10 pax</p>
                     <div class="flex items-center justify-between pt-2"><span class="text-amberGold font-extrabold text-sm">RM 80.00</span><span class="text-[11px] font-bold text-roast-700 group-hover:text-amberGold">View <i class="fa-solid fa-arrow-right text-[9px]"></i></span></div></div>
                 </a>
 
-                <a href="index.html#classes" class="group snap-start shrink-0 w-64 sm:w-auto bg-white rounded-2xl border border-roast-200 overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-amberGold/40 transition-all">
+                <a href="workshops.html" class="group snap-start shrink-0 w-64 sm:w-auto bg-white rounded-2xl border border-roast-200 overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-amberGold/40 transition-all">
                     <div class="relative h-36 overflow-hidden"><img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=700&q=80" alt="Latte Art Workshop" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                     <span class="absolute top-3 left-3 px-2.5 py-1 bg-white/95 text-amberGold text-[10px] font-bold rounded-full">Hands-on</span></div>
                     <div class="p-4 space-y-1"><h3 class="font-serif text-base font-bold text-roast-950">Latte Art Workshop</h3><p class="text-[11px] text-roast-500">3 hours &middot; Max 6 pax</p>
@@ -153,7 +132,7 @@
                 <div class="bg-roast-50 rounded-2xl p-4 space-y-2 text-xs text-roast-700 border border-roast-200">
                     <div class="flex justify-between"><span>Attendee:</span> <strong id="et-attendee" class="text-roast-950">Guest</strong></div>
                     <div class="flex justify-between"><span>Date & Time:</span> <strong id="et-datetime" class="text-roast-950">—</strong></div>
-                    <div class="flex justify-between"><span>Duration:</span> <strong id="et-duration" class="text-roast-950">—</strong></div>
+                    <div class="flex justify-between"><span>Mode:</span> <strong id="et-duration" class="text-roast-950">—</strong></div>
                     <div class="flex justify-between"><span>Location:</span> <strong id="et-location" class="text-roast-950">—</strong></div>
                     <div class="flex justify-between"><span>Fee Paid:</span> <strong id="et-fee" class="text-amberGold">RM 0.00</strong></div>
                 </div>
@@ -176,24 +155,34 @@
     <script src="js/member-shell.js"></script>
     <script>
 
-        const workshopTicketsData = {
-            'coffee-brewing': { className: 'Coffee Brewing Masterclass', datetime: 'Saturday, 10:00 AM', duration: '2.5 Hours', location: 'Sungai Petani Roastery', fee: 'RM 120.00', ref: 'RP-CBM-1001' },
-            'latte-art': { className: 'Latte Art Workshop', datetime: 'Sunday, 02:00 PM', duration: '3.0 Hours', location: 'Sungai Petani Roastery', fee: 'RM 150.00', ref: 'RP-LAW-1002' }
-        };
-
-        function openETicketModal(ticketId) {
-            const data = workshopTicketsData[ticketId];
-            if (!data) return;
-            const attendee = (MemberShell.user() || {}).name || 'Guest';
-            document.getElementById('et-class-name').innerText = data.className;
+        function openETicketModal(idx) {
+            const w = MemberShell.myWorkshops()[idx];
+            if (!w) return;
+            const attendee = w.name || (MemberShell.user() || {}).name || 'Guest';
+            document.getElementById('et-class-name').innerText = w.title;
             document.getElementById('et-attendee').innerText = attendee;
-            document.getElementById('et-datetime').innerText = data.datetime;
-            document.getElementById('et-duration').innerText = data.duration;
-            document.getElementById('et-location').innerText = data.location;
-            document.getElementById('et-fee').innerText = data.fee;
-            document.getElementById('et-ticket-ref').innerText = data.ref;
-            document.getElementById('et-qr-code').src = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(data.ref + '|' + data.className + '|' + attendee);
+            document.getElementById('et-datetime').innerText = w.slot;
+            document.getElementById('et-duration').innerText = w.modeLabel;
+            document.getElementById('et-location').innerText = w.location;
+            document.getElementById('et-fee').innerText = 'RM ' + Number(w.price).toFixed(2) + ' (' + w.status + ')';
+            document.getElementById('et-ticket-ref').innerText = w.ref;
+            document.getElementById('et-qr-code').src = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(w.ref + '|' + w.title + '|' + attendee);
             document.getElementById('eticket-modal').classList.remove('hidden');
+        }
+
+        function renderWorkshops() {
+            const box = document.getElementById('ws-list');
+            const list = MemberShell.myWorkshops();
+            if (!list.length) {
+                box.innerHTML = '<div class="md:col-span-2 bg-white rounded-3xl border border-dashed border-roast-300 p-8 text-center space-y-2"><p class="text-sm font-bold text-roast-950">No workshop tickets yet</p><p class="text-xs text-roast-500">Enroll in a brewing, latte art or cupping workshop and your e-ticket shows up here.</p></div>';
+                return;
+            }
+            box.innerHTML = list.map((w, i) =>
+                '<div class="bg-white rounded-3xl p-6 border border-roast-200 shadow-sm space-y-4 hover:shadow-lg hover:border-amberGold/40 transition-all">' +
+                '<div class="flex justify-between items-center"><span class="px-3 py-1 bg-blue-500/10 text-blue-600 text-[10px] font-bold rounded-full uppercase tracking-wider">' + MemberShell.esc(w.status) + '</span><span class="text-xs font-bold text-amberGold">RM ' + Number(w.price).toFixed(2) + '</span></div>' +
+                '<h3 class="font-serif text-xl font-bold text-roast-950">' + MemberShell.esc(w.title) + '</h3>' +
+                '<div class="bg-roast-50 p-4 rounded-2xl border border-roast-200 space-y-2 text-xs text-roast-700"><div class="flex justify-between gap-3"><span>Slot</span><strong class="text-roast-950 text-right">' + MemberShell.esc(w.slot) + '</strong></div><div class="flex justify-between gap-3"><span>Mode</span><strong class="text-roast-950">' + MemberShell.esc(w.modeLabel) + '</strong></div><div class="flex justify-between gap-3"><span>Location</span><strong class="text-roast-950 text-right">' + MemberShell.esc(w.location) + '</strong></div></div>' +
+                '<button onclick="openETicketModal(' + i + ')" class="w-full py-2.5 bg-roast-100 hover:bg-amberGold hover:text-white text-roast-900 font-bold rounded-xl text-xs transition-all border border-roast-200"><i class="fa-solid fa-qrcode mr-1"></i> View e-ticket</button></div>').join('');
         }
         function closeETicketModal() { document.getElementById('eticket-modal').classList.add('hidden'); }
 
@@ -212,7 +201,7 @@
                     '<div class="w-14 h-14 rounded-2xl bg-blue-50 text-amberGold flex items-center justify-center mx-auto text-2xl"><i class="fa-solid fa-calendar-plus"></i></div>' +
                     '<h3 class="font-serif text-xl font-bold text-roast-950">No class registered yet</h3>' +
                     '<p class="text-xs text-roast-500 max-w-sm mx-auto">Pick a date (Sunday to Thursday) and a session, pay the deposit and we will confirm your seat.</p>' +
-                    '<a href="index.html#fixed-classes" class="inline-flex items-center gap-2 px-5 py-2.5 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-full text-xs shadow">Register for a class <i class="fa-solid fa-arrow-right text-[10px]"></i></a></div>';
+                    '<a href="book-class.html" class="inline-flex items-center gap-2 px-5 py-2.5 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-full text-xs shadow">Register for a class <i class="fa-solid fa-arrow-right text-[10px]"></i></a></div>';
                 return;
             }
             box.innerHTML = regs.map(r => {
@@ -242,7 +231,87 @@
                     '</div></article>';
             }).join('');
         }
-        window.addEventListener('member-ready', renderRegistrations);
+        window.addEventListener('member-ready', () => { renderRegistrations(); renderWorkshops(); });
+
+    </script>
+</body>
+</html>        function openETicketModal(idx) {
+            const w = MemberShell.myWorkshops()[idx];
+            if (!w) return;
+            const attendee = w.name || (MemberShell.user() || {}).name || 'Guest';
+            document.getElementById('et-class-name').innerText = w.title;
+            document.getElementById('et-attendee').innerText = attendee;
+            document.getElementById('et-datetime').innerText = w.slot;
+            document.getElementById('et-duration').innerText = w.modeLabel;
+            document.getElementById('et-location').innerText = w.location;
+            document.getElementById('et-fee').innerText = 'RM ' + Number(w.price).toFixed(2) + ' (' + w.status + ')';
+            document.getElementById('et-ticket-ref').innerText = w.ref;
+            document.getElementById('et-qr-code').src = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(w.ref + '|' + w.title + '|' + attendee);
+            document.getElementById('eticket-modal').classList.remove('hidden');
+        }
+
+        function renderWorkshops() {
+            const box = document.getElementById('ws-list');
+            const list = MemberShell.myWorkshops();
+            if (!list.length) {
+                box.innerHTML = '<div class="md:col-span-2 bg-white rounded-3xl border border-dashed border-roast-300 p-8 text-center space-y-2"><p class="text-sm font-bold text-roast-950">No workshop tickets yet</p><p class="text-xs text-roast-500">Enroll in a brewing, latte art or cupping workshop and your e-ticket shows up here.</p></div>';
+                return;
+            }
+            box.innerHTML = list.map((w, i) =>
+                '<div class="bg-white rounded-3xl p-6 border border-roast-200 shadow-sm space-y-4 hover:shadow-lg hover:border-amberGold/40 transition-all">' +
+                '<div class="flex justify-between items-center"><span class="px-3 py-1 bg-blue-500/10 text-blue-600 text-[10px] font-bold rounded-full uppercase tracking-wider">' + MemberShell.esc(w.status) + '</span><span class="text-xs font-bold text-amberGold">RM ' + Number(w.price).toFixed(2) + '</span></div>' +
+                '<h3 class="font-serif text-xl font-bold text-roast-950">' + MemberShell.esc(w.title) + '</h3>' +
+                '<div class="bg-roast-50 p-4 rounded-2xl border border-roast-200 space-y-2 text-xs text-roast-700"><div class="flex justify-between gap-3"><span>Slot</span><strong class="text-roast-950 text-right">' + MemberShell.esc(w.slot) + '</strong></div><div class="flex justify-between gap-3"><span>Mode</span><strong class="text-roast-950">' + MemberShell.esc(w.modeLabel) + '</strong></div><div class="flex justify-between gap-3"><span>Location</span><strong class="text-roast-950 text-right">' + MemberShell.esc(w.location) + '</strong></div></div>' +
+                '<button onclick="openETicketModal(' + i + ')" class="w-full py-2.5 bg-roast-100 hover:bg-amberGold hover:text-white text-roast-900 font-bold rounded-xl text-xs transition-all border border-roast-200"><i class="fa-solid fa-qrcode mr-1"></i> View e-ticket</button></div>').join('');
+        }
+        function closeETicketModal() { document.getElementById('eticket-modal').classList.add('hidden'); }
+
+        function stepDot(done, active, icon, label) {
+            const cls = done ? 'bg-emerald-500 text-white' : active ? 'bg-amberGold text-white ring-4 ring-blue-100' : 'bg-roast-200 text-roast-500';
+            return '<div class="flex flex-col items-center gap-1.5 text-center w-20"><span class="w-9 h-9 rounded-full flex items-center justify-center text-xs ' + cls + '"><i class="fa-solid ' + (done ? 'fa-check' : icon) + '"></i></span>' +
+                '<span class="text-[10px] font-bold ' + (done || active ? 'text-roast-950' : 'text-roast-400') + '">' + label + '</span></div>';
+        }
+        const bar = on => '<div class="flex-1 h-0.5 mt-[17px] ' + (on ? 'bg-emerald-500' : 'bg-roast-200') + '"></div>';
+
+        function renderRegistrations() {
+            const box = document.getElementById('reg-list');
+            const regs = MemberShell.registrations().slice().reverse();
+            if (!regs.length) {
+                box.innerHTML = '<div class="bg-white rounded-3xl border border-dashed border-roast-300 p-10 text-center space-y-3">' +
+                    '<div class="w-14 h-14 rounded-2xl bg-blue-50 text-amberGold flex items-center justify-center mx-auto text-2xl"><i class="fa-solid fa-calendar-plus"></i></div>' +
+                    '<h3 class="font-serif text-xl font-bold text-roast-950">No class registered yet</h3>' +
+                    '<p class="text-xs text-roast-500 max-w-sm mx-auto">Pick a date (Sunday to Thursday) and a session, pay the deposit and we will confirm your seat.</p>' +
+                    '<a href="book-class.html" class="inline-flex items-center gap-2 px-5 py-2.5 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-full text-xs shadow">Register for a class <i class="fa-solid fa-arrow-right text-[10px]"></i></a></div>';
+                return;
+            }
+            box.innerHTML = regs.map(r => {
+                const paid = r.depositStatus === 'Paid';
+                const admitted = r.classStatus === 'Admitted';
+                const resched = r.classStatus === 'Reschedule';
+                const d = new Date(r.preferredDate + 'T00:00:00');
+                const balance = (Number(r.classFee) - Number(r.deposit)).toFixed(2);
+                const badge = admitted ? ['Confirmed', 'bg-emerald-500/10 text-emerald-600'] : resched ? ['Reschedule needed', 'bg-red-500/10 text-red-600'] : ['Awaiting confirmation', 'bg-blue-500/10 text-blue-600'];
+                return '<article class="bg-white rounded-3xl border border-roast-200 shadow-sm overflow-hidden">' +
+                    '<div class="p-5 sm:p-6 grid sm:grid-cols-12 gap-5">' +
+                        '<div class="sm:col-span-3 flex sm:flex-col items-center sm:items-start gap-3">' +
+                            '<div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-roast-950 to-amberGold text-white flex flex-col items-center justify-center shrink-0"><span class="text-[10px] font-bold uppercase">' + d.toLocaleDateString('en-GB', { month: 'short' }) + '</span><span class="text-2xl font-extrabold leading-none">' + d.getDate() + '</span></div>' +
+                            '<div><p class="text-xs font-bold text-roast-950">' + d.toLocaleDateString('en-GB', { weekday: 'long' }) + '</p><p class="text-[11px] text-roast-500">' + MemberShell.esc(r.session) + '</p></div>' +
+                        '</div>' +
+                        '<div class="sm:col-span-9 space-y-4">' +
+                            '<div class="flex flex-wrap items-center justify-between gap-2"><h3 class="font-serif text-lg font-bold text-roast-950">Coffee Fundamentals &mdash; Daily Class</h3>' +
+                            '<span class="px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider ' + badge[1] + '">' + badge[0] + '</span></div>' +
+                            '<div class="flex items-start justify-between max-w-md">' + stepDot(true, false, 'fa-pen', 'Registered') + bar(paid) + stepDot(paid, !paid, 'fa-credit-card', 'Deposit paid') + bar(admitted) + stepDot(admitted, paid && !admitted && !resched, 'fa-circle-check', 'Seat confirmed') + '</div>' +
+                            (resched ? '<div class="rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs p-3 flex gap-2"><i class="fa-solid fa-triangle-exclamation mt-0.5"></i><span>We need to move your session. Our team will contact you on <strong>' + MemberShell.esc(r.phone || 'your phone') + '</strong> to agree a new date.</span></div>' : '') +
+                            '<div class="grid grid-cols-3 gap-3 text-xs bg-roast-50 border border-roast-200 rounded-2xl p-3.5">' +
+                                '<div><span class="block text-[10px] text-roast-500 uppercase">Class fee</span><strong class="text-roast-950">RM ' + Number(r.classFee).toFixed(2) + '</strong></div>' +
+                                '<div><span class="block text-[10px] text-roast-500 uppercase">Deposit</span><strong class="text-roast-950">RM ' + Number(r.deposit).toFixed(2) + '</strong></div>' +
+                                '<div><span class="block text-[10px] text-roast-500 uppercase">Balance on the day</span><strong class="text-amberGold">RM ' + balance + '</strong></div>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div></article>';
+            }).join('');
+        }
+        window.addEventListener('member-ready', () => { renderRegistrations(); renderWorkshops(); });
 
     </script>
 </body>

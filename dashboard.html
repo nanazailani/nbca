@@ -59,8 +59,8 @@
                         <h2 id="hero-welcome-title" class="font-serif text-3xl sm:text-5xl font-extrabold leading-tight">Hello, Member!</h2>
                         <p class="text-sm text-blue-100/90 max-w-md font-light leading-relaxed">Book your next coffee class, track your orders and collect rewards &mdash; everything in one place.</p>
                         <div class="flex flex-wrap gap-3 pt-2">
-                            <a href="index.html#fixed-classes" class="px-5 py-3 bg-white text-amberGold font-bold rounded-full text-xs shadow-lg hover:-translate-y-0.5 transition-all"><i class="fa-solid fa-user-pen mr-1.5"></i> Book a Class</a>
-                            <a href="index.html#coffee-beans" class="px-5 py-3 bg-white/10 hover:bg-white/20 border border-white/30 text-white font-bold rounded-full text-xs transition-all"><i class="fa-solid fa-mug-hot mr-1.5"></i> Shop Beans</a>
+                            <a href="book-class.html" class="px-5 py-3 bg-white text-amberGold font-bold rounded-full text-xs shadow-lg hover:-translate-y-0.5 transition-all"><i class="fa-solid fa-user-pen mr-1.5"></i> Book a Class</a>
+                            <a href="shop.html?tab=beans" class="px-5 py-3 bg-white/10 hover:bg-white/20 border border-white/30 text-white font-bold rounded-full text-xs transition-all"><i class="fa-solid fa-mug-hot mr-1.5"></i> Shop Beans</a>
                         </div>
                     </div>
                     <div id="next-up-card" class="lg:col-span-2 rounded-2xl bg-white/12 border border-white/25 backdrop-blur-md p-5 space-y-3"></div>
@@ -77,7 +77,7 @@
                     <p id="stat-classes" class="text-2xl font-extrabold text-roast-950 font-serif">0</p><p class="text-[11px] text-roast-500 font-semibold">Class bookings</p></a>
                 <a href="orders.html" class="bg-white rounded-2xl border border-roast-200 p-4 sm:p-5 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all">
                     <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center mb-3"><i class="fa-solid fa-box-open"></i></div>
-                    <p class="text-2xl font-extrabold text-roast-950 font-serif">1</p><p class="text-[11px] text-roast-500 font-semibold">Active order</p></a>
+                    <p id="stat-orders" class="text-2xl font-extrabold text-roast-950 font-serif">0</p><p class="text-[11px] text-roast-500 font-semibold">Orders placed</p></a>
                 <a href="membership.html" class="bg-white rounded-2xl border border-roast-200 p-4 sm:p-5 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all">
                     <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-500 flex items-center justify-center mb-3"><i class="fa-solid fa-ticket"></i></div>
                     <p class="text-2xl font-extrabold text-roast-950 font-serif">3</p><p class="text-[11px] text-roast-500 font-semibold">Vouchers to redeem</p></a>
@@ -91,7 +91,7 @@
                 
             </div>
                 <div class="grid lg:grid-cols-3 gap-5">
-                    <a href="index.html#fixed-classes" class="group relative lg:col-span-2 min-h-[260px] rounded-3xl overflow-hidden shadow-lg">
+                    <a href="book-class.html" class="group relative lg:col-span-2 min-h-[260px] rounded-3xl overflow-hidden shadow-lg">
                         <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1000&q=80" alt="Daily coffee class" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                         <div class="absolute inset-0 bg-gradient-to-t from-roast-950/90 via-roast-950/40 to-transparent"></div>
                         <div class="relative h-full flex flex-col justify-end p-6 sm:p-8 text-white space-y-2">
@@ -111,7 +111,7 @@
                             <div class="h-1.5 rounded-full bg-white/30 overflow-hidden mb-1"><div class="h-full w-[70%] bg-white rounded-full"></div></div>
                             <p class="text-[10px] font-bold">350 / 500 pts</p>
                         </a>
-                        <a href="index.html#merchandise" class="group relative rounded-3xl p-6 bg-white border border-roast-200 shadow-sm hover:shadow-lg transition-all overflow-hidden">
+                        <a href="shop.html?tab=merch" class="group relative rounded-3xl p-6 bg-white border border-roast-200 shadow-sm hover:shadow-lg transition-all overflow-hidden">
                             <i class="fa-solid fa-shirt absolute -right-2 -bottom-3 text-7xl text-amberGold/10 -rotate-12"></i>
                             <span class="text-[10px] font-extrabold uppercase tracking-widest text-amberGold">New merch</span>
                             <h3 class="font-serif text-xl font-extrabold text-roast-950 mt-1">Nb.CA T-Shirt &amp; Stickers</h3>
@@ -127,25 +127,25 @@
             <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-5">
                 <div><span class="text-[11px] font-extrabold tracking-[0.18em] text-amberGold uppercase">Level up</span>
                 <h2 class="text-2xl sm:text-3xl font-extrabold text-roast-950 mt-1">Workshops</h2></div>
-                <a href="index.html#classes" class="text-xs font-bold text-amberGold hover:underline">See all workshops <i class="fa-solid fa-arrow-right text-[10px]"></i></a>
+                <a href="workshops.html" class="text-xs font-bold text-amberGold hover:underline">See all workshops <i class="fa-solid fa-arrow-right text-[10px]"></i></a>
             </div>
                 <div class="flex sm:grid sm:grid-cols-3 gap-4 overflow-x-auto sm:overflow-visible snap-x no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 pb-2">
 
-                <a href="index.html#classes" class="group snap-start shrink-0 w-64 sm:w-auto bg-white rounded-2xl border border-roast-200 overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-amberGold/40 transition-all">
+                <a href="workshops.html" class="group snap-start shrink-0 w-64 sm:w-auto bg-white rounded-2xl border border-roast-200 overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-amberGold/40 transition-all">
                     <div class="relative h-36 overflow-hidden"><img src="https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&w=700&q=80" alt="Coffee Brewing Masterclass" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                     <span class="absolute top-3 left-3 px-2.5 py-1 bg-white/95 text-amberGold text-[10px] font-bold rounded-full">Bestseller</span></div>
                     <div class="p-4 space-y-1"><h3 class="font-serif text-base font-bold text-roast-950">Coffee Brewing Masterclass</h3><p class="text-[11px] text-roast-500">2.5 hours &middot; Max 8 pax</p>
                     <div class="flex items-center justify-between pt-2"><span class="text-amberGold font-extrabold text-sm">RM 120.00</span><span class="text-[11px] font-bold text-roast-700 group-hover:text-amberGold">View <i class="fa-solid fa-arrow-right text-[9px]"></i></span></div></div>
                 </a>
 
-                <a href="index.html#classes" class="group snap-start shrink-0 w-64 sm:w-auto bg-white rounded-2xl border border-roast-200 overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-amberGold/40 transition-all">
+                <a href="workshops.html" class="group snap-start shrink-0 w-64 sm:w-auto bg-white rounded-2xl border border-roast-200 overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-amberGold/40 transition-all">
                     <div class="relative h-36 overflow-hidden"><img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=700&q=80" alt="Latte Art Workshop" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                     <span class="absolute top-3 left-3 px-2.5 py-1 bg-white/95 text-amberGold text-[10px] font-bold rounded-full">Hands-on</span></div>
                     <div class="p-4 space-y-1"><h3 class="font-serif text-base font-bold text-roast-950">Latte Art Workshop</h3><p class="text-[11px] text-roast-500">3 hours &middot; Max 6 pax</p>
                     <div class="flex items-center justify-between pt-2"><span class="text-amberGold font-extrabold text-sm">RM 150.00</span><span class="text-[11px] font-bold text-roast-700 group-hover:text-amberGold">View <i class="fa-solid fa-arrow-right text-[9px]"></i></span></div></div>
                 </a>
 
-                <a href="index.html#classes" class="group snap-start shrink-0 w-64 sm:w-auto bg-white rounded-2xl border border-roast-200 overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-amberGold/40 transition-all">
+                <a href="workshops.html" class="group snap-start shrink-0 w-64 sm:w-auto bg-white rounded-2xl border border-roast-200 overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-amberGold/40 transition-all">
                     <div class="relative h-36 overflow-hidden"><img src="https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=700&q=80" alt="Coffee Cupping Experience" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                     <span class="absolute top-3 left-3 px-2.5 py-1 bg-white/95 text-amberGold text-[10px] font-bold rounded-full">Beginner</span></div>
                     <div class="p-4 space-y-1"><h3 class="font-serif text-base font-bold text-roast-950">Coffee Cupping Experience</h3><p class="text-[11px] text-roast-500">1.5 hours &middot; Max 10 pax</p>
@@ -159,29 +159,29 @@
             <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-5">
                 <div><span class="text-[11px] font-extrabold tracking-[0.18em] text-amberGold uppercase">Fresh from the roastery</span>
                 <h2 class="text-2xl sm:text-3xl font-extrabold text-roast-950 mt-1">Coffee Beans</h2></div>
-                <a href="index.html#coffee-beans" class="text-xs font-bold text-amberGold hover:underline">Shop all beans <i class="fa-solid fa-arrow-right text-[10px]"></i></a>
+                <a href="shop.html?tab=beans" class="text-xs font-bold text-amberGold hover:underline">Shop all beans <i class="fa-solid fa-arrow-right text-[10px]"></i></a>
             </div>
                 <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
 
-                <a href="index.html#coffee-beans" class="group bg-white rounded-2xl border border-roast-200 overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-amberGold/40 transition-all">
+                <a href="shop.html?tab=beans" class="group bg-white rounded-2xl border border-roast-200 overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-amberGold/40 transition-all">
                     <div class="h-32 overflow-hidden bg-roast-100"><img src="https://images.unsplash.com/photo-1587734195503-904fca47e0e9?auto=format&fit=crop&w=600&q=80" alt="1st Grind HITAM MANIS" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"></div>
                     <div class="p-3.5 space-y-0.5"><h3 class="font-serif text-[13px] font-bold text-roast-950 leading-snug line-clamp-2">1st Grind HITAM MANIS</h3><p class="text-[10px] text-roast-500">Dark roast blend &middot; 250g</p>
                     <div class="flex items-center justify-between pt-2"><span class="text-amberGold font-extrabold text-sm">RM 30.00</span><span class="w-7 h-7 rounded-full bg-amberGold/10 group-hover:bg-amberGold text-amberGold group-hover:text-white flex items-center justify-center text-[10px] transition-all"><i class="fa-solid fa-plus"></i></span></div></div>
                 </a>
 
-                <a href="index.html#coffee-beans" class="group bg-white rounded-2xl border border-roast-200 overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-amberGold/40 transition-all">
+                <a href="shop.html?tab=beans" class="group bg-white rounded-2xl border border-roast-200 overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-amberGold/40 transition-all">
                     <div class="h-32 overflow-hidden bg-roast-100"><img src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?auto=format&fit=crop&w=600&q=80" alt="1st Grind Cream Beans" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"></div>
                     <div class="p-3.5 space-y-0.5"><h3 class="font-serif text-[13px] font-bold text-roast-950 leading-snug line-clamp-2">1st Grind Cream Beans</h3><p class="text-[10px] text-roast-500">Medium roast blend &middot; 250g</p>
                     <div class="flex items-center justify-between pt-2"><span class="text-amberGold font-extrabold text-sm">RM 35.00</span><span class="w-7 h-7 rounded-full bg-amberGold/10 group-hover:bg-amberGold text-amberGold group-hover:text-white flex items-center justify-center text-[10px] transition-all"><i class="fa-solid fa-plus"></i></span></div></div>
                 </a>
 
-                <a href="index.html#coffee-beans" class="group bg-white rounded-2xl border border-roast-200 overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-amberGold/40 transition-all">
+                <a href="shop.html?tab=beans" class="group bg-white rounded-2xl border border-roast-200 overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-amberGold/40 transition-all">
                     <div class="h-32 overflow-hidden bg-roast-100"><img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=600&q=80" alt="1st Grind BLACK STONE" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"></div>
                     <div class="p-3.5 space-y-0.5"><h3 class="font-serif text-[13px] font-bold text-roast-950 leading-snug line-clamp-2">1st Grind BLACK STONE</h3><p class="text-[10px] text-roast-500">Bold blend &middot; 250g</p>
                     <div class="flex items-center justify-between pt-2"><span class="text-amberGold font-extrabold text-sm">RM 35.00</span><span class="w-7 h-7 rounded-full bg-amberGold/10 group-hover:bg-amberGold text-amberGold group-hover:text-white flex items-center justify-center text-[10px] transition-all"><i class="fa-solid fa-plus"></i></span></div></div>
                 </a>
 
-                <a href="index.html#coffee-beans" class="group bg-white rounded-2xl border border-roast-200 overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-amberGold/40 transition-all">
+                <a href="shop.html?tab=beans" class="group bg-white rounded-2xl border border-roast-200 overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-amberGold/40 transition-all">
                     <div class="h-32 overflow-hidden bg-roast-100"><img src="https://images.unsplash.com/photo-1521302080334-4bebac2763a6?auto=format&fit=crop&w=600&q=80" alt="1st Grind SUNRISE" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"></div>
                     <div class="p-3.5 space-y-0.5"><h3 class="font-serif text-[13px] font-bold text-roast-950 leading-snug line-clamp-2">1st Grind SUNRISE</h3><p class="text-[10px] text-roast-500">Light-medium blend &middot; 250g</p>
                     <div class="flex items-center justify-between pt-2"><span class="text-amberGold font-extrabold text-sm">RM 35.00</span><span class="w-7 h-7 rounded-full bg-amberGold/10 group-hover:bg-amberGold text-amberGold group-hover:text-white flex items-center justify-center text-[10px] transition-all"><i class="fa-solid fa-plus"></i></span></div></div>
@@ -189,18 +189,14 @@
                 </div>
             </section>
 
-            <!-- LATEST ORDER -->
+            <!-- LATEST ORDER + NEXT REWARD -->
             <section class="grid md:grid-cols-2 gap-5">
-                <a href="orders.html" class="bg-white rounded-2xl border border-roast-200 p-5 shadow-sm hover:shadow-lg transition-all flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-xl bg-yellow-100 text-yellow-600 flex items-center justify-center text-lg shrink-0"><i class="fa-solid fa-box-open"></i></div>
-                    <div class="flex-1 min-w-0"><p class="text-[10px] font-extrabold uppercase tracking-widest text-roast-400">Latest order</p><h3 class="font-serif text-base font-bold text-roast-950">Order #ORD1001</h3><p class="text-[11px] text-roast-500">3 items &middot; RM 2,040.00 &middot; 9 Aug 2026</p></div>
-                    <span class="px-2.5 py-1 bg-yellow-500/15 text-yellow-700 text-[10px] font-bold rounded-full whitespace-nowrap">Awaiting payment</span></a>
+                <a id="latest-order-card" href="orders.html" class="bg-white rounded-2xl border border-roast-200 p-5 shadow-sm hover:shadow-lg transition-all flex items-center gap-4"></a>
                 <a href="membership.html" class="bg-white rounded-2xl border border-roast-200 p-5 shadow-sm hover:shadow-lg transition-all flex items-center gap-4">
                     <div class="w-12 h-12 rounded-xl bg-blue-100 text-amberGold flex items-center justify-center text-lg shrink-0"><i class="fa-solid fa-gift"></i></div>
                     <div class="flex-1 min-w-0"><p class="text-[10px] font-extrabold uppercase tracking-widest text-roast-400">Next reward</p><h3 class="font-serif text-base font-bold text-roast-950">Free Delivery Voucher</h3><p class="text-[11px] text-roast-500">150 more points to go</p></div>
                     <i class="fa-solid fa-arrow-right text-roast-400"></i></a>
             </section>
-
         </main>
     </div>
     <nav id="m-bottomnav" aria-label="Primary"></nav>
@@ -222,15 +218,95 @@
                 }
             } catch (e) {}
 
+            const orders = MemberShell.myOrders();
+            document.getElementById('stat-orders').innerText = orders.length;
+            const lo = orders[orders.length - 1], loBox = document.getElementById('latest-order-card');
+            loBox.innerHTML = lo
+                ? '<div class="w-12 h-12 rounded-xl bg-yellow-100 text-yellow-600 flex items-center justify-center text-lg shrink-0"><i class="fa-solid fa-box-open"></i></div><div class="flex-1 min-w-0"><p class="text-[10px] font-extrabold uppercase tracking-widest text-roast-400">Latest order</p><h3 class="font-serif text-base font-bold text-roast-950">Order #' + MemberShell.esc(lo.id) + '</h3><p class="text-[11px] text-roast-500">' + lo.items.reduce((a, i) => a + i.qty, 0) + ' items &middot; ' + MemberShell.money(lo.total) + '</p></div><span class="px-2.5 py-1 bg-yellow-500/15 text-yellow-700 text-[10px] font-bold rounded-full whitespace-nowrap">' + MemberShell.esc(lo.status) + '</span>'
+                : '<div class="w-12 h-12 rounded-xl bg-blue-50 text-amberGold flex items-center justify-center text-lg shrink-0"><i class="fa-solid fa-mug-hot"></i></div><div class="flex-1 min-w-0"><p class="text-[10px] font-extrabold uppercase tracking-widest text-roast-400">Orders</p><h3 class="font-serif text-base font-bold text-roast-950">No orders yet</h3><p class="text-[11px] text-roast-500">Fresh beans are one tap away.</p></div><i class="fa-solid fa-arrow-right text-roast-400"></i>';
+            loBox.href = lo ? 'orders.html' : 'shop.html?tab=beans';
+            const orders = MemberShell.myOrders();
+            document.getElementById('stat-orders').innerText = orders.length;
+            const lo = orders[orders.length - 1], loBox = document.getElementById('latest-order-card');
+            loBox.innerHTML = lo
+                ? '<div class="w-12 h-12 rounded-xl bg-yellow-100 text-yellow-600 flex items-center justify-center text-lg shrink-0"><i class="fa-solid fa-box-open"></i></div><div class="flex-1 min-w-0"><p class="text-[10px] font-extrabold uppercase tracking-widest text-roast-400">Latest order</p><h3 class="font-serif text-base font-bold text-roast-950">Order #' + MemberShell.esc(lo.id) + '</h3><p class="text-[11px] text-roast-500">' + lo.items.reduce((a, i) => a + i.qty, 0) + ' items &middot; ' + MemberShell.money(lo.total) + '</p></div><span class="px-2.5 py-1 bg-yellow-500/15 text-yellow-700 text-[10px] font-bold rounded-full whitespace-nowrap">' + MemberShell.esc(lo.status) + '</span>'
+                : '<div class="w-12 h-12 rounded-xl bg-blue-50 text-amberGold flex items-center justify-center text-lg shrink-0"><i class="fa-solid fa-mug-hot"></i></div><div class="flex-1 min-w-0"><p class="text-[10px] font-extrabold uppercase tracking-widest text-roast-400">Orders</p><h3 class="font-serif text-base font-bold text-roast-950">No orders yet</h3><p class="text-[11px] text-roast-500">Fresh beans are one tap away.</p></div><i class="fa-solid fa-arrow-right text-roast-400"></i>';
+            loBox.href = lo ? 'orders.html' : 'shop.html?tab=beans';
             const regs = MemberShell.registrations().filter(r => r.classStatus !== 'Cancelled');
-            document.getElementById('stat-classes').innerText = regs.length;
+            document.getElementById('stat-classes').innerText = regs.length + MemberShell.myWorkshops().length;
             const latest = regs[regs.length - 1];
             const card = document.getElementById('next-up-card');
             if (!latest) {
                 card.innerHTML = '<p class="text-[10px] font-extrabold uppercase tracking-widest text-blue-200">Next up</p>' +
                     '<h3 class="font-serif text-xl font-bold">No class booked yet</h3>' +
                     '<p class="text-xs text-blue-100">Pick a date and reserve your seat &mdash; it takes about a minute.</p>' +
-                    '<a href="index.html#fixed-classes" class="inline-flex items-center gap-2 px-4 py-2.5 bg-white text-amberGold font-bold rounded-full text-xs">Reserve a seat <i class="fa-solid fa-arrow-right text-[10px]"></i></a>';
+                    '<a href="book-class.html" class="inline-flex items-center gap-2 px-4 py-2.5 bg-white text-amberGold font-bold rounded-full text-xs">Reserve a seat <i class="fa-solid fa-arrow-right text-[10px]"></i></a>';
+                return;
+            }
+            const d = new Date(latest.preferredDate + 'T00:00:00');
+            const status = latest.classStatus === 'Admitted' ? ['Confirmed', 'bg-emerald-400 text-emerald-950'] :
+                latest.classStatus === 'Reschedule' ? ['Reschedule needed', 'bg-red-400 text-red-950'] : ['Awaiting confirmation', 'bg-amber-300 text-amber-950'];
+            card.innerHTML = '<div class="flex items-center justify-between"><p class="text-[10px] font-extrabold uppercase tracking-widest text-blue-200">Your class</p>' +
+                '<span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold ' + status[1] + '">' + status[0] + '</span></div>' +
+                '<h3 class="font-serif text-xl font-bold">' + d.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'short' }) + '</h3>' +
+                '<p class="text-xs text-blue-100"><i class="fa-solid fa-clock mr-1.5"></i>' + MemberShell.esc(latest.session) + '</p>' +
+                '<a href="classes.html" class="inline-flex items-center gap-2 text-xs font-bold text-white hover:underline">View details <i class="fa-solid fa-arrow-right text-[10px]"></i></a>';
+        });
+
+    </script>
+</body>
+</html>            <!-- LATEST ORDER + NEXT REWARD -->
+            <section class="grid md:grid-cols-2 gap-5">
+                <a id="latest-order-card" href="orders.html" class="bg-white rounded-2xl border border-roast-200 p-5 shadow-sm hover:shadow-lg transition-all flex items-center gap-4"></a>
+                <a href="membership.html" class="bg-white rounded-2xl border border-roast-200 p-5 shadow-sm hover:shadow-lg transition-all flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-blue-100 text-amberGold flex items-center justify-center text-lg shrink-0"><i class="fa-solid fa-gift"></i></div>
+                    <div class="flex-1 min-w-0"><p class="text-[10px] font-extrabold uppercase tracking-widest text-roast-400">Next reward</p><h3 class="font-serif text-base font-bold text-roast-950">Free Delivery Voucher</h3><p class="text-[11px] text-roast-500">150 more points to go</p></div>
+                    <i class="fa-solid fa-arrow-right text-roast-400"></i></a>
+            </section>
+        </main>
+    </div>
+    <nav id="m-bottomnav" aria-label="Primary"></nav>
+
+    <script src="js/member-shell.js"></script>
+    <script>
+
+        window.addEventListener('member-ready', () => {
+            const u = MemberShell.user() || {};
+            const first = (u.name || 'Member').split(/\s+/)[0];
+            document.getElementById('hero-welcome-title').innerText = 'Hello, ' + first + '!';
+
+            // promo card reflects admin settings when present
+            try {
+                const st = JSON.parse(localStorage.getItem('rp_fixed_class_settings') || 'null');
+                if (st && st.fee) {
+                    document.getElementById('promo-fee').innerText = 'RM ' + Number(st.fee).toFixed(0);
+                    document.getElementById('promo-deposit').innerText = (st.depositPct || 50) + '% deposit';
+                }
+            } catch (e) {}
+
+            const orders = MemberShell.myOrders();
+            document.getElementById('stat-orders').innerText = orders.length;
+            const lo = orders[orders.length - 1], loBox = document.getElementById('latest-order-card');
+            loBox.innerHTML = lo
+                ? '<div class="w-12 h-12 rounded-xl bg-yellow-100 text-yellow-600 flex items-center justify-center text-lg shrink-0"><i class="fa-solid fa-box-open"></i></div><div class="flex-1 min-w-0"><p class="text-[10px] font-extrabold uppercase tracking-widest text-roast-400">Latest order</p><h3 class="font-serif text-base font-bold text-roast-950">Order #' + MemberShell.esc(lo.id) + '</h3><p class="text-[11px] text-roast-500">' + lo.items.reduce((a, i) => a + i.qty, 0) + ' items &middot; ' + MemberShell.money(lo.total) + '</p></div><span class="px-2.5 py-1 bg-yellow-500/15 text-yellow-700 text-[10px] font-bold rounded-full whitespace-nowrap">' + MemberShell.esc(lo.status) + '</span>'
+                : '<div class="w-12 h-12 rounded-xl bg-blue-50 text-amberGold flex items-center justify-center text-lg shrink-0"><i class="fa-solid fa-mug-hot"></i></div><div class="flex-1 min-w-0"><p class="text-[10px] font-extrabold uppercase tracking-widest text-roast-400">Orders</p><h3 class="font-serif text-base font-bold text-roast-950">No orders yet</h3><p class="text-[11px] text-roast-500">Fresh beans are one tap away.</p></div><i class="fa-solid fa-arrow-right text-roast-400"></i>';
+            loBox.href = lo ? 'orders.html' : 'shop.html?tab=beans';
+            const orders = MemberShell.myOrders();
+            document.getElementById('stat-orders').innerText = orders.length;
+            const lo = orders[orders.length - 1], loBox = document.getElementById('latest-order-card');
+            loBox.innerHTML = lo
+                ? '<div class="w-12 h-12 rounded-xl bg-yellow-100 text-yellow-600 flex items-center justify-center text-lg shrink-0"><i class="fa-solid fa-box-open"></i></div><div class="flex-1 min-w-0"><p class="text-[10px] font-extrabold uppercase tracking-widest text-roast-400">Latest order</p><h3 class="font-serif text-base font-bold text-roast-950">Order #' + MemberShell.esc(lo.id) + '</h3><p class="text-[11px] text-roast-500">' + lo.items.reduce((a, i) => a + i.qty, 0) + ' items &middot; ' + MemberShell.money(lo.total) + '</p></div><span class="px-2.5 py-1 bg-yellow-500/15 text-yellow-700 text-[10px] font-bold rounded-full whitespace-nowrap">' + MemberShell.esc(lo.status) + '</span>'
+                : '<div class="w-12 h-12 rounded-xl bg-blue-50 text-amberGold flex items-center justify-center text-lg shrink-0"><i class="fa-solid fa-mug-hot"></i></div><div class="flex-1 min-w-0"><p class="text-[10px] font-extrabold uppercase tracking-widest text-roast-400">Orders</p><h3 class="font-serif text-base font-bold text-roast-950">No orders yet</h3><p class="text-[11px] text-roast-500">Fresh beans are one tap away.</p></div><i class="fa-solid fa-arrow-right text-roast-400"></i>';
+            loBox.href = lo ? 'orders.html' : 'shop.html?tab=beans';
+            const regs = MemberShell.registrations().filter(r => r.classStatus !== 'Cancelled');
+            document.getElementById('stat-classes').innerText = regs.length + MemberShell.myWorkshops().length;
+            const latest = regs[regs.length - 1];
+            const card = document.getElementById('next-up-card');
+            if (!latest) {
+                card.innerHTML = '<p class="text-[10px] font-extrabold uppercase tracking-widest text-blue-200">Next up</p>' +
+                    '<h3 class="font-serif text-xl font-bold">No class booked yet</h3>' +
+                    '<p class="text-xs text-blue-100">Pick a date and reserve your seat &mdash; it takes about a minute.</p>' +
+                    '<a href="book-class.html" class="inline-flex items-center gap-2 px-4 py-2.5 bg-white text-amberGold font-bold rounded-full text-xs">Reserve a seat <i class="fa-solid fa-arrow-right text-[10px]"></i></a>';
                 return;
             }
             const d = new Date(latest.preferredDate + 'T00:00:00');

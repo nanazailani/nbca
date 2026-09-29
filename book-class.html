@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fixed Classes | Nb.CA Academy</title>
+    <script>if (!localStorage.getItem('rp_logged_user')) { location.replace('auth.html?next=' + encodeURIComponent(location.pathname.split('/').pop() || 'dashboard.html')); }</script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    screens: { xs: '420px' },
+                    colors: {
+                        roast: {
+                            50: '#F8FAFC', 100: '#F1F5F9', 200: '#E2E8F0', 300: '#CBD5E1', 400: '#94A3B8',
+                            500: '#64748B', 600: '#475569', 700: '#334155', 800: '#1E293B', 900: '#1E40AF', 950: '#172554'
+                        },
+                        amberGold: '#2563EB',
+                        royalBlue: '#1E40AF',
+                        navy: '#172554'
+                    },
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'], serif: ['Playfair Display', 'serif'] }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F8FAFC;
+            background-image: radial-gradient(circle at 8% 5%, rgba(37,99,235,0.06) 0%, transparent 30%), radial-gradient(circle at 95% 8%, rgba(30,64,175,0.05) 0%, transparent 28%);
+            background-attachment: fixed; }
+        h1, h2, h3, .font-serif { font-family: 'Playfair Display', serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; } .no-scrollbar { scrollbar-width: none; }
+        @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+        main > * { animation: rise .45s ease both; } main > *:nth-child(2) { animation-delay: .06s; } main > *:nth-child(3) { animation-delay: .12s; } main > *:nth-child(4) { animation-delay: .18s; }
+        @media (prefers-reduced-motion: reduce) { main > * { animation: none; } }
+        @media print { #m-sidebar, #m-topbar, #m-bottomnav { display: none !important; } }
+    </style>
+</head>
+<body data-page="fixed" data-title="Fixed Classes" data-sub="Book a seat in our daily coffee class" class="text-roast-900 antialiased selection:bg-amberGold selection:text-white">
+    <div id="m-overlay"></div>
+    <aside id="m-sidebar"></aside>
+    <div class="lg:pl-72 min-h-screen flex flex-col min-w-0 overflow-x-hidden">
+        <header id="m-topbar"></header>
+        <main class="flex-1 min-w-0 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-10 py-6 lg:py-10 pb-28 lg:pb-14 space-y-10">
+
+            <div class="grid lg:grid-cols-5 gap-6 items-start">
+                <!-- Class info -->
+                <aside class="lg:col-span-2 bg-white rounded-3xl border border-roast-200 shadow-sm overflow-hidden lg:sticky lg:top-28">
+                    <div class="relative h-48"><img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=900&q=80" alt="Daily coffee class" class="w-full h-full object-cover">
+                        <span class="absolute top-4 left-4 px-3 py-1 bg-white text-amberGold text-[10px] font-extrabold uppercase tracking-wider rounded-full">Daily class</span></div>
+                    <div class="p-6 space-y-4">
+                        <div><h2 class="font-serif text-2xl font-extrabold text-roast-950">Coffee Fundamentals</h2><p class="text-xs text-roast-600 mt-1">Hands-on brewing basics for beginners.</p></div>
+                        <ul class="space-y-2 text-xs text-roast-700">
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-calendar-days text-amberGold w-4"></i> Sunday &ndash; Thursday</li>
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-sun text-amberGold w-4"></i> Morning: 10:00 AM &ndash; 12:00 PM</li>
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-cloud-sun text-amberGold w-4"></i> Afternoon: 2:00 PM &ndash; 4:00 PM</li>
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-location-dot text-amberGold w-4"></i> Nb.CA Academy, Sungai Petani</li>
+                        </ul>
+                        <div class="grid grid-cols-2 gap-3 pt-4 border-t border-roast-100">
+                            <div><span class="block text-[10px] uppercase tracking-wider text-roast-500">Class fee</span><strong id="info-fee" class="font-serif text-2xl text-amberGold">RM 150</strong></div>
+                            <div class="text-right"><span class="block text-[10px] uppercase tracking-wider text-roast-500">Deposit now</span><strong id="info-deposit" class="text-lg text-roast-950">RM 75</strong></div>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- Registration wizard -->
+                <section class="lg:col-span-3 bg-white rounded-3xl border border-roast-200 shadow-sm p-5 sm:p-8">
+                    <div class="flex items-center justify-center gap-2 mb-7 text-[10px] font-bold uppercase tracking-wider flex-wrap">
+                        <span id="fc-step-dot-1" class="px-3 py-1 rounded-full">1 Details</span><span class="text-roast-300">&rsaquo;</span>
+                        <span id="fc-step-dot-2" class="px-3 py-1 rounded-full">2 Date &amp; Session</span><span class="text-roast-300">&rsaquo;</span>
+                        <span id="fc-step-dot-3" class="px-3 py-1 rounded-full">3 Payment</span>
+                    </div>
+
+                    <form id="fc-step-1" onsubmit="fcGoToStep2(event)" class="space-y-4 text-xs">
+                        <div><label class="block font-semibold text-roast-600 uppercase mb-1">Name *</label><input type="text" id="fc-student-name" required class="w-full bg-roast-50 border border-roast-200 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold"></div>
+                        <div><label class="block font-semibold text-roast-600 uppercase mb-1">IC / Passport Number * <span class="normal-case font-normal text-roast-400">(for your certificate)</span></label><input type="text" id="fc-student-ic" required placeholder="e.g. 990101-01-1234" class="w-full bg-roast-50 border border-roast-200 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold"></div>
+                        <div><label class="block font-semibold text-roast-600 uppercase mb-1">Cafe Ownership <span class="normal-case font-normal text-roast-400">(optional)</span></label><input type="text" id="fc-student-cafe" placeholder="Cafe name, if you own or run one" class="w-full bg-roast-50 border border-roast-200 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold"></div>
+                        <div class="grid sm:grid-cols-2 gap-4">
+                            <div><label class="block font-semibold text-roast-600 uppercase mb-1">Phone *</label><input type="tel" id="fc-student-phone" required placeholder="+60 12-345 6789" class="w-full bg-roast-50 border border-roast-200 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold"></div>
+                            <div><label class="block font-semibold text-roast-600 uppercase mb-1">Email *</label><input type="email" id="fc-student-email" required readonly class="w-full bg-roast-100 border border-roast-200 text-roast-600 rounded-xl px-4 py-3 cursor-not-allowed" title="Linked to your account"></div>
+                        </div>
+                        <div><label class="block font-semibold text-roast-600 uppercase mb-1">From Where *</label><input type="text" id="fc-student-from" required placeholder="Town / state you are travelling from" class="w-full bg-roast-50 border border-roast-200 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold"></div>
+                        <button type="submit" class="w-full py-3.5 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl uppercase tracking-wider shadow-lg transition-all">Next: choose date &amp; session</button>
+                    </form>
+
+                    <div id="fc-step-2" class="hidden space-y-4 text-xs">
+                        <div class="flex items-center justify-between">
+                            <button type="button" onclick="fcChangeMonth(-1)" id="fc-prev-month" class="w-9 h-9 rounded-full border border-roast-200 text-roast-700 hover:bg-roast-100" aria-label="Previous month"><i class="fa-solid fa-chevron-left text-[10px]"></i></button>
+                            <span id="fc-month-label" class="font-bold text-roast-950 text-base font-serif"></span>
+                            <button type="button" onclick="fcChangeMonth(1)" class="w-9 h-9 rounded-full border border-roast-200 text-roast-700 hover:bg-roast-100" aria-label="Next month"><i class="fa-solid fa-chevron-right text-[10px]"></i></button>
+                        </div>
+                        <div class="grid grid-cols-7 gap-1.5 text-center text-[10px] font-bold uppercase text-roast-500"><span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span class="text-roast-300">Fri</span><span class="text-roast-300">Sat</span></div>
+                        <div id="fc-calendar" class="grid grid-cols-7 gap-1.5"></div>
+                        <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-[10px] text-roast-600">
+                            <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-emerald-500"></span> Available</span>
+                            <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-amber-400"></span> Filling up</span>
+                            <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-red-500"></span> Fully booked</span>
+                            <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-roast-200"></span> Closed</span>
+                        </div>
+                        <div id="fc-session-picker" class="hidden space-y-2 pt-3 border-t border-roast-100">
+                            <p class="font-semibold text-roast-600 uppercase">Sessions on <span id="fc-picked-date-label" class="text-roast-950"></span></p>
+                            <div id="fc-session-buttons" class="grid sm:grid-cols-2 gap-3"></div>
+                        </div>
+                        <div class="flex gap-3 pt-2">
+                            <button type="button" onclick="fcShowStep(1)" class="flex-1 py-3 bg-roast-100 hover:bg-roast-200 text-roast-700 font-bold rounded-xl border border-roast-200">Back</button>
+                            <button type="button" id="fc-continue-payment" onclick="fcGoToStep3()" disabled class="flex-[2] py-3 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl uppercase tracking-wider disabled:opacity-40 disabled:cursor-not-allowed">Next: payment</button>
+                        </div>
+                    </div>
+
+                    <div id="fc-step-3" class="hidden space-y-4 text-xs">
+                        <div class="bg-roast-50 rounded-xl p-4 border border-roast-200 space-y-1.5">
+                            <div class="flex justify-between"><span class="text-roast-600">Student</span><strong id="fc-sum-name" class="text-roast-950"></strong></div>
+                            <div class="flex justify-between"><span class="text-roast-600">Date</span><strong id="fc-sum-date" class="text-roast-950"></strong></div>
+                            <div class="flex justify-between"><span class="text-roast-600">Session</span><strong id="fc-sum-session" class="text-roast-950"></strong></div>
+                        </div>
+                        <div class="bg-roast-50 rounded-xl p-4 border border-roast-200 space-y-1.5">
+                            <div class="flex justify-between"><span class="text-roast-600">Class fee</span><span id="fc-sum-fee" class="font-bold text-roast-950"></span></div>
+                            <div class="flex justify-between text-amberGold font-bold"><span>Deposit due now</span><span id="fc-sum-deposit"></span></div>
+                            <div class="flex justify-between text-roast-500"><span>Balance on class day</span><span id="fc-sum-balance"></span></div>
+                        </div>
+                        <p class="text-[10px] text-roast-500 text-center">After payment our team reviews it and confirms your seat, or contacts you to reschedule if needed.</p>
+                        <div class="flex gap-3">
+                            <button type="button" onclick="fcShowStep(2)" class="flex-1 py-3 bg-roast-100 hover:bg-roast-200 text-roast-700 font-bold rounded-xl border border-roast-200">Back</button>
+                            <button type="button" onclick="fcPayDeposit()" class="flex-[2] py-3 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl uppercase tracking-wider"><i class="fa-solid fa-lock text-[10px] mr-1"></i> Pay deposit</button>
+                        </div>
+                    </div>
+
+                    <div id="fc-step-4" class="hidden text-center space-y-4 py-6">
+                        <div class="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto text-2xl"><i class="fa-solid fa-check"></i></div>
+                        <h3 class="font-serif text-2xl font-bold text-roast-950">Registration submitted</h3>
+                        <p id="fc-done-text" class="text-xs text-roast-600 max-w-sm mx-auto"></p>
+                        <div class="flex gap-3 justify-center pt-2"><a href="classes.html" class="px-5 py-3 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl text-xs">View my classes</a><a href="dashboard.html" class="px-5 py-3 bg-roast-100 hover:bg-roast-200 text-roast-700 font-bold rounded-xl text-xs border border-roast-200">Back to dashboard</a></div>
+                    </div>
+                </section>
+            </div>
+
+        </main>
+    </div>
+    <nav id="m-bottomnav" aria-label="Primary"></nav>
+
+    <script src="js/member-shell.js"></script>
+    <script>
+
+        const isLoggedIn = true;   // this page is members-only (guard in <head>)
+        const FC_CAPACITY = 10;                       // seats per session
+        const FC_OPEN_DAYS = [0, 1, 2, 3, 4];          // Sunday – Thursday
+        const FC_SESSIONS = ['10:00 AM – 12:00 PM', '2:00 PM – 4:00 PM'];
+        const FC_INACTIVE = ['Reschedule', 'Cancelled'];
+        let fcDetails = null;
+        let fcPicked = { date: null, session: null };
+        let fcViewMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+
+        function fcGetFees() {
+            let fee = 150, pct = 50;
+            try {
+                const st = JSON.parse(localStorage.getItem('rp_fixed_class_settings') || 'null');
+                if (st) { fee = Number(st.fee) || fee; pct = Number(st.depositPct) || pct; }
+            } catch (e) {}
+            return { fee, deposit: fee * pct / 100 };
+        }
+
+        function fcLoadRegistrations() {
+            try { return JSON.parse(localStorage.getItem('rp_fixed_class_students') || '[]'); } catch (e) { return []; }
+        }
+
+        function fcBookedCount(dateStr, session) {
+            return fcLoadRegistrations().filter(r => r.preferredDate === dateStr && r.session === session && !FC_INACTIVE.includes(r.classStatus)).length;
+        }
+
+        function fcDateStr(d) {
+            return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+        }
+
+        // Registration requires an account: send guests to sign in / register, then bring them back here.
+        
+        function fcShowStep(n) {
+            [1, 2, 3, 4].forEach(i => {
+                document.getElementById('fc-step-' + i).classList.toggle('hidden', i !== n);
+                const dot = document.getElementById('fc-step-dot-' + i); if (dot) dot.className = 'px-3 py-1 rounded-full ' + (i <= Math.min(n, 3) ? 'bg-amberGold text-roast-50' : 'bg-roast-100 text-roast-500');
+            });
+            if (n === 2) fcRenderCalendar();
+        }
+
+        function fcGoToStep2(e) {
+            e.preventDefault();
+            fcDetails = {
+                name: document.getElementById('fc-student-name').value.trim(),
+                ic: document.getElementById('fc-student-ic').value.trim(),
+                cafe: document.getElementById('fc-student-cafe').value.trim(),
+                phone: document.getElementById('fc-student-phone').value.trim(),
+                email: document.getElementById('fc-student-email').value.trim(),
+                from: document.getElementById('fc-student-from').value.trim()
+            };
+            if (!fcDetails.name || !fcDetails.ic || !fcDetails.phone || !fcDetails.email || !fcDetails.from) {
+                alert('Please complete all required fields.');
+                return;
+            }
+            fcShowStep(2);
+        }
+
+        function fcChangeMonth(delta) {
+            fcViewMonth = new Date(fcViewMonth.getFullYear(), fcViewMonth.getMonth() + delta, 1);
+            fcRenderCalendar();
+        }
+
+        // green = plenty of seats, amber = a session is nearly full, red = every session is full
+        function fcDayState(dateStr) {
+            const counts = FC_SESSIONS.map(s => fcBookedCount(dateStr, s));
+            if (counts.every(c => c >= FC_CAPACITY)) return 'full';
+            if (counts.some(c => c >= FC_CAPACITY * 0.7)) return 'few';
+            return 'open';
+        }
+
+        function fcRenderCalendar() {
+            const y = fcViewMonth.getFullYear(), m = fcViewMonth.getMonth();
+            document.getElementById('fc-month-label').innerText = fcViewMonth.toLocaleString('en-GB', { month: 'long', year: 'numeric' });
+            const today = new Date(); today.setHours(0, 0, 0, 0);
+            const thisMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+            document.getElementById('fc-prev-month').style.visibility = fcViewMonth <= thisMonth ? 'hidden' : 'visible';
+
+            const first = new Date(y, m, 1).getDay();
+            const days = new Date(y, m + 1, 0).getDate();
+            let html = '';
+            for (let i = 0; i < first; i++) html += '<span></span>';
+            for (let d = 1; d <= days; d++) {
+                const date = new Date(y, m, d);
+                const str = fcDateStr(date);
+                const isOpen = FC_OPEN_DAYS.includes(date.getDay()) && date >= today;
+                const base = 'h-10 rounded-lg text-xs font-bold transition-all';
+                if (!isOpen) {
+                    html += '<span class="' + base + ' flex items-center justify-center bg-roast-100 text-roast-300">' + d + '</span>';
+                    continue;
+                }
+                const st = fcDayState(str);
+                const color = st === 'full' ? 'bg-red-500 text-white' : st === 'few' ? 'bg-amber-400 text-roast-950' : 'bg-emerald-500 text-white';
+                const ring = fcPicked.date === str ? ' ring-2 ring-offset-2 ring-royalBlue' : '';
+                html += '<button type="button" onclick="fcPickDate(\'' + str + '\')" class="' + base + ' ' + color + ring + ' hover:opacity-85">' + d + '</button>';
+            }
+            document.getElementById('fc-calendar').innerHTML = html;
+            fcRenderSessions();
+        }
+
+        function fcPickDate(str) {
+            fcPicked = { date: str, session: null };
+            fcRenderCalendar();
+        }
+
+        function fcRenderSessions() {
+            const box = document.getElementById('fc-session-picker');
+            const btnWrap = document.getElementById('fc-session-buttons');
+            document.getElementById('fc-continue-payment').disabled = !(fcPicked.date && fcPicked.session);
+            if (!fcPicked.date) { box.classList.add('hidden'); return; }
+            box.classList.remove('hidden');
+            document.getElementById('fc-picked-date-label').innerText = new Date(fcPicked.date + 'T00:00:00').toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' });
+            btnWrap.innerHTML = FC_SESSIONS.map(sess => {
+                const left = FC_CAPACITY - fcBookedCount(fcPicked.date, sess);
+                const full = left <= 0;
+                const few = !full && left <= FC_CAPACITY * 0.3;
+                const color = full ? 'bg-red-50 border-red-300 text-red-600 cursor-not-allowed' : few ? 'bg-amber-50 border-amber-300 text-amber-700' : 'bg-emerald-50 border-emerald-300 text-emerald-700';
+                const sel = fcPicked.session === sess ? ' ring-2 ring-royalBlue' : '';
+                const label = full ? 'Fully booked' : left + ' seat' + (left > 1 ? 's' : '') + ' left';
+                return '<button type="button" ' + (full ? 'disabled' : 'onclick="fcPickSession(\'' + sess + '\')"') + ' class="p-3 rounded-xl border text-left ' + color + sel + '"><strong class="block text-xs">' + sess + '</strong><span class="text-[10px]">' + label + '</span></button>';
+            }).join('');
+        }
+
+        function fcPickSession(sess) {
+            fcPicked.session = sess;
+            fcRenderSessions();
+        }
+
+        function fcGoToStep3() {
+            if (!fcPicked.date || !fcPicked.session) return;
+            const { fee, deposit } = fcGetFees();
+            document.getElementById('fc-sum-name').innerText = fcDetails.name;
+            document.getElementById('fc-sum-date').innerText = new Date(fcPicked.date + 'T00:00:00').toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+            document.getElementById('fc-sum-session').innerText = fcPicked.session;
+            document.getElementById('fc-sum-fee').innerText = 'RM ' + fee.toFixed(2);
+            document.getElementById('fc-sum-deposit').innerText = 'RM ' + deposit.toFixed(2);
+            document.getElementById('fc-sum-balance').innerText = 'RM ' + (fee - deposit).toFixed(2);
+            fcShowStep(3);
+        }
+
+        // NOTE: no live payment gateway is connected on this static site yet, so this records the deposit
+        // as paid and leaves it for the admin to verify and admit. Replace with a real gateway callback.
+        function fcPayDeposit() {
+            if (fcBookedCount(fcPicked.date, fcPicked.session) >= FC_CAPACITY) {
+                alert('Sorry, that session just became fully booked. Please choose another.');
+                fcShowStep(2);
+                return;
+            }
+            const { fee, deposit } = fcGetFees();
+            const regs = fcLoadRegistrations();
+            regs.push({
+                id: 'FC-' + Date.now(),
+                name: fcDetails.name,
+                ic: fcDetails.ic,
+                cafe: fcDetails.cafe,
+                phone: fcDetails.phone,
+                email: fcDetails.email,
+                from: fcDetails.from,
+                preferredDate: fcPicked.date,
+                session: fcPicked.session,
+                classFee: fee,
+                deposit: deposit,
+                depositStatus: 'Paid',
+                classStatus: 'Pending Confirmation',
+                createdAt: new Date().toISOString()
+            });
+            localStorage.setItem('rp_fixed_class_students', JSON.stringify(regs));
+            document.getElementById('fc-done-text').innerText = 'Deposit received for ' + fcPicked.date + ' (' + fcPicked.session + '). We will confirm your seat shortly - you can track it in My Classes.';
+            fcShowStep(4);
+        }
+
+
+        window.addEventListener('member-ready', () => {
+            const u = MemberShell.user() || {};
+            const prev = MemberShell.registrations().slice(-1)[0] || {};
+            document.getElementById('fc-student-name').value = u.name || '';
+            document.getElementById('fc-student-email').value = u.email || '';
+            document.getElementById('fc-student-phone').value = prev.phone || '';
+            document.getElementById('fc-student-ic').value = prev.ic || '';
+            document.getElementById('fc-student-cafe').value = prev.cafe || '';
+            document.getElementById('fc-student-from').value = prev.from || '';
+            const f = fcGetFees();
+            document.getElementById('info-fee').innerText = 'RM ' + f.fee.toFixed(0);
+            document.getElementById('info-deposit').innerText = 'RM ' + f.deposit.toFixed(0);
+            fcShowStep(1);
+        });
+
+    </script>
+</body>
+</html>
