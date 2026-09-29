@@ -1,0 +1,234 @@
+/* Nb.CA Academy — shared member portal shell.
+ * Injects the sidebar, mobile drawer, topbar, bottom nav, profile modal and toast into every member page.
+ * Page markup needs: <body data-page="dashboard" data-title="..." data-sub="...">, #m-sidebar, #m-overlay, #m-topbar, #m-bottomnav.
+ * Session = localStorage.rp_logged_user, account record = rp_user (see auth.html). */
+(function () {
+    const SAMPLE_POINTS = 350;          // placeholder until points are stored per member
+    const SAMPLE_TIER = 'Gold';
+
+    const NAV = [
+        { group: 'Member', items: [
+            { id: 'dashboard', label: 'Dashboard', icon: 'fa-house', href: 'dashboard.html' },
+            { id: 'classes', label: 'My Classes', icon: 'fa-graduation-cap', href: 'classes.html', badge: 'classes' },
+            { id: 'orders', label: 'My Orders', icon: 'fa-box-open', href: 'orders.html' },
+            { id: 'membership', label: 'Membership', icon: 'fa-crown', href: 'membership.html', pill: SAMPLE_POINTS + ' pts' }
+        ]},
+        { group: 'Discover', items: [
+            { id: 'x-fixed', label: 'Fixed Classes', icon: 'fa-calendar-days', href: 'index.html#fixed-classes' },
+            { id: 'x-workshops', label: 'Workshops', icon: 'fa-chalkboard-user', href: 'index.html#classes' },
+            { id: 'x-beans', label: 'Coffee Beans', icon: 'fa-mug-hot', href: 'index.html#coffee-beans' },
+            { id: 'x-merch', label: 'Merchandise', icon: 'fa-shirt', href: 'index.html#merchandise' }
+        ]}
+    ];
+
+    const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+    function user() {
+        try { return JSON.parse(localStorage.getItem('rp_logged_user') || 'null'); } catch (e) { return null; }
+    }
+
+    // Guard: members only. (Also done inline in <head> to avoid a flash of content.)
+    if (!user()) {
+        window.location.replace('auth.html?next=' + encodeURIComponent(location.pathname.split('/').pop() || 'dashboard.html'));
+        return;
+    }
+
+    function registrations() {
+        const email = ((user() || {}).email || '').toLowerCase();
+        let all = [];
+        try { all = JSON.parse(localStorage.getItem('rp_fixed_class_students') || '[]'); } catch (e) {}
+        return all.filter(r => (r.email || '').toLowerCase() === email);
+    }
+
+    function initials(name) {
+        return (name || '?').split(/\s+/).filter(Boolean).map(w => w[0]).slice(0, 2).join('').toUpperCase();
+    }
+
+    const page = document.body.dataset.page || '';
+    const u = user();
+
+    function navItem(it) {
+        const active = it.id === page;
+        let extra = '';
+        if (it.badge === 'classes') {
+            const n = registrations().filter(r => r.classStatus === 'Reschedule').length;
+            if (n) extra = '<span class="ml-auto min-w-[20px] h-5 px-1.5 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center">' + n + '</span>';
+        }
+        if (it.pill) extra = '<span class="ml-auto whitespace-nowrap text-[10px] font-bold px-2 py-0.5 rounded-full ' + (active ? 'bg-white text-amberGold' : 'bg-amberGold/10 text-amberGold') + '">' + it.pill + '</span>';
+        const external = it.id.startsWith('x-');
+        return '<a href="' + it.href + '" class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[13px] font-semibold transition-all ' +
+            (active ? 'bg-amberGold text-white shadow-md shadow-blue-600/25' : 'text-roast-700 hover:bg-roast-100 hover:text-roast-950') + '">' +
+            '<span class="w-8 h-8 rounded-lg flex items-center justify-center text-sm shrink-0 ' + (active ? 'bg-white/20' : 'bg-roast-100 group-hover:bg-white text-amberGold') + '"><i class="fa-solid ' + it.icon + '"></i></span>' +
+            '<span>' + it.label + '</span>' + extra +
+            (external ? '<i class="fa-solid fa-arrow-up-right-from-square ml-auto text-[9px] text-roast-400 opacity-0 group-hover:opacity-100"></i>' : '') +
+            '</a>';
+    }
+
+    function buildSidebar() {
+        const el = document.getElementById('m-sidebar');
+        if (!el) return;
+        el.className = 'fixed inset-y-0 left-0 w-72 z-40 bg-white border-r border-roast-200 flex flex-col -translate-x-full lg:translate-x-0 transition-transform duration-300';
+        el.innerHTML =
+            '<div class="h-20 px-5 flex items-center justify-between border-b border-roast-100 shrink-0">' +
+                '<a href="dashboard.html" class="flex items-center gap-3">' +
+                    '<img src="images/logo.png" alt="Nb.CA Academy" class="w-11 h-11 object-contain">' +
+                    '<div class="leading-tight"><span class="block font-serif text-base font-extrabold tracking-wider text-roast-950 uppercase">Nb.CA Academy</span>' +
+                    '<span class="block text-[10px] tracking-widest text-amberGold uppercase font-bold">Member Portal</span></div>' +
+                '</a>' +
+                '<button onclick="MemberShell.closeMenu()" class="lg:hidden w-9 h-9 rounded-full hover:bg-roast-100 text-roast-600" aria-label="Close menu"><i class="fa-solid fa-xmark"></i></button>' +
+            '</div>' +
+            '<nav class="flex-1 overflow-y-auto px-4 py-5 space-y-6" aria-label="Member navigation">' +
+                NAV.map(g => '<div class="space-y-1"><p class="px-3.5 mb-2 text-[10px] font-extrabold tracking-[0.18em] uppercase text-roast-400">' + g.group + '</p>' + g.items.map(navItem).join('') + '</div>').join('') +
+                '<a href="index.html#fixed-classes" class="block rounded-2xl p-4 bg-gradient-to-br from-roast-950 to-royalBlue text-white shadow-lg relative overflow-hidden">' +
+                    '<i class="fa-solid fa-mug-hot absolute -right-3 -bottom-3 text-6xl text-white/10"></i>' +
+                    '<span class="text-[10px] font-bold uppercase tracking-widest text-blue-200">Now open</span>' +
+                    '<p class="font-serif text-base font-bold mt-1 leading-snug">Reserve your seat in the daily class</p>' +
+                    '<span class="inline-flex items-center gap-1.5 mt-3 text-[11px] font-bold bg-white text-amberGold px-3 py-1.5 rounded-full">Book now <i class="fa-solid fa-arrow-right text-[9px]"></i></span>' +
+                '</a>' +
+            '</nav>' +
+            '<div class="p-4 border-t border-roast-100 space-y-2 shrink-0">' +
+                '<button onclick="openProfileModal()" class="w-full flex items-center gap-3 p-2.5 rounded-xl hover:bg-roast-100 transition-all text-left">' +
+                    '<span class="w-10 h-10 rounded-full bg-amberGold text-white font-bold text-sm flex items-center justify-center shrink-0">' + esc(initials(u.name)) + '</span>' +
+                    '<span class="min-w-0 flex-1"><strong class="block text-[13px] text-roast-950 truncate">' + esc(u.name || 'Member') + '</strong><span class="block text-[11px] text-roast-500 truncate">' + esc(u.email || '') + '</span></span>' +
+                    '<i class="fa-solid fa-gear text-roast-400 text-xs"></i>' +
+                '</button>' +
+                '<div class="flex gap-2">' +
+                    '<a href="index.html" class="flex-1 py-2 rounded-xl text-[11px] font-bold text-roast-700 bg-roast-100 hover:bg-roast-200 text-center transition-all"><i class="fa-solid fa-globe mr-1"></i> Website</a>' +
+                    '<button onclick="logoutUser()" class="flex-1 py-2 rounded-xl text-[11px] font-bold text-red-600 bg-red-50 hover:bg-red-100 transition-all"><i class="fa-solid fa-right-from-bracket mr-1"></i> Logout</button>' +
+                '</div>' +
+            '</div>';
+    }
+
+    function buildTopbar() {
+        const el = document.getElementById('m-topbar');
+        if (!el) return;
+        el.className = 'sticky top-0 z-30 h-16 lg:h-20 bg-roast-50/85 backdrop-blur-md border-b border-roast-200 px-4 sm:px-6 lg:px-10 flex items-center justify-between gap-3';
+        el.innerHTML =
+            '<div class="flex items-center gap-3 min-w-0">' +
+                '<button onclick="MemberShell.openMenu()" class="lg:hidden w-10 h-10 rounded-xl bg-white border border-roast-200 text-roast-800 flex items-center justify-center shadow-sm" aria-label="Open menu"><i class="fa-solid fa-bars"></i></button>' +
+                '<div class="min-w-0"><h1 class="font-serif text-lg lg:text-2xl font-extrabold text-roast-950 truncate">' + esc(document.body.dataset.title || '') + '</h1>' +
+                '<p class="hidden sm:block text-[11px] text-roast-500 truncate">' + esc(document.body.dataset.sub || '') + '</p></div>' +
+            '</div>' +
+            '<div class="flex items-center gap-2 sm:gap-3 shrink-0">' +
+                '<a href="membership.html" class="hidden sm:flex items-center gap-2 px-3.5 py-2 rounded-full bg-white border border-roast-200 text-xs font-bold text-roast-800 hover:border-amberGold transition-all"><i class="fa-solid fa-coins text-amberGold"></i> ' + SAMPLE_POINTS + ' pts</a>' +
+                '<a href="index.html#fixed-classes" class="flex items-center gap-2 px-4 py-2.5 rounded-full bg-amberGold hover:bg-royalBlue text-white text-xs font-bold shadow-md transition-all"><i class="fa-solid fa-user-pen text-[11px]"></i> <span class="hidden xs:inline sm:inline">Book a Class</span></a>' +
+                '<button onclick="openProfileModal()" class="w-10 h-10 rounded-full bg-amberGold text-white font-bold text-xs flex items-center justify-center shadow-md" aria-label="Profile">' + esc(initials(u.name)) + '</button>' +
+            '</div>';
+    }
+
+    function buildBottomNav() {
+        const el = document.getElementById('m-bottomnav');
+        if (!el) return;
+        el.className = 'lg:hidden fixed bottom-0 inset-x-0 z-30 bg-white/95 backdrop-blur border-t border-roast-200 flex items-stretch justify-around shadow-[0_-8px_24px_rgba(15,23,42,0.08)]';
+        el.style.paddingBottom = 'env(safe-area-inset-bottom)';
+        const tabs = [
+            ['dashboard', 'Home', 'fa-house', 'dashboard.html'],
+            ['classes', 'Classes', 'fa-graduation-cap', 'classes.html'],
+            ['orders', 'Orders', 'fa-box-open', 'orders.html'],
+            ['membership', 'Rewards', 'fa-crown', 'membership.html']
+        ];
+        el.innerHTML = tabs.map(t => {
+            const on = t[0] === page;
+            return '<a href="' + t[3] + '" class="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 ' + (on ? 'text-amberGold' : 'text-roast-500') + '">' +
+                '<i class="fa-solid ' + t[2] + ' text-base"></i><span class="text-[10px] font-bold">' + t[1] + '</span>' +
+                (on ? '<span class="absolute top-0 w-8 h-0.5 rounded-full bg-amberGold"></span>' : '') + '</a>';
+        }).join('') +
+        '<button onclick="openProfileModal()" class="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-roast-500"><i class="fa-solid fa-user text-base"></i><span class="text-[10px] font-bold">Profile</span></button>';
+    }
+
+    function injectOverlays() {
+        const wrap = document.createElement('div');
+        wrap.innerHTML =
+            '<div id="profile-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">' +
+                '<div class="bg-white border border-roast-200 rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl relative space-y-6">' +
+                    '<button onclick="closeProfileModal()" class="absolute top-5 right-5 text-roast-500 hover:text-roast-950 p-2" aria-label="Close"><i class="fa-solid fa-xmark text-lg"></i></button>' +
+                    '<div class="text-center space-y-1"><div class="w-16 h-16 rounded-full bg-amberGold text-white flex items-center justify-center mx-auto text-xl font-bold shadow" id="pm-avatar"></div>' +
+                    '<h3 class="text-xl font-bold font-serif text-roast-950 pt-2">Profile &amp; Security</h3><p class="text-xs text-roast-500">Update your account details.</p></div>' +
+                    '<form onsubmit="saveProfileChanges(event)" class="space-y-4 text-xs">' +
+                        '<div><label class="block font-semibold text-roast-700 uppercase mb-1">Full Name</label><input type="text" id="profile-name-input" required class="w-full bg-roast-50 border border-roast-200 text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold"></div>' +
+                        '<div><label class="block font-semibold text-roast-700 uppercase mb-1">Email Address</label><input type="email" id="profile-email-input" readonly class="w-full bg-roast-100 border border-roast-200 text-roast-600 rounded-xl px-4 py-3 cursor-not-allowed"><p class="text-[10px] text-roast-500 mt-1">Your email links your class registrations, so it can\'t be changed here.</p></div>' +
+                        '<div><label class="block font-semibold text-roast-700 uppercase mb-1">New Password <span class="normal-case font-normal text-roast-400">(leave blank to keep current)</span></label><input type="password" id="profile-password-input" placeholder="••••••••" class="w-full bg-roast-50 border border-roast-200 text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold"></div>' +
+                        '<div class="flex gap-3 pt-2"><button type="submit" class="flex-1 py-3 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl transition-all shadow-md">Save Changes</button>' +
+                        '<button type="button" onclick="closeProfileModal()" class="px-5 py-3 bg-roast-100 hover:bg-roast-200 text-roast-700 font-bold rounded-xl border border-roast-200">Cancel</button></div>' +
+                    '</form>' +
+                '</div>' +
+            '</div>' +
+            '<div id="app-toast" class="fixed bottom-24 lg:bottom-6 right-4 lg:right-6 z-[60] transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none">' +
+                '<div class="bg-white border border-amberGold/40 text-roast-950 px-5 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3">' +
+                    '<div class="w-8 h-8 rounded-full bg-amberGold text-white flex items-center justify-center shrink-0"><i class="fa-solid fa-check text-xs"></i></div>' +
+                    '<p id="toast-msg" class="text-xs font-semibold"></p>' +
+                '</div>' +
+            '</div>';
+        while (wrap.firstChild) document.body.appendChild(wrap.firstChild);
+    }
+
+    // ---- public helpers (used by inline handlers + page scripts) ----
+    window.MemberShell = {
+        user, registrations, esc, initials,
+        openMenu() {
+            document.getElementById('m-sidebar').classList.remove('-translate-x-full');
+            const o = document.getElementById('m-overlay');
+            o.classList.remove('hidden');
+        },
+        closeMenu() {
+            document.getElementById('m-sidebar').classList.add('-translate-x-full');
+            document.getElementById('m-overlay').classList.add('hidden');
+        }
+    };
+
+    window.logoutUser = function () {
+        localStorage.removeItem('rp_logged_user');   // keep rp_user: that's the account itself
+        window.location.href = 'index.html';
+    };
+
+    window.openProfileModal = function () {
+        const cur = user() || {};
+        document.getElementById('pm-avatar').innerText = initials(cur.name);
+        document.getElementById('profile-name-input').value = cur.name || '';
+        document.getElementById('profile-email-input').value = cur.email || '';
+        document.getElementById('profile-password-input').value = '';
+        document.getElementById('profile-modal').classList.remove('hidden');
+    };
+
+    window.closeProfileModal = function () {
+        document.getElementById('profile-modal').classList.add('hidden');
+    };
+
+    window.saveProfileChanges = function (e) {
+        e.preventDefault();
+        const cur = user() || {};
+        cur.name = document.getElementById('profile-name-input').value.trim() || cur.name;
+        const pw = document.getElementById('profile-password-input').value;
+        if (pw) cur.password = pw;
+        localStorage.setItem('rp_user', JSON.stringify(cur));
+        localStorage.setItem('rp_logged_user', JSON.stringify(cur));
+        closeProfileModal();
+        showToast('Profile updated.');
+        setTimeout(() => location.reload(), 700);
+    };
+
+    window.showToast = function (message) {
+        const toast = document.getElementById('app-toast');
+        document.getElementById('toast-msg').innerText = message;
+        toast.classList.remove('translate-y-24', 'opacity-0');
+        toast.classList.add('translate-y-0', 'opacity-100');
+        setTimeout(() => {
+            toast.classList.remove('translate-y-0', 'opacity-100');
+            toast.classList.add('translate-y-24', 'opacity-0');
+        }, 2500);
+    };
+
+    buildSidebar();
+    buildTopbar();
+    buildBottomNav();
+    injectOverlays();
+    const overlay = document.getElementById('m-overlay');
+    if (overlay) {
+        overlay.className = 'hidden lg:hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-30';
+        overlay.onclick = MemberShell.closeMenu;
+    }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') { MemberShell.closeMenu(); closeProfileModal(); } });
+    // after the page's own scripts have registered their listeners
+    const fireReady = () => window.dispatchEvent(new Event('member-ready'));
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fireReady); else fireReady();
+})();

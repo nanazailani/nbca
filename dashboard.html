@@ -4,462 +4,245 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Member Dashboard | Nb.CA Academy</title>
+    <script>if (!localStorage.getItem('rp_logged_user')) { location.replace('auth.html?next=' + encodeURIComponent(location.pathname.split('/').pop() || 'dashboard.html')); }</script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
+                    screens: { xs: '420px' },
                     colors: {
                         roast: {
-                            50: '#F8FAFC',
-                            100: '#F1F5F9',
-                            200: '#E2E8F0',
-                            300: '#CBD5E1',
-                            400: '#94A3B8',
-                            500: '#64748B',
-                            600: '#475569',
-                            700: '#334155',
-                            800: '#1E293B',
-                            900: '#1E40AF',
-                            950: '#172554',
+                            50: '#F8FAFC', 100: '#F1F5F9', 200: '#E2E8F0', 300: '#CBD5E1', 400: '#94A3B8',
+                            500: '#64748B', 600: '#475569', 700: '#334155', 800: '#1E293B', 900: '#1E40AF', 950: '#172554'
                         },
                         amberGold: '#2563EB',
                         royalBlue: '#1E40AF',
-                        navy: '#172554',
+                        navy: '#172554'
                     },
-                    fontFamily: {
-                        sans: ['Plus Jakarta Sans', 'sans-serif'],
-                        serif: ['Playfair Display', 'serif'],
-                    }
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'], serif: ['Playfair Display', 'serif'] }
                 }
             }
         }
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            background-color: #F8FAFC; 
-            background-image: 
-                radial-gradient(circle at 8% 5%, rgba(37,99,235,0.06) 0%, transparent 30%), 
-                radial-gradient(circle at 95% 8%, rgba(30,64,175,0.05) 0%, transparent 28%), 
-                radial-gradient(circle at 50% 100%, rgba(37,99,235,0.05) 0%, transparent 35%); 
-            background-attachment: fixed; 
-        }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F8FAFC;
+            background-image: radial-gradient(circle at 8% 5%, rgba(37,99,235,0.06) 0%, transparent 30%), radial-gradient(circle at 95% 8%, rgba(30,64,175,0.05) 0%, transparent 28%);
+            background-attachment: fixed; }
         h1, h2, h3, .font-serif { font-family: 'Playfair Display', serif; }
-        .bg-coffee-pattern {
-            background-color: #140803;
-            background-image: radial-gradient(#281107 1px, transparent 1px);
-            background-size: 24px 24px;
-        }
+        .no-scrollbar::-webkit-scrollbar { display: none; } .no-scrollbar { scrollbar-width: none; }
+        @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+        main > * { animation: rise .45s ease both; } main > *:nth-child(2) { animation-delay: .06s; } main > *:nth-child(3) { animation-delay: .12s; } main > *:nth-child(4) { animation-delay: .18s; }
+        @media (prefers-reduced-motion: reduce) { main > * { animation: none; } }
+        @media print { #m-sidebar, #m-topbar, #m-bottomnav { display: none !important; } }
     </style>
 </head>
-<body class="bg-roast-50 text-roast-900 antialiased selection:bg-amberGold selection:text-white">
+<body data-page="dashboard" data-title="Dashboard" data-sub="Your classes, orders and rewards at a glance" class="text-roast-900 antialiased selection:bg-amberGold selection:text-white">
+    <div id="m-overlay"></div>
+    <aside id="m-sidebar"></aside>
+    <div class="lg:pl-72 min-h-screen flex flex-col min-w-0 overflow-x-hidden">
+        <header id="m-topbar"></header>
+        <main class="flex-1 min-w-0 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-10 py-6 lg:py-10 pb-28 lg:pb-14 space-y-10">
 
-    <nav class="fixed top-0 left-0 right-0 z-50 bg-roast-50/90 backdrop-blur-md border-b border-roast-100 transition-all duration-300" id="navbar">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20">
-                <a href="dashboard.html" class="flex items-center gap-3 group">
-                    <img src="images/logo.png" alt="Nb.CA Academy Logo" class="w-12 h-12 object-contain group-hover:scale-105 transition-transform">
-                    <div class="flex flex-col">
-                        <span class="font-serif text-xl font-extrabold tracking-wider text-roast-950 uppercase">Nb.CA Academy</span>
-                        <span class="text-[10px] tracking-widest text-amberGold uppercase">Member Portal</span>
+            <!-- HERO -->
+            <section class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-roast-950 via-royalBlue to-amberGold text-white p-6 sm:p-10 shadow-xl">
+                <div class="absolute -right-16 -top-16 w-72 h-72 rounded-full bg-white/10 blur-2xl"></div>
+                <div class="absolute -left-10 -bottom-20 w-64 h-64 rounded-full bg-blue-300/20 blur-3xl"></div>
+                <i class="fa-solid fa-mug-hot absolute right-6 bottom-2 text-[130px] text-white/[0.07] rotate-12"></i>
+                <div class="relative grid lg:grid-cols-5 gap-8 items-center">
+                    <div class="lg:col-span-3 space-y-4">
+                        <span class="text-[11px] font-extrabold tracking-[0.2em] uppercase text-blue-200">Welcome back</span>
+                        <h2 id="hero-welcome-title" class="font-serif text-3xl sm:text-5xl font-extrabold leading-tight">Hello, Member!</h2>
+                        <p class="text-sm text-blue-100/90 max-w-md font-light leading-relaxed">Book your next coffee class, track your orders and collect rewards &mdash; everything in one place.</p>
+                        <div class="flex flex-wrap gap-3 pt-2">
+                            <a href="index.html#fixed-classes" class="px-5 py-3 bg-white text-amberGold font-bold rounded-full text-xs shadow-lg hover:-translate-y-0.5 transition-all"><i class="fa-solid fa-user-pen mr-1.5"></i> Book a Class</a>
+                            <a href="index.html#coffee-beans" class="px-5 py-3 bg-white/10 hover:bg-white/20 border border-white/30 text-white font-bold rounded-full text-xs transition-all"><i class="fa-solid fa-mug-hot mr-1.5"></i> Shop Beans</a>
+                        </div>
                     </div>
+                    <div id="next-up-card" class="lg:col-span-2 rounded-2xl bg-white/12 border border-white/25 backdrop-blur-md p-5 space-y-3"></div>
+                </div>
+            </section>
+
+            <!-- STATS -->
+            <section class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <a href="membership.html" class="bg-white rounded-2xl border border-roast-200 p-4 sm:p-5 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all">
+                    <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center mb-3"><i class="fa-solid fa-coins"></i></div>
+                    <p class="text-2xl font-extrabold text-roast-950 font-serif">350</p><p class="text-[11px] text-roast-500 font-semibold">Reward points &middot; Gold</p></a>
+                <a href="classes.html" class="bg-white rounded-2xl border border-roast-200 p-4 sm:p-5 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all">
+                    <div class="w-10 h-10 rounded-xl bg-blue-100 text-amberGold flex items-center justify-center mb-3"><i class="fa-solid fa-graduation-cap"></i></div>
+                    <p id="stat-classes" class="text-2xl font-extrabold text-roast-950 font-serif">0</p><p class="text-[11px] text-roast-500 font-semibold">Class bookings</p></a>
+                <a href="orders.html" class="bg-white rounded-2xl border border-roast-200 p-4 sm:p-5 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center mb-3"><i class="fa-solid fa-box-open"></i></div>
+                    <p class="text-2xl font-extrabold text-roast-950 font-serif">1</p><p class="text-[11px] text-roast-500 font-semibold">Active order</p></a>
+                <a href="membership.html" class="bg-white rounded-2xl border border-roast-200 p-4 sm:p-5 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all">
+                    <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-500 flex items-center justify-center mb-3"><i class="fa-solid fa-ticket"></i></div>
+                    <p class="text-2xl font-extrabold text-roast-950 font-serif">3</p><p class="text-[11px] text-roast-500 font-semibold">Vouchers to redeem</p></a>
+            </section>
+
+            <!-- FEATURED PROMOTIONS -->
+            <section>
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-5">
+                <div><span class="text-[11px] font-extrabold tracking-[0.18em] text-amberGold uppercase">Featured for you</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-roast-950 mt-1">Promotions</h2></div>
+                
+            </div>
+                <div class="grid lg:grid-cols-3 gap-5">
+                    <a href="index.html#fixed-classes" class="group relative lg:col-span-2 min-h-[260px] rounded-3xl overflow-hidden shadow-lg">
+                        <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1000&q=80" alt="Daily coffee class" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-roast-950/90 via-roast-950/40 to-transparent"></div>
+                        <div class="relative h-full flex flex-col justify-end p-6 sm:p-8 text-white space-y-2">
+                            <span class="self-start px-3 py-1 bg-white text-amberGold text-[10px] font-extrabold uppercase tracking-wider rounded-full">Daily class &middot; Sun &ndash; Thu</span>
+                            <h3 class="font-serif text-2xl sm:text-3xl font-extrabold">Coffee Fundamentals</h3>
+                            <p class="text-xs text-blue-100 max-w-md">Hands-on brewing basics. Morning 10AM&ndash;12PM or afternoon 2PM&ndash;4PM. Secure your seat with a deposit.</p>
+                            <div class="flex items-center justify-between pt-2"><span class="text-sm">From <strong id="promo-fee" class="text-xl font-serif">RM 150</strong> <span class="text-blue-200 text-xs">&middot; <span id="promo-deposit">50% deposit</span></span></span>
+                            <span class="px-4 py-2 bg-white text-amberGold font-bold rounded-full text-xs group-hover:bg-amberGold group-hover:text-white transition-all">Reserve a seat <i class="fa-solid fa-arrow-right ml-1 text-[10px]"></i></span></div>
+                        </div>
+                    </a>
+                    <div class="grid gap-5">
+                        <a href="membership.html" class="group relative rounded-3xl p-6 bg-gradient-to-br from-amber-400 to-orange-500 text-white shadow-lg overflow-hidden">
+                            <i class="fa-solid fa-crown absolute -right-3 -bottom-4 text-8xl text-white/20 rotate-12"></i>
+                            <span class="text-[10px] font-extrabold uppercase tracking-widest text-amber-100">Members only</span>
+                            <h3 class="font-serif text-xl font-extrabold mt-1">50% off a workshop</h3>
+                            <p class="text-[11px] text-amber-50 mt-1 mb-3">Redeem with 500 points.</p>
+                            <div class="h-1.5 rounded-full bg-white/30 overflow-hidden mb-1"><div class="h-full w-[70%] bg-white rounded-full"></div></div>
+                            <p class="text-[10px] font-bold">350 / 500 pts</p>
+                        </a>
+                        <a href="index.html#merchandise" class="group relative rounded-3xl p-6 bg-white border border-roast-200 shadow-sm hover:shadow-lg transition-all overflow-hidden">
+                            <i class="fa-solid fa-shirt absolute -right-2 -bottom-3 text-7xl text-amberGold/10 -rotate-12"></i>
+                            <span class="text-[10px] font-extrabold uppercase tracking-widest text-amberGold">New merch</span>
+                            <h3 class="font-serif text-xl font-extrabold text-roast-950 mt-1">Nb.CA T-Shirt &amp; Stickers</h3>
+                            <p class="text-[11px] text-roast-500 mt-1">Wear the academy. From RM 12.</p>
+                            <span class="inline-flex items-center gap-1 text-[11px] font-bold text-amberGold mt-3">Shop merch <i class="fa-solid fa-arrow-right text-[9px]"></i></span>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- WORKSHOPS -->
+            <section>
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-5">
+                <div><span class="text-[11px] font-extrabold tracking-[0.18em] text-amberGold uppercase">Level up</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-roast-950 mt-1">Workshops</h2></div>
+                <a href="index.html#classes" class="text-xs font-bold text-amberGold hover:underline">See all workshops <i class="fa-solid fa-arrow-right text-[10px]"></i></a>
+            </div>
+                <div class="flex sm:grid sm:grid-cols-3 gap-4 overflow-x-auto sm:overflow-visible snap-x no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 pb-2">
+
+                <a href="index.html#classes" class="group snap-start shrink-0 w-64 sm:w-auto bg-white rounded-2xl border border-roast-200 overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-amberGold/40 transition-all">
+                    <div class="relative h-36 overflow-hidden"><img src="https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&w=700&q=80" alt="Coffee Brewing Masterclass" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    <span class="absolute top-3 left-3 px-2.5 py-1 bg-white/95 text-amberGold text-[10px] font-bold rounded-full">Bestseller</span></div>
+                    <div class="p-4 space-y-1"><h3 class="font-serif text-base font-bold text-roast-950">Coffee Brewing Masterclass</h3><p class="text-[11px] text-roast-500">2.5 hours &middot; Max 8 pax</p>
+                    <div class="flex items-center justify-between pt-2"><span class="text-amberGold font-extrabold text-sm">RM 120.00</span><span class="text-[11px] font-bold text-roast-700 group-hover:text-amberGold">View <i class="fa-solid fa-arrow-right text-[9px]"></i></span></div></div>
                 </a>
 
-                <div class="hidden md:flex items-center space-x-8 text-sm font-medium">
-                    <a href="dashboard.html" class="text-amberGold font-bold hover:underline transition-colors">Home</a>
-                    <a href="orders.html" class="text-roast-800 hover:text-amberGold transition-colors"><i class="fa-solid fa-box-open me-1"></i> My Orders</a>
-                </div>
+                <a href="index.html#classes" class="group snap-start shrink-0 w-64 sm:w-auto bg-white rounded-2xl border border-roast-200 overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-amberGold/40 transition-all">
+                    <div class="relative h-36 overflow-hidden"><img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=700&q=80" alt="Latte Art Workshop" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    <span class="absolute top-3 left-3 px-2.5 py-1 bg-white/95 text-amberGold text-[10px] font-bold rounded-full">Hands-on</span></div>
+                    <div class="p-4 space-y-1"><h3 class="font-serif text-base font-bold text-roast-950">Latte Art Workshop</h3><p class="text-[11px] text-roast-500">3 hours &middot; Max 6 pax</p>
+                    <div class="flex items-center justify-between pt-2"><span class="text-amberGold font-extrabold text-sm">RM 150.00</span><span class="text-[11px] font-bold text-roast-700 group-hover:text-amberGold">View <i class="fa-solid fa-arrow-right text-[9px]"></i></span></div></div>
+                </a>
 
-                <!-- On mobile only Profile + Logout stay here; Membership/Cart/Wishlist move to the bottom nav bar. -->
-                <div class="flex items-center gap-2.5">
-                    <a href="membership.html" class="hidden md:flex relative w-10 h-10 rounded-full bg-roast-100 hover:bg-roast-200 border border-roast-200 text-amberGold items-center justify-center transition-all shadow-md" title="Membership Points">
-                        <i class="fa-solid fa-bag-shopping text-base"></i>
-                        <span class="absolute -top-1 -right-1 bg-amberGold text-roast-50 text-[9px] font-extrabold px-1.5 py-0.5 rounded-full shadow">350</span>
-                    </a>
-                    <button onclick="toggleCart(true)" class="hidden md:flex relative w-10 h-10 rounded-full bg-roast-100 hover:bg-roast-200 border border-roast-200 text-amberGold items-center justify-center transition-all shadow-md" title="Shopping Cart">
-                        <i class="fa-solid fa-cart-shopping text-base"></i>
-                        <span id="cart-count" class="absolute -top-1 -right-1 bg-amberGold text-roast-50 text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow">0</span>
-                    </button>
-                    <button onclick="toggleWishlistDrawer()" class="hidden md:flex relative w-10 h-10 rounded-full bg-roast-100 hover:bg-roast-200 border border-roast-200 text-amberGold items-center justify-center transition-all shadow-md" title="View Wishlist">
-                        <i class="fa-solid fa-heart text-base"></i>
-                        <span id="wishlist-count" class="absolute -top-1 -right-1 bg-amberGold text-roast-50 text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow">0</span>
-                    </button>
-                    <button onclick="openProfileModal()" class="w-10 h-10 rounded-full bg-roast-100 hover:bg-roast-200 border border-roast-200 text-amberGold flex items-center justify-center transition-all shadow-md" title="Edit Profile">
-                        <i class="fa-solid fa-user text-base"></i>
-                    </button>
-                    <button onclick="logoutUser()" class="px-3 sm:px-3.5 py-2 rounded-full bg-roast-100 hover:bg-red-950/40 border border-roast-300 text-roast-700 hover:text-red-400 text-xs font-semibold transition-all">
-                        <i class="fa-solid fa-right-from-bracket"></i> <span class="hidden sm:inline">Logout</span>
-                    </button>
+                <a href="index.html#classes" class="group snap-start shrink-0 w-64 sm:w-auto bg-white rounded-2xl border border-roast-200 overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-amberGold/40 transition-all">
+                    <div class="relative h-36 overflow-hidden"><img src="https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=700&q=80" alt="Coffee Cupping Experience" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    <span class="absolute top-3 left-3 px-2.5 py-1 bg-white/95 text-amberGold text-[10px] font-bold rounded-full">Beginner</span></div>
+                    <div class="p-4 space-y-1"><h3 class="font-serif text-base font-bold text-roast-950">Coffee Cupping Experience</h3><p class="text-[11px] text-roast-500">1.5 hours &middot; Max 10 pax</p>
+                    <div class="flex items-center justify-between pt-2"><span class="text-amberGold font-extrabold text-sm">RM 80.00</span><span class="text-[11px] font-bold text-roast-700 group-hover:text-amberGold">View <i class="fa-solid fa-arrow-right text-[9px]"></i></span></div></div>
+                </a>
                 </div>
+            </section>
+
+            <!-- BEANS -->
+            <section>
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-5">
+                <div><span class="text-[11px] font-extrabold tracking-[0.18em] text-amberGold uppercase">Fresh from the roastery</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-roast-950 mt-1">Coffee Beans</h2></div>
+                <a href="index.html#coffee-beans" class="text-xs font-bold text-amberGold hover:underline">Shop all beans <i class="fa-solid fa-arrow-right text-[10px]"></i></a>
             </div>
-        </div>
-    </nav>
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
 
-    <!-- ============================================================ -->
-    <!-- BOTTOM NAVIGATION (Mobile & Tablet only) -->
-    <!-- ============================================================ -->
-    <nav id="bottom-nav" class="md:hidden fixed bottom-0 inset-x-0 z-50 bg-roast-50 border-t border-roast-100 flex items-stretch justify-around shadow-[0_-8px_24px_rgba(0,0,0,0.35)]" style="padding-bottom: env(safe-area-inset-bottom);">
-        <a href="dashboard.html" class="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-amberGold transition-all">
-            <i class="fa-solid fa-house text-base"></i>
-            <span class="text-[10px] font-bold">Home</span>
-        </a>
-        <a href="orders.html" class="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-roast-600 transition-all">
-            <i class="fa-solid fa-box-open text-base"></i>
-            <span class="text-[10px] font-bold">Orders</span>
-        </a>
-        <a href="membership.html" class="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-roast-600 transition-all">
-            <i class="fa-solid fa-coins text-base"></i>
-            <span class="text-[10px] font-bold">Points</span>
-        </a>
-        <button onclick="toggleWishlistDrawer()" class="relative flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-roast-600 transition-all">
-            <span class="relative">
-                <i class="fa-solid fa-heart text-base"></i>
-                <span id="bottomnav-wishlist-count" class="absolute -top-1.5 -right-2.5 bg-amberGold text-roast-50 text-[9px] font-extrabold w-4 h-4 rounded-full flex items-center justify-center shadow">0</span>
-            </span>
-            <span class="text-[10px] font-bold">Wishlist</span>
-        </button>
-        <button onclick="toggleCart(true)" class="relative flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-roast-600 transition-all">
-            <span class="relative">
-                <i class="fa-solid fa-cart-shopping text-base"></i>
-                <span id="bottomnav-cart-count" class="absolute -top-1.5 -right-2.5 bg-amberGold text-roast-50 text-[9px] font-extrabold w-4 h-4 rounded-full flex items-center justify-center shadow">0</span>
-            </span>
-            <span class="text-[10px] font-bold">Cart</span>
-        </button>
-    </nav>
+                <a href="index.html#coffee-beans" class="group bg-white rounded-2xl border border-roast-200 overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-amberGold/40 transition-all">
+                    <div class="h-32 overflow-hidden bg-roast-100"><img src="https://images.unsplash.com/photo-1587734195503-904fca47e0e9?auto=format&fit=crop&w=600&q=80" alt="1st Grind HITAM MANIS" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"></div>
+                    <div class="p-3.5 space-y-0.5"><h3 class="font-serif text-[13px] font-bold text-roast-950 leading-snug line-clamp-2">1st Grind HITAM MANIS</h3><p class="text-[10px] text-roast-500">Dark roast blend &middot; 250g</p>
+                    <div class="flex items-center justify-between pt-2"><span class="text-amberGold font-extrabold text-sm">RM 30.00</span><span class="w-7 h-7 rounded-full bg-amberGold/10 group-hover:bg-amberGold text-amberGold group-hover:text-white flex items-center justify-center text-[10px] transition-all"><i class="fa-solid fa-plus"></i></span></div></div>
+                </a>
 
-    <section class="relative pt-36 pb-24 overflow-hidden border-b border-roast-100 flex items-center justify-center">
-        <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover z-0">
-            <source src="video/background.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-        <div class="absolute inset-0 bg-roast-50/75 z-10"></div>
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 w-full text-center md:text-left">
-            <div class="space-y-3">
-                <h1 id="hero-welcome-title" class="text-3xl sm:text-5xl font-extrabold text-roast-950 font-serif">Hello, Member!</h1>
-                <p class="text-xs sm:text-sm text-roast-700 font-light max-w-xl">Welcome back to your portal. Browse your upcoming classes, track orders, and manage your coffee bean stash below.</p>
-            </div>
-        </div>
-    </section>
+                <a href="index.html#coffee-beans" class="group bg-white rounded-2xl border border-roast-200 overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-amberGold/40 transition-all">
+                    <div class="h-32 overflow-hidden bg-roast-100"><img src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?auto=format&fit=crop&w=600&q=80" alt="1st Grind Cream Beans" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"></div>
+                    <div class="p-3.5 space-y-0.5"><h3 class="font-serif text-[13px] font-bold text-roast-950 leading-snug line-clamp-2">1st Grind Cream Beans</h3><p class="text-[10px] text-roast-500">Medium roast blend &middot; 250g</p>
+                    <div class="flex items-center justify-between pt-2"><span class="text-amberGold font-extrabold text-sm">RM 35.00</span><span class="w-7 h-7 rounded-full bg-amberGold/10 group-hover:bg-amberGold text-amberGold group-hover:text-white flex items-center justify-center text-[10px] transition-all"><i class="fa-solid fa-plus"></i></span></div></div>
+                </a>
 
-    <main class="relative overflow-hidden pt-10 pb-32 md:pb-20 bg-transparent">
-        <div class="absolute -top-10 -left-24 w-80 h-80 bg-amberGold/8 rounded-full blur-3xl pointer-events-none"></div>
-        <div class="absolute top-1/3 -right-24 w-96 h-96 bg-blue-300/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 relative z-10">
-            <div>
-                <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Member Portal Hub</span>
-                <h2 class="text-3xl font-extrabold text-roast-950 mt-1">At A Glance</h2>
-            </div>
-            
-            <div class="grid sm:grid-cols-2 lg:grid-cols-5 gap-6">
-                <!-- My Fixed Class Snapshot (dynamic, rendered by renderFixedClassGlanceCard()) -->
-                <div id="fixed-class-glance-card" class="bg-gradient-to-br from-amberGold/15 to-white rounded-2xl p-6 border border-amberGold/40 shadow-sm space-y-4 hover:border-amberGold/70 hover:shadow-lg hover:-translate-y-1 transition-all flex flex-col justify-between"></div>
+                <a href="index.html#coffee-beans" class="group bg-white rounded-2xl border border-roast-200 overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-amberGold/40 transition-all">
+                    <div class="h-32 overflow-hidden bg-roast-100"><img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=600&q=80" alt="1st Grind BLACK STONE" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"></div>
+                    <div class="p-3.5 space-y-0.5"><h3 class="font-serif text-[13px] font-bold text-roast-950 leading-snug line-clamp-2">1st Grind BLACK STONE</h3><p class="text-[10px] text-roast-500">Bold blend &middot; 250g</p>
+                    <div class="flex items-center justify-between pt-2"><span class="text-amberGold font-extrabold text-sm">RM 35.00</span><span class="w-7 h-7 rounded-full bg-amberGold/10 group-hover:bg-amberGold text-amberGold group-hover:text-white flex items-center justify-center text-[10px] transition-all"><i class="fa-solid fa-plus"></i></span></div></div>
+                </a>
 
-                <!-- Upcoming Class (Workshop) Snapshot -->
-                <div class="bg-white rounded-2xl p-6 border border-roast-200 shadow-sm space-y-4 hover:border-amberGold/50 hover:shadow-lg hover:-translate-y-1 transition-all flex flex-col justify-between">
-                    <div class="space-y-3">
-                        <div class="flex items-center justify-between">
-                            <div class="w-11 h-11 rounded-xl bg-amberGold/20 text-amberGold flex items-center justify-center text-lg">
-                                <i class="fa-solid fa-chalkboard-user"></i>
-                            </div>
-                            <span class="px-2.5 py-1 bg-green-500/15 text-green-600 text-[10px] font-bold rounded-full">Confirmed</span>
-                        </div>
-                        <div>
-                            <h3 class="text-base font-bold text-roast-950 font-serif">Coffee Brewing Masterclass</h3>
-                            <p class="text-xs text-roast-600 mt-0.5">Saturday, 10:00 AM · Sungai Petani Roastery</p>
-                        </div>
-                    </div>
-                    <a href="orders.html" class="inline-flex items-center justify-between py-2.5 px-4 bg-roast-50 hover:bg-roast-200 border border-roast-200 text-roast-900 font-bold rounded-xl text-xs transition-all">
-                        View E-Ticket <i class="fa-solid fa-arrow-right text-[10px]"></i>
-                    </a>
+                <a href="index.html#coffee-beans" class="group bg-white rounded-2xl border border-roast-200 overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-amberGold/40 transition-all">
+                    <div class="h-32 overflow-hidden bg-roast-100"><img src="https://images.unsplash.com/photo-1521302080334-4bebac2763a6?auto=format&fit=crop&w=600&q=80" alt="1st Grind SUNRISE" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"></div>
+                    <div class="p-3.5 space-y-0.5"><h3 class="font-serif text-[13px] font-bold text-roast-950 leading-snug line-clamp-2">1st Grind SUNRISE</h3><p class="text-[10px] text-roast-500">Light-medium blend &middot; 250g</p>
+                    <div class="flex items-center justify-between pt-2"><span class="text-amberGold font-extrabold text-sm">RM 35.00</span><span class="w-7 h-7 rounded-full bg-amberGold/10 group-hover:bg-amberGold text-amberGold group-hover:text-white flex items-center justify-center text-[10px] transition-all"><i class="fa-solid fa-plus"></i></span></div></div>
+                </a>
                 </div>
+            </section>
 
-                <!-- Latest Order Snapshot -->
-                <div class="bg-white rounded-2xl p-6 border border-roast-200 shadow-sm space-y-4 hover:border-amberGold/50 hover:shadow-lg hover:-translate-y-1 transition-all flex flex-col justify-between">
-                    <div class="space-y-3">
-                        <div class="flex items-center justify-between">
-                            <div class="w-11 h-11 rounded-xl bg-amberGold/20 text-amberGold flex items-center justify-center text-lg">
-                                <i class="fa-solid fa-box-open"></i>
-                            </div>
-                            <span class="px-2.5 py-1 bg-yellow-500/15 text-yellow-600 text-[10px] font-bold rounded-full">Awaiting Payment</span>
-                        </div>
-                        <div>
-                            <h3 class="text-base font-bold text-roast-950 font-serif">Order #ORD1001</h3>
-                            <p class="text-xs text-roast-600 mt-0.5">3 items · RM 2,040.00 · 9 Aug 2026</p>
-                        </div>
-                    </div>
-                    <a href="orders.html" class="inline-flex items-center justify-between py-2.5 px-4 bg-roast-50 hover:bg-roast-200 border border-roast-200 text-roast-900 font-bold rounded-xl text-xs transition-all">
-                        Track Order <i class="fa-solid fa-arrow-right text-[10px]"></i>
-                    </a>
-                </div>
+            <!-- LATEST ORDER -->
+            <section class="grid md:grid-cols-2 gap-5">
+                <a href="orders.html" class="bg-white rounded-2xl border border-roast-200 p-5 shadow-sm hover:shadow-lg transition-all flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-yellow-100 text-yellow-600 flex items-center justify-center text-lg shrink-0"><i class="fa-solid fa-box-open"></i></div>
+                    <div class="flex-1 min-w-0"><p class="text-[10px] font-extrabold uppercase tracking-widest text-roast-400">Latest order</p><h3 class="font-serif text-base font-bold text-roast-950">Order #ORD1001</h3><p class="text-[11px] text-roast-500">3 items &middot; RM 2,040.00 &middot; 9 Aug 2026</p></div>
+                    <span class="px-2.5 py-1 bg-yellow-500/15 text-yellow-700 text-[10px] font-bold rounded-full whitespace-nowrap">Awaiting payment</span></a>
+                <a href="membership.html" class="bg-white rounded-2xl border border-roast-200 p-5 shadow-sm hover:shadow-lg transition-all flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-blue-100 text-amberGold flex items-center justify-center text-lg shrink-0"><i class="fa-solid fa-gift"></i></div>
+                    <div class="flex-1 min-w-0"><p class="text-[10px] font-extrabold uppercase tracking-widest text-roast-400">Next reward</p><h3 class="font-serif text-base font-bold text-roast-950">Free Delivery Voucher</h3><p class="text-[11px] text-roast-500">150 more points to go</p></div>
+                    <i class="fa-solid fa-arrow-right text-roast-400"></i></a>
+            </section>
 
-                <!-- Membership Points Snapshot -->
-                <div class="bg-white rounded-2xl p-6 border border-roast-200 shadow-sm space-y-4 hover:border-amberGold/50 hover:shadow-lg hover:-translate-y-1 transition-all flex flex-col justify-between">
-                    <div class="space-y-3">
-                        <div class="flex items-center justify-between">
-                            <div class="w-11 h-11 rounded-xl bg-amberGold/20 text-amberGold flex items-center justify-center text-lg">
-                                <i class="fa-solid fa-coins"></i>
-                            </div>
-                            <span class="px-2.5 py-1 bg-amberGold/15 text-amberGold text-[10px] font-bold rounded-full">Gold Tier</span>
-                        </div>
-                        <div>
-                            <h3 class="text-2xl font-extrabold text-roast-950 font-serif">350 <span class="text-xs font-medium text-roast-600">points</span></h3>
-                            <p class="text-xs text-roast-600 mt-0.5">150 more points to redeem Free Delivery</p>
-                        </div>
-                    </div>
-                    <a href="membership.html" class="inline-flex items-center justify-between py-2.5 px-4 bg-roast-50 hover:bg-roast-200 border border-roast-200 text-roast-900 font-bold rounded-xl text-xs transition-all">
-                        Redeem Rewards <i class="fa-solid fa-arrow-right text-[10px]"></i>
-                    </a>
-                </div>
-
-                <!-- Shop Coffee Beans CTA (de-prioritized, shown last) -->
-                <div class="bg-white rounded-2xl p-6 border border-roast-200 shadow-sm space-y-4 hover:border-amberGold/50 hover:shadow-lg hover:-translate-y-1 transition-all flex flex-col justify-between">
-                    <div class="space-y-3">
-                        <div class="flex items-center justify-between">
-                            <div class="w-11 h-11 rounded-xl bg-amberGold/20 text-amberGold flex items-center justify-center text-lg">
-                                <i class="fa-solid fa-mug-hot"></i>
-                            </div>
-                            <span class="px-2.5 py-1 bg-amberGold/15 text-amberGold text-[10px] font-bold rounded-full">Order Now</span>
-                        </div>
-                        <div>
-                            <h3 class="text-base font-bold text-roast-950 font-serif">Craving Fresh Beans?</h3>
-                            <p class="text-xs text-roast-700 mt-0.5">Browse our in-house roasted single origin & Series RU.PA blends.</p>
-                        </div>
-                    </div>
-                    <a href="index.html#coffee-beans" class="inline-flex items-center justify-between py-2.5 px-4 bg-roast-50 hover:bg-roast-200 border border-roast-200 text-roast-900 font-bold rounded-xl text-xs transition-all">
-                        Shop Coffee Beans <i class="fa-solid fa-arrow-right text-[10px]"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <div id="profile-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-roast-100 border border-roast-200 rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl relative space-y-6 text-roast-900">
-            <button onclick="closeProfileModal()" class="absolute top-5 right-5 text-roast-600 hover:text-roast-950 p-2">
-                <i class="fa-solid fa-xmark text-lg"></i>
-            </button>
-            <div class="text-center space-y-1">
-                <div class="w-14 h-14 rounded-2xl bg-amberGold/25 border border-amberGold/40 text-amberGold flex items-center justify-center mx-auto text-2xl shadow">
-                    <i class="fa-solid fa-user-pen"></i>
-                </div>
-                <h3 class="text-xl font-bold font-serif text-roast-950">Edit Profile</h3>
-                <p class="text-xs text-roast-700">Update your member account details</p>
-            </div>
-            <div class="space-y-4 text-xs">
-                <div>
-                    <label class="block font-semibold text-roast-700 uppercase mb-1">Full Name</label>
-                    <input type="text" id="input-profile-name" placeholder="Your Name" class="w-full bg-roast-50 border border-roast-200 text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
-                </div>
-                <div>
-                    <label class="block font-semibold text-roast-700 uppercase mb-1">Email Address</label>
-                    <input type="email" id="input-profile-email" placeholder="your@email.com" class="w-full bg-roast-50 border border-roast-200 text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
-                </div>
-                <div>
-                    <label class="block font-semibold text-roast-700 uppercase mb-1">New Password (Optional)</label>
-                    <input type="password" id="input-profile-password" placeholder="Leave blank to keep current" class="w-full bg-roast-50 border border-roast-200 text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
-                </div>
-            </div>
-            <div class="flex gap-3 pt-2">
-                <button onclick="saveProfileChanges()" class="flex-1 py-3 bg-amberGold hover:bg-royalBlue text-roast-50 font-extrabold rounded-xl text-xs shadow transition-all">Save Changes</button>
-                <button onclick="closeProfileModal()" class="px-5 py-3 bg-roast-50 text-roast-700 font-bold rounded-xl border border-roast-200 text-xs">Cancel</button>
-            </div>
-        </div>
+        </main>
     </div>
+    <nav id="m-bottomnav" aria-label="Primary"></nav>
 
-    <div id="cart-drawer" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden transition-opacity">
-        <div class="absolute right-0 top-0 bottom-0 w-full max-w-md bg-roast-100 border-l border-roast-200 p-6 flex flex-col justify-between shadow-2xl">
-            <div>
-                <div class="flex justify-between items-center pb-4 border-b border-roast-200">
-                    <h3 class="text-lg font-bold text-roast-950 font-serif"><i class="fa-solid fa-cart-shopping text-amberGold me-2"></i> Your Order Basket</h3>
-                    <button onclick="toggleCart()" class="text-roast-600 hover:text-roast-950 p-2">
-                        <i class="fa-solid fa-xmark text-xl"></i>
-                    </button>
-                </div>
-                <div id="cart-items" class="py-4 space-y-3 overflow-y-auto max-h-[60vh]">
-                    <p class="text-center text-roast-600 text-xs py-8">Your order basket is currently empty.</p>
-                </div>
-            </div>
-            <div class="border-t border-roast-200 pt-4 space-y-4">
-                <div class="flex justify-between items-center text-sm font-bold text-roast-950">
-                    <span>Total Amount:</span>
-                    <span id="cart-total" class="text-amberGold text-lg">RM 0.00</span>
-                </div>
-                <button onclick="toggleCart()" class="w-full py-3.5 bg-amberGold hover:bg-royalBlue text-roast-50 font-bold rounded-xl transition-all shadow-lg text-sm flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-credit-card"></i> Close Cart
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <div id="wishlist-drawer" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden transition-opacity">
-        <div class="absolute right-0 top-0 bottom-0 w-full max-w-md bg-roast-100 border-l border-roast-200 p-6 flex flex-col justify-between shadow-2xl">
-            <div>
-                <div class="flex justify-between items-center pb-4 border-b border-roast-200">
-                    <h3 class="text-lg font-bold text-roast-950 font-serif"><i class="fa-solid fa-heart text-amberGold me-2"></i> My Wishlist</h3>
-                    <button onclick="toggleWishlistDrawer()" class="text-roast-600 hover:text-roast-950 p-2">
-                        <i class="fa-solid fa-xmark text-xl"></i>
-                    </button>
-                </div>
-                <div id="wishlist-items" class="py-4 space-y-3 overflow-y-auto max-h-[65vh]">
-                    <p class="text-center text-roast-600 text-xs py-8">Your wishlist is currently empty.</p>
-                </div>
-            </div>
-            <div class="border-t border-roast-200 pt-4">
-                <button onclick="toggleWishlistDrawer()" class="w-full py-3 bg-roast-200 hover:bg-roast-300 text-roast-900 font-bold rounded-xl transition-all text-xs"> Close Wishlist </button>
-            </div>
-        </div>
-    </div>
-
+    <script src="js/member-shell.js"></script>
     <script>
-        let cart = [];
-        let wishlist = [];
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const user = localStorage.getItem('rp_logged_user');
-            if (!user) {
-                window.location.href = 'auth.html';
+        window.addEventListener('member-ready', () => {
+            const u = MemberShell.user() || {};
+            const first = (u.name || 'Member').split(/\s+/)[0];
+            document.getElementById('hero-welcome-title').innerText = 'Hello, ' + first + '!';
+
+            // promo card reflects admin settings when present
+            try {
+                const st = JSON.parse(localStorage.getItem('rp_fixed_class_settings') || 'null');
+                if (st && st.fee) {
+                    document.getElementById('promo-fee').innerText = 'RM ' + Number(st.fee).toFixed(0);
+                    document.getElementById('promo-deposit').innerText = (st.depositPct || 50) + '% deposit';
+                }
+            } catch (e) {}
+
+            const regs = MemberShell.registrations().filter(r => r.classStatus !== 'Cancelled');
+            document.getElementById('stat-classes').innerText = regs.length;
+            const latest = regs[regs.length - 1];
+            const card = document.getElementById('next-up-card');
+            if (!latest) {
+                card.innerHTML = '<p class="text-[10px] font-extrabold uppercase tracking-widest text-blue-200">Next up</p>' +
+                    '<h3 class="font-serif text-xl font-bold">No class booked yet</h3>' +
+                    '<p class="text-xs text-blue-100">Pick a date and reserve your seat &mdash; it takes about a minute.</p>' +
+                    '<a href="index.html#fixed-classes" class="inline-flex items-center gap-2 px-4 py-2.5 bg-white text-amberGold font-bold rounded-full text-xs">Reserve a seat <i class="fa-solid fa-arrow-right text-[10px]"></i></a>';
                 return;
             }
-            try {
-                const userData = JSON.parse(user);
-                if(userData && userData.name) {
-                    document.getElementById('hero-welcome-title').innerText = `Hello, ${userData.name}!`;
-                    document.getElementById('input-profile-name').value = userData.name || '';
-                    document.getElementById('input-profile-email').value = userData.email || '';
-                }
-            } catch(e) {}
-            updateCartUI();
-            updateWishlistUI();
-            renderFixedClassGlanceCard();
+            const d = new Date(latest.preferredDate + 'T00:00:00');
+            const status = latest.classStatus === 'Admitted' ? ['Confirmed', 'bg-emerald-400 text-emerald-950'] :
+                latest.classStatus === 'Reschedule' ? ['Reschedule needed', 'bg-red-400 text-red-950'] : ['Awaiting confirmation', 'bg-amber-300 text-amber-950'];
+            card.innerHTML = '<div class="flex items-center justify-between"><p class="text-[10px] font-extrabold uppercase tracking-widest text-blue-200">Your class</p>' +
+                '<span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold ' + status[1] + '">' + status[0] + '</span></div>' +
+                '<h3 class="font-serif text-xl font-bold">' + d.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'short' }) + '</h3>' +
+                '<p class="text-xs text-blue-100"><i class="fa-solid fa-clock mr-1.5"></i>' + MemberShell.esc(latest.session) + '</p>' +
+                '<a href="classes.html" class="inline-flex items-center gap-2 text-xs font-bold text-white hover:underline">View details <i class="fa-solid fa-arrow-right text-[10px]"></i></a>';
         });
 
-        // Fixed Class registrations are submitted from the homepage's "Register as Student" 
-        // form and stored under this shared localStorage key. Show the current customer's 
-        // latest registration here, or a CTA to register if they haven't yet. 
-        function renderFixedClassGlanceCard() {
-            const card = document.getElementById('fixed-class-glance-card');
-            if (!card) return;
-
-            const userData = JSON.parse(localStorage.getItem('rp_logged_user') || '{}');
-            const userEmail = (userData.email || '').toLowerCase();
-
-            let allStudents = [];
-            try {
-                allStudents = JSON.parse(localStorage.getItem('rp_fixed_class_students') || '[]');
-            } catch (e) {
-                allStudents = [];
-            }
-
-            const myRegistration = allStudents.filter(s => (s.email || '').toLowerCase() === userEmail).pop();
-
-            if (!myRegistration) {
-                card.innerHTML = `
-                    <div class="space-y-3">
-                        <div class="flex items-center justify-between">
-                            <div class="w-11 h-11 rounded-xl bg-amberGold/20 text-amberGold flex items-center justify-center text-lg">
-                                <i class="fa-solid fa-user-pen"></i>
-                            </div>
-                            <span class="px-2.5 py-1 bg-red-500/15 text-red-600 text-[10px] font-bold rounded-full">Not Registered</span>
-                        </div>
-                        <div>
-                            <h3 class="text-base font-bold text-roast-950 font-serif">Join a Fixed Class</h3>
-                            <p class="text-xs text-roast-600 mt-0.5">Daily sessions, 10AM–12PM or 2PM–5PM. Just a 50% deposit to secure your seat.</p>
-                        </div>
-                    </div>
-                    <a href="index.html#fixed-classes" class="inline-flex items-center justify-between py-2.5 px-4 bg-amberGold hover:bg-royalBlue text-roast-50 font-bold rounded-xl text-xs transition-all shadow">
-                        Register as Student <i class="fa-solid fa-arrow-right text-[10px]"></i>
-                    </a>
-                `;
-                return;
-            }
-
-            const statusClass = 'bg-amberGold/15 text-amberGold';
-
-            card.innerHTML = `
-                <div class="space-y-3">
-                    <div class="flex items-center justify-between">
-                        <div class="w-11 h-11 rounded-xl bg-amberGold/20 text-amberGold flex items-center justify-center text-lg">
-                            <i class="fa-solid fa-calendar-check"></i>
-                        </div>
-                        <span class="px-2.5 py-1 ${statusClass} text-[10px] font-bold rounded-full">Deposit ${myRegistration.depositStatus}</span>
-                    </div>
-                    <div>
-                        <h3 class="text-base font-bold text-roast-950 font-serif">Fixed Class ${myRegistration.classStatus === 'Admitted' ? 'Confirmed' : myRegistration.classStatus === 'Reschedule' ? '— Reschedule Needed' : 'Awaiting Confirmation'}</h3>
-                        <p class="text-xs text-roast-600 mt-0.5">${myRegistration.preferredDate} · ${myRegistration.session}</p>
-                    </div>
-                </div>
-                <a href="orders.html" class="inline-flex items-center justify-between py-2.5 px-4 bg-roast-50 hover:bg-roast-200 border border-roast-200 text-roast-900 font-bold rounded-xl text-xs transition-all">
-                    View Details <i class="fa-solid fa-arrow-right text-[10px]"></i>
-                </a>
-            `;
-        }
-
-        function logoutUser() {
-            localStorage.removeItem('rp_logged_user');
-            window.location.href = 'auth.html';
-        }
-
-        // --- EDIT PROFILE MODAL FUNCTIONS ---
-        function openProfileModal() {
-            document.getElementById('profile-modal').classList.remove('hidden');
-        }
-
-        function closeProfileModal() {
-            document.getElementById('profile-modal').classList.add('hidden');
-        }
-
-        function saveProfileChanges() {
-            const name = document.getElementById('input-profile-name').value.trim();
-            const email = document.getElementById('input-profile-email').value.trim();
-            if(!name || !email) {
-                alert('Sila lengkapkan nama dan emel.');
-                return;
-            }
-            
-            let userStr = localStorage.getItem('rp_logged_user');
-            let userData = userStr ? JSON.parse(userStr) : {};
-            userData.name = name;
-            userData.email = email;
-
-            localStorage.setItem('rp_user', JSON.stringify(userData));
-            localStorage.setItem('rp_logged_user', JSON.stringify(userData));
-
-            document.getElementById('hero-welcome-title').innerText = `Hello, ${name}!`;
-            closeProfileModal();
-            alert('Profil anda berjaya dikemas kini!');
-        }
-
-        function toggleCart(forceOpen = false) {
-            const drawer = document.getElementById('cart-drawer');
-            if(forceOpen) {
-                drawer.classList.remove('hidden');
-            } else {
-                drawer.classList.toggle('hidden');
-            }
-        }
-
-        function updateCartUI() {
-            const cartCount = document.getElementById('cart-count');
-            const bottomCartCount = document.getElementById('bottomnav-cart-count');
-            if(cartCount) cartCount.innerText = cart.length;
-            if(bottomCartCount) bottomCartCount.innerText = cart.length;
-        }
-
-        function updateWishlistUI() {
-            const badge = document.getElementById('wishlist-count');
-            const bottomBadge = document.getElementById('bottomnav-wishlist-count');
-            if(badge) badge.innerText = wishlist.length;
-            if(bottomBadge) bottomBadge.innerText = wishlist.length;
-        }
-
-        function toggleWishlistDrawer() {
-            document.getElementById('wishlist-drawer').classList.toggle('hidden');
-        }
     </script>
 </body>
 </html>

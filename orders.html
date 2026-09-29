@@ -1,145 +1,52 @@
-<!DOCTYPE html> 
-<html lang="en" class="scroll-smooth"> 
-<head> 
-    <meta charset="UTF-8"> 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-    <title>My Orders & Enrolled Classes | Nb.CA Academy</title> 
-    <script src="https://cdn.tailwindcss.com"></script> 
-    <script> 
-        tailwind.config = { 
-            theme: { 
-                extend: { 
-                    colors: { 
-                        roast: { 
-                            50: '#F8FAFC', 100: '#F1F5F9', 200: '#E2E8F0', 300: '#CBD5E1', 
-                            400: '#94A3B8', 500: '#64748B', 600: '#475569', 700: '#334155', 
-                            800: '#1E293B', 900: '#1E40AF', 950: '#172554', 
-                        }, 
-                        amberGold: '#2563EB', 
-                        royalBlue: '#1E40AF', 
-                        navy: '#172554', 
-                    }, 
-                    fontFamily: { 
-                        sans: ['Plus Jakarta Sans', 'sans-serif'], 
-                        serif: ['Playfair Display', 'serif'], 
-                    } 
-                } 
-            } 
-        } 
-    </script> 
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"> 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> 
-    <style> 
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            background-color: #F8FAFC; 
-            background-image: 
-                radial-gradient(circle at 8% 5%, rgba(37,99,235,0.06) 0%, transparent 30%), 
-                radial-gradient(circle at 95% 8%, rgba(30,64,175,0.05) 0%, transparent 28%), 
-                radial-gradient(circle at 50% 100%, rgba(37,99,235,0.05) 0%, transparent 35%); 
-            background-attachment: fixed; 
-        } 
-        h1, h2, h3, .font-serif { font-family: 'Playfair Display', serif; } 
-        .bg-coffee-pattern { 
-            background-color: #140803; 
-            background-image: radial-gradient(#281107 1px, transparent 1px); 
-            background-size: 24px 24px; 
-        } 
-    </style> 
-</head> 
-<body class="bg-roast-50 text-roast-900 antialiased selection:bg-amberGold selection:text-white"> 
-
-    <nav class="fixed top-0 left-0 right-0 z-50 bg-roast-50/90 backdrop-blur-md border-b border-roast-100 transition-all duration-300"> 
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> 
-            <div class="flex items-center justify-between h-20"> 
-                <a href="dashboard.html" class="flex items-center gap-3 group"> 
-                    <img src="images/logo.png" alt="Nb.CA Academy Logo" class="w-12 h-12 object-contain group-hover:scale-105 transition-transform"> 
-                    <div class="flex flex-col"> 
-                        <span class="font-serif text-xl font-extrabold tracking-wider text-roast-950 uppercase">Nb.CA Academy</span> 
-                        <span class="text-[10px] tracking-widest text-amberGold uppercase">Member Portal</span> 
-                    </div> 
-                </a> 
-                <div class="hidden md:flex items-center space-x-8 text-sm font-medium"> 
-                    <a href="dashboard.html" class="text-roast-800 hover:text-amberGold transition-colors">Home</a> 
-                    <a href="orders.html" class="text-amberGold font-bold hover:underline transition-colors"><i class="fa-solid fa-box-open me-1"></i> My Orders</a> 
-                </div> 
-
-                <!-- On mobile only Profile + Logout stay here; Membership/Cart/Wishlist move to the bottom nav bar. -->
-                <div class="flex items-center gap-2.5">
-                    <a href="membership.html" class="hidden md:flex relative w-10 h-10 rounded-full bg-roast-100 hover:bg-roast-200 border border-roast-200 text-amberGold items-center justify-center transition-all shadow-md" title="Membership Points">
-                        <i class="fa-solid fa-bag-shopping text-base"></i>
-                        <span class="absolute -top-1 -right-1 bg-amberGold text-roast-50 text-[9px] font-extrabold px-1.5 py-0.5 rounded-full shadow">350</span>
-                    </a>
-                    <button onclick="toggleCart(true)" class="hidden md:flex relative w-10 h-10 rounded-full bg-roast-100 hover:bg-roast-200 border border-roast-200 text-amberGold items-center justify-center transition-all shadow-md" title="Shopping Cart">
-                        <i class="fa-solid fa-cart-shopping text-base"></i>
-                        <span id="cart-count" class="absolute -top-1 -right-1 bg-amberGold text-roast-50 text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow">0</span>
-                    </button>
-                    <button onclick="toggleWishlistDrawer()" class="hidden md:flex relative w-10 h-10 rounded-full bg-roast-100 hover:bg-roast-200 border border-roast-200 text-amberGold items-center justify-center transition-all shadow-md" title="View Wishlist">
-                        <i class="fa-solid fa-heart text-base"></i>
-                        <span id="wishlist-count" class="absolute -top-1 -right-1 bg-amberGold text-roast-50 text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow">0</span>
-                    </button>
-                    <button onclick="openProfileModal()" class="w-10 h-10 rounded-full bg-roast-100 hover:bg-roast-200 border border-roast-200 text-amberGold flex items-center justify-center transition-all shadow-md" title="Edit Profile">
-                        <i class="fa-solid fa-user text-base"></i>
-                    </button>
-                    <button onclick="logoutUser()" class="px-3 sm:px-3.5 py-2 rounded-full bg-roast-100 hover:bg-red-950/40 border border-roast-300 text-roast-700 hover:text-red-400 text-xs font-semibold transition-all">
-                        <i class="fa-solid fa-right-from-bracket"></i> <span class="hidden sm:inline">Logout</span>
-                    </button>
-                </div>
-            </div> 
-        </div> 
-    </nav> 
-
-    <!-- ============================================================ -->
-    <!-- BOTTOM NAVIGATION (Mobile & Tablet only) -->
-    <!-- ============================================================ -->
-    <nav id="bottom-nav" class="md:hidden fixed bottom-0 inset-x-0 z-50 bg-roast-50 border-t border-roast-100 flex items-stretch justify-around shadow-[0_-8px_24px_rgba(0,0,0,0.35)]" style="padding-bottom: env(safe-area-inset-bottom);">
-        <a href="dashboard.html" class="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-roast-600 transition-all">
-            <i class="fa-solid fa-house text-base"></i>
-            <span class="text-[10px] font-bold">Home</span>
-        </a>
-        <a href="orders.html" class="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-amberGold transition-all">
-            <i class="fa-solid fa-box-open text-base"></i>
-            <span class="text-[10px] font-bold">Orders</span>
-        </a>
-        <a href="membership.html" class="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-roast-600 transition-all">
-            <i class="fa-solid fa-coins text-base"></i>
-            <span class="text-[10px] font-bold">Points</span>
-        </a>
-        <button onclick="toggleWishlistDrawer()" class="relative flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-roast-600 transition-all">
-            <span class="relative">
-                <i class="fa-solid fa-heart text-base"></i>
-                <span id="bottomnav-wishlist-count" class="absolute -top-1.5 -right-2.5 bg-amberGold text-roast-50 text-[9px] font-extrabold w-4 h-4 rounded-full flex items-center justify-center shadow">0</span>
-            </span>
-            <span class="text-[10px] font-bold">Wishlist</span>
-        </button>
-        <button onclick="toggleCart(true)" class="relative flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-roast-600 transition-all">
-            <span class="relative">
-                <i class="fa-solid fa-cart-shopping text-base"></i>
-                <span id="bottomnav-cart-count" class="absolute -top-1.5 -right-2.5 bg-amberGold text-roast-50 text-[9px] font-extrabold w-4 h-4 rounded-full flex items-center justify-center shadow">0</span>
-            </span>
-            <span class="text-[10px] font-bold">Cart</span>
-        </button>
-    </nav>
-
-    <section class="relative pt-36 pb-24 overflow-hidden border-b border-roast-100 flex items-center justify-center">
-        <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover z-0">
-            <source src="video/background-order.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-        <div class="absolute inset-0 bg-roast-50/75 z-10"></div>
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 w-full text-center md:text-left">
-            <div class="space-y-3">
-                <h1 class="text-3xl sm:text-5xl font-extrabold text-roast-950 font-serif">My Orders & Enrolled Classes</h1>
-                <p class="text-xs sm:text-sm text-roast-700 font-light max-w-xl">Track your product shipments, view invoices, and manage your booked roasting workshops.</p>
-            </div>
-        </div>
-    </section>
-
-    <section class="relative overflow-hidden pt-10 pb-32 md:pb-16 bg-transparent"> 
-        <div class="absolute -top-10 -left-24 w-80 h-80 bg-amberGold/8 rounded-full blur-3xl pointer-events-none"></div>
-        <div class="absolute top-1/3 -right-24 w-96 h-96 bg-blue-300/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 relative z-10"> 
-            
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders | Nb.CA Academy</title>
+    <script>if (!localStorage.getItem('rp_logged_user')) { location.replace('auth.html?next=' + encodeURIComponent(location.pathname.split('/').pop() || 'dashboard.html')); }</script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    screens: { xs: '420px' },
+                    colors: {
+                        roast: {
+                            50: '#F8FAFC', 100: '#F1F5F9', 200: '#E2E8F0', 300: '#CBD5E1', 400: '#94A3B8',
+                            500: '#64748B', 600: '#475569', 700: '#334155', 800: '#1E293B', 900: '#1E40AF', 950: '#172554'
+                        },
+                        amberGold: '#2563EB',
+                        royalBlue: '#1E40AF',
+                        navy: '#172554'
+                    },
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'], serif: ['Playfair Display', 'serif'] }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F8FAFC;
+            background-image: radial-gradient(circle at 8% 5%, rgba(37,99,235,0.06) 0%, transparent 30%), radial-gradient(circle at 95% 8%, rgba(30,64,175,0.05) 0%, transparent 28%);
+            background-attachment: fixed; }
+        h1, h2, h3, .font-serif { font-family: 'Playfair Display', serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; } .no-scrollbar { scrollbar-width: none; }
+        @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+        main > * { animation: rise .45s ease both; } main > *:nth-child(2) { animation-delay: .06s; } main > *:nth-child(3) { animation-delay: .12s; } main > *:nth-child(4) { animation-delay: .18s; }
+        @media (prefers-reduced-motion: reduce) { main > * { animation: none; } }
+        @media print { #m-sidebar, #m-topbar, #m-bottomnav { display: none !important; } }
+    </style>
+</head>
+<body data-page="orders" data-title="My Orders" data-sub="Track shipments and view receipts" class="text-roast-900 antialiased selection:bg-amberGold selection:text-white">
+    <div id="m-overlay"></div>
+    <aside id="m-sidebar"></aside>
+    <div class="lg:pl-72 min-h-screen flex flex-col min-w-0 overflow-x-hidden">
+        <header id="m-topbar"></header>
+        <main class="flex-1 min-w-0 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-10 py-6 lg:py-10 pb-28 lg:pb-14 space-y-10">
             <div class="space-y-6"> 
                 <div class="flex flex-col md:flex-row md:items-end justify-between"> 
                     <div> 
@@ -229,109 +136,17 @@
                 </div> 
             </div>
 
-            <div class="space-y-6 pt-6"> 
-                <div class="flex flex-col md:flex-row md:items-end justify-between"> 
-                    <div> 
-                        <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Daily Training</span> 
-                        <h2 class="text-3xl font-extrabold text-roast-950 mt-1">My Fixed Class Registration</h2> 
-                    </div> 
-                    <p class="text-xs text-roast-600 mt-2 md:mt-0">Your registered daily class sessions and deposit status.</p> 
-                </div>
 
-                <div id="fixed-class-registrations-container" class="space-y-4"></div>
-            </div>
+            <a href="index.html#coffee-beans" class="group flex items-center gap-4 rounded-3xl p-5 sm:p-6 bg-gradient-to-r from-roast-950 to-amberGold text-white shadow-lg">
+                <div class="w-12 h-12 rounded-2xl bg-white/15 flex items-center justify-center text-xl shrink-0"><i class="fa-solid fa-mug-hot"></i></div>
+                <div class="flex-1"><h3 class="font-serif text-lg font-bold">Craving fresh beans?</h3><p class="text-xs text-blue-100">In-house roasted 1st Grind blends, from RM 30.</p></div>
+                <span class="px-4 py-2 bg-white text-amberGold font-bold rounded-full text-xs group-hover:bg-blue-50 whitespace-nowrap">Shop now</span>
+            </a>
 
-            <div class="space-y-6 pt-6"> 
-                <div class="flex flex-col md:flex-row md:items-end justify-between"> 
-                    <div> 
-                        <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Workshops & Training</span> 
-                        <h2 class="text-3xl font-extrabold text-roast-950 mt-1">Enrolled Classes</h2> 
-                    </div> 
-                    <p class="text-xs text-roast-600 mt-2 md:mt-0">Manage your upcoming professional roasting and brewing masterclasses.</p> 
-                </div> 
-
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div class="bg-white rounded-3xl p-6 border border-roast-200 shadow-sm space-y-4 hover:border-amberGold/40 hover:shadow-lg hover:-translate-y-1 transition-all flex flex-col justify-between">
-                        <div class="space-y-2">
-                            <div class="flex justify-between items-center">
-                                <span class="px-3 py-1 bg-amberGold/10 text-amberGold text-[10px] font-bold rounded-full uppercase tracking-wider">Confirmed Slot</span>
-                                <span class="text-xs font-bold text-amberGold">RM 120.00</span>
-                            </div>
-                            <h3 class="font-serif text-xl font-bold text-roast-950">Coffee Brewing Masterclass</h3>
-                            <p class="text-xs text-roast-700 font-light">Master V60, French Press & AeroPress techniques and extraction ratio fundamentals.</p>
-                        </div>
-                        <div class="bg-roast-50 p-4 rounded-2xl border border-roast-200 space-y-2 text-xs text-roast-700">
-                            <div class="flex justify-between"><span>Date & Time:</span> <strong class="text-roast-950">Saturday, 10:00 AM</strong></div>
-                            <div class="flex justify-between"><span>Duration:</span> <strong class="text-roast-950">2.5 Hours</strong></div>
-                            <div class="flex justify-between"><span>Location:</span> <strong class="text-roast-950">Sungai Petani Roastery</strong></div>
-                        </div>
-                        <button onclick="openETicketModal('coffee-brewing')" class="w-full py-2.5 bg-roast-200 hover:bg-amberGold hover:text-roast-50 text-roast-900 font-bold rounded-xl text-xs transition-all border border-roast-300">
-                            <i class="fa-solid fa-qrcode me-1"></i> View E-Ticket Pass
-                        </button>
-                    </div>
-
-                    <div class="bg-white rounded-3xl p-6 border border-roast-200 shadow-sm space-y-4 hover:border-amberGold/40 hover:shadow-lg hover:-translate-y-1 transition-all flex flex-col justify-between">
-                        <div class="space-y-2">
-                            <div class="flex justify-between items-center">
-                                <span class="px-3 py-1 bg-blue-500/10 text-blue-400 text-[10px] font-bold rounded-full uppercase tracking-wider">Upcoming</span>
-                                <span class="text-xs font-bold text-amberGold">RM 150.00</span>
-                            </div>
-                            <h3 class="font-serif text-xl font-bold text-roast-950">Latte Art Workshop</h3>
-                            <p class="text-xs text-roast-700 font-light">Learn professional milk steaming and pouring techniques to craft heart, rosetta, and tulip patterns.</p>
-                        </div>
-                        <div class="bg-roast-50 p-4 rounded-2xl border border-roast-200 space-y-2 text-xs text-roast-700">
-                            <div class="flex justify-between"><span>Date & Time:</span> <strong class="text-roast-950">Sunday, 02:00 PM</strong></div>
-                            <div class="flex justify-between"><span>Duration:</span> <strong class="text-roast-950">3.0 Hours</strong></div>
-                            <div class="flex justify-between"><span>Location:</span> <strong class="text-roast-950">Sungai Petani Roastery</strong></div>
-                        </div>
-                        <button onclick="openETicketModal('latte-art')" class="w-full py-2.5 bg-roast-200 hover:bg-amberGold hover:text-roast-50 text-roast-900 font-bold rounded-xl text-xs transition-all border border-roast-300">
-                            <i class="fa-solid fa-qrcode me-1"></i> View E-Ticket Pass
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-        </div> 
-    </section> 
-
-    <div id="profile-modal" class="fixed inset-0 bg-black/75 backdrop-blur-md z-50 hidden flex items-center justify-center p-4"> 
-        <div class="bg-gradient-to-b from-roast-100 to-roast-50 border border-roast-200 rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl relative space-y-6"> 
-            <button onclick="closeProfileModal()" class="absolute top-5 right-5 text-roast-600 hover:text-roast-950 p-2"> 
-                <i class="fa-solid fa-xmark text-lg"></i> 
-            </button> 
-            <div class="text-center space-y-2"> 
-                <div class="w-16 h-16 rounded-full bg-amberGold/20 border border-amberGold/40 text-amberGold flex items-center justify-center mx-auto text-2xl shadow"> 
-                    <i class="fa-solid fa-user-gear"></i> 
-                </div> 
-                <h3 class="text-xl font-bold font-serif text-roast-950">Edit Profile & Security</h3> 
-                <p class="text-xs text-roast-600">Update your account details and change your password.</p> 
-            </div> 
-            <form onsubmit="saveProfileChanges(event)" class="space-y-4"> 
-                <div> 
-                    <label class="block text-xs font-semibold text-roast-700 uppercase mb-1">Full Name</label> 
-                    <input type="text" id="profile-name-input" required class="w-full bg-roast-50 border border-roast-300 text-roast-950 rounded-xl px-4 py-3 text-xs focus:outline-none focus:border-amberGold"> 
-                </div> 
-                <div> 
-                    <label class="block text-xs font-semibold text-roast-700 uppercase mb-1">Email Address</label> 
-                    <input type="email" id="profile-email-input" required class="w-full bg-roast-50 border border-roast-300 text-roast-950 rounded-xl px-4 py-3 text-xs focus:outline-none focus:border-amberGold"> 
-                </div> 
-                <div> 
-                    <label class="block text-xs font-semibold text-roast-700 uppercase mb-1">New Password (Leave blank to keep current)</label> 
-                    <input type="password" id="profile-password-input" placeholder="••••••••" class="w-full bg-roast-50 border border-roast-300 text-roast-950 rounded-xl px-4 py-3 text-xs focus:outline-none focus:border-amberGold"> 
-                </div> 
-                <div class="pt-2 flex gap-3"> 
-                    <button type="submit" class="flex-1 py-3 bg-amberGold hover:bg-royalBlue text-roast-50 font-bold rounded-xl text-xs transition-all shadow-md"> 
-                        Save Changes 
-                    </button> 
-                    <button type="button" onclick="closeProfileModal()" class="px-5 py-3 bg-roast-100 hover:bg-roast-200 text-roast-700 font-bold rounded-xl text-xs border border-roast-300 transition-all"> 
-                        Cancel 
-                    </button> 
-                </div> 
-            </form> 
-        </div> 
-    </div> 
-
-    <div id="receipt-modal" class="fixed inset-0 bg-black/75 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        </main>
+    </div>
+    <nav id="m-bottomnav" aria-label="Primary"></nav>
+<div id="receipt-modal" class="fixed inset-0 bg-black/75 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="bg-roast-100 border border-roast-200 rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl relative space-y-6 text-roast-900">
             <button onclick="closeReceiptModal()" class="absolute top-5 right-5 text-roast-600 hover:text-roast-950 p-2">
                 <i class="fa-solid fa-xmark text-lg"></i>
@@ -374,324 +189,17 @@
         </div>
     </div>
 
-    <!-- E-TICKET PASS MODAL -->
-    <div id="eticket-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-sm w-full shadow-2xl relative overflow-hidden">
-            <button onclick="closeETicketModal()" class="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 text-white flex items-center justify-center transition-all">
-                <i class="fa-solid fa-xmark text-sm"></i>
-            </button>
-
-            <!-- Ticket header -->
-            <div class="bg-gradient-to-br from-amberGold to-royalBlue p-6 text-center">
-                <p class="text-[10px] uppercase tracking-widest text-white/80">Nb.CA Academy — E-Ticket Pass</p>
-                <h3 id="et-class-name" class="text-xl font-bold font-serif text-white mt-1">Coffee Brewing Masterclass</h3>
-            </div>
-
-            <!-- Perforated divider with notches -->
-            <div class="relative">
-                <div class="absolute -left-3 -top-3 w-6 h-6 bg-black/60 rounded-full"></div>
-                <div class="absolute -right-3 -top-3 w-6 h-6 bg-black/60 rounded-full"></div>
-                <div class="border-t-2 border-dashed border-roast-200"></div>
-            </div>
-
-            <div class="p-6 space-y-4">
-                <div class="flex justify-center">
-                    <img id="et-qr-code" src="" alt="E-Ticket QR Code" class="w-36 h-36 border border-roast-200 rounded-xl p-2">
-                </div>
-                <div class="text-center">
-                    <p class="text-[10px] text-roast-500 uppercase tracking-wider">Ticket Reference</p>
-                    <p id="et-ticket-ref" class="text-sm font-bold text-roast-950 font-mono tracking-wider">RP-0000-0000</p>
-                </div>
-
-                <div class="bg-roast-50 rounded-2xl p-4 space-y-2 text-xs text-roast-700 border border-roast-200">
-                    <div class="flex justify-between"><span>Attendee:</span> <strong id="et-attendee" class="text-roast-950">Guest</strong></div>
-                    <div class="flex justify-between"><span>Date & Time:</span> <strong id="et-datetime" class="text-roast-950">—</strong></div>
-                    <div class="flex justify-between"><span>Duration:</span> <strong id="et-duration" class="text-roast-950">—</strong></div>
-                    <div class="flex justify-between"><span>Location:</span> <strong id="et-location" class="text-roast-950">—</strong></div>
-                    <div class="flex justify-between"><span>Fee Paid:</span> <strong id="et-fee" class="text-amberGold">RM 0.00</strong></div>
-                </div>
-
-                <p class="text-[10px] text-roast-400 text-center">Please present this QR code at the front desk on your class day.</p>
-
-                <div class="flex gap-2">
-                    <button onclick="window.print()" class="flex-1 py-2.5 bg-amberGold hover:bg-royalBlue text-roast-50 font-bold rounded-xl text-xs transition-all shadow">
-                        <i class="fa-solid fa-print me-1"></i> Print / Save
-                    </button>
-                    <button onclick="closeETicketModal()" class="px-5 py-2.5 bg-roast-100 hover:bg-roast-200 text-roast-900 font-bold rounded-xl text-xs transition-all">
-                        Close
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="cart-drawer" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden transition-opacity"> 
-        <div class="absolute right-0 top-0 bottom-0 w-full max-w-md bg-roast-100 border-l border-roast-200 p-6 flex flex-col justify-between shadow-2xl"> 
-            <div> 
-                <div class="flex justify-between items-center pb-4 border-b border-roast-200"> 
-                    <h3 class="text-lg font-bold text-roast-950 font-serif"><i class="fa-solid fa-bag-shopping text-amberGold me-2"></i> Your Order Cart</h3> 
-                    <button onclick="toggleCart()" class="text-roast-600 hover:text-roast-950 p-2"> 
-                        <i class="fa-solid fa-xmark text-xl"></i> 
-                    </button> 
-                </div> 
-                <div id="cart-items" class="py-4 space-y-3 overflow-y-auto max-h-[60vh]"> 
-                    <p class="text-center text-roast-600 text-xs py-8">Your order cart is currently empty.</p> 
-                </div> 
-            </div> 
-            <div class="border-t border-roast-200 pt-4 space-y-4"> 
-                <div class="flex justify-between items-center text-sm font-bold text-roast-950"> 
-                    <span>Total Amount:</span> 
-                    <span id="cart-total" class="text-amberGold text-lg">RM 0.00</span> 
-                </div> 
-                <button onclick="alert('Proceeding to checkout workflow...')" class="w-full py-3.5 bg-amberGold hover:bg-royalBlue text-roast-50 font-bold rounded-xl transition-all shadow-lg text-sm flex items-center justify-center gap-2"> 
-                    <i class="fa-solid fa-credit-card"></i> Proceed To Checkout 
-                </button> 
-            </div> 
-        </div> 
-    </div> 
-
-    <div id="wishlist-drawer" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden transition-opacity"> 
-        <div class="absolute right-0 top-0 bottom-0 w-full max-w-md bg-roast-100 border-l border-roast-200 p-6 flex flex-col justify-between shadow-2xl"> 
-            <div> 
-                <div class="flex justify-between items-center pb-4 border-b border-roast-200"> 
-                    <h3 class="text-lg font-bold text-roast-950 font-serif"><i class="fa-solid fa-heart text-amberGold me-2"></i> My Wishlist</h3> 
-                    <button onclick="toggleWishlistDrawer()" class="text-roast-600 hover:text-roast-950 p-2"> 
-                        <i class="fa-solid fa-xmark text-xl"></i> 
-                    </button> 
-                </div> 
-                <div id="wishlist-items" class="py-4 space-y-3 overflow-y-auto max-h-[65vh]"> 
-                    <p class="text-center text-roast-600 text-xs py-8">Your wishlist is currently empty.</p> 
-                </div> 
-            </div> 
-            <div class="border-t border-roast-200 pt-4"> 
-                <button onclick="toggleWishlistDrawer()" class="w-full py-3 bg-roast-200 hover:bg-roast-300 text-roast-900 font-bold rounded-xl transition-all text-xs"> 
-                    Close Wishlist 
-                </button> 
-            </div> 
-        </div> 
-    </div> 
-
-    <div id="app-toast" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none"> 
-        <div class="bg-roast-100 border border-amberGold/50 text-roast-950 px-5 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3"> 
-            <div class="w-8 h-8 rounded-full bg-amberGold text-roast-50 flex items-center justify-center font-bold shrink-0"> 
-                <i class="fa-solid fa-check text-xs"></i> 
-            </div> 
-            <div> 
-                <h4 class="text-xs font-bold text-roast-950">Notification</h4> 
-                <p id="toast-msg" class="text-[11px] text-roast-700">Action completed successfully.</p> 
-            </div> 
-        </div> 
-    </div> 
-
-    <footer class="bg-roast-50 border-t border-roast-100 py-12 text-center text-xs text-roast-600"> 
-        <p>© 2026 Nb.CA Academy Member Portal. All rights reserved.</p> 
-    </footer> 
-
-    <script> 
-        let cart = [];
-        let wishlist = [];
-
-        document.addEventListener('DOMContentLoaded', () => { 
-            const user = localStorage.getItem('rp_logged_user'); 
-            if (!user) { 
-                window.location.href = 'auth.html'; 
-                return; 
-            } 
-            updateCartUI();
-            updateWishlistUI();
-            renderFixedClassRegistrations();
-        }); 
-
-        // Fixed Class registrations are submitted from the homepage's "Register as Student" 
-        // form and stored under this shared localStorage key. Here we only show the ones 
-        // that belong to the currently logged-in customer (matched by email). 
-        function renderFixedClassRegistrations() {
-            const container = document.getElementById('fixed-class-registrations-container');
-            if (!container) return;
-
-            const userData = JSON.parse(localStorage.getItem('rp_logged_user') || '{}');
-            const userEmail = (userData.email || '').toLowerCase();
-
-            let allStudents = [];
-            try {
-                allStudents = JSON.parse(localStorage.getItem('rp_fixed_class_students') || '[]');
-            } catch (e) {
-                allStudents = [];
-            }
-
-            const myRegistrations = allStudents.filter(s => (s.email || '').toLowerCase() === userEmail);
-
-            if (myRegistrations.length === 0) {
-                container.innerHTML = `
-                    <div class="bg-white rounded-3xl p-6 border border-roast-200 shadow-sm text-center space-y-3">
-                        <p class="text-sm text-roast-600">You haven't registered for a Fixed Class yet.</p>
-                        <a href="index.html#fixed-classes" class="inline-flex items-center gap-2 text-xs font-bold text-amberGold hover:underline">
-                            <i class="fa-solid fa-user-pen"></i> Register as Student
-                        </a>
-                    </div>
-                `;
-                return;
-            }
-
-            container.innerHTML = `<div class="grid md:grid-cols-2 gap-6">` + myRegistrations.map(reg => {
-                const isPaid = reg.depositStatus === 'Paid';
-                const statusClass = isPaid ? 'bg-green-500/10 text-green-600' : 'bg-yellow-500/10 text-yellow-600';
-                const balance = (Number(reg.classFee) - Number(reg.deposit)).toFixed(2);
-                return `
-                <div class="bg-white rounded-3xl p-6 border border-roast-200 shadow-sm space-y-4 hover:border-amberGold/40 hover:shadow-lg hover:-translate-y-1 transition-all flex flex-col justify-between">
-                    <div class="space-y-2">
-                        <div class="flex justify-between items-center">
-                            <span class="px-3 py-1 ${statusClass} text-[10px] font-bold rounded-full uppercase tracking-wider">Deposit ${reg.depositStatus}</span>
-                            <span class="px-3 py-1 ${reg.classStatus === 'Admitted' ? 'bg-green-500/10 text-green-600' : reg.classStatus === 'Reschedule' ? 'bg-red-500/10 text-red-600' : 'bg-blue-500/10 text-blue-600'} text-[10px] font-bold rounded-full uppercase tracking-wider">${reg.classStatus === 'Reschedule' ? 'Reschedule Needed' : (reg.classStatus || 'Pending Confirmation')}</span>
-                            <span class="text-xs font-bold text-amberGold">RM ${Number(reg.classFee).toFixed(2)}</span>
-                        </div>
-                        <h3 class="font-serif text-xl font-bold text-roast-950">Coffee Fundamentals — Daily Class</h3>
-                        <p class="text-xs text-roast-700 font-light">Hands-on brewing basics, held daily except Friday.</p>
-                    </div>
-                    <div class="bg-roast-50 p-4 rounded-2xl border border-roast-200 space-y-2 text-xs text-roast-700">
-                        <div class="flex justify-between"><span>Preferred Date:</span> <strong class="text-roast-950">${reg.preferredDate}</strong></div>
-                        <div class="flex justify-between"><span>Session:</span> <strong class="text-roast-950">${reg.session}</strong></div>
-                        <div class="flex justify-between"><span>Deposit Paid:</span> <strong class="text-roast-950">RM ${Number(reg.deposit).toFixed(2)}</strong></div>
-                        <div class="flex justify-between"><span>Balance Due:</span> <strong class="text-roast-950">RM ${balance}</strong></div>
-                    </div>
-                </div>`;
-            }).join('') + `</div>`;
-        }
-
-        function logoutUser() {
-            localStorage.removeItem('rp_logged_user'); 
-            window.location.href = 'auth.html'; 
-        } 
+    
+    <script src="js/member-shell.js"></script>
+    <script>
 
         function toggleTimeline() {
-            const content = document.getElementById('timeline-content');
-            const icon = document.getElementById('timeline-icon');
-            content.classList.toggle('hidden');
-            icon.classList.toggle('rotate-180');
+            document.getElementById('timeline-content').classList.toggle('hidden');
+            document.getElementById('timeline-icon').classList.toggle('rotate-180');
         }
+        function openReceiptModal() { document.getElementById('receipt-modal').classList.remove('hidden'); }
+        function closeReceiptModal() { document.getElementById('receipt-modal').classList.add('hidden'); }
 
-        function openReceiptModal() {
-            document.getElementById('receipt-modal').classList.remove('hidden');
-        }
-
-        function closeReceiptModal() {
-            document.getElementById('receipt-modal').classList.add('hidden');
-        }
-
-        // ===================== E-TICKET PASS ===================== 
-        const workshopTicketsData = {
-            'coffee-brewing': {
-                className: 'Coffee Brewing Masterclass',
-                datetime: 'Saturday, 10:00 AM',
-                duration: '2.5 Hours',
-                location: 'Sungai Petani Roastery',
-                fee: 'RM 120.00',
-                ref: 'RP-CBM-1001'
-            },
-            'latte-art': {
-                className: 'Latte Art Workshop',
-                datetime: 'Sunday, 02:00 PM',
-                duration: '3.0 Hours',
-                location: 'Sungai Petani Roastery',
-                fee: 'RM 150.00',
-                ref: 'RP-LAW-1002'
-            }
-        };
-
-        function openETicketModal(ticketId) {
-            const data = workshopTicketsData[ticketId];
-            if (!data) return;
-
-            const userData = JSON.parse(localStorage.getItem('rp_logged_user') || '{}');
-            const attendeeName = userData.name || 'Guest';
-
-            document.getElementById('et-class-name').innerText = data.className;
-            document.getElementById('et-attendee').innerText = attendeeName;
-            document.getElementById('et-datetime').innerText = data.datetime;
-            document.getElementById('et-duration').innerText = data.duration;
-            document.getElementById('et-location').innerText = data.location;
-            document.getElementById('et-fee').innerText = data.fee;
-            document.getElementById('et-ticket-ref').innerText = data.ref;
-
-            const qrPayload = encodeURIComponent(`${data.ref}|${data.className}|${attendeeName}`);
-            document.getElementById('et-qr-code').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${qrPayload}`;
-
-            document.getElementById('eticket-modal').classList.remove('hidden');
-        }
-
-        function closeETicketModal() {
-            document.getElementById('eticket-modal').classList.add('hidden');
-        }
-
-        function openProfileModal() {
-            const user = JSON.parse(localStorage.getItem('rp_logged_user') || '{}');
-            document.getElementById('profile-name-input').value = user.name || '';
-            document.getElementById('profile-email-input').value = user.email || '';
-            document.getElementById('profile-password-input').value = '';
-            document.getElementById('profile-modal').classList.remove('hidden');
-        }
-
-        function closeProfileModal() {
-            document.getElementById('profile-modal').classList.add('hidden');
-        }
-
-        function saveProfileChanges(e) {
-            e.preventDefault();
-            const newName = document.getElementById('profile-name-input').value;
-            const newEmail = document.getElementById('profile-email-input').value;
-            const newPassword = document.getElementById('profile-password-input').value;
-
-            const userData = JSON.parse(localStorage.getItem('rp_logged_user') || '{}');
-            userData.name = newName;
-            userData.email = newEmail;
-            if (newPassword) {
-                userData.password = newPassword; 
-            }
-            localStorage.setItem('rp_user', JSON.stringify(userData));
-            localStorage.setItem('rp_logged_user', JSON.stringify(userData));
-
-            closeProfileModal();
-            showToast("Profile & security details updated successfully!");
-        }
-
-        function toggleCart(forceOpen = false) {
-            const drawer = document.getElementById('cart-drawer');
-            if(forceOpen) {
-                drawer.classList.remove('hidden');
-            } else {
-                drawer.classList.toggle('hidden');
-            }
-        }
-
-        function updateCartUI() {
-            const cartCount = document.getElementById('cart-count');
-            const bottomCartCount = document.getElementById('bottomnav-cart-count');
-            if(cartCount) cartCount.innerText = cart.length;
-            if(bottomCartCount) bottomCartCount.innerText = cart.length;
-        }
-
-        function updateWishlistUI() {
-            const badge = document.getElementById('wishlist-count');
-            const bottomBadge = document.getElementById('bottomnav-wishlist-count');
-            if(badge) badge.innerText = wishlist.length;
-            if(bottomBadge) bottomBadge.innerText = wishlist.length;
-        }
-
-        function toggleWishlistDrawer() {
-            document.getElementById('wishlist-drawer').classList.toggle('hidden');
-        }
-
-        function showToast(message) {
-            const toast = document.getElementById('app-toast');
-            const msgEl = document.getElementById('toast-msg');
-            msgEl.innerText = message;
-            toast.classList.remove('translate-y-24', 'opacity-0');
-            toast.classList.add('translate-y-0', 'opacity-100');
-            setTimeout(() => {
-                toast.classList.remove('translate-y-0', 'opacity-100');
-                toast.classList.add('translate-y-24', 'opacity-0');
-            }, 2500);
-        }
-    </script> 
-</body> 
+    </script>
+</body>
 </html>
