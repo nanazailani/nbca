@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fixed Classes | Nb.CA Academy</title>
-    <script>if (!localStorage.getItem('rp_logged_user')) { location.replace('auth.html?next=' + encodeURIComponent(location.pathname.split('/').pop() || 'dashboard.html')); }</script>
+    <script>if (!localStorage.getItem('rp_logged_user')) { const _p = location.pathname.split('/').pop() || 'book-class.html'; location.replace('auth.html?next=' + encodeURIComponent(_p + location.search)); }</script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -54,7 +54,7 @@
                     <div class="relative h-48"><img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=900&q=80" alt="Daily coffee class" class="w-full h-full object-cover">
                         <span class="absolute top-4 left-4 px-3 py-1 bg-white text-amberGold text-[10px] font-extrabold uppercase tracking-wider rounded-full">Daily class</span></div>
                     <div class="p-6 space-y-4">
-                        <div><h2 class="font-serif text-2xl font-extrabold text-roast-950">Coffee Fundamentals</h2><p class="text-xs text-roast-600 mt-1">Hands-on brewing basics for beginners.</p></div>
+                        <div><h2 id="info-class-label" class="font-serif text-2xl font-extrabold text-roast-950">Select a class</h2><p id="info-class-desc" class="text-xs text-roast-600 mt-1">Choose your programme above to see fees.</p></div>
                         <ul class="space-y-2 text-xs text-roast-700">
                             <li class="flex items-center gap-2.5"><i class="fa-solid fa-calendar-days text-amberGold w-4"></i> Sunday &ndash; Thursday</li>
                             <li class="flex items-center gap-2.5"><i class="fa-solid fa-sun text-amberGold w-4"></i> Morning: 10:00 AM &ndash; 12:00 PM</li>
@@ -77,6 +77,12 @@
                     </div>
 
                     <form id="fc-step-1" onsubmit="fcGoToStep2(event)" class="space-y-4 text-xs">
+                        <!-- Class picker -->
+                        <div>
+                            <label class="block font-semibold text-roast-600 uppercase mb-2">Select class *</label>
+                            <div id="fc-class-cards" class="grid gap-2"></div>
+                            <input type="hidden" id="fc-class-id">
+                        </div>
                         <div><label class="block font-semibold text-roast-600 uppercase mb-1">Name *</label><input type="text" id="fc-student-name" required class="w-full bg-roast-50 border border-roast-200 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold"></div>
                         <div><label class="block font-semibold text-roast-600 uppercase mb-1">IC / Passport Number * <span class="normal-case font-normal text-roast-400">(for your certificate)</span></label><input type="text" id="fc-student-ic" required placeholder="e.g. 990101-01-1234" class="w-full bg-roast-50 border border-roast-200 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold"></div>
                         <div><label class="block font-semibold text-roast-600 uppercase mb-1">Cafe Ownership <span class="normal-case font-normal text-roast-400">(optional)</span></label><input type="text" id="fc-student-cafe" placeholder="Cafe name, if you own or run one" class="w-full bg-roast-50 border border-roast-200 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold"></div>
@@ -114,6 +120,7 @@
 
                     <div id="fc-step-3" class="hidden space-y-4 text-xs">
                         <div class="bg-roast-50 rounded-xl p-4 border border-roast-200 space-y-1.5">
+                            <div class="flex justify-between"><span class="text-roast-600">Class</span><strong id="fc-sum-class" class="text-roast-950"></strong></div>
                             <div class="flex justify-between"><span class="text-roast-600">Student</span><strong id="fc-sum-name" class="text-roast-950"></strong></div>
                             <div class="flex justify-between"><span class="text-roast-600">Date</span><strong id="fc-sum-date" class="text-roast-950"></strong></div>
                             <div class="flex justify-between"><span class="text-roast-600">Session</span><strong id="fc-sum-session" class="text-roast-950"></strong></div>
@@ -121,14 +128,14 @@
                         <div id="fc-voucher-box"></div>
                         <div class="bg-roast-50 rounded-xl p-4 border border-roast-200 space-y-1.5">
                             <div class="flex justify-between"><span class="text-roast-600">Class fee</span><span id="fc-sum-fee" class="font-bold text-roast-950"></span></div>
-                            <div class="flex justify-between text-amberGold font-bold"><span>Deposit due now</span><span id="fc-sum-deposit"></span></div>
-                            <div class="flex justify-between text-roast-500"><span>Balance on class day</span><span id="fc-sum-balance"></span></div>
+                            <div id="fc-sum-deposit-row" class="flex justify-between text-amberGold font-bold"><span id="fc-sum-deposit-label">Deposit due now</span><span id="fc-sum-deposit"></span></div>
+                            <div id="fc-sum-balance-row" class="flex justify-between text-roast-500"><span>Balance on class day</span><span id="fc-sum-balance"></span></div>
                         </div>
                         <div class="rounded-xl border border-amberGold bg-blue-50 p-3.5 text-xs"><p class="font-bold text-roast-950"><i class="fa-solid fa-credit-card text-amberGold mr-1.5"></i>Billplz Payment Gateway</p><p class="text-[10px] text-roast-600 mt-0.5">Online banking (FPX), e-wallet or card. Your seat is held for 30 minutes while you pay.</p></div>
                         <p class="text-[10px] text-roast-500 text-center">After payment our team reviews it and confirms your seat, or contacts you to reschedule if needed.</p>
                         <div class="flex gap-3">
                             <button type="button" onclick="fcShowStep(2)" class="flex-1 py-3 bg-roast-100 hover:bg-roast-200 text-roast-700 font-bold rounded-xl border border-roast-200">Back</button>
-                            <button type="button" onclick="fcPayDeposit()" class="flex-[2] py-3 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl uppercase tracking-wider"><i class="fa-solid fa-lock text-[10px] mr-1"></i> Pay deposit with Billplz</button>
+                            <button type="button" id="fc-pay-btn" onclick="fcPayDeposit()" class="flex-[2] py-3 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl uppercase tracking-wider"><i class="fa-solid fa-lock text-[10px] mr-1"></i> Pay with Billplz</button>
                         </div>
                     </div>
 
@@ -152,30 +159,77 @@
     <script>
 
         const isLoggedIn = true;   // this page is members-only (guard in <head>)
-        const { FC_CAPACITY, FC_OPEN_DAYS, FC_SESSIONS, FC_HOLD_MINUTES } = window.NBCA_CFG;   // shared with the admin console
+        const { FC_CAPACITY, FC_OPEN_DAYS, FC_HOLD_MINUTES, CLASSES } = window.NBCA_CFG;
+        let FC_SESSIONS = window.NBCA_CFG.FC_SESSIONS;
+        try { const _fst = JSON.parse(localStorage.getItem('rp_fixed_class_settings') || 'null'); if (_fst && _fst.morningSession && _fst.afternoonSession) FC_SESSIONS = [_fst.morningSession, _fst.afternoonSession]; } catch (e) {}
         const FC_INACTIVE = ['Reschedule', 'Cancelled'];
         let fcDetails = null;
         let fcPicked = { date: null, session: null };
         let fcViewMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+        let fcClassId = null;
+
+        function fcRenderClassCards() {
+            const container = document.getElementById('fc-class-cards');
+            if (!container) return;
+            container.innerHTML = CLASSES.map(cls => {
+                if (cls.comingSoon) {
+                    return '<div class="flex items-center gap-3 p-3.5 rounded-xl border-2 border-roast-100 bg-roast-50 opacity-60 cursor-not-allowed">' +
+                        '<span class="w-8 h-8 rounded-lg bg-slate-100 text-slate-400 flex items-center justify-center shrink-0"><i class="fa-solid fa-hourglass-half text-xs"></i></span>' +
+                        '<div class="flex-1 min-w-0"><strong class="text-xs text-roast-700">' + cls.label + '</strong>' +
+                        '<span class="ml-2 px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 text-[9px] font-bold uppercase">' + cls.comingSoon + '</span></div></div>';
+                }
+                return '<button type="button" onclick="fcPickClass(\'' + cls.id + '\')" id="fccard-' + cls.id + '" class="flex items-center gap-3 p-3.5 rounded-xl border-2 border-roast-200 hover:border-amberGold transition-all text-left w-full">' +
+                    '<span class="w-8 h-8 rounded-lg bg-blue-50 text-amberGold flex items-center justify-center shrink-0"><i class="fa-solid fa-mug-hot text-xs"></i></span>' +
+                    '<div class="flex-1 min-w-0"><strong class="text-xs text-roast-950 block">' + cls.label + '</strong>' +
+                    '<span class="text-[10px] text-roast-500">' + cls.desc.split('.')[0] + '</span></div></button>';
+            }).join('');
+        }
+
+        function fcPickClass(id) {
+            fcClassId = id;
+            document.getElementById('fc-class-id').value = id;
+            CLASSES.filter(c => c.open).forEach(c => {
+                const btn = document.getElementById('fccard-' + c.id);
+                if (!btn) return;
+                if (c.id === id) { btn.classList.add('border-amberGold', 'bg-blue-50'); btn.classList.remove('border-roast-200'); }
+                else { btn.classList.remove('border-amberGold', 'bg-blue-50'); btn.classList.add('border-roast-200'); }
+            });
+            const cls = CLASSES.find(c => c.id === id);
+            if (cls) {
+                document.getElementById('info-class-label').textContent = cls.label;
+                document.getElementById('info-class-desc').textContent = cls.desc;
+            }
+            const f = fcGetFees(id);
+            document.getElementById('info-fee').innerText = 'RM ' + f.fee.toFixed(0);
+            document.getElementById('info-deposit').innerText = f.mode === 'full' ? 'Full payment' : 'RM ' + f.deposit.toFixed(0);
+        }
 
         // Price after an optional class voucher (percent off the fee; the deposit keeps the same share of the fee).
         let fcVoucher = null;
         function fcPricing() {
-            const base = fcGetFees();
+            const base = fcGetFees(fcClassId);
             const v = NBCA_DATA.loyalty.available((MemberShell.user() || {}).email, 'class').find(x => x.code === fcVoucher) || null;
             const discount = NBCA_DATA.loyalty.discount(v, { subtotal: base.fee, shipping: 0 });
             const fee = base.fee - discount;
-            return { list: base.fee, fee, deposit: Math.round(fee * (base.deposit / base.fee) * 100) / 100, discount, voucher: v };
+            const depositShare = base.mode === 'full' ? fee : Math.round(fee * (base.deposit / base.fee) * 100) / 100;
+            return { list: base.fee, fee, deposit: depositShare, discount, voucher: v, mode: base.mode, pct: base.pct };
         }
         function fcSetVoucher(code) { fcVoucher = code || null; fcGoToStep3(); }
 
-        function fcGetFees() {
-            let fee = 150, pct = 50;
+        function fcGetFees(classId) {
+            let fee = 150, pct = 50, mode = 'deposit';
             try {
                 const st = JSON.parse(localStorage.getItem('rp_fixed_class_settings') || 'null');
-                if (st) { fee = Number(st.fee) || fee; pct = Number(st.depositPct) || pct; }
+                if (st) {
+                    const id = classId || fcClassId;
+                    const cls = id && st.classes && st.classes[id];
+                    fee  = Number((cls ? cls.fee  : st.fee)        || fee);
+                    pct  = Number((cls ? cls.depositPct : st.depositPct) || pct);
+                    mode = (cls ? cls.paymentMode : st.paymentMode) || mode;
+                }
             } catch (e) {}
-            return { fee, deposit: fee * pct / 100 };
+            const deposit = mode === 'full' ? fee : Math.round(fee * pct) / 100;
+            return { fee, deposit, mode, pct };
         }
 
         function fcLoadRegistrations() {
@@ -205,7 +259,10 @@
 
         function fcGoToStep2(e) {
             e.preventDefault();
+            if (!fcClassId) { alert('Please select a class before continuing.'); return; }
             fcDetails = {
+                classId: fcClassId,
+                className: (CLASSES.find(c => c.id === fcClassId) || {}).label || fcClassId,
                 name: document.getElementById('fc-student-name').value.trim(),
                 ic: document.getElementById('fc-student-ic').value.trim(),
                 cafe: document.getElementById('fc-student-cafe').value.trim(),
@@ -297,12 +354,17 @@
             document.getElementById('fc-voucher-box').innerHTML = mine.length
                 ? '<label class="block font-semibold text-roast-600 uppercase mb-1 text-xs"><i class="fa-solid fa-ticket text-amberGold mr-1"></i>Voucher</label><select onchange="fcSetVoucher(this.value)" class="w-full bg-white border border-roast-200 rounded-xl px-3.5 py-2.5 text-xs focus:outline-none focus:border-amberGold"><option value="">No voucher</option>' + mine.map(v => '<option value="' + v.code + '" ' + (v.code === fcVoucher ? 'selected' : '') + '>' + v.title + ' (' + v.code + ')</option>').join('') + '</select>'
                 : '';
+            const isFullPay = P.mode === 'full';
+            document.getElementById('fc-sum-class').innerText = fcDetails.className || '';
             document.getElementById('fc-sum-name').innerText = fcDetails.name;
             document.getElementById('fc-sum-date').innerText = new Date(fcPicked.date + 'T00:00:00').toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
             document.getElementById('fc-sum-session').innerText = fcPicked.session;
-            document.getElementById('fc-sum-fee').innerText = (P.discount ? 'RM ' + P.list.toFixed(2) + ' - RM ' + P.discount.toFixed(2) + ' = ' : '') + 'RM ' + fee.toFixed(2);
+            document.getElementById('fc-sum-fee').innerText = (P.discount ? 'RM ' + P.list.toFixed(2) + ' − RM ' + P.discount.toFixed(2) + ' = ' : '') + 'RM ' + fee.toFixed(2);
+            document.getElementById('fc-sum-deposit-label').innerText = isFullPay ? 'Amount due now (full)' : 'Deposit due now (' + P.pct + '%)';
             document.getElementById('fc-sum-deposit').innerText = 'RM ' + deposit.toFixed(2);
-            document.getElementById('fc-sum-balance').innerText = 'RM ' + (fee - deposit).toFixed(2);
+            document.getElementById('fc-sum-balance-row').classList.toggle('hidden', isFullPay);
+            if (!isFullPay) document.getElementById('fc-sum-balance').innerText = 'RM ' + (fee - deposit).toFixed(2);
+            document.getElementById('fc-pay-btn').textContent = isFullPay ? '🔒 Pay in full with Billplz' : '🔒 Pay deposit with Billplz';
             fcShowStep(3);
         }
 
@@ -318,6 +380,9 @@
             const regs = fcLoadRegistrations();
             const rec = {
                 id: 'FC-' + Date.now(),
+                classId: fcDetails.classId || 'bev-foundation',
+                className: fcDetails.className || 'Beverage Foundation',
+                paymentMode: P.mode || 'deposit',
                 name: fcDetails.name,
                 ic: fcDetails.ic,
                 cafe: fcDetails.cafe,
@@ -338,7 +403,8 @@
             regs.push(rec);
             localStorage.setItem('rp_fixed_class_students', JSON.stringify(regs));
             if (P.voucher) NBCA_DATA.loyalty.use(P.voucher.code, rec.id);
-            NBCA_PAY.checkout({ type: 'fixed', refId: rec.id, amount: deposit, description: 'Class deposit ' + rec.preferredDate + ' - Nb.CA Academy', name: rec.name, email: rec.email, phone: rec.phone, returnTo: 'classes.html' });
+            const descLabel = rec.paymentMode === 'full' ? rec.className + ' (full payment)' : rec.className + ' deposit';
+            NBCA_PAY.checkout({ type: 'fixed', refId: rec.id, amount: deposit, description: descLabel + ' ' + rec.preferredDate + ' - Nb.CA Academy', name: rec.name, email: rec.email, phone: rec.phone, returnTo: 'classes.html' });
         }
 
         window.addEventListener('member-ready', () => {
@@ -350,9 +416,12 @@
             document.getElementById('fc-student-ic').value = prev.ic || '';
             document.getElementById('fc-student-cafe').value = prev.cafe || '';
             document.getElementById('fc-student-from').value = prev.from || '';
-            const f = fcGetFees();
-            document.getElementById('info-fee').innerText = 'RM ' + f.fee.toFixed(0);
-            document.getElementById('info-deposit').innerText = 'RM ' + f.deposit.toFixed(0);
+            fcRenderClassCards();
+            // Auto-select if URL has ?class=
+            const urlClass = new URLSearchParams(location.search).get('class');
+            const openIds = (CLASSES || []).filter(c => c.open).map(c => c.id);
+            if (urlClass && openIds.includes(urlClass)) fcPickClass(urlClass);
+            else if (openIds.length === 1) fcPickClass(openIds[0]);
             fcShowStep(1);
         });
 

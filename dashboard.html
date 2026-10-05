@@ -41,7 +41,7 @@
         @media print { #m-sidebar, #m-topbar, #m-bottomnav { display: none !important; } }
     </style>
 </head>
-<body data-page="dashboard" data-title="Dashboard" data-sub="Your classes, orders and rewards at a glance" class="text-roast-900 antialiased selection:bg-amberGold selection:text-white">
+<body data-page="dashboard" data-title="Dashboard" data-sub="Your classes and consultations at a glance" class="text-roast-900 antialiased selection:bg-amberGold selection:text-white">
     <div id="m-overlay"></div>
     <aside id="m-sidebar"></aside>
     <div class="lg:pl-72 min-h-screen flex flex-col min-w-0 overflow-x-hidden">
@@ -57,10 +57,10 @@
                     <div class="lg:col-span-3 space-y-4">
                         <span class="text-[11px] font-extrabold tracking-[0.2em] uppercase text-blue-200">Welcome back</span>
                         <h2 id="hero-welcome-title" class="font-serif text-3xl sm:text-5xl font-extrabold leading-tight">Hello, Member!</h2>
-                        <p class="text-sm text-blue-100/90 max-w-md font-light leading-relaxed">Book your next coffee class, track your orders and collect rewards &mdash; everything in one place.</p>
+                        <p class="text-sm text-blue-100/90 max-w-md font-light leading-relaxed">Book a coffee class, request a consultation &mdash; everything you need in one place.</p>
                         <div class="flex flex-wrap gap-3 pt-2">
                             <a href="book-class.html" class="px-5 py-3 bg-white text-amberGold font-bold rounded-full text-xs shadow-lg hover:-translate-y-0.5 transition-all"><i class="fa-solid fa-user-pen mr-1.5"></i> Book a Class</a>
-                            <a href="shop.html?tab=beans" class="px-5 py-3 bg-white/10 hover:bg-white/20 border border-white/30 text-white font-bold rounded-full text-xs transition-all"><i class="fa-solid fa-mug-hot mr-1.5"></i> Shop Beans</a>
+                            <a href="shop.html?tab=beans" data-feature="shop" class="px-5 py-3 bg-white/10 hover:bg-white/20 border border-white/30 text-white font-bold rounded-full text-xs transition-all"><i class="fa-solid fa-mug-hot mr-1.5"></i> Shop Beans</a>
                         </div>
                     </div>
                     <div id="next-up-card" class="lg:col-span-2 rounded-2xl bg-white/12 border border-white/25 backdrop-blur-md p-5 space-y-3"></div>
@@ -69,16 +69,19 @@
 
             <!-- STATS -->
             <section class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                <a href="membership.html" class="bg-white rounded-2xl border border-roast-200 p-4 sm:p-5 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all">
+                <a href="membership.html" data-feature="rewards" class="bg-white rounded-2xl border border-roast-200 p-4 sm:p-5 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all">
                     <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center mb-3"><i class="fa-solid fa-coins"></i></div>
                     <p id="stat-points" class="text-2xl font-extrabold text-roast-950 font-serif">0</p><p id="stat-points-sub" class="text-[11px] text-roast-500 font-semibold">Reward points</p></a>
                 <a href="classes.html" class="bg-white rounded-2xl border border-roast-200 p-4 sm:p-5 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all">
                     <div class="w-10 h-10 rounded-xl bg-blue-100 text-amberGold flex items-center justify-center mb-3"><i class="fa-solid fa-graduation-cap"></i></div>
                     <p id="stat-classes" class="text-2xl font-extrabold text-roast-950 font-serif">0</p><p class="text-[11px] text-roast-500 font-semibold">Class bookings</p></a>
-                <a href="orders.html" class="bg-white rounded-2xl border border-roast-200 p-4 sm:p-5 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all">
+                <a href="consultation.html" data-feature="consultation" class="bg-white rounded-2xl border border-roast-200 p-4 sm:p-5 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all">
+                    <div class="w-10 h-10 rounded-xl bg-blue-100 text-amberGold flex items-center justify-center mb-3"><i class="fa-solid fa-comments"></i></div>
+                    <p id="stat-consults" class="text-2xl font-extrabold text-roast-950 font-serif">0</p><p class="text-[11px] text-roast-500 font-semibold">Consultations</p></a>
+                <a href="orders.html" data-feature="shop" class="bg-white rounded-2xl border border-roast-200 p-4 sm:p-5 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all">
                     <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center mb-3"><i class="fa-solid fa-box-open"></i></div>
                     <p id="stat-orders" class="text-2xl font-extrabold text-roast-950 font-serif">0</p><p class="text-[11px] text-roast-500 font-semibold">Orders placed</p></a>
-                <a href="membership.html" class="bg-white rounded-2xl border border-roast-200 p-4 sm:p-5 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all">
+                <a href="membership.html" data-feature="rewards" class="bg-white rounded-2xl border border-roast-200 p-4 sm:p-5 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all">
                     <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-500 flex items-center justify-center mb-3"><i class="fa-solid fa-ticket"></i></div>
                     <p id="stat-vouchers" class="text-2xl font-extrabold text-roast-950 font-serif">0</p><p class="text-[11px] text-roast-500 font-semibold">Vouchers ready to use</p></a>
             </section>
@@ -91,19 +94,27 @@
                 
             </div>
                 <div class="grid lg:grid-cols-3 gap-5">
-                    <a href="book-class.html" class="group relative lg:col-span-2 min-h-[260px] rounded-3xl overflow-hidden shadow-lg">
-                        <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1000&q=80" alt="Daily coffee class" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                        <div class="absolute inset-0 bg-gradient-to-t from-roast-950/90 via-roast-950/40 to-transparent"></div>
-                        <div class="relative h-full flex flex-col justify-end p-6 sm:p-8 text-white space-y-2">
-                            <span class="self-start px-3 py-1 bg-white text-amberGold text-[10px] font-extrabold uppercase tracking-wider rounded-full">Daily class &middot; Sun &ndash; Thu</span>
-                            <h3 class="font-serif text-2xl sm:text-3xl font-extrabold">Coffee Fundamentals</h3>
-                            <p class="text-xs text-blue-100 max-w-md">Hands-on brewing basics. Morning 10AM&ndash;12PM or afternoon 2PM&ndash;4PM. Secure your seat with a deposit.</p>
-                            <div class="flex items-center justify-between pt-2"><span class="text-sm">From <strong id="promo-fee" class="text-xl font-serif">RM 150</strong> <span class="text-blue-200 text-xs">&middot; <span id="promo-deposit">50% deposit</span></span></span>
-                            <span class="px-4 py-2 bg-white text-amberGold font-bold rounded-full text-xs group-hover:bg-amberGold group-hover:text-white transition-all">Reserve a seat <i class="fa-solid fa-arrow-right ml-1 text-[10px]"></i></span></div>
+                    <div class="lg:col-span-2 grid gap-4">
+                        <a href="book-class.html" class="group relative min-h-[220px] rounded-3xl overflow-hidden shadow-lg">
+                            <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1000&q=80" alt="Beverage Foundation & Barista Basic" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                            <div class="absolute inset-0 bg-gradient-to-t from-roast-950/90 via-roast-950/40 to-transparent"></div>
+                            <div class="relative h-full flex flex-col justify-end p-6 sm:p-8 text-white space-y-2">
+                                <span class="self-start px-3 py-1 bg-white text-amberGold text-[10px] font-extrabold uppercase tracking-wider rounded-full">Daily class &middot; Sun &ndash; Thu</span>
+                                <h3 class="font-serif text-2xl sm:text-3xl font-extrabold">Beverage Foundation &amp; Barista Basic</h3>
+                                <p class="text-xs text-blue-100 max-w-md">Hands-on coffee training. Morning 10AM&ndash;12PM or afternoon 2PM&ndash;4PM. Secure your seat with a deposit.</p>
+                                <div class="flex items-center justify-between pt-2"><span class="text-sm">From <strong id="promo-fee" class="text-xl font-serif">RM 150</strong> <span class="text-blue-200 text-xs">&middot; <span id="promo-deposit">50% deposit</span></span></span>
+                                <span class="px-4 py-2 bg-white text-amberGold font-bold rounded-full text-xs group-hover:bg-amberGold group-hover:text-white transition-all">Reserve a seat <i class="fa-solid fa-arrow-right ml-1 text-[10px]"></i></span></div>
+                            </div>
+                        </a>
+                        <div class="relative rounded-3xl p-6 bg-gradient-to-br from-slate-800 to-slate-900 text-white shadow-lg overflow-hidden">
+                            <i class="fa-solid fa-award absolute -right-2 -bottom-4 text-8xl text-white/10 rotate-12"></i>
+                            <span class="px-2.5 py-1 rounded-full bg-amber-400/20 text-amber-300 text-[10px] font-extrabold uppercase tracking-widest">Coming soon</span>
+                            <h3 class="font-serif text-xl font-extrabold mt-2">SCA Classes</h3>
+                            <p class="text-[11px] text-slate-400 mt-1">Specialty Coffee Association certified programmes launching soon at Nb.CA Academy.</p>
                         </div>
-                    </a>
+                    </div>
                     <div class="grid gap-5">
-                        <a href="membership.html" class="group relative rounded-3xl p-6 bg-gradient-to-br from-amber-400 to-orange-500 text-white shadow-lg overflow-hidden">
+                        <a href="membership.html" data-feature="rewards" class="group relative rounded-3xl p-6 bg-gradient-to-br from-amber-400 to-orange-500 text-white shadow-lg overflow-hidden">
                             <i class="fa-solid fa-crown absolute -right-3 -bottom-4 text-8xl text-white/20 rotate-12"></i>
                             <span class="text-[10px] font-extrabold uppercase tracking-widest text-amber-100">Members only</span>
                             <h3 id="promo-rw-title" class="font-serif text-xl font-extrabold mt-1">Rewards</h3>
@@ -111,7 +122,14 @@
                             <div class="h-1.5 rounded-full bg-white/30 overflow-hidden mb-1"><div id="promo-rw-bar" class="h-full w-0 bg-white rounded-full transition-all duration-700"></div></div>
                             <p id="promo-rw-pts" class="text-[10px] font-bold"></p>
                         </a>
-                        <a href="shop.html?tab=merch" class="group relative rounded-3xl p-6 bg-white border border-roast-200 shadow-sm hover:shadow-lg transition-all overflow-hidden">
+                        <a href="consultation.html" data-feature="consultation" class="group relative rounded-3xl p-6 bg-white border border-roast-200 shadow-sm hover:shadow-lg transition-all overflow-hidden">
+                            <i class="fa-solid fa-comments absolute -right-2 -bottom-3 text-7xl text-amberGold/10 -rotate-6"></i>
+                            <span class="text-[10px] font-extrabold uppercase tracking-widest text-amberGold">Free consultation</span>
+                            <h3 class="font-serif text-xl font-extrabold text-roast-950 mt-1">Talk to Our Experts</h3>
+                            <p class="text-[11px] text-roast-500 mt-1">Cafe setup, menu dev, barista training — no payment required.</p>
+                            <span class="inline-flex items-center gap-1 text-[11px] font-bold text-amberGold mt-3">Request a session <i class="fa-solid fa-arrow-right text-[9px]"></i></span>
+                        </a>
+                        <a href="shop.html?tab=merch" data-feature="shop" class="group relative rounded-3xl p-6 bg-white border border-roast-200 shadow-sm hover:shadow-lg transition-all overflow-hidden">
                             <i class="fa-solid fa-shirt absolute -right-2 -bottom-3 text-7xl text-amberGold/10 -rotate-12"></i>
                             <span class="text-[10px] font-extrabold uppercase tracking-widest text-amberGold">New merch</span>
                             <h3 class="font-serif text-xl font-extrabold text-roast-950 mt-1">Nb.CA T-Shirt &amp; Stickers</h3>
@@ -123,7 +141,7 @@
             </section>
 
             <!-- WORKSHOPS -->
-            <section>
+            <section data-feature="workshops">
             <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-5">
                 <div><span class="text-[11px] font-extrabold tracking-[0.18em] text-amberGold uppercase">Level up</span>
                 <h2 class="text-2xl sm:text-3xl font-extrabold text-roast-950 mt-1">Workshops</h2></div>
@@ -155,7 +173,7 @@
             </section>
 
             <!-- BEANS -->
-            <section>
+            <section data-feature="shop">
             <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-5">
                 <div><span class="text-[11px] font-extrabold tracking-[0.18em] text-amberGold uppercase">Fresh from the roastery</span>
                 <h2 class="text-2xl sm:text-3xl font-extrabold text-roast-950 mt-1">Coffee Beans</h2></div>
@@ -191,8 +209,8 @@
 
             <!-- LATEST ORDER + NEXT REWARD -->
             <section class="grid md:grid-cols-2 gap-5">
-                <a id="latest-order-card" href="orders.html" class="bg-white rounded-2xl border border-roast-200 p-5 shadow-sm hover:shadow-lg transition-all flex items-center gap-4"></a>
-                <a href="membership.html" class="bg-white rounded-2xl border border-roast-200 p-5 shadow-sm hover:shadow-lg transition-all flex items-center gap-4">
+                <a id="latest-order-card" href="orders.html" data-feature="shop" class="bg-white rounded-2xl border border-roast-200 p-5 shadow-sm hover:shadow-lg transition-all flex items-center gap-4"></a>
+                <a href="membership.html" data-feature="rewards" class="bg-white rounded-2xl border border-roast-200 p-5 shadow-sm hover:shadow-lg transition-all flex items-center gap-4">
                     <div class="w-12 h-12 rounded-xl bg-blue-100 text-amberGold flex items-center justify-center text-lg shrink-0"><i class="fa-solid fa-gift"></i></div>
                     <div class="flex-1 min-w-0"><p class="text-[10px] font-extrabold uppercase tracking-widest text-roast-400">Next reward</p><h3 id="nr-title" class="font-serif text-base font-bold text-roast-950">Rewards</h3><p id="nr-sub" class="text-[11px] text-roast-500"></p></div>
                     <i class="fa-solid fa-arrow-right text-roast-400"></i></a>
@@ -238,6 +256,11 @@
                 }
             } catch (e) {}
 
+            const consultEl = document.getElementById('stat-consults');
+            if (consultEl) {
+                const myConsults = NBCA_DATA.consults.forMember(u.email);
+                consultEl.innerText = myConsults.filter(c => c.status !== 'Cancelled').length;
+            }
             const orders = MemberShell.myOrders();
             document.getElementById('stat-orders').innerText = orders.length;
             const lo = orders[orders.length - 1], loBox = document.getElementById('latest-order-card');

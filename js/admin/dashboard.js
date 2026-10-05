@@ -48,25 +48,29 @@
     }
 
     function renderKpis(r) {
+        const featureShop = S.on('shop'), featureWs = S.on('workshops'), featureConsult = S.on('consultation');
         const ev = paidEvents(), orders = S.orders(), regs = S.regs().filter(x => x.classStatus !== 'Cancelled'), enr = S.enrolls().filter(x => x.status !== 'Cancelled'), accs = D.accounts.list();
         const sum = (a, b) => ev.filter(e => within(e.t, a, b)).reduce((s, e) => s + e.amt, 0);
         const cnt = (arr, key, a, b) => arr.filter(x => within(x[key], a, b)).length;
         const rev = sum(r.start, r.end), revP = sum(r.prev.start, r.prev.end);
         const ord = cnt(orders, 'createdAt', r.start, r.end), ordP = cnt(orders, 'createdAt', r.prev.start, r.prev.end);
-        const bk = cnt(regs, 'createdAt', r.start, r.end) + cnt(enr, 'createdAt', r.start, r.end), bkP = cnt(regs, 'createdAt', r.prev.start, r.prev.end) + cnt(enr, 'createdAt', r.prev.start, r.prev.end);
+        const bkBase = cnt(regs, 'createdAt', r.start, r.end), bkBaseP = cnt(regs, 'createdAt', r.prev.start, r.prev.end);
+        const bk = bkBase + (featureWs ? cnt(enr, 'createdAt', r.start, r.end) : 0), bkP = bkBaseP + (featureWs ? cnt(enr, 'createdAt', r.prev.start, r.prev.end) : 0);
         const nm = cnt(accs, 'createdAt', r.start, r.end), nmP = cnt(accs, 'createdAt', r.prev.start, r.prev.end);
         const act = activeIn(r.start, r.end).size, actP = activeIn(r.prev.start, r.prev.end).size;
         const paidOrders = orders.filter(o => o.paymentStatus === 'Paid' && within(o.paidAt || o.createdAt, r.start, r.end));
         const aov = paidOrders.length ? paidOrders.reduce((s, o) => s + Number(o.total), 0) / paidOrders.length : 0;
         const d = (c, p) => { const x = kpiDelta(c, p); return { sub: x.text, subTone: x.tone }; };
-        $('kpis').innerHTML = [
+        const tiles = [
             { icon: 'fa-wallet', tone: 'emerald', value: money(rev), label: 'Revenue (paid)', ...d(rev, revP), href: 'admin-orders.html' },
-            { icon: 'fa-bag-shopping', tone: 'blue', value: ord, label: 'Orders placed', ...d(ord, ordP), href: 'admin-orders.html' },
-            { icon: 'fa-calendar-check', tone: 'amber', value: bk, label: 'Class & workshop bookings', ...d(bk, bkP), href: 'admin-bookings.html' },
+            featureShop ? { icon: 'fa-bag-shopping', tone: 'blue', value: ord, label: 'Orders placed', ...d(ord, ordP), href: 'admin-orders.html' } : null,
+            { icon: 'fa-calendar-check', tone: 'amber', value: bk, label: featureWs ? 'Class & workshop bookings' : 'Class bookings', ...d(bk, bkP), href: 'admin-bookings.html' },
+            featureConsult ? { icon: 'fa-comments', tone: 'blue', value: D.consults.pendingCount(), label: 'Consultation requests', sub: 'Awaiting response', subTone: D.consults.pendingCount() ? 'text-amber-600' : 'text-slate-500', href: 'admin-consultations.html' } : null,
             { icon: 'fa-user-plus', tone: 'violet', value: nm, label: 'New sign-ups', ...d(nm, nmP), href: 'admin-members.html' },
             { icon: 'fa-bolt', tone: 'rose', value: act, label: 'Active members', sub: D.activity.onlineNow(5) + ' online now', subTone: 'text-emerald-600', href: 'admin-members.html' },
-            { icon: 'fa-receipt', tone: 'blue', value: money(aov), label: 'Avg. order value', sub: paidOrders.length + ' paid order' + (paidOrders.length === 1 ? '' : 's') }
-        ].map(UI.kpi).join('');
+            featureShop ? { icon: 'fa-receipt', tone: 'blue', value: money(aov), label: 'Avg. order value', sub: paidOrders.length + ' paid order' + (paidOrders.length === 1 ? '' : 's') } : null
+        ].filter(Boolean);
+        $('kpis').innerHTML = tiles.map(UI.kpi).join('');
         $('period-label').innerText = r.start.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) + ' – ' + new Date(+r.end - 1).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
     }
 
@@ -127,11 +131,12 @@
         const c = S.counts(), now = Date.now();
         const dayOld = S.orders().filter(o => o.status === 'Pending Payment' && now - new Date(o.createdAt) > DAY).length;
         const items = [];
+        if (S.on('consultation') && c.consult) items.push(['fa-comments', 'bg-blue-100 text-amberGold', c.consult + ' consultation request' + (c.consult > 1 ? 's' : '') + ' awaiting response', 'Accept, propose an alternative time or decline.', 'admin-consultations.html?status=Requested', 'Review']);
         if (c.admit) items.push(['fa-circle-check', 'bg-emerald-100 text-emerald-600', c.admit + ' paid deposit' + (c.admit > 1 ? 's' : '') + ' waiting for confirmation', 'Admit the student so they get a confirmed seat.', 'admin-bookings.html?status=confirm', 'Review']);
         if (c.unassigned) items.push(['fa-user-tie', 'bg-violet-100 text-violet-600', c.unassigned + ' session' + (c.unassigned > 1 ? 's' : '') + ' without an instructor', 'Students are booked but nobody is assigned to teach.', 'admin-schedule.html', 'Assign']);
         if (c.reschedule) items.push(['fa-rotate', 'bg-red-100 text-red-600', c.reschedule + ' booking' + (c.reschedule > 1 ? 's' : '') + ' flagged for reschedule', 'Contact the member to agree a new date.', 'admin-bookings.html?status=reschedule', 'Open']);
-        if (c.ship) items.push(['fa-truck-fast', 'bg-blue-100 text-amberGold', c.ship + ' order' + (c.ship > 1 ? 's' : '') + ' ready to ship', 'Paid orders waiting for a tracking number.', 'admin-orders.html?status=Processing', 'Ship']);
-        if (dayOld) items.push(['fa-hourglass-half', 'bg-amber-100 text-amber-600', dayOld + ' unpaid order' + (dayOld > 1 ? 's' : '') + ' older than a day', 'Follow up or cancel to keep the queue tidy.', 'admin-orders.html?status=Pending Payment', 'Check']);
+        if (S.on('shop') && c.ship) items.push(['fa-truck-fast', 'bg-blue-100 text-amberGold', c.ship + ' order' + (c.ship > 1 ? 's' : '') + ' ready to ship', 'Paid orders waiting for a tracking number.', 'admin-orders.html?status=Processing', 'Ship']);
+        if (S.on('shop') && dayOld) items.push(['fa-hourglass-half', 'bg-amber-100 text-amber-600', dayOld + ' unpaid order' + (dayOld > 1 ? 's' : '') + ' older than a day', 'Follow up or cancel to keep the queue tidy.', 'admin-orders.html?status=Pending Payment', 'Check']);
         S.openDays(7).forEach(d => CFG.FC_SESSIONS.forEach(s => { if (S.seatsUsed(S.ymd(d), s) >= CFG.FC_CAPACITY) items.push(['fa-users-slash', 'bg-slate-100 text-slate-600', 'Session full: ' + d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' }) + ', ' + s.split(' – ')[0], 'No seats left for this session.', 'admin-bookings.html?date=' + S.ymd(d) + '&session=' + encodeURIComponent(s), 'View']); }));
         $('attn-count').innerText = items.length ? items.length + ' item' + (items.length > 1 ? 's' : '') : '';
         $('attention').innerHTML = items.length ? items.slice(0, 6).map(i => '<a href="' + i[4] + '" class="flex items-center gap-4 p-3.5 rounded-2xl border border-slate-200 hover:border-amberGold hover:bg-blue-50/40 transition-all"><span class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ' + i[1] + '"><i class="fa-solid ' + i[0] + '"></i></span><span class="flex-1 min-w-0"><strong class="block text-sm text-slate-900">' + i[2] + '</strong><span class="block text-[11px] text-slate-500">' + i[3] + '</span></span><span class="text-[11px] font-bold text-amberGold whitespace-nowrap">' + i[5] + ' <i class="fa-solid fa-arrow-right text-[9px]"></i></span></a>').join('')
@@ -141,9 +146,10 @@
     function renderActivity() {
         const ev = [];
         D.accounts.list().forEach(a => ev.push({ t: a.createdAt, icon: 'fa-user-plus', tone: 'bg-violet-100 text-violet-600', text: '<strong>' + esc(a.name) + '</strong> joined' }));
-        S.regs().forEach(r => ev.push({ t: r.createdAt, icon: 'fa-calendar-plus', tone: 'bg-blue-100 text-amberGold', text: '<strong>' + esc(r.name) + '</strong> booked ' + S.fmtDate(r.preferredDate, { day: 'numeric', month: 'short' }) + ' (' + esc(r.session.split(' – ')[0]) + ')' }));
-        S.enrolls().forEach(w => ev.push({ t: w.createdAt, icon: 'fa-chalkboard-user', tone: 'bg-violet-100 text-violet-600', text: '<strong>' + esc(w.name) + '</strong> enrolled in ' + esc(w.title) }));
-        S.orders().forEach(o => ev.push({ t: o.createdAt, icon: 'fa-bag-shopping', tone: 'bg-amber-100 text-amber-600', text: '<strong>' + esc(o.name) + '</strong> placed order ' + esc(o.id) + ' (' + money(o.total) + ')' }));
+        S.regs().forEach(r => ev.push({ t: r.createdAt, icon: 'fa-calendar-plus', tone: 'bg-blue-100 text-amberGold', text: '<strong>' + esc(r.name) + '</strong> booked ' + S.fmtDate(r.preferredDate, { day: 'numeric', month: 'short' }) + ' (' + esc(r.session.split(' – ')[0]) + ')' + (r.className ? ' — ' + esc(r.className) : '') }));
+        if (S.on('workshops')) S.enrolls().forEach(w => ev.push({ t: w.createdAt, icon: 'fa-chalkboard-user', tone: 'bg-violet-100 text-violet-600', text: '<strong>' + esc(w.name) + '</strong> enrolled in ' + esc(w.title) }));
+        if (S.on('shop')) S.orders().forEach(o => ev.push({ t: o.createdAt, icon: 'fa-bag-shopping', tone: 'bg-amber-100 text-amber-600', text: '<strong>' + esc(o.name) + '</strong> placed order ' + esc(o.id) + ' (' + money(o.total) + ')' }));
+        if (S.on('consultation')) D.consults.list().forEach(c => ev.push({ t: c.createdAt, icon: 'fa-comments', tone: 'bg-blue-100 text-amberGold', text: '<strong>' + esc(c.name) + '</strong> requested a ' + esc(c.typeLabel) + ' consultation' }));
         paidEvents().forEach(p => ev.push({ t: p.t, icon: 'fa-circle-check', tone: 'bg-emerald-100 text-emerald-600', text: 'Payment received: ' + money(p.amt) + ' <span class="text-slate-400">&middot; ' + esc(p.src) + '</span>' }));
         ev.sort((a, b) => (b.t || '').localeCompare(a.t || ''));
         $('activity').innerHTML = ev.length ? ev.slice(0, 8).map(e => '<div class="flex items-start gap-3"><span class="w-9 h-9 rounded-full flex items-center justify-center shrink-0 text-xs ' + e.tone + '"><i class="fa-solid ' + e.icon + '"></i></span><div class="min-w-0"><p class="text-xs text-slate-700 leading-snug">' + e.text + '</p><p class="text-[10px] text-slate-400 mt-0.5">' + S.ago(e.t) + '</p></div></div>').join('')

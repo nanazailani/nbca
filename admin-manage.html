@@ -104,7 +104,7 @@
             <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-1.5 flex gap-1 overflow-x-auto no-scrollbar" id="manage-tabs"></div>
 
             <!-- TAB 3: INVENTORY STOCK -->
-            <div id="view-inventory" class="admin-view space-y-6 hidden">
+            <div id="view-inventory" class="admin-view space-y-6 hidden" style="display:none">
                 <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
                     <div>
                         <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Inventory</span>
@@ -174,7 +174,7 @@
             </div>
 
             <!-- TAB: MANAGE FIXED CLASS -->
-            <div id="view-fixedclass" class="admin-view space-y-6 hidden">
+            <div id="view-fixedclass" class="admin-view space-y-6 hidden" style="display:none">
                 <div>
                     <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Daily Training</span>
                     <h3 class="text-2xl font-extrabold text-roast-950 font-serif mt-1">Manage Fixed Class</h3>
@@ -210,7 +210,7 @@
 
                         <div class="bg-adminCard rounded-3xl border border-adminBorder p-6 sm:p-8 shadow-xl space-y-5">
                             <h4 class="text-sm font-bold text-roast-950 uppercase tracking-wider border-b border-adminBorder pb-3">Schedule</h4>
-                            <p class="text-[11px] text-roast-400 -mt-2">Sessions and open days are shared with booking and the schedule, so they are shown here read-only. Ask the developer to change them.</p>
+                            <p class="text-[11px] text-roast-400 -mt-2">Changes here update the booking calendar and homepage straight away. The class schedule page uses the same session names — if you rename a session, existing instructor assignments will need to be re-saved.</p>
                             <div class="grid sm:grid-cols-2 gap-4">
                                 <div>
                                     <label class="block font-semibold text-roast-300 uppercase mb-1">Morning Session</label>
@@ -238,15 +238,24 @@
                         <div class="bg-adminCard rounded-3xl border border-adminBorder p-6 sm:p-8 shadow-xl space-y-5">
                             <h4 class="text-sm font-bold text-roast-950 uppercase tracking-wider border-b border-adminBorder pb-3">Pricing & Deposit</h4>
                             <div class="grid sm:grid-cols-2 gap-4">
-                                <div>
+                                <!-- Per-class fee settings -->
+                            <div id="fcs-class-tabs" class="flex flex-wrap gap-2 mb-1"></div>
+                            <input type="hidden" id="fcs-active-class">
+                            <div>
                                     <label class="block font-semibold text-roast-300 uppercase mb-1">Class Fee (RM)</label>
                                     <input type="number" step="0.01" id="fcs-fee" required oninput="updateFixedClassPreview()" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
                                 </div>
-                                <div>
-                                    <label class="block font-semibold text-roast-300 uppercase mb-1">Deposit Required (%)</label>
-                                    <input type="number" min="0" max="100" id="fcs-deposit-pct" required oninput="updateFixedClassPreview()" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                            <div>
+                                <label class="block font-semibold text-roast-300 uppercase mb-1">Payment mode</label>
+                                <div class="flex gap-3">
+                                    <label class="flex items-center gap-2 text-xs text-slate-700 cursor-pointer"><input type="radio" name="fcs-pay-mode" id="fcs-mode-deposit" value="deposit" onchange="updateFixedClassPreview()" checked> Deposit (partial payment)</label>
+                                    <label class="flex items-center gap-2 text-xs text-slate-700 cursor-pointer"><input type="radio" name="fcs-pay-mode" id="fcs-mode-full" value="full" onchange="updateFixedClassPreview()"> Full payment</label>
                                 </div>
                             </div>
+                                <div>
+                                    <label class="block font-semibold text-roast-300 uppercase mb-1">Deposit Required (%) <span id="fcs-pct-label" class="normal-case text-roast-400 font-normal">— ignored for full payment</span></label>
+                                    <input type="number" min="0" max="100" id="fcs-deposit-pct" required oninput="updateFixedClassPreview()" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                                </div>
                             <div class="bg-adminBg rounded-xl p-4 border border-adminBorder flex items-center justify-between">
                                 <span class="text-roast-400 uppercase tracking-wider text-[10px]">Deposit Amount (calculated)</span>
                                 <span id="fcs-deposit-preview" class="text-amberGold font-bold text-sm">RM 0.00</span>
@@ -295,7 +304,7 @@
             </div>
 
             <!-- TAB 5: MANAGE BLOG -->
-            <div id="view-blog" class="admin-view space-y-6 hidden">
+            <div id="view-blog" class="admin-view space-y-6 hidden" style="display:none">
                 <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
                     <div>
                         <span class="text-xs font-bold tracking-widest text-amberGold uppercase">Stories & Culture</span>
@@ -322,7 +331,7 @@
             </div>
 
             <!-- TAB: ADMIN ACCOUNTS -->
-            <div id="view-admins" class="admin-view space-y-6 hidden">
+            <div id="view-admins" class="admin-view space-y-6 hidden" style="display:none">
                 <div><span class="text-[11px] font-extrabold tracking-[0.18em] text-amberGold uppercase">Access</span><h3 class="text-2xl font-extrabold text-slate-900 font-serif mt-1">Admin Accounts</h3><p class="text-xs text-slate-500 mt-1">People who can sign in to this console.</p></div>
                 <div class="grid lg:grid-cols-5 gap-6">
                     <div class="lg:col-span-3 bg-white rounded-3xl border border-slate-200 shadow-sm p-5 sm:p-6"><h4 class="font-serif text-base font-bold text-slate-900 mb-3">Current admins</h4><div id="admin-list" class="divide-y divide-slate-100"></div></div>
@@ -488,14 +497,21 @@
         let activeStockRow = null;
 
         // ===================== TABS =====================
-        const TABS = [['fixed', 'fixedclass', 'Fixed Class Settings', 'fa-sliders'], ['inventory', 'inventory', 'Inventory', 'fa-boxes-stacked'], ['blog', 'blog', 'Announcements', 'fa-bullhorn'], ['admins', 'admins', 'Admin Accounts', 'fa-user-shield']];
+        const TABS = [
+            ['fixed', 'fixedclass', 'Fixed Class Settings', 'fa-sliders'],
+            ...(AdminShell.on('shop') ? [['inventory', 'inventory', 'Inventory', 'fa-boxes-stacked']] : []),
+            ['blog', 'blog', 'Announcements', 'fa-bullhorn'],
+            ['admins', 'admins', 'Admin Accounts', 'fa-user-shield']
+        ];
         function showTab(key) {
             const t = TABS.find(x => x[0] === key) || TABS[0];
-            document.querySelectorAll('.admin-view').forEach(el => el.classList.add('hidden'));
-            document.getElementById('view-' + t[1]).classList.remove('hidden');
+            document.querySelectorAll('.admin-view').forEach(el => { el.classList.add('hidden'); el.style.display = 'none'; });
+            const activeView = document.getElementById('view-' + t[1]);
+            if (activeView) { activeView.classList.remove('hidden'); activeView.style.display = ''; }
             document.getElementById('manage-tabs').innerHTML = TABS.map(x => '<a href="admin-manage.html?tab=' + x[0] + '" class="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all ' + (x[0] === t[0] ? 'bg-amberGold text-white shadow' : 'text-slate-600 hover:bg-slate-100') + '"><i class="fa-solid ' + x[3] + '"></i>' + x[2] + '</a>').join('');
             if (t[0] === 'fixed') loadFixedClassSettingsIntoForm();
             if (t[0] === 'admins') renderAdmins();
+            if (t[0] === 'blog') { loadBlogPosts(); renderBlogTable(); }
         }
         function showAdminToast(msg) { AdminShell.toast(msg); }
 
@@ -555,6 +571,28 @@
             }
         }
 
+        function fcsRenderClassTabs() {
+            const openClasses = (NBCA_CFG.CLASSES || []).filter(c => c.open);
+            const active = document.getElementById('fcs-active-class').value || (openClasses[0] || {}).id || '';
+            if (!document.getElementById('fcs-active-class').value && openClasses.length) document.getElementById('fcs-active-class').value = openClasses[0].id;
+            document.getElementById('fcs-class-tabs').innerHTML = openClasses.map(c =>
+                '<button type="button" onclick="fcsSelectClass(\'' + AdminShell.esc(c.id) + '\')" class="px-3 py-1.5 rounded-full text-xs font-bold border transition-all ' + (c.id === active ? 'bg-amberGold text-white border-amberGold shadow' : 'bg-white text-slate-600 border-slate-200 hover:border-amberGold') + '">' + AdminShell.esc(c.label) + '</button>'
+            ).join('');
+        }
+
+        function fcsSelectClass(id) {
+            document.getElementById('fcs-active-class').value = id;
+            const s = loadFixedClassSettings();
+            const cls = s.classes && s.classes[id];
+            document.getElementById('fcs-fee').value = cls ? cls.fee : s.fee;
+            document.getElementById('fcs-deposit-pct').value = cls ? cls.depositPct : s.depositPct;
+            const mode = cls ? (cls.paymentMode || 'deposit') : (s.paymentMode || 'deposit');
+            document.getElementById('fcs-mode-deposit').checked = mode === 'deposit';
+            document.getElementById('fcs-mode-full').checked = mode === 'full';
+            fcsRenderClassTabs();
+            updateFixedClassPreview();
+        }
+
         function loadFixedClassSettingsIntoForm() {
             const s = loadFixedClassSettings();
             document.getElementById('fcs-name').value = s.name;
@@ -562,13 +600,14 @@
             document.getElementById('fcs-image').value = s.image;
             document.getElementById('fcs-image-filename').innerText = s.image ? 'Current image (upload a new one to replace)' : 'Choose an image to upload';
             document.getElementById('fcs-image-file').value = '';
-            document.getElementById('fcs-morning').value = NBCA_CFG.FC_SESSIONS[0];
-            document.getElementById('fcs-afternoon').value = NBCA_CFG.FC_SESSIONS[1];
-            document.getElementById('fcs-closed-day').value = '5';
-            ['fcs-morning', 'fcs-afternoon'].forEach(id => { const el = document.getElementById(id); el.readOnly = true; el.classList.add('opacity-70', 'cursor-not-allowed'); });
-            const cd = document.getElementById('fcs-closed-day'); cd.disabled = true; cd.classList.add('opacity-70', 'cursor-not-allowed');
-            document.getElementById('fcs-fee').value = s.fee;
-            document.getElementById('fcs-deposit-pct').value = s.depositPct;
+            document.getElementById('fcs-morning').value = s.morningSession || NBCA_CFG.FC_SESSIONS[0] || '';
+            document.getElementById('fcs-afternoon').value = s.afternoonSession || NBCA_CFG.FC_SESSIONS[1] || '';
+            document.getElementById('fcs-closed-day').value = s.closedDay !== undefined ? String(s.closedDay) : '5';
+            fcsRenderClassTabs();
+            const openClasses = (NBCA_CFG.CLASSES || []).filter(c => c.open);
+            const firstId = (openClasses[0] || {}).id || '';
+            if (firstId) fcsSelectClass(firstId);
+            else { document.getElementById('fcs-fee').value = s.fee; document.getElementById('fcs-deposit-pct').value = s.depositPct; }
             updateFixedClassPreview();
         }
 
@@ -595,26 +634,27 @@
         const FCS_DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
         function updateFixedClassPreview() {
-            const name = document.getElementById('fcs-name').value || 'Coffee Fundamentals — Daily Class';
-            const description = document.getElementById('fcs-description').value || 'Hands-on brewing basics for beginners.';
+            const name = document.getElementById('fcs-name').value || 'Daily Class';
+            const description = document.getElementById('fcs-description').value || '';
             const image = document.getElementById('fcs-image').value;
             const morning = document.getElementById('fcs-morning').value || '10:00 AM – 12:00 PM';
             const afternoon = document.getElementById('fcs-afternoon').value || '2:00 PM – 4:00 PM';
             const closedDay = 'Friday & Saturday';
             const fee = parseFloat(document.getElementById('fcs-fee').value) || 0;
             const pct = parseFloat(document.getElementById('fcs-deposit-pct').value) || 0;
-            const deposit = (fee * pct / 100);
-
-            document.getElementById('fcs-deposit-preview').innerText = `RM ${deposit.toFixed(2)}`;
-
+            const mode = document.querySelector('input[name="fcs-pay-mode"]:checked') ? document.querySelector('input[name="fcs-pay-mode"]:checked').value : 'deposit';
+            const deposit = mode === 'full' ? fee : (fee * pct / 100);
+            const pctLabel = document.getElementById('fcs-pct-label');
+            if (pctLabel) pctLabel.className = 'normal-case font-normal ' + (mode === 'full' ? 'text-roast-300 line-through' : 'text-roast-400');
+            document.getElementById('fcs-deposit-preview').innerText = mode === 'full' ? 'Full: RM ' + fee.toFixed(2) : 'RM ' + deposit.toFixed(2);
             document.getElementById('fcs-preview-name').innerText = name;
             document.getElementById('fcs-preview-description').innerText = description;
             if (image) document.getElementById('fcs-preview-image').src = image;
             document.getElementById('fcs-preview-morning').innerText = morning;
             document.getElementById('fcs-preview-afternoon').innerText = afternoon;
             document.getElementById('fcs-preview-closed-day').innerText = closedDay;
-            document.getElementById('fcs-preview-fee').innerText = `RM ${fee.toFixed(2)}`;
-            document.getElementById('fcs-preview-deposit').innerText = `RM ${deposit.toFixed(2)}`;
+            document.getElementById('fcs-preview-fee').innerText = 'RM ' + fee.toFixed(2);
+            document.getElementById('fcs-preview-deposit').innerText = mode === 'full' ? 'Full payment' : 'RM ' + deposit.toFixed(2);
         }
 
         function saveFixedClassSettings(e) {
@@ -624,6 +664,13 @@
                 AdminShell.toast('Please upload a cover image for the daily class.');
                 return;
             }
+            const activeClassId = document.getElementById('fcs-active-class').value;
+            const existing = loadFixedClassSettings();
+            const fee = parseFloat(document.getElementById('fcs-fee').value) || 0;
+            const depositPct = parseFloat(document.getElementById('fcs-deposit-pct').value) || 0;
+            const paymentMode = document.querySelector('input[name="fcs-pay-mode"]:checked') ? document.querySelector('input[name="fcs-pay-mode"]:checked').value : 'deposit';
+            const classes = existing.classes || {};
+            if (activeClassId) classes[activeClassId] = { fee, depositPct, paymentMode };
             const settings = {
                 name: document.getElementById('fcs-name').value.trim(),
                 description: document.getElementById('fcs-description').value.trim(),
@@ -631,8 +678,8 @@
                 morningSession: document.getElementById('fcs-morning').value.trim(),
                 afternoonSession: document.getElementById('fcs-afternoon').value.trim(),
                 closedDay: parseInt(document.getElementById('fcs-closed-day').value),
-                fee: parseFloat(document.getElementById('fcs-fee').value) || 0,
-                depositPct: parseFloat(document.getElementById('fcs-deposit-pct').value) || 0
+                fee, depositPct, paymentMode,
+                classes
             };
             try {
                 localStorage.setItem('rp_fixed_class_settings', JSON.stringify(settings));
@@ -640,7 +687,10 @@
                 AdminShell.toast('That image is too large to save. Please try a smaller one.');
                 return;
             }
-            showAdminToast('Fixed Class settings saved. The homepage will reflect these changes.');
+            if (window.NBCA_CFG && settings.morningSession && settings.afternoonSession) {
+                NBCA_CFG.FC_SESSIONS = [settings.morningSession, settings.afternoonSession];
+            }
+            showAdminToast('Fixed Class settings saved. The booking calendar and homepage will reflect these changes.');
         }
 
         // --- EDIT PROFILE MODAL FUNCTIONS ---
@@ -931,7 +981,8 @@
             const stored = localStorage.getItem('rp_blog_posts');
             if (stored && storedVersion === BLOG_DATA_VERSION) {
                 try {
-                    blogPosts = JSON.parse(stored);
+                    const parsed = JSON.parse(stored);
+                    blogPosts = Array.isArray(parsed) && parsed.length > 0 ? parsed : DEFAULT_BLOG_POSTS.slice();
                 } catch (e) {
                     blogPosts = DEFAULT_BLOG_POSTS.slice();
                 }
@@ -1102,7 +1153,35 @@
                 showAdminToast('Announcement successfully deleted.');
             }
         }
-        // ===================== END BLOG POST MANAGEMENT ===================== 
+        // ===================== END BLOG POST MANAGEMENT =====================
+
+        // Fallback init: if admin-ready somehow never fires (or throws mid-way), initialize
+        // the active tab directly. Registered after all functions are defined.
+        (function () {
+            var _tab = new URLSearchParams(location.search).get('tab') || 'fixed';
+            function _tryInit() {
+                try {
+                    var tabs = document.getElementById('manage-tabs');
+                    if (!tabs) return;
+                    if (!tabs.innerHTML.trim()) {
+                        // admin-ready never fired — initialize from scratch
+                        showTab(_tab);
+                    } else if (_tab === 'blog') {
+                        // Tab nav rendered but blog content might not have
+                        var tbody = document.getElementById('blog-tbody');
+                        if (tbody && !tbody.innerHTML.trim()) {
+                            loadBlogPosts();
+                            renderBlogTable();
+                        }
+                    }
+                } catch (e) {}
+            }
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', _tryInit);
+            } else {
+                _tryInit();
+            }
+        })();
 
         // --- ORDER MANAGEMENT FUNCTIONS ---
 

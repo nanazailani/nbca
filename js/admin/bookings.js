@@ -10,14 +10,22 @@
     const find = id => S.regs().find(r => r.id === id);
     const upd = (id, patch) => { S.update(D.K.regs, id, patch); render(); };
 
+    function initClassFilter() {
+        const sel = $('class-filter');
+        if (!sel || sel.options.length > 1) return;
+        (CFG.CLASSES || []).filter(c => c.open).forEach(c => { const o = document.createElement('option'); o.value = c.id; o.textContent = c.label; sel.appendChild(o); });
+    }
+
     function filtered() {
         const q = ($('q').value || '').toLowerCase().trim(), scope = $('scope').value;
+        const classF = ($('class-filter') ? $('class-filter').value : '') || '';
         return S.regs().filter(r => {
             if (statusF !== 'all' && statusOf(r) !== statusF) return false;
+            if (classF && r.classId !== classF) return false;
             if (slot) { if (r.preferredDate !== slot.date || (slot.session && r.session !== slot.session)) return false; }
             else if (scope === 'upcoming' && r.preferredDate < todayStr) return false;
             else if (scope === 'past' && r.preferredDate >= todayStr) return false;
-            return !q || [r.name, r.ic, r.phone, r.email, r.cafe, r.from].some(v => (v || '').toLowerCase().includes(q));
+            return !q || [r.name, r.ic, r.phone, r.email, r.cafe, r.from, r.className].some(v => (v || '').toLowerCase().includes(q));
         }).sort((a, b) => $('scope').value === 'past' ? b.preferredDate.localeCompare(a.preferredDate) : a.preferredDate.localeCompare(b.preferredDate) || a.session.localeCompare(b.session));
     }
 
@@ -32,19 +40,23 @@
 
     function card(r) {
         const st = statusOf(r), paid = r.depositStatus === 'Paid', ins = S.instructorOf(r.preferredDate, r.session);
-        const wa = S.waLink(r.phone, 'Hi ' + r.name + ', regarding your Nb.CA Academy class on ' + r.preferredDate + ' (' + r.session + '). ');
+        const isFullPay = r.paymentMode === 'full';
+        const payPill = paid ? (isFullPay ? UI.pill('Paid', 'good') : UI.pill('Deposit paid', 'good')) : (isFullPay ? UI.pill('Awaiting payment', 'warn') : UI.pill('Deposit unpaid', 'warn'));
+        const balanceRow = !isFullPay && paid ? '<div class="text-slate-500 text-[10px] mt-0.5">Balance on class day: ' + money(r.classFee - r.deposit) + '</div>' : '';
+        const classLabel = r.className ? UI.pill(r.className, 'info') : '';
+        const wa = S.waLink(r.phone, 'Hi ' + r.name + ', regarding your Nb.CA Academy ' + (r.className || 'class') + ' on ' + r.preferredDate + ' (' + r.session + '). ');
         const actions = [];
         if (st === 'confirm') actions.push(UI.btn('<i class="fa-solid fa-check mr-1.5"></i>Admit', "Bookings.admit('" + r.id + "')", 'good'));
-        if (!paid && st !== 'cancelled') actions.push(UI.btn('Mark deposit paid', "Bookings.markPaid('" + r.id + "')", 'primary'));
+        if (!paid && st !== 'cancelled') actions.push(UI.btn(isFullPay ? 'Mark as paid' : 'Mark deposit paid', "Bookings.markPaid('" + r.id + "')", 'primary'));
         if (st !== 'cancelled' && st !== 'reschedule') actions.push(UI.btn('Reschedule', "Bookings.reschedule('" + r.id + "')", 'ghost'));
         if (st === 'reschedule' || st === 'cancelled') actions.push(UI.btn('Reopen', "Bookings.reopen('" + r.id + "')", 'ghost'));
         if (st !== 'cancelled') actions.push(UI.btn('Cancel', "Bookings.cancel('" + r.id + "')", 'danger'));
         return '<article class="bg-white rounded-3xl border border-slate-200 shadow-sm p-5 sm:p-6 hover:shadow-md transition-all"><div class="flex flex-col lg:flex-row lg:items-start gap-5">' +
-            '<div class="flex items-start gap-4 flex-1 min-w-0">' + UI.avatar(r.name) + '<div class="min-w-0 space-y-1.5"><div class="flex flex-wrap items-center gap-2"><strong class="text-slate-900 text-base">' + esc(r.name) + '</strong>' + UI.pill(STATUS[st][0], STATUS[st][1]) + UI.pill(paid ? 'Deposit paid' : 'Deposit unpaid', paid ? 'good' : 'warn') + (r.voucher ? UI.pill('Voucher ' + r.voucher.code, 'info') : '') + '</div>' +
+            '<div class="flex items-start gap-4 flex-1 min-w-0">' + UI.avatar(r.name) + '<div class="min-w-0 space-y-1.5"><div class="flex flex-wrap items-center gap-2"><strong class="text-slate-900 text-base">' + esc(r.name) + '</strong>' + UI.pill(STATUS[st][0], STATUS[st][1]) + payPill + classLabel + (r.voucher ? UI.pill('Voucher ' + r.voucher.code, 'info') : '') + '</div>' +
             '<div class="flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-slate-500"><span><i class="fa-solid fa-id-card mr-1.5 text-slate-400"></i>' + esc(r.ic || '-') + '</span><span><i class="fa-solid fa-phone mr-1.5 text-slate-400"></i>' + esc(r.phone || '-') + '</span><span><i class="fa-solid fa-envelope mr-1.5 text-slate-400"></i>' + esc(r.email) + '</span>' + (r.from ? '<span><i class="fa-solid fa-location-dot mr-1.5 text-slate-400"></i>' + esc(r.from) + '</span>' : '') + (r.cafe ? '<span><i class="fa-solid fa-mug-hot mr-1.5 text-slate-400"></i>' + esc(r.cafe) + '</span>' : '') + '</div></div></div>' +
             '<div class="lg:w-72 shrink-0 rounded-2xl bg-slate-50 border border-slate-200 p-4 space-y-1 text-xs"><div class="flex items-center gap-2 font-bold text-slate-900"><i class="fa-solid fa-calendar-day text-amberGold"></i>' + S.fmtDate(r.preferredDate, { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }) + '</div><div class="text-slate-600"><i class="fa-solid fa-clock text-slate-400 mr-1.5"></i>' + esc(r.session) + '</div>' +
             '<div class="text-slate-600"><i class="fa-solid fa-user-tie text-slate-400 mr-1.5"></i>' + (ins ? esc(ins.name) : '<a href="admin-schedule.html" class="text-amber-600 font-semibold hover:underline">No instructor assigned</a>') + '</div>' +
-            '<div class="text-slate-500 pt-1 border-t border-slate-200 mt-2">Deposit ' + money(r.deposit) + ' of ' + money(r.classFee) + '</div></div></div>' +
+            '<div class="text-slate-500 pt-1 border-t border-slate-200 mt-2">' + (isFullPay ? 'Full payment: ' + money(r.classFee) : 'Deposit ' + money(r.deposit) + ' of ' + money(r.classFee)) + '</div>' + balanceRow + '</div></div>' +
             '<div class="flex flex-wrap items-center gap-2 mt-4 pt-4 border-t border-slate-100">' + actions.join('') + '<span class="ml-auto flex flex-wrap gap-2">' + UI.btn('<i class="fa-solid fa-copy mr-1.5"></i>Copy name &amp; IC', "Bookings.copyId('" + r.id + "')", 'ghost') + (wa ? '<a href="' + wa + '" target="_blank" rel="noopener" class="px-3.5 py-2 rounded-xl text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 transition-all"><i class="fa-brands fa-whatsapp mr-1.5"></i>WhatsApp</a>' : '') + '</span></div></article>';
     }
 
@@ -98,9 +110,9 @@
                 S.downloadCsv('certificate-list.csv', [['Name', 'IC / Passport', 'Class date', 'Session', 'Instructor']].concat(rows.map(r => [r.name, r.ic, r.preferredDate, r.session, (S.instructorOf(r.preferredDate, r.session) || {}).name || ''])));
             } else {
                 const rows = filtered(); if (!rows.length) { S.toast('Nothing to export for this filter.'); return; }
-                S.downloadCsv('class-bookings.csv', [['Name', 'IC / Passport', 'Phone', 'Email', 'Cafe', 'From', 'Date', 'Session', 'Instructor', 'Deposit', 'Deposit status', 'Status']].concat(rows.map(r => [r.name, r.ic, r.phone, r.email, r.cafe, r.from, r.preferredDate, r.session, (S.instructorOf(r.preferredDate, r.session) || {}).name || '', r.deposit, r.depositStatus, STATUS[statusOf(r)][0]])));
+                S.downloadCsv('class-bookings.csv', [['Class', 'Name', 'IC / Passport', 'Phone', 'Email', 'Cafe', 'From', 'Date', 'Session', 'Instructor', 'Payment mode', 'Amount due', 'Deposit status', 'Status', 'Balance due']].concat(rows.map(r => [r.className || '', r.name, r.ic, r.phone, r.email, r.cafe, r.from, r.preferredDate, r.session, (S.instructorOf(r.preferredDate, r.session) || {}).name || '', r.paymentMode || 'deposit', r.paymentMode === 'full' ? r.classFee : r.deposit, r.depositStatus, STATUS[statusOf(r)][0], r.paymentMode === 'full' ? 0 : (r.classFee - r.deposit)])));
             }
         }
     };
-    window.addEventListener('admin-ready', () => { if (slot) $('scope').value = 'all'; render(); });
+    window.addEventListener('admin-ready', () => { initClassFilter(); if (slot) $('scope').value = 'all'; render(); });
 })();

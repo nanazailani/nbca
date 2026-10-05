@@ -3,21 +3,58 @@
  * Page markup needs: <body data-page="dashboard" data-title="..." data-sub="...">, #m-sidebar, #m-overlay, #m-topbar, #m-bottomnav.
  * Session = localStorage.rp_logged_user, account record = rp_user (see auth.html). */
 (function () {
-    const navGroups = () => [
-        { group: 'Member', items: [
+    // ---- feature-flag helper (window-level so page scripts can call it) ----
+    window.NBCA_FEATURE = function (f) {
+        return !!(window.NBCA_CFG && NBCA_CFG.FEATURES && NBCA_CFG.FEATURES[f]);
+    };
+
+    // Off-feature page guard: redirect before rendering
+    const PAGE_FEATURES = {
+        workshops: 'workshops', beans: 'shop', merch: 'shop', orders: 'shop', membership: 'rewards'
+    };
+    const PAGE_FALLBACK = {
+        workshops: 'classes.html'
+    };
+    const currentPage = document.body.dataset.page || '';
+    if (PAGE_FEATURES[currentPage] && !NBCA_FEATURE(PAGE_FEATURES[currentPage])) {
+        window.location.replace(PAGE_FALLBACK[currentPage] || 'dashboard.html');
+        return; // stop shell from rendering
+    }
+
+    const navGroups = () => {
+        const items1 = [
             { id: 'dashboard', label: 'Dashboard', icon: 'fa-house', href: 'dashboard.html' },
-            { id: 'classes', label: 'My Classes', icon: 'fa-graduation-cap', href: 'classes.html', badge: 'classes' },
-            { id: 'orders', label: 'My Orders', icon: 'fa-box-open', href: 'orders.html' },
-            { id: 'membership', label: 'Membership', icon: 'fa-crown', href: 'membership.html', pill: points() + ' pts' },
-            { id: 'profile', label: 'My Profile', icon: 'fa-user', href: 'profile.html' }
-        ]},
-        { group: 'Discover', items: [
-            { id: 'fixed', label: 'Fixed Classes', icon: 'fa-calendar-days', href: 'book-class.html' },
-            { id: 'workshops', label: 'Workshops', icon: 'fa-chalkboard-user', href: 'workshops.html' },
-            { id: 'beans', label: 'Coffee Beans', icon: 'fa-mug-hot', href: 'shop.html?tab=beans' },
-            { id: 'merch', label: 'Merchandise', icon: 'fa-shirt', href: 'shop.html?tab=merch' }
-        ]}
-    ];
+            { id: 'classes', label: 'My Classes', icon: 'fa-graduation-cap', href: 'classes.html', badge: 'classes' }
+        ];
+        if (NBCA_FEATURE('consultation')) {
+            items1.push({ id: 'my-consult', label: 'My Consultations', icon: 'fa-calendar-pen', href: 'consultation.html', badge: 'consult' });
+        }
+        if (NBCA_FEATURE('shop')) {
+            items1.push({ id: 'orders', label: 'My Orders', icon: 'fa-box-open', href: 'orders.html' });
+        }
+        if (NBCA_FEATURE('rewards')) {
+            items1.push({ id: 'membership', label: 'Membership', icon: 'fa-crown', href: 'membership.html', pill: points() + ' pts' });
+        }
+        items1.push({ id: 'profile', label: 'My Profile', icon: 'fa-user', href: 'profile.html' });
+
+        const items2 = [
+            { id: 'fixed', label: 'Fixed Classes', icon: 'fa-calendar-days', href: 'book-class.html' }
+        ];
+        if (NBCA_FEATURE('consultation')) {
+            items2.push({ id: 'consult-new', label: 'Request Consultation', icon: 'fa-comments', href: 'consultation.html?new=1' });
+        }
+        if (NBCA_FEATURE('workshops')) {
+            items2.push({ id: 'workshops', label: 'Workshops', icon: 'fa-chalkboard-user', href: 'workshops.html' });
+        }
+        if (NBCA_FEATURE('shop')) {
+            items2.push({ id: 'beans', label: 'Coffee Beans', icon: 'fa-mug-hot', href: 'shop.html?tab=beans' });
+            items2.push({ id: 'merch', label: 'Merchandise', icon: 'fa-shirt', href: 'shop.html?tab=merch' });
+        }
+        return [
+            { group: 'Member', items: items1 },
+            { group: 'Discover', items: items2 }
+        ];
+    };
 
     const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
@@ -50,11 +87,20 @@
     const u = user();
     NBCA_DATA.activity.touch(u.email);          // feeds the admin's active-user numbers
 
+    function consultBadge() {
+        if (!NBCA_FEATURE('consultation')) return 0;
+        try { return NBCA_DATA.consults.proposalCount(u.email); } catch (e) { return 0; }
+    }
+
     function navItem(it) {
         const active = it.id === page;
         let extra = '';
         if (it.badge === 'classes') {
             const n = registrations().filter(r => r.classStatus === 'Reschedule').length;
+            if (n) extra = '<span class="ml-auto min-w-[20px] h-5 px-1.5 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center">' + n + '</span>';
+        }
+        if (it.badge === 'consult') {
+            const n = consultBadge();
             if (n) extra = '<span class="ml-auto min-w-[20px] h-5 px-1.5 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center">' + n + '</span>';
         }
         if (it.pill) extra = '<span class="ml-auto whitespace-nowrap text-[10px] font-bold px-2 py-0.5 rounded-full ' + (active ? 'bg-white text-amberGold' : 'bg-amberGold/10 text-amberGold') + '">' + it.pill + '</span>';
@@ -103,6 +149,12 @@
         const el = document.getElementById('m-topbar');
         if (!el) return;
         el.className = 'sticky top-0 z-30 h-16 lg:h-20 bg-roast-50/85 backdrop-blur-md border-b border-roast-200 px-4 sm:px-6 lg:px-10 flex items-center justify-between gap-3';
+        const pointsChip = NBCA_FEATURE('rewards')
+            ? '<a href="membership.html" class="hidden sm:flex items-center gap-2 px-3.5 py-2 rounded-full bg-white border border-roast-200 text-xs font-bold text-roast-800 hover:border-amberGold transition-all"><i class="fa-solid fa-coins text-amberGold"></i> ' + points() + ' pts</a>'
+            : '';
+        const cartBtn = NBCA_FEATURE('shop')
+            ? '<button onclick="openCart()" class="relative w-10 h-10 rounded-full bg-white border border-roast-200 text-roast-800 hover:border-amberGold flex items-center justify-center" aria-label="Cart"><i class="fa-solid fa-bag-shopping text-sm"></i><span id="cart-badge" class="hidden absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-amberGold text-white text-[10px] font-bold items-center justify-center">0</span></button>'
+            : '';
         el.innerHTML =
             '<div class="flex items-center gap-3 min-w-0">' +
                 '<button onclick="MemberShell.openMenu()" class="lg:hidden w-10 h-10 rounded-xl bg-white border border-roast-200 text-roast-800 flex items-center justify-center shadow-sm" aria-label="Open menu"><i class="fa-solid fa-bars"></i></button>' +
@@ -110,9 +162,9 @@
                 '<p class="hidden sm:block text-[11px] text-roast-500 truncate">' + esc(document.body.dataset.sub || '') + '</p></div>' +
             '</div>' +
             '<div class="flex items-center gap-2 sm:gap-3 shrink-0">' +
-                '<a href="membership.html" class="hidden sm:flex items-center gap-2 px-3.5 py-2 rounded-full bg-white border border-roast-200 text-xs font-bold text-roast-800 hover:border-amberGold transition-all"><i class="fa-solid fa-coins text-amberGold"></i> ' + points() + ' pts</a>' +
+                pointsChip +
                 '<a href="book-class.html" class="flex items-center gap-2 px-4 py-2.5 rounded-full bg-amberGold hover:bg-royalBlue text-white text-xs font-bold shadow-md transition-all"><i class="fa-solid fa-user-pen text-[11px]"></i> <span class="hidden xs:inline sm:inline">Book a Class</span></a>' +
-                '<button onclick="openCart()" class="relative w-10 h-10 rounded-full bg-white border border-roast-200 text-roast-800 hover:border-amberGold flex items-center justify-center" aria-label="Cart"><i class="fa-solid fa-bag-shopping text-sm"></i><span id="cart-badge" class="hidden absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-amberGold text-white text-[10px] font-bold items-center justify-center">0</span></button>' +
+                cartBtn +
                 '<button onclick="openProfileModal()" class="w-10 h-10 rounded-full bg-amberGold text-white font-bold text-xs flex items-center justify-center shadow-md" aria-label="Profile">' + esc(initials(u.name)) + '</button>' +
             '</div>';
     }
@@ -123,11 +175,18 @@
         el.className = 'lg:hidden fixed bottom-0 inset-x-0 z-30 bg-white/95 backdrop-blur border-t border-roast-200 flex items-stretch justify-around shadow-[0_-8px_24px_rgba(15,23,42,0.08)]';
         el.style.paddingBottom = 'env(safe-area-inset-bottom)';
         const tabs = [
-            ['dashboard', 'Home', 'fa-house', 'dashboard.html'],
-            ['classes', 'Classes', 'fa-graduation-cap', 'classes.html'],
-            ['orders', 'Orders', 'fa-box-open', 'orders.html'],
-            ['membership', 'Rewards', 'fa-crown', 'membership.html']
+            ['dashboard', 'Home', 'fa-house', 'dashboard.html']
         ];
+        tabs.push(['classes', 'Classes', 'fa-graduation-cap', 'classes.html']);
+        if (NBCA_FEATURE('consultation')) {
+            tabs.push(['my-consult', 'Consult', 'fa-comments', 'consultation.html']);
+        }
+        if (NBCA_FEATURE('shop')) {
+            tabs.push(['orders', 'Orders', 'fa-box-open', 'orders.html']);
+        }
+        if (NBCA_FEATURE('rewards')) {
+            tabs.push(['membership', 'Rewards', 'fa-crown', 'membership.html']);
+        }
         el.innerHTML = tabs.map(t => {
             const on = t[0] === page;
             return '<a href="' + t[3] + '" class="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 ' + (on ? 'text-amberGold' : 'text-roast-500') + '">' +
@@ -157,9 +216,17 @@
         while (wrap.firstChild) document.body.appendChild(wrap.firstChild);
     }
 
+    // Apply data-feature attribute: remove elements whose feature is off (member pages)
+    function applyFeatureFlags() {
+        document.querySelectorAll('[data-feature]').forEach(el => {
+            const f = el.dataset.feature;
+            if (!NBCA_FEATURE(f)) el.remove();
+        });
+    }
+
     // ---- public helpers (used by inline handlers + page scripts) ----
     window.MemberShell = {
-        user, registrations, esc, initials,
+        user, registrations, esc, initials, consultBadge,
         openMenu() {
             document.getElementById('m-sidebar').classList.remove('-translate-x-full');
             const o = document.getElementById('m-overlay');
@@ -377,6 +444,9 @@
         overlay.onclick = MemberShell.closeMenu;
     }
     document.addEventListener('keydown', e => { if (e.key === 'Escape') { MemberShell.closeMenu(); closeProfileModal(); closeCart(); } });
+    // Apply data-feature attribute: remove elements whose feature is off
+    const doFlags = () => applyFeatureFlags();
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', doFlags); else doFlags();
     // after the page's own scripts have registered their listeners
     const fireReady = () => window.dispatchEvent(new Event('member-ready'));
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fireReady); else fireReady();

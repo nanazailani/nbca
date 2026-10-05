@@ -2,7 +2,11 @@
 (function () {
     const S = AdminShell, D = NBCA_DATA, CFG = S.CFG, esc = S.esc, $ = id => document.getElementById(id);
     let tab = UI.param('tab') || 'fixed', onlyBooked = false;
-    const TABS = [['fixed', 'Daily class', 'fa-calendar-days'], ['workshops', 'Workshops', 'fa-chalkboard-user'], ['instructors', 'Instructors', 'fa-user-tie']];
+    const TABS = [
+        ['fixed', 'Daily class', 'fa-calendar-days'],
+        ...(S.on('workshops') ? [['workshops', 'Workshops', 'fa-chalkboard-user']] : []),
+        ['instructors', 'Instructors', 'fa-user-tie']
+    ];
 
     // <select> of instructors; keeps an inactive assignee visible so nothing silently disappears.
     function instructorSelect(current, onchange, label) {

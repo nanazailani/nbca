@@ -230,6 +230,76 @@
         defaults: DEFAULT_SITE
     };
 
+    // ============================ CONSULTATIONS ============================
+    // Status flow:
+    //   Requested -> Accepted | Alternative Proposed | Declined
+    //   Alternative Proposed -> Accepted (customer agrees) | Declined (customer refuses)
+    //   Requested | Accepted -> Cancelled (customer)
+    //   Accepted -> Completed (admin)
+    const consults = {
+        list() { return read('rp_consultations', []); },
+        get(id) { return consults.list().find(c => c.id === id) || null; },
+        forMember(email) { const e = norm(email); return consults.list().filter(c => c.email === e); },
+        typeOf(typeId) { return ((window.NBCA_CFG || {}).CONSULT_TYPES || []).find(t => t.id === typeId) || null; },
+        _save(all) { write('rp_consultations', all); },
+        _hist(c, action, by, note) {
+            c.history = c.history || [];
+            c.history.push({ action, by: by || 'system', note: note || '', at: nowIso() });
+            c.updatedAt = nowIso();
+        },
+        create({ name, email, phone, business, typeId, mode, preferredDate, preferredTime, altDate, altTime, notes }) {
+            const type = consults.typeOf(typeId);
+            const all = consults.list();
+            const ref = 'CR-' + String(all.length + 1).padStart(5, '0');
+            const c = { id: uid('C'), ref, name, email: norm(email), phone, business: business || '', typeId, typeLabel: type ? type.label : typeId, duration: type ? type.duration : '', mode, preferredDate, preferredTime, altDate: altDate || '', altTime: altTime || '', notes: notes || '', status: 'Requested', confirmedDate: '', confirmedTime: '', adminNote: '', history: [], createdAt: nowIso(), updatedAt: nowIso() };
+            consults._hist(c, 'Requested', 'member');
+            all.push(c);
+            consults._save(all);
+            return c;
+        },
+        _patch(id, patch, action, by, note) {
+            let out = null;
+            const all = consults.list().map(c => {
+                if (c.id !== id) return c;
+                out = { ...c, ...patch };
+                consults._hist(out, action, by, note);
+                return out;
+            });
+            if (out) consults._save(all);
+            return out;
+        },
+        accept(id, adminNote) {
+            return consults._patch(id, { status: 'Accepted', adminNote: adminNote || '' }, 'Accepted', 'admin', adminNote);
+        },
+        propose(id, altDate, altTime, adminNote) {
+            return consults._patch(id, { status: 'Alternative Proposed', altDate, altTime, adminNote: adminNote || '' }, 'Alternative Proposed', 'admin', adminNote);
+        },
+        decline(id, reason) {
+            return consults._patch(id, { status: 'Declined', adminNote: reason || '' }, 'Declined', 'admin', reason);
+        },
+        complete(id) {
+            return consults._patch(id, { status: 'Completed' }, 'Completed', 'admin');
+        },
+        agree(id) {
+            const c = consults.get(id);
+            if (!c) return null;
+            return consults._patch(id, { status: 'Accepted', confirmedDate: c.altDate, confirmedTime: c.altTime }, 'Agreed to proposed time', 'member');
+        },
+        reject(id) {
+            return consults._patch(id, { status: 'Declined', adminNote: 'Customer declined the proposed time.' }, 'Declined proposed time', 'member');
+        },
+        cancel(id) {
+            return consults._patch(id, { status: 'Cancelled' }, 'Cancelled', 'member');
+        },
+        pendingCount() {
+            return consults.list().filter(c => c.status === 'Requested').length;
+        },
+        proposalCount(email) {
+            const e = norm(email);
+            return consults.list().filter(c => c.email === e && c.status === 'Alternative Proposed').length;
+        }
+    };
+
     accounts.migrate();
-    window.NBCA_DATA = { K, read, write, uid, norm, dayOf, accounts, session, activity, instructors, assign, slots, loyalty, site };
+    window.NBCA_DATA = { K, read, write, uid, norm, dayOf, accounts, session, activity, instructors, assign, slots, loyalty, site, consults };
 })();

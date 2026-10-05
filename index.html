@@ -200,19 +200,21 @@
                         <span class="text-[10px] tracking-widest text-amberGold uppercase">Coffee Education Academy</span> 
                     </div> 
                 </a> 
-                <!-- Desktop Menu --> 
-                <div class="hidden md:flex items-center space-x-8 text-sm font-medium"> 
-                    <a href="#fixed-classes" class="text-roast-800 hover:text-amberGold transition-colors font-bold">Fixed Classes</a> 
-                    <a href="#classes" class="text-roast-800 hover:text-amberGold transition-colors font-bold">Workshops</a> 
-                    <a href="#coffee-beans" class="text-roast-800 hover:text-amberGold transition-colors">Coffee Beans</a> 
-                    <a href="#location" class="text-roast-800 hover:text-amberGold transition-colors">Locations</a> 
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8 text-sm font-medium">
+                    <a href="#class-lineup" class="text-roast-800 hover:text-amberGold transition-colors font-bold">Classes</a>
+                    <a href="#consulting" class="text-roast-800 hover:text-amberGold transition-colors font-bold" data-feature="consultation">Consulting</a>
+                    <a href="#blog" class="text-roast-800 hover:text-amberGold transition-colors">Announcements</a>
+                    <a href="#location" class="text-roast-800 hover:text-amberGold transition-colors">Locations</a>
+                    <a href="#classes" class="text-roast-800 hover:text-amberGold transition-colors" data-feature="workshops">Workshops</a>
+                    <a href="#coffee-beans" class="text-roast-800 hover:text-amberGold transition-colors" data-feature="shop">Coffee Beans</a>
                 </div> 
                 <!-- Right Actions --> 
                 <div class="flex items-center gap-2 sm:gap-4"> 
-                    <!-- Cart Button (Bulat Konsisten) -->
-                    <button onclick="toggleCart()" class="relative w-10 h-10 rounded-full bg-roast-100 hover:bg-roast-200 border border-roast-200 text-roast-900 flex items-center justify-center transition-all shadow-md"> 
-                        <i class="fa-solid fa-bag-shopping text-base"></i> 
-                        <span id="cart-count" class="absolute -top-1 -right-1 bg-amberGold text-roast-50 text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow">0</span> 
+                    <!-- Cart Button (Phase 2: shop) -->
+                    <button onclick="toggleCart()" data-feature="shop" class="relative w-10 h-10 rounded-full bg-roast-100 hover:bg-roast-200 border border-roast-200 text-roast-900 flex items-center justify-center transition-all shadow-md">
+                        <i class="fa-solid fa-bag-shopping text-base"></i>
+                        <span id="cart-count" class="absolute -top-1 -right-1 bg-amberGold text-roast-50 text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow">0</span>
                     </button> 
                     <!-- Login Button / User State --> 
                     <div id="nav-auth-container">
@@ -234,14 +236,15 @@
                 <span class="text-xs uppercase font-bold tracking-widest text-amberGold">Mobile Navigation</span> 
                 <span class="text-[10px] text-roast-600">Nb.CA OS v2.6</span> 
             </div> 
-            <a href="#about" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-800 hover:text-amberGold font-medium border-b border-roast-100/50"><i class="fa-solid fa-circle-info text-amberGold text-xs"></i> About Us</a> 
-            <a href="#team" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-800 hover:text-amberGold font-medium border-b border-roast-100/50"><i class="fa-solid fa-users text-amberGold text-xs"></i> Meet The Team</a> 
-            <a href="#fixed-classes" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-800 hover:text-amberGold font-bold border-b border-roast-100/50"><i class="fa-solid fa-calendar-days text-amberGold text-xs"></i> Fixed Classes</a> 
-            <a href="#classes" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-800 hover:text-amberGold font-bold border-b border-roast-100/50"><i class="fa-solid fa-chalkboard-user text-amberGold text-xs"></i> Workshops</a> 
-            <a href="#coffee-beans" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-800 hover:text-amberGold font-medium border-b border-roast-100/50"><i class="fa-solid fa-mug-hot text-amberGold text-xs"></i> Coffee Beans</a> 
-            <a href="#blog" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-800 hover:text-amberGold font-medium border-b border-roast-100/50"><i class="fa-solid fa-bullhorn text-amberGold text-xs"></i> Announcements</a> 
-            <a href="#merchandise" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-800 hover:text-amberGold font-medium border-b border-roast-100/50"><i class="fa-solid fa-shirt text-amberGold text-xs"></i> Merchandise</a> 
-            <a href="#location" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-800 hover:text-amberGold font-medium"><i class="fa-solid fa-location-dot text-amberGold text-xs"></i> Locations & Outlets</a> 
+            <a href="#about" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-800 hover:text-amberGold font-medium border-b border-roast-100/50"><i class="fa-solid fa-circle-info text-amberGold text-xs"></i> About Us</a>
+            <a href="#team" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-800 hover:text-amberGold font-medium border-b border-roast-100/50"><i class="fa-solid fa-users text-amberGold text-xs"></i> Meet The Team</a>
+            <a href="#class-lineup" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-800 hover:text-amberGold font-bold border-b border-roast-100/50"><i class="fa-solid fa-calendar-days text-amberGold text-xs"></i> Classes</a>
+            <a href="#consulting" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-800 hover:text-amberGold font-bold border-b border-roast-100/50" data-feature="consultation"><i class="fa-solid fa-comments text-amberGold text-xs"></i> Consulting</a>
+            <a href="#blog" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-800 hover:text-amberGold font-medium border-b border-roast-100/50"><i class="fa-solid fa-bullhorn text-amberGold text-xs"></i> Announcements</a>
+            <a href="#location" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-800 hover:text-amberGold font-medium border-b border-roast-100/50"><i class="fa-solid fa-location-dot text-amberGold text-xs"></i> Locations & Outlets</a>
+            <a href="#classes" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-800 hover:text-amberGold font-medium border-b border-roast-100/50" data-feature="workshops"><i class="fa-solid fa-chalkboard-user text-amberGold text-xs"></i> Workshops</a>
+            <a href="#coffee-beans" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-800 hover:text-amberGold font-medium border-b border-roast-100/50" data-feature="shop"><i class="fa-solid fa-mug-hot text-amberGold text-xs"></i> Coffee Beans</a>
+            <a href="#merchandise" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-800 hover:text-amberGold font-medium" data-feature="shop"><i class="fa-solid fa-shirt text-amberGold text-xs"></i> Merchandise</a> 
             <div class="pt-2" id="mobile-auth-container"> 
                 <a href="auth.html" class="w-full py-3 rounded-xl bg-roast-100 border border-roast-300 text-roast-800 font-bold text-xs flex items-center justify-center gap-2 shadow-md"> 
                     <i class="fa-solid fa-user"></i> Sign In / Register 
@@ -276,10 +279,13 @@
                     <p class="hero-anim-3 text-lg text-roast-800 max-w-2xl mx-auto font-medium leading-relaxed" style="text-shadow: 0 1px 12px rgba(248,250,252,0.85);"> 
                         Nb.CA Academy is Malaysia's hands-on coffee education academy — learn brewing, roasting & latte art from certified instructors, hosted at our Sungai Petani studio. 
                     </p> 
-                    <div class="hero-anim-4 flex flex-col sm:flex-row items-center justify-center gap-4"> 
-                        <a href="#classes" class="btn-anim w-full sm:w-auto px-8 py-4 rounded-full bg-amberGold hover:bg-royalBlue text-roast-50 font-bold text-center shadow-lg"> 
-                            <i class="fa-solid fa-chalkboard-user me-2"></i> Browse Classes 
-                        </a> 
+                    <div class="hero-anim-4 flex flex-col sm:flex-row items-center justify-center gap-4">
+                        <a href="#class-lineup" class="btn-anim w-full sm:w-auto px-8 py-4 rounded-full bg-amberGold hover:bg-royalBlue text-roast-50 font-bold text-center shadow-lg">
+                            <i class="fa-solid fa-graduation-cap me-2"></i> Browse Classes
+                        </a>
+                        <a href="#consulting" class="btn-anim w-full sm:w-auto px-8 py-4 rounded-full bg-white/90 hover:bg-white border border-roast-200 text-roast-900 font-bold text-center shadow-lg" data-feature="consultation">
+                            <i class="fa-solid fa-comments me-2 text-amberGold"></i> Book a Consultation
+                        </a>
                     </div> 
                     <div id="hero-stats" class="hero-anim-5 flex flex-wrap justify-center gap-3 pt-2"> 
                         <div class="bg-white/85 backdrop-blur-sm rounded-2xl px-5 py-3 border border-roast-200 shadow-sm"> 
@@ -360,61 +366,112 @@
         </div> 
     </section> 
 
-    <!-- PAID CLASSES / WORKSHOP SECTION (MOVED UP — PRIMARY FOCUS) --> 
-    <!-- FIXED CLASSES SECTION (daily schedule, deposit-based registration) -->
-    <section id="fixed-classes" class="relative overflow-hidden py-20 bg-roast-50 border-t border-roast-100">
+    <!-- SESSION INFO STRIP — anchor kept for nav compatibility -->
+    <section id="fixed-classes" class="relative overflow-hidden py-12 bg-roast-100/60 border-t border-roast-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="reveal-up grid sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+                <div class="flex items-start gap-4 p-4 bg-white rounded-2xl border border-roast-200 shadow-sm">
+                    <div class="w-10 h-10 rounded-xl bg-amberGold/15 text-amberGold flex items-center justify-center shrink-0"><i class="fa-solid fa-calendar-days"></i></div>
+                    <div><p class="text-[10px] font-bold uppercase tracking-wider text-roast-500">Schedule</p><p id="fx-days" class="text-xs text-roast-700 mt-0.5 font-medium">Open <strong>Sunday – Thursday</strong></p><p class="text-[10px] text-roast-500">Closed Friday &amp; Saturday</p></div>
+                </div>
+                <div class="flex items-start gap-4 p-4 bg-white rounded-2xl border border-roast-200 shadow-sm">
+                    <div class="w-10 h-10 rounded-xl bg-amberGold/15 text-amberGold flex items-center justify-center shrink-0"><i class="fa-solid fa-clock"></i></div>
+                    <div><p class="text-[10px] font-bold uppercase tracking-wider text-roast-500">Sessions</p><p id="fx-s1" class="text-xs text-roast-700 mt-0.5 font-medium"><strong>Morning:</strong> 10:00 AM – 12:00 PM</p><p id="fx-s2" class="text-[10px] text-roast-500"><strong>Afternoon:</strong> 2:00 PM – 4:00 PM</p></div>
+                </div>
+                <div class="flex items-start gap-4 p-4 bg-white rounded-2xl border border-roast-200 shadow-sm">
+                    <div class="w-10 h-10 rounded-xl bg-amberGold/15 text-amberGold flex items-center justify-center shrink-0"><i class="fa-solid fa-coins"></i></div>
+                    <div><p class="text-[10px] font-bold uppercase tracking-wider text-roast-500">Fees</p><p class="text-xs text-roast-700 mt-0.5 font-medium">From <strong id="fx-fee" class="text-amberGold">RM 150</strong></p><p id="fx-dep-label" class="text-[10px] text-roast-500">50% deposit to confirm seat</p></div>
+                </div>
+                <div class="flex items-start gap-4 p-4 bg-white rounded-2xl border border-roast-200 shadow-sm">
+                    <div class="w-10 h-10 rounded-xl bg-amberGold/15 text-amberGold flex items-center justify-center shrink-0"><i class="fa-solid fa-location-dot"></i></div>
+                    <div><p class="text-[10px] font-bold uppercase tracking-wider text-roast-500">Location</p><p class="text-xs text-roast-700 mt-0.5 font-medium">Nb.CA Academy</p><p class="text-[10px] text-roast-500">Sungai Petani, Kedah</p></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CLASS LINEUP SECTION (Phase 1: BF, BB open; SCA coming soon) -->
+    <section id="class-lineup" class="relative overflow-hidden py-20 bg-roast-50 border-t border-roast-100">
         <div class="absolute top-0 -left-24 w-80 h-80 bg-blue-300/12 rounded-full blur-3xl pointer-events-none"></div>
         <div class="absolute bottom-0 -right-20 w-72 h-72 bg-amberGold/10 rounded-full blur-3xl pointer-events-none"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="reveal-up text-center max-w-2xl mx-auto mb-12">
-                <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amberGold/10 text-amberGold text-xs font-bold uppercase tracking-wider border border-amberGold/20 mb-3"><i class="fa-solid fa-calendar-days text-[10px]"></i> Daily Training</span>
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-roast-950 mt-1">Fixed Classes</h2>
-                <p class="text-roast-700 text-sm mt-3 font-light">Join our regular daily coffee training sessions — no need to wait for a special workshop date.</p>
+                <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amberGold/10 text-amberGold text-xs font-bold uppercase tracking-wider border border-amberGold/20 mb-3"><i class="fa-solid fa-graduation-cap text-[10px]"></i> Our Programmes</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-roast-950 mt-1">Coffee Classes at Nb.CA</h2>
+                <p class="text-roast-700 text-sm mt-3 font-light">Hands-on training programmes led by certified instructors at our Sungai Petani studio.</p>
             </div>
-
-            <div class="max-w-3xl mx-auto reveal-up">
-                <div class="bg-white rounded-3xl border border-roast-200 shadow-lg overflow-hidden">
-                    <div class="grid md:grid-cols-2">
-                        <div class="relative h-56 md:h-auto">
-                            <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=800&q=80" alt="Fixed Coffee Class" id="fx-img" class="w-full h-full object-cover">
-                            <span class="absolute top-4 left-4 px-3 py-1 bg-amberGold text-roast-50 text-[10px] font-bold uppercase rounded-full">Walk-In Friendly</span>
+            <div class="grid md:grid-cols-3 gap-6 reveal-stagger">
+                <!-- Beverage Foundation -->
+                <div class="card-lift bg-white rounded-3xl border border-roast-200 shadow-sm overflow-hidden flex flex-col group hover:border-amberGold/50">
+                    <div class="relative h-48 overflow-hidden bg-roast-100">
+                        <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=800&q=80" alt="Beverage Foundation" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <span class="cl-avail-badge absolute top-4 left-4 px-3 py-1 bg-emerald-100 text-emerald-700 border border-emerald-200 text-[10px] font-bold uppercase rounded-full shadow">Seats available</span>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col space-y-4">
+                        <div>
+                            <span class="text-[10px] font-bold tracking-widest text-amberGold uppercase">Foundation Programme</span>
+                            <h3 class="text-xl font-bold text-roast-950 font-serif mt-1">Beverage Foundation</h3>
+                            <p class="text-sm text-roast-600 font-light mt-2 leading-relaxed">Core brewing theory and practice for beginners. Master espresso, pour-over and milk fundamentals.</p>
                         </div>
-                        <div class="p-6 sm:p-8 space-y-5">
-                            <div>
-                                <h3 id="fx-title" class="text-xl font-bold text-roast-950 font-serif">Coffee Fundamentals — Daily Class</h3>
-                                <p id="fx-desc" class="text-xs text-roast-600 mt-1">Hands-on brewing basics for beginners, run every operating day.</p>
-                            </div>
-
-                            <div class="space-y-2">
-                                <div class="flex items-center gap-2 text-xs text-roast-700">
-                                    <i class="fa-solid fa-clock text-amberGold w-4"></i>
-                                    <span id="fx-s1"><strong class="text-roast-950">Morning Session:</strong> 10:00 AM – 12:00 PM</span>
-                                </div>
-                                <div class="flex items-center gap-2 text-xs text-roast-700">
-                                    <i class="fa-solid fa-clock text-amberGold w-4"></i>
-                                    <span id="fx-s2"><strong class="text-roast-950">Afternoon Session:</strong> 2:00 PM – 4:00 PM</span>
-                                </div>
-                                <div class="flex items-center gap-2 text-xs text-roast-700">
-                                    <i class="fa-solid fa-calendar-xmark text-amberGold w-4"></i>
-                                    <span id="fx-days">Open <strong class="text-roast-950">Sunday – Thursday</strong> (closed Fri &amp; Sat)</span>
-                                </div>
-                            </div>
-
-                            <div class="flex items-center justify-between py-3 border-y border-roast-100">
-                                <div>
-                                    <span class="text-[10px] text-roast-500 uppercase tracking-wider block">Class Fee</span>
-                                    <span id="fx-fee" class="text-2xl font-extrabold text-amberGold font-serif">RM 150.00</span>
-                                </div>
-                                <div class="text-right">
-                                    <span id="fx-dep-label" class="text-[10px] text-roast-500 uppercase tracking-wider block">Deposit Required (50%)</span>
-                                    <span id="fx-dep" class="text-lg font-bold text-roast-950">RM 75.00</span>
-                                </div>
-                            </div>
-
-                            <button onclick="openFixedClassModal()" class="btn-anim w-full py-3 bg-amberGold hover:bg-royalBlue text-roast-50 font-bold rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-2">
-                                <i class="fa-solid fa-user-pen"></i> Sign in to Register
+                        <div class="grid grid-cols-2 gap-2 text-xs text-roast-700">
+                            <div class="flex items-center gap-2"><i class="fa-solid fa-clock text-amberGold w-4 shrink-0"></i> Daily schedule</div>
+                            <div class="flex items-center gap-2"><i class="fa-solid fa-users text-amberGold w-4 shrink-0"></i> Small groups</div>
+                            <div class="flex items-center gap-2"><i class="fa-solid fa-hand-holding-heart text-amberGold w-4 shrink-0"></i> Hands-on</div>
+                            <div class="flex items-center gap-2"><i class="fa-solid fa-certificate text-amberGold w-4 shrink-0"></i> Certificate</div>
+                        </div>
+                        <div class="mt-auto pt-2">
+                            <a href="book-class.html?class=bev-foundation" class="btn-anim block w-full py-3 text-center bg-amberGold hover:bg-royalBlue text-roast-50 font-bold rounded-xl text-sm transition-all shadow-md">
+                                <i class="fa-solid fa-user-pen mr-2"></i> Register Now
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Barista Basic -->
+                <div class="card-lift bg-white rounded-3xl border border-roast-200 shadow-sm overflow-hidden flex flex-col group hover:border-amberGold/50">
+                    <div class="relative h-48 overflow-hidden bg-roast-100">
+                        <img src="https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&w=800&q=80" alt="Barista Basic" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <span class="cl-avail-badge absolute top-4 left-4 px-3 py-1 bg-emerald-100 text-emerald-700 border border-emerald-200 text-[10px] font-bold uppercase rounded-full shadow">Seats available</span>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col space-y-4">
+                        <div>
+                            <span class="text-[10px] font-bold tracking-widest text-amberGold uppercase">Skills Programme</span>
+                            <h3 class="text-xl font-bold text-roast-950 font-serif mt-1">Barista Basic</h3>
+                            <p class="text-sm text-roast-600 font-light mt-2 leading-relaxed">Hands-on barista workflow: grind, extraction, steaming and latte art foundations.</p>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 text-xs text-roast-700">
+                            <div class="flex items-center gap-2"><i class="fa-solid fa-clock text-amberGold w-4 shrink-0"></i> Daily schedule</div>
+                            <div class="flex items-center gap-2"><i class="fa-solid fa-users text-amberGold w-4 shrink-0"></i> Small groups</div>
+                            <div class="flex items-center gap-2"><i class="fa-solid fa-mug-hot text-amberGold w-4 shrink-0"></i> Espresso & latte art</div>
+                            <div class="flex items-center gap-2"><i class="fa-solid fa-certificate text-amberGold w-4 shrink-0"></i> Certificate</div>
+                        </div>
+                        <div class="mt-auto pt-2">
+                            <a href="book-class.html?class=barista-basic" class="btn-anim block w-full py-3 text-center bg-amberGold hover:bg-royalBlue text-roast-50 font-bold rounded-xl text-sm transition-all shadow-md">
+                                <i class="fa-solid fa-user-pen mr-2"></i> Register Now
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- SCA Classes — Coming Soon -->
+                <div class="bg-gradient-to-br from-roast-900 to-roast-950 rounded-3xl border border-roast-700 shadow-sm overflow-hidden flex flex-col group relative">
+                    <div class="absolute inset-0 bg-gradient-to-br from-amberGold/10 to-transparent pointer-events-none"></div>
+                    <div class="relative h-48 overflow-hidden bg-roast-800">
+                        <img src="https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=800&q=80" alt="SCA Classes" class="w-full h-full object-cover opacity-40">
+                        <span class="absolute top-4 left-4 px-3 py-1 bg-amberGold/90 text-roast-50 text-[10px] font-bold uppercase rounded-full shadow">Coming Soon</span>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col space-y-4 relative">
+                        <div>
+                            <span class="text-[10px] font-bold tracking-widest text-amberGold uppercase">SCA Certified</span>
+                            <h3 class="text-xl font-bold text-white font-serif mt-1">SCA Classes</h3>
+                            <p class="text-sm text-roast-400 font-light mt-2 leading-relaxed">Specialty Coffee Association certified programmes — internationally recognised qualifications in coffee.</p>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 text-xs text-roast-400">
+                            <div class="flex items-center gap-2"><i class="fa-solid fa-globe text-amberGold w-4 shrink-0"></i> Internationally accredited</div>
+                            <div class="flex items-center gap-2"><i class="fa-solid fa-star text-amberGold w-4 shrink-0"></i> Professional level</div>
+                        </div>
+                        <div class="mt-auto pt-2">
+                            <button disabled class="block w-full py-3 text-center bg-roast-700/60 text-roast-400 font-bold rounded-xl text-sm cursor-not-allowed border border-roast-600">
+                                <i class="fa-solid fa-clock mr-2"></i> Launching Soon
                             </button>
-                            <p id="fx-note" class="text-[10px] text-roast-500 text-center">A 50% deposit is required to confirm your seat. Balance is payable on class day. You will need to log in or create an account first.</p>
                         </div>
                     </div>
                 </div>
@@ -422,7 +479,79 @@
         </div>
     </section>
 
-    <section id="classes" class="relative overflow-hidden py-20 bg-gradient-to-b from-roast-50 to-roast-100/60 border-t border-roast-100"> 
+    <!-- CONSULTING SECTION (Phase 1) -->
+    <section id="consulting" data-feature="consultation" class="relative overflow-hidden py-20 bg-roast-100/40 border-t border-roast-100">
+        <div class="absolute top-0 -right-24 w-80 h-80 bg-amberGold/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute bottom-0 -left-20 w-72 h-72 bg-blue-300/12 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="reveal-up text-center max-w-2xl mx-auto mb-12">
+                <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amberGold/10 text-amberGold text-xs font-bold uppercase tracking-wider border border-amberGold/20 mb-3"><i class="fa-solid fa-comments text-[10px]"></i> Expert Advice</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-roast-950 mt-1">Coffee Consulting</h2>
+                <p class="text-roast-700 text-sm mt-3 font-light">One-to-one sessions with Nb.CA Academy instructors — from business setup to barista training plans.</p>
+                <p class="text-xs text-roast-500 mt-2"><i class="fa-solid fa-circle-check text-emerald-500 mr-1"></i> No consultation fee — free to request during Phase 1</p>
+            </div>
+
+            <!-- Consultation type cards -->
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-12 reveal-stagger">
+                <div class="bg-white rounded-2xl border border-roast-200 p-5 space-y-3 hover:border-amberGold/50 hover:shadow-md transition-all">
+                    <div class="w-10 h-10 rounded-xl bg-amberGold/15 text-amberGold flex items-center justify-center"><i class="fa-solid fa-store text-lg"></i></div>
+                    <h4 class="font-bold text-roast-950 font-serif">Cafe / Business Setup</h4>
+                    <p class="text-xs text-roast-600 font-light leading-relaxed">Concept, layout, equipment, workflow and cost planning for a new coffee business.</p>
+                    <span class="inline-flex items-center gap-1 text-[10px] font-bold text-amberGold"><i class="fa-regular fa-clock"></i> 60 min</span>
+                </div>
+                <div class="bg-white rounded-2xl border border-roast-200 p-5 space-y-3 hover:border-amberGold/50 hover:shadow-md transition-all">
+                    <div class="w-10 h-10 rounded-xl bg-amberGold/15 text-amberGold flex items-center justify-center"><i class="fa-solid fa-list text-lg"></i></div>
+                    <h4 class="font-bold text-roast-950 font-serif">Menu & Beverage Development</h4>
+                    <p class="text-xs text-roast-600 font-light leading-relaxed">Design or refine your drink menu to match your brand and target customers.</p>
+                    <span class="inline-flex items-center gap-1 text-[10px] font-bold text-amberGold"><i class="fa-regular fa-clock"></i> 60 min</span>
+                </div>
+                <div class="bg-white rounded-2xl border border-roast-200 p-5 space-y-3 hover:border-amberGold/50 hover:shadow-md transition-all">
+                    <div class="w-10 h-10 rounded-xl bg-amberGold/15 text-amberGold flex items-center justify-center"><i class="fa-solid fa-people-group text-lg"></i></div>
+                    <h4 class="font-bold text-roast-950 font-serif">Barista Team Training Plan</h4>
+                    <p class="text-xs text-roast-600 font-light leading-relaxed">Customised training roadmap for your team — from basics to advanced skills.</p>
+                    <span class="inline-flex items-center gap-1 text-[10px] font-bold text-amberGold"><i class="fa-regular fa-clock"></i> 90 min</span>
+                </div>
+                <div class="bg-white rounded-2xl border border-roast-200 p-5 space-y-3 hover:border-amberGold/50 hover:shadow-md transition-all">
+                    <div class="w-10 h-10 rounded-xl bg-amberGold/15 text-amberGold flex items-center justify-center"><i class="fa-solid fa-mug-hot text-lg"></i></div>
+                    <h4 class="font-bold text-roast-950 font-serif">General Coffee Consultation</h4>
+                    <p class="text-xs text-roast-600 font-light leading-relaxed">Open session: sourcing, brewing equipment, troubleshooting or anything coffee.</p>
+                    <span class="inline-flex items-center gap-1 text-[10px] font-bold text-amberGold"><i class="fa-regular fa-clock"></i> 45 min</span>
+                </div>
+            </div>
+
+            <!-- How it works -->
+            <div class="reveal-up bg-white rounded-3xl border border-roast-200 shadow-sm p-6 sm:p-10 mb-10">
+                <h3 class="text-lg font-bold text-roast-950 font-serif text-center mb-8">How It Works</h3>
+                <div class="grid sm:grid-cols-3 gap-8 text-center">
+                    <div class="space-y-3">
+                        <div class="w-12 h-12 rounded-full bg-amberGold text-roast-50 font-extrabold text-lg flex items-center justify-center mx-auto shadow-lg">1</div>
+                        <h4 class="font-bold text-roast-950 text-sm">Submit Your Request</h4>
+                        <p class="text-xs text-roast-600 font-light leading-relaxed">Pick a topic, choose a preferred date and time, and tell us what you'd like to discuss.</p>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="w-12 h-12 rounded-full bg-amberGold text-roast-50 font-extrabold text-lg flex items-center justify-center mx-auto shadow-lg">2</div>
+                        <h4 class="font-bold text-roast-950 text-sm">We Confirm Your Slot</h4>
+                        <p class="text-xs text-roast-600 font-light leading-relaxed">Our team reviews your request and confirms or proposes an alternative time within 24 hours.</p>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="w-12 h-12 rounded-full bg-amberGold text-roast-50 font-extrabold text-lg flex items-center justify-center mx-auto shadow-lg">3</div>
+                        <h4 class="font-bold text-roast-950 text-sm">Meet Your Instructor</h4>
+                        <p class="text-xs text-roast-600 font-light leading-relaxed">Meet in person at the academy or via video call — whichever works best for you.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA -->
+            <div class="reveal-up text-center">
+                <a href="consultation.html" id="consult-cta" class="btn-anim inline-flex items-center gap-2 px-8 py-4 rounded-full bg-amberGold hover:bg-royalBlue text-roast-50 font-bold text-sm shadow-lg transition-all">
+                    <i class="fa-solid fa-comments"></i> Request a Consultation
+                </a>
+                <p class="text-xs text-roast-500 mt-3">Sign in or create a free account to submit your request.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="classes" data-feature="workshops" class="relative overflow-hidden py-20 bg-gradient-to-b from-roast-50 to-roast-100/60 border-t border-roast-100"> 
         <div class="absolute top-0 -right-24 w-96 h-96 bg-blue-300/15 rounded-full blur-3xl pointer-events-none"></div> 
         <div class="absolute bottom-0 -left-20 w-72 h-72 bg-amberGold/12 rounded-full blur-3xl pointer-events-none"></div> 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10"> <i class="fa-solid fa-graduation-cap absolute top-6 -right-10 text-[240px] text-amberGold/[0.06] rotate-12 pointer-events-none select-none"></i> 
@@ -518,8 +647,8 @@
         </div> 
     </section> 
 
-    <!-- COFFEE BEANS SHOP SECTION (DE-EMPHASIZED — SECONDARY OFFERING) --> 
-    <section id="coffee-beans" class="relative overflow-hidden py-12 bg-roast-50 border-t border-roast-100"> 
+    <!-- COFFEE BEANS SHOP SECTION (Phase 2 — hidden until shop feature enabled) -->
+    <section id="coffee-beans" data-feature="shop" class="relative overflow-hidden py-12 bg-roast-50 border-t border-roast-100"> 
         <div class="absolute -bottom-16 -right-16 w-64 h-64 bg-blue-300/10 rounded-full blur-3xl pointer-events-none"></div> 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10"> <i class="fa-solid fa-mug-saucer absolute -top-8 left-1/4 text-[180px] text-amberGold/[0.06] rotate-6 pointer-events-none select-none"></i> 
         
@@ -644,8 +773,8 @@
         </div> 
     </section> 
 
-    <!-- MERCHANDISE SECTION (DE-EMPHASIZED — SECONDARY OFFERING) --> 
-    <section id="merchandise" class="relative overflow-hidden py-12 bg-roast-50 border-t border-roast-100"> 
+    <!-- MERCHANDISE SECTION (Phase 2 — hidden until shop feature enabled) -->
+    <section id="merchandise" data-feature="shop" class="relative overflow-hidden py-12 bg-roast-50 border-t border-roast-100"> 
         <div class="absolute top-0 -left-16 w-64 h-64 bg-amberGold/10 rounded-full blur-3xl pointer-events-none"></div> 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10"> <i class="fa-solid fa-shirt absolute bottom-0 -right-10 text-[160px] text-amberGold/[0.06] rotate-12 pointer-events-none select-none"></i> 
         
@@ -1200,19 +1329,29 @@
 
         let isLoggedIn = false; 
 
-        document.addEventListener('DOMContentLoaded', () => { 
-            const savedUser = localStorage.getItem('rp_logged_user'); 
-            if (savedUser && !new URLSearchParams(location.search).has('preview')) { 
-                window.location.replace('dashboard.html'); 
-                return; 
-            } 
+        function applyFeatureFlags() {
+            const F = (window.NBCA_CFG || {}).FEATURES || {};
+            document.querySelectorAll('[data-feature]').forEach(el => {
+                const f = el.getAttribute('data-feature');
+                if (F[f] === false) el.style.display = 'none';
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedUser = localStorage.getItem('rp_logged_user');
+            if (savedUser && !new URLSearchParams(location.search).has('preview')) {
+                window.location.replace('dashboard.html');
+                return;
+            }
+            applyFeatureFlags();
             updateAuthNavbarUI();
-            loadBlogPosts(); 
-            renderBlogGrid(); 
+            loadBlogPosts();
+            renderBlogGrid();
             applySiteContent();
-            renderTeamGrid(); 
-            initScrollReveal(); 
-        }); 
+            renderClassAvailability();
+            renderTeamGrid();
+            initScrollReveal();
+        });
 
         // ===================== SCROLL REVEAL ===================== 
         function initScrollReveal() { 
@@ -1858,9 +1997,43 @@
         } 
         // ===================== END MEET THE TEAM =====================
 
+        // ===================== CLASS LINEUP: LIVE AVAILABILITY =====================
+        function renderClassAvailability() {
+            const CFG = window.NBCA_CFG;
+            if (!CFG || !CFG.CLASSES || !window.NBCA_DATA) return;
+            const FC_OPEN_DAYS = CFG.FC_OPEN_DAYS || [0,1,2,3,4];
+            const FC_SESSIONS = CFG.FC_SESSIONS || [];
+            const FC_CAPACITY = CFG.FC_CAPACITY || 10;
+            const FC_HOLD = (CFG.FC_HOLD_MINUTES || 30) * 60000;
+            let regs = [];
+            try { regs = JSON.parse(localStorage.getItem('rp_fixed_class_students') || '[]'); } catch(e) {}
+            const inactive = ['Reschedule','Cancelled'];
+            const now = Date.now();
+            // Look ahead 14 days to estimate availability
+            let totalOpen = 0, totalFull = 0;
+            for (let i = 1; i <= 14; i++) {
+                const d = new Date(); d.setDate(d.getDate() + i);
+                if (!FC_OPEN_DAYS.includes(d.getDay())) continue;
+                const str = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+                const dayFull = FC_SESSIONS.every(s => {
+                    const count = regs.filter(r => r.preferredDate === str && r.session === s && !inactive.includes(r.classStatus) && !(r.classStatus === 'Awaiting Payment' && now - new Date(r.createdAt).getTime() > FC_HOLD)).length;
+                    return count >= FC_CAPACITY;
+                });
+                if (dayFull) totalFull++; else totalOpen++;
+            }
+            const badge = totalOpen === 0 ? { text: 'Fully booked this week', cls: 'bg-red-100 text-red-700 border-red-200' }
+                : totalOpen <= 3 ? { text: totalOpen + ' day' + (totalOpen > 1 ? 's' : '') + ' left this week', cls: 'bg-amber-100 text-amber-700 border-amber-200' }
+                : { text: 'Seats available', cls: 'bg-emerald-100 text-emerald-700 border-emerald-200' };
+            // Update the Open for Booking badges on class cards
+            document.querySelectorAll('.cl-avail-badge').forEach(el => {
+                el.textContent = badge.text;
+                el.className = 'cl-avail-badge absolute top-4 left-4 px-3 py-1 text-[10px] font-bold uppercase rounded-full shadow border ' + badge.cls;
+            });
+        }
+
         // ===================== ADMIN-CONTROLLED CONTENT =====================
-        // Contact/social/hero figures (admin: Website & Demo), the daily class card (admin: Fixed Class Settings)
-        // and workshop sessions (admin: Class Schedule) are read from the shared data layer.
+        // Contact/social/hero figures (admin: Website & Demo) and the session info strip
+        // are read from the shared data layer.
         function applySiteContent() {
             const site = NBCA_DATA.site.get(), CFG = NBCA_CFG, esc = escHtml;
             document.querySelectorAll('a[href^="https://wa.me/"]').forEach(a => { a.href = a.href.replace(/wa\.me\/\d+/, 'wa.me/' + site.whatsapp); });
@@ -1881,7 +2054,7 @@
             set('fx-fee', 'RM ' + fee.toFixed(2)); set('fx-dep', 'RM ' + (fee * pct / 100).toFixed(2)); set('fx-dep-label', 'Deposit Required (' + pct + '%)');
             const note = document.getElementById('fx-note'); if (note) note.textContent = note.textContent.replace(/A \d+% deposit/, 'A ' + pct + '% deposit');
             const sess = (id, label, t) => { const el = document.getElementById(id); if (el && t) el.innerHTML = '<strong class="text-roast-950">' + label + ':</strong> ' + esc(t); };
-            sess('fx-s1', 'Morning Session', CFG.FC_SESSIONS[0]); sess('fx-s2', 'Afternoon Session', CFG.FC_SESSIONS[1]);
+            sess('fx-s1', 'Morning Session', (fx && fx.morningSession) || CFG.FC_SESSIONS[0]); sess('fx-s2', 'Afternoon Session', (fx && fx.afternoonSession) || CFG.FC_SESSIONS[1]);
             const names = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'], open = CFG.FC_OPEN_DAYS, closed = names.filter((n, i) => !open.includes(i));
             const daysEl = document.getElementById('fx-days');
             if (daysEl) daysEl.innerHTML = 'Open <strong class="text-roast-950">' + names[open[0]] + (open.length > 1 ? ' – ' + names[open[open.length - 1]] : '') + '</strong>' + (closed.length ? ' (closed ' + closed.map(n => n.slice(0, 3)).join(' &amp; ') + ')' : '');

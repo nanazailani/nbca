@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultations | Nb.CA Academy</title>
+    <script>if (!localStorage.getItem('rp_logged_user')) { location.replace('auth.html?next=' + encodeURIComponent(location.pathname.split('/').pop() || 'dashboard.html')); }</script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    screens: { xs: '420px' },
+                    colors: {
+                        roast: {
+                            50: '#F8FAFC', 100: '#F1F5F9', 200: '#E2E8F0', 300: '#CBD5E1', 400: '#94A3B8',
+                            500: '#64748B', 600: '#475569', 700: '#334155', 800: '#1E293B', 900: '#1E40AF', 950: '#172554'
+                        },
+                        amberGold: '#2563EB',
+                        royalBlue: '#1E40AF',
+                        navy: '#172554'
+                    },
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'], serif: ['Playfair Display', 'serif'] }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F8FAFC;
+            background-image: radial-gradient(circle at 8% 5%, rgba(37,99,235,0.06) 0%, transparent 30%), radial-gradient(circle at 95% 8%, rgba(30,64,175,0.05) 0%, transparent 28%);
+            background-attachment: fixed; }
+        h1, h2, h3, .font-serif { font-family: 'Playfair Display', serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; } .no-scrollbar { scrollbar-width: none; }
+        @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+        main > * { animation: rise .45s ease both; } main > *:nth-child(2) { animation-delay: .06s; } main > *:nth-child(3) { animation-delay: .12s; }
+        @media (prefers-reduced-motion: reduce) { main > * { animation: none; } }
+        @media print { #m-sidebar, #m-topbar, #m-bottomnav { display: none !important; } }
+    </style>
+</head>
+<body data-page="my-consult" data-title="Consultations" data-sub="Request a session with our coffee experts" class="text-roast-900 antialiased selection:bg-amberGold selection:text-white">
+    <div id="m-overlay"></div>
+    <aside id="m-sidebar"></aside>
+    <div class="lg:pl-72 min-h-screen flex flex-col min-w-0 overflow-x-hidden">
+        <header id="m-topbar"></header>
+        <main class="flex-1 min-w-0 w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-10 py-6 lg:py-10 pb-28 lg:pb-14 space-y-10">
+
+            <!-- No-payment banner -->
+            <div class="rounded-2xl bg-blue-50 border border-blue-200 px-5 py-3.5 flex items-center gap-3 text-xs text-blue-800">
+                <i class="fa-solid fa-circle-info shrink-0 text-blue-500"></i>
+                <span><strong>Free to request, no payment required.</strong> We will confirm your slot once a suitable time is available.</span>
+            </div>
+
+            <!-- MY CONSULTATIONS -->
+            <section id="my-consultations-section">
+                <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-5">
+                    <div><span class="text-[11px] font-extrabold tracking-[0.18em] text-amberGold uppercase">Your requests</span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-roast-950 mt-1">My Consultations</h2></div>
+                    <a href="consultation.html?new=1" class="inline-flex items-center gap-2 px-4 py-2.5 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-full text-xs shadow transition-all self-start"><i class="fa-solid fa-plus text-[10px]"></i> New request</a>
+                </div>
+                <div id="consult-list" class="space-y-4"></div>
+            </section>
+
+            <!-- REQUEST FORM -->
+            <section id="consult-form-section" class="bg-white rounded-3xl border border-roast-200 shadow-sm p-5 sm:p-8">
+                <span class="text-[11px] font-extrabold tracking-[0.18em] text-amberGold uppercase">Book a session</span>
+                <h2 class="text-2xl font-extrabold text-roast-950 mt-1 mb-6">Request a Consultation</h2>
+
+                <!-- Step 1: Topic -->
+                <div class="space-y-6">
+                    <div>
+                        <p class="text-xs font-bold text-roast-700 uppercase tracking-wider mb-3">1. What would you like to discuss? *</p>
+                        <div id="topic-cards" class="grid sm:grid-cols-2 gap-3"></div>
+                        <input type="hidden" id="cr-type-id">
+                    </div>
+
+                    <!-- Step 2: Schedule -->
+                    <div class="grid sm:grid-cols-2 gap-4 text-xs">
+                        <div>
+                            <label class="block font-semibold text-roast-600 uppercase mb-1">Preferred date *</label>
+                            <input type="date" id="cr-pref-date" class="w-full bg-roast-50 border border-roast-200 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-roast-600 uppercase mb-1">Preferred time *</label>
+                            <select id="cr-pref-time" class="w-full bg-roast-50 border border-roast-200 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                                <option value="">Select time</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-roast-600 uppercase mb-1">Backup date <span class="normal-case font-normal text-roast-400">(optional)</span></label>
+                            <input type="date" id="cr-alt-date" class="w-full bg-roast-50 border border-roast-200 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-roast-600 uppercase mb-1">Backup time <span class="normal-case font-normal text-roast-400">(optional)</span></label>
+                            <select id="cr-alt-time" class="w-full bg-roast-50 border border-roast-200 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                                <option value="">Select time</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Meeting mode -->
+                    <div class="text-xs">
+                        <p class="font-semibold text-roast-600 uppercase mb-3">Meeting mode *</p>
+                        <div class="grid sm:grid-cols-2 gap-3">
+                            <button type="button" onclick="crSelectMode('Online Google Meet')" id="mode-online" class="flex items-center gap-3 p-4 rounded-2xl border-2 border-roast-200 hover:border-amberGold transition-all text-left">
+                                <span class="w-10 h-10 rounded-xl bg-blue-50 text-amberGold flex items-center justify-center shrink-0"><i class="fa-brands fa-google text-lg"></i></span>
+                                <div><strong class="text-roast-950">Online — Google Meet</strong><p class="text-roast-500 mt-0.5">Video call, link sent after confirmation</p></div>
+                            </button>
+                            <button type="button" onclick="crSelectMode('In person')" id="mode-inperson" class="flex items-center gap-3 p-4 rounded-2xl border-2 border-roast-200 hover:border-amberGold transition-all text-left">
+                                <span class="w-10 h-10 rounded-xl bg-blue-50 text-amberGold flex items-center justify-center shrink-0"><i class="fa-solid fa-location-dot text-lg"></i></span>
+                                <div><strong class="text-roast-950">In person</strong><p class="text-roast-500 mt-0.5">At Nb.CA Academy, Sungai Petani</p></div>
+                            </button>
+                        </div>
+                        <input type="hidden" id="cr-mode">
+                    </div>
+
+                    <!-- Contact details -->
+                    <div class="grid sm:grid-cols-2 gap-4 text-xs">
+                        <div>
+                            <label class="block font-semibold text-roast-600 uppercase mb-1">Your name *</label>
+                            <input type="text" id="cr-name" class="w-full bg-roast-50 border border-roast-200 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-roast-600 uppercase mb-1">WhatsApp number *</label>
+                            <input type="tel" id="cr-phone" placeholder="+60 12-345 6789" class="w-full bg-roast-50 border border-roast-200 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                        </div>
+                        <div class="sm:col-span-2">
+                            <label class="block font-semibold text-roast-600 uppercase mb-1">Business / Cafe name <span class="normal-case font-normal text-roast-400">(optional)</span></label>
+                            <input type="text" id="cr-business" placeholder="If relevant to your consultation" class="w-full bg-roast-50 border border-roast-200 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                        </div>
+                        <div class="sm:col-span-2">
+                            <label class="block font-semibold text-roast-600 uppercase mb-1">Additional notes <span class="normal-case font-normal text-roast-400">(optional)</span></label>
+                            <textarea id="cr-notes" rows="3" placeholder="Anything you'd like us to know before the session" class="w-full bg-roast-50 border border-roast-200 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold resize-none"></textarea>
+                        </div>
+                    </div>
+
+                    <p id="cr-error" class="hidden text-xs font-semibold text-red-600 bg-red-50 border border-red-200 rounded-xl px-4 py-3"></p>
+
+                    <button type="button" onclick="crSubmit()" class="w-full py-3.5 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl uppercase tracking-wider shadow-lg transition-all text-xs">
+                        <i class="fa-solid fa-paper-plane mr-2"></i>Submit consultation request
+                    </button>
+                </div>
+            </section>
+
+        </main>
+    </div>
+    <nav id="m-bottomnav" aria-label="Primary"></nav>
+
+    <script src="js/nbca-config.js"></script>
+    <script src="js/nbca-data.js"></script>
+    <script src="js/billplz.js"></script>
+    <script src="js/member-shell.js"></script>
+    <script>
+        const CFG = window.NBCA_CFG, TYPES = CFG.CONSULT_TYPES || [], TIMES = CFG.CONSULT_TIMES || [];
+        const esc = MemberShell.esc;
+        let crSelectedType = null, crSelectedMode = null;
+
+        // Set min date to tomorrow
+        const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 1);
+        const tomorrowStr = tomorrow.toISOString().split('T')[0];
+        document.getElementById('cr-pref-date').min = tomorrowStr;
+        document.getElementById('cr-alt-date').min = tomorrowStr;
+
+        // Populate time selects
+        ['cr-pref-time', 'cr-alt-time'].forEach(id => {
+            const sel = document.getElementById(id);
+            TIMES.forEach(t => { const opt = document.createElement('option'); opt.value = t; opt.textContent = t; sel.appendChild(opt); });
+        });
+
+        // Pre-fill name and phone from account
+        window.addEventListener('member-ready', () => {
+            const u = MemberShell.user() || {};
+            document.getElementById('cr-name').value = u.name || '';
+            const prof = MemberShell.getProfile();
+            document.getElementById('cr-phone').value = u.phone || prof.phone || '';
+            renderConsultList();
+            renderTopicCards();
+            // Scroll to form if ?new=1
+            if (new URLSearchParams(location.search).get('new') === '1') {
+                document.getElementById('consult-form-section').scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+
+        function renderTopicCards() {
+            document.getElementById('topic-cards').innerHTML = TYPES.map(t =>
+                '<button type="button" onclick="crSelectType(\'' + t.id + '\')" id="tc-' + t.id + '" class="flex items-start gap-3 p-4 rounded-2xl border-2 border-roast-200 hover:border-amberGold transition-all text-left w-full">' +
+                '<span class="w-10 h-10 rounded-xl bg-blue-50 text-amberGold flex items-center justify-center shrink-0 mt-0.5"><i class="fa-solid fa-mug-hot text-sm"></i></span>' +
+                '<div class="min-w-0"><strong class="text-xs font-bold text-roast-950 leading-snug block">' + esc(t.label) + '</strong>' +
+                '<p class="text-[11px] text-roast-500 mt-0.5 leading-relaxed">' + esc(t.desc) + '</p>' +
+                '<span class="inline-block mt-1 text-[10px] font-bold text-amberGold"><i class="fa-regular fa-clock mr-1"></i>' + esc(t.duration) + '</span>' +
+                '</div></button>'
+            ).join('');
+        }
+
+        function crSelectType(id) {
+            crSelectedType = id;
+            document.getElementById('cr-type-id').value = id;
+            TYPES.forEach(t => {
+                const btn = document.getElementById('tc-' + t.id);
+                if (btn) btn.className = btn.className.replace('border-roast-200', t.id === id ? 'border-amberGold bg-blue-50' : 'border-roast-200').replace('border-amberGold bg-blue-50', t.id === id ? 'border-amberGold bg-blue-50' : 'border-roast-200');
+                if (btn) {
+                    if (t.id === id) {
+                        btn.classList.add('border-amberGold', 'bg-blue-50');
+                        btn.classList.remove('border-roast-200');
+                    } else {
+                        btn.classList.remove('border-amberGold', 'bg-blue-50');
+                        btn.classList.add('border-roast-200');
+                    }
+                }
+            });
+        }
+
+        function crSelectMode(mode) {
+            crSelectedMode = mode;
+            document.getElementById('cr-mode').value = mode;
+            ['mode-online', 'mode-inperson'].forEach(id => {
+                const btn = document.getElementById(id);
+                const isThis = (id === 'mode-online' && mode === 'Online Google Meet') || (id === 'mode-inperson' && mode === 'In person');
+                btn.classList.toggle('border-amberGold', isThis);
+                btn.classList.toggle('bg-blue-50', isThis);
+                btn.classList.toggle('border-roast-200', !isThis);
+            });
+        }
+
+        function crShowError(msg) {
+            const el = document.getElementById('cr-error');
+            el.textContent = msg;
+            el.classList.remove('hidden');
+        }
+
+        function crSubmit() {
+            document.getElementById('cr-error').classList.add('hidden');
+            const typeId = document.getElementById('cr-type-id').value;
+            const prefDate = document.getElementById('cr-pref-date').value;
+            const prefTime = document.getElementById('cr-pref-time').value;
+            const altDate = document.getElementById('cr-alt-date').value;
+            const altTime = document.getElementById('cr-alt-time').value;
+            const mode = document.getElementById('cr-mode').value;
+            const name = document.getElementById('cr-name').value.trim();
+            const phone = document.getElementById('cr-phone').value.trim();
+            const business = document.getElementById('cr-business').value.trim();
+            const notes = document.getElementById('cr-notes').value.trim();
+
+            if (!typeId) { crShowError('Please select a topic.'); return; }
+            if (!prefDate) { crShowError('Please choose your preferred date.'); return; }
+            if (!prefTime) { crShowError('Please choose your preferred time.'); return; }
+            if (!mode) { crShowError('Please select a meeting mode (Online or In person).'); return; }
+            if (!name) { crShowError('Please enter your name.'); return; }
+            if (!phone) { crShowError('Please enter your WhatsApp number.'); return; }
+            if (!/^[+\d][\d\s-]{6,}$/.test(phone)) { crShowError('Please enter a valid WhatsApp number.'); return; }
+            if (prefDate < tomorrowStr) { crShowError('Preferred date must be tomorrow or later.'); return; }
+
+            const u = MemberShell.user() || {};
+            NBCA_DATA.consults.create({ name, email: u.email, phone, business, typeId, mode, preferredDate: prefDate, preferredTime: prefTime, altDate, altTime, notes });
+            showToast('Consultation request submitted!');
+            // Reset form
+            crSelectedType = null; crSelectedMode = null;
+            document.getElementById('cr-type-id').value = '';
+            document.getElementById('cr-mode').value = '';
+            document.getElementById('cr-pref-date').value = '';
+            document.getElementById('cr-pref-time').value = '';
+            document.getElementById('cr-alt-date').value = '';
+            document.getElementById('cr-alt-time').value = '';
+            document.getElementById('cr-notes').value = '';
+            renderTopicCards();
+            ['mode-online', 'mode-inperson'].forEach(id => {
+                const btn = document.getElementById(id);
+                btn.classList.remove('border-amberGold', 'bg-blue-50');
+                btn.classList.add('border-roast-200');
+            });
+            renderConsultList();
+            document.getElementById('my-consultations-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        const STATUS_PILLS = {
+            'Requested': ['Requested', 'bg-blue-100 text-blue-700'],
+            'Accepted': ['Confirmed', 'bg-emerald-100 text-emerald-700'],
+            'Alternative Proposed': ['New time proposed', 'bg-amber-100 text-amber-700'],
+            'Declined': ['Declined', 'bg-red-100 text-red-700'],
+            'Completed': ['Completed', 'bg-slate-100 text-slate-600'],
+            'Cancelled': ['Cancelled', 'bg-slate-100 text-slate-500']
+        };
+
+        function pill(status) {
+            const s = STATUS_PILLS[status] || [status, 'bg-slate-100 text-slate-600'];
+            return '<span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider whitespace-nowrap ' + s[1] + '">' + esc(s[0]) + '</span>';
+        }
+
+        function renderConsultList() {
+            const u = MemberShell.user() || {};
+            const items = NBCA_DATA.consults.forMember(u.email).slice().reverse();
+            const el = document.getElementById('consult-list');
+            if (!items.length) {
+                el.innerHTML = '<div class="bg-white rounded-3xl border border-dashed border-roast-300 p-10 text-center space-y-3">' +
+                    '<div class="w-14 h-14 rounded-2xl bg-blue-50 text-amberGold flex items-center justify-center mx-auto text-2xl"><i class="fa-solid fa-comments"></i></div>' +
+                    '<h3 class="font-serif text-lg font-bold text-roast-950">No consultations yet</h3>' +
+                    '<p class="text-xs text-roast-500 max-w-sm mx-auto">Submit a request below — it\'s free and there\'s no payment required.</p></div>';
+                return;
+            }
+            const wa = NBCA_DATA.site.get().whatsapp;
+            el.innerHTML = items.map(c => {
+                const actions = [];
+                if (c.status === 'Alternative Proposed') {
+                    actions.push('<button type="button" onclick="crAgree(\'' + c.id + '\')" class="px-3.5 py-2 rounded-xl text-[11px] font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-all"><i class="fa-solid fa-check mr-1.5"></i>Accept this time</button>');
+                    actions.push('<button type="button" onclick="crReject(\'' + c.id + '\')" class="px-3.5 py-2 rounded-xl text-[11px] font-bold bg-white hover:bg-red-50 text-red-600 border border-red-200 transition-all">Not suitable</button>');
+                }
+                if (['Requested', 'Accepted'].includes(c.status)) {
+                    actions.push('<button type="button" onclick="crCancel(\'' + c.id + '\')" class="px-3.5 py-2 rounded-xl text-[11px] font-bold bg-white hover:bg-red-50 text-red-600 border border-red-200 transition-all">Cancel request</button>');
+                }
+                if (wa) {
+                    const waMsg = 'Hi, I\'m following up on my consultation request ' + c.ref + ' (' + c.typeLabel + ').';
+                    actions.push('<a href="https://wa.me/' + wa.replace(/[^0-9]/g,'') + '?text=' + encodeURIComponent(waMsg) + '" target="_blank" rel="noopener" class="px-3.5 py-2 rounded-xl text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 transition-all"><i class="fa-brands fa-whatsapp mr-1.5"></i>WhatsApp</a>');
+                }
+
+                let proposed = '';
+                if (c.status === 'Alternative Proposed' && c.altDate) {
+                    proposed = '<div class="mt-3 p-3.5 rounded-2xl bg-amber-50 border border-amber-200 text-xs space-y-1">' +
+                        '<p class="font-bold text-amber-800"><i class="fa-solid fa-calendar-pen mr-1.5"></i>New time proposed</p>' +
+                        '<p class="text-amber-700">' + esc(c.altDate) + ' at ' + esc(c.altTime) + '</p>' +
+                        (c.adminNote ? '<p class="text-amber-600 italic">"' + esc(c.adminNote) + '"</p>' : '') +
+                        '</div>';
+                }
+
+                const adminNote = c.adminNote && c.status !== 'Alternative Proposed'
+                    ? '<p class="text-xs text-roast-500 mt-2 italic"><i class="fa-solid fa-comment-dots mr-1.5 text-slate-400"></i>' + esc(c.adminNote) + '</p>'
+                    : '';
+
+                return '<article class="bg-white rounded-3xl border border-roast-200 shadow-sm p-5 space-y-4">' +
+                    '<div class="flex flex-wrap items-start justify-between gap-3">' +
+                        '<div class="space-y-1"><div class="flex flex-wrap items-center gap-2"><span class="text-xs font-mono text-roast-400">' + esc(c.ref) + '</span>' + pill(c.status) + '</div>' +
+                        '<h3 class="font-serif text-base font-bold text-roast-950">' + esc(c.typeLabel) + '</h3>' +
+                        '<p class="text-[11px] text-roast-500"><i class="fa-regular fa-clock mr-1.5"></i>' + esc(c.duration) + ' &middot; ' + esc(c.mode) + '</p>' +
+                        '</div>' +
+                        '<div class="text-right text-[11px] text-roast-500 shrink-0">' +
+                            '<p>' + esc(c.preferredDate) + ' · ' + esc(c.preferredTime) + '</p>' +
+                            (c.altDate && c.status !== 'Alternative Proposed' ? '<p class="text-roast-400">Alt: ' + esc(c.altDate) + '</p>' : '') +
+                        '</div>' +
+                    '</div>' +
+                    proposed +
+                    adminNote +
+                    (actions.length ? '<div class="flex flex-wrap gap-2 pt-3 border-t border-roast-100">' + actions.join('') + '</div>' : '') +
+                    '</article>';
+            }).join('');
+        }
+
+        function crAgree(id) {
+            if (!confirm('Accept the proposed time?')) return;
+            NBCA_DATA.consults.agree(id);
+            showToast('You have accepted the proposed time.');
+            renderConsultList();
+        }
+
+        function crReject(id) {
+            NBCA_DATA.consults.reject(id);
+            showToast('Declined. We will be in touch to find a better time.');
+            renderConsultList();
+        }
+
+        function crCancel(id) {
+            if (!confirm('Cancel this consultation request?')) return;
+            NBCA_DATA.consults.cancel(id);
+            showToast('Consultation request cancelled.');
+            renderConsultList();
+        }
+    </script>
+</body>
+</html>

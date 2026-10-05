@@ -65,17 +65,20 @@
         (D.slots.catalog()).forEach((w, wi) => Object.keys(w.slots).forEach(mode => (w.slots[mode] || []).forEach((slot, si) => { if ((wi + si) % 2 === 0) asg[D.assign.wsKey(w.id, slot)] = ['I-DEMO2', 'I-DEMO1', 'I-DEMO3'][wi % 3]; })));
         D.write(K.assignments, asg);
 
-        // ---- daily class bookings ----
+        // ---- daily class bookings (spread across Beverage Foundation and Barista Basic) ----
         const person = i => MEMBERS[i];
-        const reg = (id, i, dayN, session, deposit, klass, created, extra) => Object.assign({ id, name: person(i)[0], email: person(i)[1], phone: person(i)[2], ic: person(i)[3], cafe: person(i)[4], from: person(i)[5], preferredDate: openDay(dayN), session, classFee: 150, deposit: 75, depositStatus: deposit, classStatus: klass, createdAt: ago(created), paidAt: deposit === 'Paid' ? ago(created) : undefined }, extra || {});
+        const CLASSES = CFG.CLASSES || [];
+        const BF = CLASSES.find(c => c.id === 'bev-foundation') || { id: 'bev-foundation', label: 'Beverage Foundation' };
+        const BB = CLASSES.find(c => c.id === 'barista-basic')  || { id: 'barista-basic',  label: 'Barista Basic' };
+        const reg = (id, i, dayN, session, deposit, klass, created, cls, extra) => Object.assign({ id, classId: cls.id, className: cls.label, paymentMode: 'deposit', name: person(i)[0], email: person(i)[1], phone: person(i)[2], ic: person(i)[3], cafe: person(i)[4], from: person(i)[5], preferredDate: openDay(dayN), session, classFee: 150, listFee: 150, discount: 0, deposit: 75, depositStatus: deposit, classStatus: klass, createdAt: ago(created), paidAt: deposit === 'Paid' ? ago(created) : undefined }, extra || {});
         const regs = [
-            reg('FC-D01', 0, 1, S1, 'Paid', 'Admitted', 3), reg('FC-D02', 1, 1, S1, 'Paid', 'Pending Confirmation', 2), reg('FC-D03', 2, 1, S2, 'Paid', 'Pending Confirmation', 1.5),
-            reg('FC-D04', 4, 2, S1, 'Paid', 'Admitted', 4), reg('FC-D05', 5, 2, S1, 'Paid', 'Pending Confirmation', 2.5), reg('FC-D06', 6, 3, S2, 'Paid', 'Reschedule', 5),
-            reg('FC-D07', 7, 3, S1, 'Pending', 'Awaiting Payment', 0.1, { paidAt: undefined }), reg('FC-D08', 8, 4, S1, 'Paid', 'Pending Confirmation', 0.6),
-            reg('FC-D09', 3, -2, S1, 'Paid', 'Admitted', 9), reg('FC-D10', 1, -4, S2, 'Paid', 'Admitted', 12), reg('FC-D11', 2, -6, S1, 'Paid', 'Admitted', 14), reg('FC-D12', 0, -8, S1, 'Paid', 'Admitted', 16)
+            reg('FC-D01', 0, 1, S1, 'Paid', 'Admitted', 3, BF), reg('FC-D02', 1, 1, S1, 'Paid', 'Pending Confirmation', 2, BB), reg('FC-D03', 2, 1, S2, 'Paid', 'Pending Confirmation', 1.5, BF),
+            reg('FC-D04', 4, 2, S1, 'Paid', 'Admitted', 4, BB), reg('FC-D05', 5, 2, S1, 'Paid', 'Pending Confirmation', 2.5, BF), reg('FC-D06', 6, 3, S2, 'Paid', 'Reschedule', 5, BB),
+            reg('FC-D07', 7, 3, S1, 'Pending', 'Awaiting Payment', 0.1, BF, { paidAt: undefined }), reg('FC-D08', 8, 4, S1, 'Paid', 'Pending Confirmation', 0.6, BB),
+            reg('FC-D09', 3, -2, S1, 'Paid', 'Admitted', 9, BF), reg('FC-D10', 1, -4, S2, 'Paid', 'Admitted', 12, BB), reg('FC-D11', 2, -6, S1, 'Paid', 'Admitted', 14, BF), reg('FC-D12', 0, -8, S1, 'Paid', 'Admitted', 16, BB)
         ];
         // a nearly-full session so the colour states are visible
-        for (let k = 0; k < 8; k++) regs.push({ id: 'FC-DF' + k, name: 'Walk-in ' + (k + 1), email: 'walkin' + k + '@demo.my', phone: '0100000000', ic: '90010' + k + '-01-0000', cafe: '', from: 'Sungai Petani', preferredDate: openDay(5), session: S1, classFee: 150, deposit: 75, depositStatus: 'Paid', classStatus: k < 5 ? 'Admitted' : 'Pending Confirmation', createdAt: ago(8 + k), paidAt: ago(8 + k) });
+        for (let k = 0; k < 8; k++) regs.push({ id: 'FC-DF' + k, classId: k % 2 ? BB.id : BF.id, className: k % 2 ? BB.label : BF.label, paymentMode: 'deposit', name: 'Walk-in ' + (k + 1), email: 'walkin' + k + '@demo.my', phone: '0100000000', ic: '90010' + k + '-01-0000', cafe: '', from: 'Sungai Petani', preferredDate: openDay(5), session: S1, classFee: 150, listFee: 150, discount: 0, deposit: 75, depositStatus: 'Paid', classStatus: k < 5 ? 'Admitted' : 'Pending Confirmation', createdAt: ago(8 + k), paidAt: ago(8 + k) });
         D.write(K.regs, regs);
 
         // ---- orders ----
@@ -97,6 +100,18 @@
         };
         D.write(K.enrolls, [ws('WS-D001', 0, 'latte-art', 0, 0, 'Confirmed', 5), ws('WS-D002', 2, 'latte-art', 0, 0, 'Pending Payment', 1), ws('WS-D003', 3, 'brewing-masterclass', 0, 1, 'Confirmed', 7), ws('WS-D004', 5, 'cupping-experience', 1, 0, 'Confirmed', 4), ws('WS-D005', 8, 'brewing-masterclass', 1, 0, 'Confirmed', 2)]);
 
+        // ---- consultations (one per status; zaki gets Alternative Proposed + Requested) ----
+        const futureDate = n => { const d = new Date(); d.setDate(d.getDate() + n); return D.dayOf(d); };
+        const consultRecs = [
+            { id: 'CR-DEMO1', ref: 'CR-00001', name: MEMBERS[1][0], email: MEMBERS[1][1], phone: MEMBERS[1][2], business: '', typeId: 'cafe-setup', typeLabel: 'Cafe / Business Setup', duration: '60 min', mode: 'Online Google Meet', preferredDate: futureDate(3), preferredTime: '10:00 AM', altDate: futureDate(5), altTime: '2:00 PM', notes: 'Planning to open a specialty cafe in Georgetown.', status: 'Alternative Proposed', confirmedDate: null, confirmedTime: null, adminNote: 'Your preferred slot is taken. Does this alternative work?', history: [], createdAt: ago(4), updatedAt: ago(1) },
+            { id: 'CR-DEMO2', ref: 'CR-00002', name: MEMBERS[1][0], email: MEMBERS[1][1], phone: MEMBERS[1][2], business: '', typeId: 'menu-dev', typeLabel: 'Menu & Beverage Development', duration: '60 min', mode: 'In person', preferredDate: futureDate(7), preferredTime: '11:00 AM', altDate: '', altTime: '', notes: 'Need help designing a seasonal menu.', status: 'Requested', confirmedDate: null, confirmedTime: null, adminNote: '', history: [], createdAt: ago(1), updatedAt: ago(1) },
+            { id: 'CR-DEMO3', ref: 'CR-00003', name: MEMBERS[0][0], email: MEMBERS[0][1], phone: MEMBERS[0][2], business: MEMBERS[0][4], typeId: 'barista-training', typeLabel: 'Barista Team Training Plan', duration: '90 min', mode: 'In person', preferredDate: futureDate(10), preferredTime: '2:00 PM', altDate: futureDate(12), altTime: '10:00 AM', notes: 'Training for 3 new staff members.', status: 'Accepted', confirmedDate: futureDate(10), confirmedTime: '2:00 PM', adminNote: 'See you then! Bring your current menu.', history: [], createdAt: ago(5), updatedAt: ago(2) },
+            { id: 'CR-DEMO4', ref: 'CR-00004', name: MEMBERS[2][0], email: MEMBERS[2][1], phone: MEMBERS[2][2], business: MEMBERS[2][4], typeId: 'general-coffee', typeLabel: 'General Coffee Consultation', duration: '45 min', mode: 'Online Google Meet', preferredDate: futureDate(-14), preferredTime: '10:00 AM', altDate: '', altTime: '', notes: '', status: 'Completed', confirmedDate: futureDate(-14), confirmedTime: '10:00 AM', adminNote: 'Great session!', history: [], createdAt: ago(20), updatedAt: ago(14) },
+            { id: 'CR-DEMO5', ref: 'CR-00005', name: MEMBERS[3][0], email: MEMBERS[3][1], phone: MEMBERS[3][2], business: MEMBERS[3][4], typeId: 'cafe-setup', typeLabel: 'Cafe / Business Setup', duration: '60 min', mode: 'In person', preferredDate: futureDate(4), preferredTime: '3:00 PM', altDate: '', altTime: '', notes: 'Looking for advice on equipment purchasing.', status: 'Declined', confirmedDate: null, confirmedTime: null, adminNote: 'We are fully booked for that week. Please try again next month.', history: [], createdAt: ago(3), updatedAt: ago(1) },
+            { id: 'CR-DEMO6', ref: 'CR-00006', name: MEMBERS[4][0], email: MEMBERS[4][1], phone: MEMBERS[4][2], business: '', typeId: 'menu-dev', typeLabel: 'Menu & Beverage Development', duration: '60 min', mode: 'Online Google Meet', preferredDate: futureDate(2), preferredTime: '4:00 PM', altDate: '', altTime: '', notes: '', status: 'Cancelled', confirmedDate: null, confirmedTime: null, adminNote: '', history: [], createdAt: ago(6), updatedAt: ago(2) }
+        ];
+        localStorage.setItem('rp_consultations', JSON.stringify(consultRecs));
+
         // ---- profiles, points activity ----
         D.write(K.profiles, {
             'member@nbca.academy': { phone: '0123456789', addresses: [{ id: 'A-D1', label: 'Home', name: 'Nana Zailani', phone: '0123456789', line1: '12 Jalan Bunga', line2: 'Taman Indah', postcode: '08000', city: 'Sungai Petani', state: 'Kedah', isDefault: true }, { id: 'A-D2', label: 'Work', name: 'Nana Zailani', phone: '0123456789', line1: 'Kopi Kita, 4 Jalan Sultanah', line2: '', postcode: '05000', city: 'Alor Setar', state: 'Kedah', isDefault: false }] },
@@ -108,12 +123,12 @@
         const r = D.loyalty.redeem('zaki@demo.my', 'V-BEANS10');
         if (!r.ok) { D.loyalty.adjust('zaki@demo.my', 200, 'Demo top-up', 'demo'); D.loyalty.redeem('zaki@demo.my', 'V-BEANS10'); }
         localStorage.setItem('rp_demo_seeded', String(now()));
-        return { members: accounts.length, bookings: regs.length, orders: 7 };
+        return { members: accounts.length, bookings: regs.length, orders: 7, consults: consultRecs.length };
     }
 
     // Empties business data. keepSettings=true here means "we are about to re-seed".
     function clear(quiet) {
-        [K.accounts, K.activity, K.instructors, K.assignments, K.slots, K.ledger, K.redemptions, K.regs, K.orders, K.enrolls, K.profiles, 'rp_portal_cart', 'rp_billplz_bills', 'rp_demo_seeded', K.session].forEach(k => localStorage.removeItem(k));
+        [K.accounts, K.activity, K.instructors, K.assignments, K.slots, K.ledger, K.redemptions, K.regs, K.orders, K.enrolls, K.profiles, 'rp_portal_cart', 'rp_billplz_bills', 'rp_demo_seeded', 'rp_consultations', K.session].forEach(k => localStorage.removeItem(k));
         return true;
     }
 

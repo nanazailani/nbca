@@ -5,9 +5,19 @@
 (function () {
     const D = window.NBCA_DATA, CFG = window.NBCA_CFG;
 
+    // ---- feature-flag helper (also exposed as AdminShell.on) ----
+    const featureOn = f => !!(CFG && CFG.FEATURES && CFG.FEATURES[f]);
+
     // ---- session guard (also inline in <head> to avoid a flash) ----
     const admin = () => { try { return JSON.parse(localStorage.getItem('rp_admin') || 'null'); } catch (e) { return null; } };
     if (!admin()) { window.location.replace('admin-login.html'); return; }
+
+    // Off-feature page guard
+    const ADMIN_PAGE_FEATURES = {
+        workshops: 'workshops', orders: 'shop', rewards: 'rewards', 'consult': 'consultation'
+    };
+    const currentPage = document.body.dataset.page || '';
+    // 'm-inventory' tab is handled inside admin-manage.html via data-feature
 
     const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
     const money = n => 'RM ' + Number(n || 0).toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -65,39 +75,65 @@
         return out;
     }
 
+    function consultPending() {
+        if (!featureOn('consultation') || !D.consults) return 0;
+        try { return D.consults.pendingCount(); } catch (e) { return 0; }
+    }
+
     function counts() {
         return {
             admit: regs().filter(r => r.depositStatus === 'Paid' && r.classStatus === 'Pending Confirmation').length,
             reschedule: regs().filter(r => r.classStatus === 'Reschedule').length,
             ship: orders().filter(o => o.status === 'Processing').length,
             unpaidOrders: orders().filter(o => o.status === 'Pending Payment').length,
-            unassigned: unassignedSessions().length
+            unassigned: unassignedSessions().length,
+            consult: consultPending()
         };
     }
 
     // ---- navigation ----
-    const NAV = [
-        { group: 'Operations', items: [
+    function buildNAV() {
+        const ops = [
             { id: 'dashboard', label: 'Dashboard', icon: 'fa-chart-pie', href: 'admin-dashboard.html' },
-            { id: 'bookings', label: 'Class Bookings', icon: 'fa-calendar-check', href: 'admin-bookings.html', badge: 'admit' },
-            { id: 'workshops', label: 'Workshop Enrollments', icon: 'fa-chalkboard-user', href: 'admin-workshops.html' },
-            { id: 'orders', label: 'Orders', icon: 'fa-bag-shopping', href: 'admin-orders.html', badge: 'ship' }
-        ]},
-        { group: 'Programs', items: [
-            { id: 'schedule', label: 'Class Schedule', icon: 'fa-user-tie', href: 'admin-schedule.html', badge: 'unassigned' },
-            { id: 'rewards', label: 'Membership & Rewards', icon: 'fa-gift', href: 'admin-rewards.html' }
-        ]},
-        { group: 'People', items: [
-            { id: 'members', label: 'Members', icon: 'fa-users', href: 'admin-members.html' },
-            { id: 'm-admins', label: 'Admin Accounts', icon: 'fa-user-shield', href: 'admin-manage.html?tab=admins' }
-        ]},
-        { group: 'Content', items: [
+            { id: 'bookings', label: 'Class Bookings', icon: 'fa-calendar-check', href: 'admin-bookings.html', badge: 'admit' }
+        ];
+        if (featureOn('consultation')) {
+            ops.push({ id: 'consult', label: 'Consultations', icon: 'fa-calendar-pen', href: 'admin-consultations.html', badge: 'consult' });
+        }
+        if (featureOn('workshops')) {
+            ops.push({ id: 'workshops', label: 'Workshop Enrollments', icon: 'fa-chalkboard-user', href: 'admin-workshops.html' });
+        }
+        if (featureOn('shop')) {
+            ops.push({ id: 'orders', label: 'Orders', icon: 'fa-bag-shopping', href: 'admin-orders.html', badge: 'ship' });
+        }
+
+        const programs = [
+            { id: 'schedule', label: 'Class Schedule', icon: 'fa-user-tie', href: 'admin-schedule.html', badge: 'unassigned' }
+        ];
+        if (featureOn('rewards')) {
+            programs.push({ id: 'rewards', label: 'Membership & Rewards', icon: 'fa-gift', href: 'admin-rewards.html' });
+        }
+
+        const content = [
             { id: 'm-fixed', label: 'Fixed Class Settings', icon: 'fa-sliders', href: 'admin-manage.html?tab=fixed' },
-            { id: 'm-inventory', label: 'Inventory', icon: 'fa-boxes-stacked', href: 'admin-manage.html?tab=inventory' },
             { id: 'm-blog', label: 'Announcements', icon: 'fa-bullhorn', href: 'admin-manage.html?tab=blog' },
             { id: 'website', label: 'Website & Demo', icon: 'fa-globe', href: 'admin-website.html' }
-        ]}
-    ];
+        ];
+        if (featureOn('shop')) {
+            content.splice(1, 0, { id: 'm-inventory', label: 'Inventory', icon: 'fa-boxes-stacked', href: 'admin-manage.html?tab=inventory' });
+        }
+
+        return [
+            { group: 'Operations', items: ops },
+            { group: 'Programs', items: programs },
+            { group: 'People', items: [
+                { id: 'members', label: 'Members', icon: 'fa-users', href: 'admin-members.html' },
+                { id: 'm-admins', label: 'Admin Accounts', icon: 'fa-user-shield', href: 'admin-manage.html?tab=admins' }
+            ]},
+            { group: 'Content', items: content }
+        ];
+    }
+
     const page = document.body.dataset.page || '';
     const me = admin();
 
@@ -110,6 +146,7 @@
 
     function buildSidebar(c) {
         const el = document.getElementById('a-sidebar');
+        const NAV = buildNAV();
         el.className = 'fixed inset-y-0 left-0 w-64 z-40 bg-slate-900 flex flex-col -translate-x-full lg:translate-x-0 transition-transform duration-300';
         el.innerHTML =
             '<div class="h-20 px-5 flex items-center justify-between border-b border-white/10 shrink-0"><a href="admin-dashboard.html" class="flex items-center gap-3"><span class="w-10 h-10 rounded-xl bg-white flex items-center justify-center"><img src="images/logo.png" alt="" class="w-8 h-8 object-contain"></span>' +
@@ -123,7 +160,8 @@
     }
 
     function buildTopbar(c) {
-        const el = document.getElementById('a-topbar'), attention = c.admit + c.reschedule + c.ship + c.unassigned;
+        const el = document.getElementById('a-topbar');
+        const attention = c.admit + c.reschedule + (featureOn('shop') ? c.ship : 0) + c.unassigned + (featureOn('consultation') ? c.consult : 0);
         el.className = 'sticky top-0 z-30 h-16 lg:h-20 bg-slate-50/85 backdrop-blur-md border-b border-slate-200 px-4 sm:px-6 lg:px-10 flex items-center justify-between gap-3';
         el.innerHTML =
             '<div class="flex items-center gap-3 min-w-0"><button onclick="AdminShell.openMenu()" class="lg:hidden w-10 h-10 rounded-xl bg-white border border-slate-200 text-slate-800 flex items-center justify-center shadow-sm" aria-label="Open menu"><i class="fa-solid fa-bars"></i></button>' +
@@ -138,14 +176,26 @@
         const el = document.getElementById('a-bottomnav');
         el.className = 'lg:hidden fixed bottom-0 inset-x-0 z-30 bg-white/95 backdrop-blur border-t border-slate-200 flex items-stretch justify-around shadow-[0_-8px_24px_rgba(15,23,42,0.08)]';
         el.style.paddingBottom = 'env(safe-area-inset-bottom)';
-        const tabs = [['dashboard', 'Home', 'fa-chart-pie', 'admin-dashboard.html', 0], ['bookings', 'Bookings', 'fa-calendar-check', 'admin-bookings.html', c.admit], ['orders', 'Orders', 'fa-bag-shopping', 'admin-orders.html', c.ship], ['members', 'Members', 'fa-users', 'admin-members.html', 0]];
+        const tabs = [['dashboard', 'Home', 'fa-chart-pie', 'admin-dashboard.html', 0], ['bookings', 'Bookings', 'fa-calendar-check', 'admin-bookings.html', c.admit]];
+        if (featureOn('consultation')) tabs.push(['consult', 'Consult', 'fa-calendar-pen', 'admin-consultations.html', c.consult]);
+        if (featureOn('shop')) tabs.push(['orders', 'Orders', 'fa-bag-shopping', 'admin-orders.html', c.ship]);
+        tabs.push(['members', 'Members', 'fa-users', 'admin-members.html', 0]);
         el.innerHTML = tabs.map(t => '<a href="' + t[3] + '" class="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 ' + (t[0] === page ? 'text-amberGold' : 'text-slate-500') + '"><span class="relative"><i class="fa-solid ' + t[2] + ' text-base"></i>' + (t[4] ? '<span class="absolute -top-1.5 -right-3 min-w-[16px] h-4 px-1 rounded-full bg-amber-400 text-slate-900 text-[9px] font-extrabold flex items-center justify-center">' + t[4] + '</span>' : '') + '</span><span class="text-[10px] font-bold">' + t[1] + '</span></a>').join('') +
             '<button onclick="AdminShell.openMenu()" class="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-slate-500"><i class="fa-solid fa-ellipsis text-base"></i><span class="text-[10px] font-bold">More</span></button>';
     }
 
+    // Apply data-feature on admin pages: display:none when feature is off
+    function applyFeatureFlags() {
+        document.querySelectorAll('[data-feature]').forEach(el => {
+            const f = el.dataset.feature;
+            if (!featureOn(f)) el.style.display = 'none';
+        });
+    }
+
     window.AdminShell = {
-        CFG, admin, esc, money, initials, ymd, regs, orders, enrolls, update, members, counts, holdsSeat, seatsUsed, workshopSeats, openDays, instructorOf, unassignedSessions,
+        CFG, admin, esc, money, initials, ymd, regs, orders, enrolls, update, members, counts, holdsSeat, seatsUsed, workshopSeats, openDays, instructorOf, unassignedSessions, consultPending,
         saveRegs: save(D.K.regs), saveOrders: save(D.K.orders), saveEnrolls: save(D.K.enrolls),
+        on: featureOn,
         openMenu() { document.getElementById('a-sidebar').classList.remove('-translate-x-full'); document.getElementById('a-overlay').classList.remove('hidden'); },
         closeMenu() { document.getElementById('a-sidebar').classList.add('-translate-x-full'); document.getElementById('a-overlay').classList.add('hidden'); },
         logout() { localStorage.removeItem('rp_admin'); window.location.href = 'admin-login.html'; },
@@ -177,6 +227,9 @@
     const ov = document.getElementById('a-overlay');
     ov.className = 'hidden lg:hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-30'; ov.onclick = AdminShell.closeMenu;
     document.addEventListener('keydown', e => { if (e.key === 'Escape') AdminShell.closeMenu(); });
+    // Apply data-feature attributes
+    const doFlags = () => applyFeatureFlags();
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', doFlags); else doFlags();
     const fire = () => window.dispatchEvent(new Event('admin-ready'));
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fire); else fire();
 })();
