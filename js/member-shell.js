@@ -7,15 +7,12 @@
         { group: 'Member', items: [
             { id: 'dashboard', label: 'Dashboard', icon: 'fa-house', href: 'dashboard.html' },
             { id: 'classes', label: 'My Classes', icon: 'fa-graduation-cap', href: 'classes.html', badge: 'classes' },
-            { id: 'orders', label: 'My Orders', icon: 'fa-box-open', href: 'orders.html' },
-            { id: 'membership', label: 'Membership', icon: 'fa-crown', href: 'membership.html', pill: points() + ' pts' },
+            { id: 'consultations', label: 'My Consultations', icon: 'fa-comments', href: 'consultation.html' },
             { id: 'profile', label: 'My Profile', icon: 'fa-user', href: 'profile.html' }
         ]},
         { group: 'Discover', items: [
             { id: 'fixed', label: 'Fixed Classes', icon: 'fa-calendar-days', href: 'book-class.html' },
-            { id: 'workshops', label: 'Workshops', icon: 'fa-chalkboard-user', href: 'workshops.html' },
-            { id: 'beans', label: 'Coffee Beans', icon: 'fa-mug-hot', href: 'shop.html?tab=beans' },
-            { id: 'merch', label: 'Merchandise', icon: 'fa-shirt', href: 'shop.html?tab=merch' }
+            { id: 'workshops', label: 'Workshops', icon: 'fa-chalkboard-user', href: 'workshops.html' }
         ]}
     ];
 
@@ -68,19 +65,21 @@
     function buildSidebar() {
         const el = document.getElementById('m-sidebar');
         if (!el) return;
-        el.className = 'fixed inset-y-0 left-0 w-72 z-40 bg-white border-r border-roast-200 flex flex-col -translate-x-full lg:translate-x-0 transition-transform duration-300';
+        el.className = 'fixed inset-y-0 left-0 w-72 z-40 bg-white border-r border-roast-200 flex-col hidden lg:flex transition-transform duration-300';
         el.innerHTML =
             '<div class="h-20 px-5 flex items-center justify-between border-b border-roast-100 shrink-0">' +
-                '<a href="dashboard.html" class="flex items-center gap-3">' +
-                    '<img src="images/logo.png" alt="Nb.CA Academy" class="w-11 h-11 object-contain">' +
-                    '<div class="leading-tight"><span class="block font-serif text-base font-extrabold tracking-wider text-roast-950 uppercase">Nb.CA Academy</span>' +
-                    '<span class="block text-[10px] tracking-widest text-amberGold uppercase font-bold">Member Portal</span></div>' +
+                '<a href="dashboard.html" class="flex items-center gap-3 min-w-0">' +
+                    '<img src="images/logo.png" alt="Nb.CA Academy" class="w-10 h-10 object-contain shrink-0">' +
+                    '<div class="leading-tight min-w-0">' +
+                        '<span class="block font-serif text-lg font-extrabold tracking-wide text-roast-950">Nb.CA</span>' +
+                        '<span class="block text-[9px] tracking-[0.2em] text-amberGold uppercase font-bold">Member Portal</span>' +
+                    '</div>' +
                 '</a>' +
                 '<button onclick="MemberShell.closeMenu()" class="lg:hidden w-9 h-9 rounded-full hover:bg-roast-100 text-roast-600" aria-label="Close menu"><i class="fa-solid fa-xmark"></i></button>' +
             '</div>' +
             '<nav class="flex-1 overflow-y-auto px-4 py-5 space-y-6" aria-label="Member navigation">' +
-                navGroups().map(g => '<div class="space-y-1"><p class="px-3.5 mb-2 text-[10px] font-extrabold tracking-[0.18em] uppercase text-roast-400">' + g.group + '</p>' + g.items.map(navItem).join('') + '</div>').join('') +
-                '<a href="book-class.html" class="block rounded-2xl p-4 bg-gradient-to-br from-roast-950 to-royalBlue text-white shadow-lg relative overflow-hidden">' +
+                navGroups().map(g => '<div class="space-y-1"><p class="px-3.5 mb-2 text-[10px] font-extrabold tracking-[0.18em] uppercase text-roast-400">' + g.group + '</p>' + g.items.map(it => navItem(it).replace('href="', 'onclick="MemberShell.closeMenu();" href="')).join('') + '</div>').join('') +
+                '<a href="book-class.html" onclick="MemberShell.closeMenu()" class="block rounded-2xl p-4 bg-gradient-to-br from-roast-950 to-royalBlue text-white shadow-lg relative overflow-hidden">' +
                     '<i class="fa-solid fa-mug-hot absolute -right-3 -bottom-3 text-6xl text-white/10"></i>' +
                     '<span class="text-[10px] font-bold uppercase tracking-widest text-blue-200">Now open</span>' +
                     '<p class="font-serif text-base font-bold mt-1 leading-snug">Reserve your seat in the daily class</p>' +
@@ -105,14 +104,16 @@
         el.className = 'sticky top-0 z-30 h-16 lg:h-20 bg-roast-50/85 backdrop-blur-md border-b border-roast-200 px-4 sm:px-6 lg:px-10 flex items-center justify-between gap-3';
         el.innerHTML =
             '<div class="flex items-center gap-3 min-w-0">' +
-                '<button onclick="MemberShell.openMenu()" class="lg:hidden w-10 h-10 rounded-xl bg-white border border-roast-200 text-roast-800 flex items-center justify-center shadow-sm" aria-label="Open menu"><i class="fa-solid fa-bars"></i></button>' +
-                '<div class="min-w-0"><h1 class="font-serif text-lg lg:text-2xl font-extrabold text-roast-950 truncate">' + esc(document.body.dataset.title || '') + '</h1>' +
-                '<p class="hidden sm:block text-[11px] text-roast-500 truncate">' + esc(document.body.dataset.sub || '') + '</p></div>' +
+                '<a href="dashboard.html" class="flex items-center gap-2 min-w-0" aria-label="Nb.CA Academy home">' +
+                    '<img src="images/logo.png" alt="Nb.CA Academy" class="w-9 h-9 object-contain shrink-0">' +
+                    '<div class="leading-tight min-w-0">' +
+                        '<span class="block font-serif text-base font-extrabold tracking-wide text-roast-950">Nb.CA</span>' +
+                        '<span class="block text-[9px] tracking-[0.2em] text-roast-500 uppercase">Academy</span>' +
+                    '</div>' +
+                '</a>' +
             '</div>' +
             '<div class="flex items-center gap-2 sm:gap-3 shrink-0">' +
-                '<a href="membership.html" class="hidden sm:flex items-center gap-2 px-3.5 py-2 rounded-full bg-white border border-roast-200 text-xs font-bold text-roast-800 hover:border-amberGold transition-all"><i class="fa-solid fa-coins text-amberGold"></i> ' + points() + ' pts</a>' +
                 '<a href="book-class.html" class="flex items-center gap-2 px-4 py-2.5 rounded-full bg-amberGold hover:bg-royalBlue text-white text-xs font-bold shadow-md transition-all"><i class="fa-solid fa-user-pen text-[11px]"></i> <span class="hidden xs:inline sm:inline">Book a Class</span></a>' +
-                '<button onclick="openCart()" class="relative w-10 h-10 rounded-full bg-white border border-roast-200 text-roast-800 hover:border-amberGold flex items-center justify-center" aria-label="Cart"><i class="fa-solid fa-bag-shopping text-sm"></i><span id="cart-badge" class="hidden absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-amberGold text-white text-[10px] font-bold items-center justify-center">0</span></button>' +
                 '<button onclick="openProfileModal()" class="w-10 h-10 rounded-full bg-amberGold text-white font-bold text-xs flex items-center justify-center shadow-md" aria-label="Profile">' + esc(initials(u.name)) + '</button>' +
             '</div>';
     }
@@ -120,21 +121,35 @@
     function buildBottomNav() {
         const el = document.getElementById('m-bottomnav');
         if (!el) return;
-        el.className = 'lg:hidden fixed bottom-0 inset-x-0 z-30 bg-white/95 backdrop-blur border-t border-roast-200 flex items-stretch justify-around shadow-[0_-8px_24px_rgba(15,23,42,0.08)]';
+        const primaryItems = navGroups().flatMap(g => g.items).filter(it => ['dashboard', 'classes', 'consultations', 'profile'].includes(it.id));
+        const extraItems = navGroups().flatMap(g => g.items).filter(it => !['dashboard', 'classes', 'consultations', 'profile'].includes(it.id));
+        el.className = 'lg:hidden fixed bottom-0 inset-x-0 z-30 bg-white/95 backdrop-blur border-t border-roast-200 shadow-[0_-8px_24px_rgba(15,23,42,0.08)]';
         el.style.paddingBottom = 'env(safe-area-inset-bottom)';
-        const tabs = [
-            ['dashboard', 'Home', 'fa-house', 'dashboard.html'],
-            ['classes', 'Classes', 'fa-graduation-cap', 'classes.html'],
-            ['orders', 'Orders', 'fa-box-open', 'orders.html'],
-            ['membership', 'Rewards', 'fa-crown', 'membership.html']
-        ];
-        el.innerHTML = tabs.map(t => {
-            const on = t[0] === page;
-            return '<a href="' + t[3] + '" class="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 ' + (on ? 'text-amberGold' : 'text-roast-500') + '">' +
-                '<i class="fa-solid ' + t[2] + ' text-base"></i><span class="text-[10px] font-bold">' + t[1] + '</span>' +
-                (on ? '<span class="absolute top-0 w-8 h-0.5 rounded-full bg-amberGold"></span>' : '') + '</a>';
-        }).join('') +
-        '<a href="profile.html" class="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 ' + (page === 'profile' ? 'text-amberGold' : 'text-roast-500') + '"><i class="fa-solid fa-user text-base"></i><span class="text-[10px] font-bold">Profile</span></a>';
+        el.innerHTML =
+            '<div class="mx-auto grid max-w-md grid-cols-5 gap-2 p-2">' + primaryItems.map(it => {
+                const on = it.id === page;
+                return '<a href="' + it.href + '" class="flex flex-col items-center justify-center gap-1 rounded-2xl py-2.5 text-center ' + (on ? 'bg-amberGold text-white shadow-md' : 'text-roast-500 hover:bg-roast-50') + '">' +
+                    '<i class="fa-solid ' + it.icon + ' text-base"></i>' +
+                    '<span class="text-[10px] font-bold leading-none">' + it.label.split(' ').slice(0, 2).join(' ') + '</span>' +
+                '</a>';
+            }).join('') +
+            '<button type="button" aria-controls="m-more-menu" aria-expanded="false" class="flex flex-col items-center justify-center gap-1 rounded-2xl py-2.5 text-center text-roast-500 hover:bg-roast-50" onclick="MemberShell.toggleMoreNav()">' +
+                '<i class="fa-solid fa-ellipsis text-base"></i>' +
+                '<span class="text-[10px] font-bold leading-none">More</span>' +
+            '</button>' +
+            '</div>' +
+            '<div id="m-more-menu" class="hidden absolute bottom-full right-4 mb-2 w-56 max-h-[70vh] overflow-y-auto rounded-2xl border border-roast-200 bg-white p-2 shadow-xl">' +
+                '<div class="space-y-1">' +
+                    extraItems.map(it => '<a href="' + it.href + '" class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-left ' + (it.id === page ? 'bg-amberGold text-white' : 'text-roast-700 hover:bg-roast-50') + '">' +
+                        '<span class="w-8 h-8 rounded-lg flex items-center justify-center ' + (it.id === page ? 'bg-white/20 text-white' : 'bg-roast-100 text-amberGold') + '"><i class="fa-solid ' + it.icon + '"></i></span>' +
+                        '<span class="text-[12px] font-bold">' + it.label + '</span>' +
+                    '</a>').join('') +
+                    '<button type="button" onclick="window.logoutUser()" class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-red-600 hover:bg-red-50">' +
+                        '<span class="w-8 h-8 rounded-lg flex items-center justify-center bg-red-100 text-red-600"><i class="fa-solid fa-right-from-bracket"></i></span>' +
+                        '<span class="text-[12px] font-bold">Logout</span>' +
+                    '</button>' +
+                '</div>' +
+            '</div>';
     }
 
     function injectOverlays() {
@@ -161,13 +176,26 @@
     window.MemberShell = {
         user, registrations, esc, initials,
         openMenu() {
-            document.getElementById('m-sidebar').classList.remove('-translate-x-full');
+            if (window.innerWidth < 1024) return;
+            const sidebar = document.getElementById('m-sidebar');
+            if (sidebar) sidebar.classList.remove('hidden');
             const o = document.getElementById('m-overlay');
-            o.classList.remove('hidden');
+            if (o) o.classList.add('hidden');
         },
         closeMenu() {
-            document.getElementById('m-sidebar').classList.add('-translate-x-full');
-            document.getElementById('m-overlay').classList.add('hidden');
+            if (window.innerWidth < 1024) return;
+            const sidebar = document.getElementById('m-sidebar');
+            if (sidebar) sidebar.classList.add('hidden');
+            const o = document.getElementById('m-overlay');
+            if (o) o.classList.add('hidden');
+        },
+        toggleMoreNav(forceOpen) {
+            const menu = document.getElementById('m-more-menu');
+            if (!menu) return;
+            const button = document.querySelector('[aria-controls="m-more-menu"]');
+            const isOpen = typeof forceOpen === 'boolean' ? forceOpen : menu.classList.contains('hidden');
+            menu.classList.toggle('hidden', !isOpen);
+            if (button) button.setAttribute('aria-expanded', String(isOpen));
         }
     };
 
@@ -376,7 +404,18 @@
         overlay.className = 'hidden lg:hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-30';
         overlay.onclick = MemberShell.closeMenu;
     }
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') { MemberShell.closeMenu(); closeProfileModal(); closeCart(); } });
+    document.addEventListener('click', event => {
+        const nav = document.getElementById('m-bottomnav');
+        if (nav && !nav.contains(event.target)) MemberShell.toggleMoreNav(false);
+    });
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') {
+            MemberShell.closeMenu();
+            MemberShell.toggleMoreNav(false);
+            closeProfileModal();
+            closeCart();
+        }
+    });
     // after the page's own scripts have registered their listeners
     const fireReady = () => window.dispatchEvent(new Event('member-ready'));
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fireReady); else fireReady();

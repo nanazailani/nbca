@@ -17,7 +17,8 @@
         activity: 'rp_activity_log',
         instructors: 'rp_instructors', site: 'rp_site_settings', assignments: 'rp_assignments', slots: 'rp_workshop_slots_extra',
         ledger: 'rp_points_ledger', loyalty: 'rp_loyalty_settings', vouchers: 'rp_vouchers', redemptions: 'rp_redemptions',
-        regs: 'rp_fixed_class_students', orders: 'rp_member_orders', enrolls: 'rp_workshop_enrollments', profiles: 'rp_member_profiles'
+        regs: 'rp_fixed_class_students', orders: 'rp_member_orders', enrolls: 'rp_workshop_enrollments', profiles: 'rp_member_profiles',
+        consultations: 'rp_consultations'
     };
     const read = (k, fallback) => { try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? fallback : v; } catch (e) { return fallback; } };
     const write = (k, v) => localStorage.setItem(k, JSON.stringify(v));
@@ -216,6 +217,35 @@
         }
     };
 
+    // ============================ CONSULTATIONS ============================
+    const CONSULT_TYPES = ['Cafe Setup & Planning', 'Staff Training', 'Menu & Quality Audit', 'Other'];
+    const consultations = {
+        list() { return read(K.consultations, []); },
+        get(id) { return consultations.list().find(c => c.id === id) || null; },
+        byEmail(email) { const e = norm(email); return consultations.list().filter(c => c.email === e).sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || '')); },
+        create({ name, email, phone, business, type, preferredDate, preferredTime, requirements }) {
+            const c = {
+                id: uid('CON'), name: name.trim(), email: norm(email), phone: phone || '', business: (business || '').trim(),
+                type: type || 'Other', preferredDate: preferredDate || '', preferredTime: preferredTime || '',
+                requirements: (requirements || '').trim(),
+                status: 'Pending', adminNote: '', proposedDate: '', proposedTime: '',
+                createdAt: nowIso(), updatedAt: nowIso()
+            };
+            write(K.consultations, consultations.list().concat(c));
+            return c;
+        },
+        update(id, patch) {
+            let out = null;
+            write(K.consultations, consultations.list().map(c => c.id === id ? (out = { ...c, ...patch, id, updatedAt: nowIso() }) : c));
+            return out;
+        },
+        accept(id, note) { return consultations.update(id, { status: 'Accepted', adminNote: note || '' }); },
+        decline(id, note) { return consultations.update(id, { status: 'Declined', adminNote: note || '' }); },
+        propose(id, date, time, note) { return consultations.update(id, { status: 'Proposed', proposedDate: date, proposedTime: time, adminNote: note || '' }); },
+        remove(id) { write(K.consultations, consultations.list().filter(c => c.id !== id)); },
+        types: CONSULT_TYPES
+    };
+
     // ============================ WEBSITE SETTINGS (homepage content the admin can change) ============================
     const DEFAULT_SITE = {
         whatsapp: '60123456789',
@@ -231,5 +261,5 @@
     };
 
     accounts.migrate();
-    window.NBCA_DATA = { K, read, write, uid, norm, dayOf, accounts, session, activity, instructors, assign, slots, loyalty, site };
+    window.NBCA_DATA = { K, read, write, uid, norm, dayOf, accounts, session, activity, instructors, assign, slots, loyalty, consultations, site };
 })();

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultations | Nb.CA Academy</title>
+    <script>if (!localStorage.getItem('rp_logged_user')) { location.replace('auth.html?next=' + encodeURIComponent(location.pathname.split('/').pop() || 'dashboard.html')); }</script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    screens: { xs: '420px' },
+                    colors: {
+                        roast: {
+                            50: '#F8FAFC', 100: '#F1F5F9', 200: '#E2E8F0', 300: '#CBD5E1', 400: '#94A3B8',
+                            500: '#64748B', 600: '#475569', 700: '#334155', 800: '#1E293B', 900: '#1E40AF', 950: '#172554'
+                        },
+                        amberGold: '#2563EB',
+                        royalBlue: '#1E40AF',
+                        navy: '#172554'
+                    },
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'], serif: ['Playfair Display', 'serif'] }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F8FAFC;
+            background-image: radial-gradient(circle at 8% 5%, rgba(37,99,235,0.06) 0%, transparent 30%), radial-gradient(circle at 95% 8%, rgba(30,64,175,0.05) 0%, transparent 28%);
+            background-attachment: fixed; }
+        h1, h2, h3, .font-serif { font-family: 'Playfair Display', serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; } .no-scrollbar { scrollbar-width: none; }
+        @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+        main > * { animation: rise .45s ease both; } main > *:nth-child(2) { animation-delay: .06s; } main > *:nth-child(3) { animation-delay: .12s; } main > *:nth-child(4) { animation-delay: .18s; }
+        @media (prefers-reduced-motion: reduce) { main > * { animation: none; } }
+        @media print { #m-sidebar, #m-topbar, #m-bottomnav { display: none !important; } }
+    </style>
+</head>
+<body data-page="consultations" data-title="Consultations" data-sub="Request and track consulting sessions" class="text-roast-900 antialiased selection:bg-amberGold selection:text-white">
+    <div id="m-overlay"></div>
+    <aside id="m-sidebar"></aside>
+    <div class="lg:pl-72 min-h-screen flex flex-col min-w-0 overflow-x-hidden">
+        <header id="m-topbar"></header>
+        <main class="flex-1 min-w-0 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-10 py-6 lg:py-10 pb-28 lg:pb-14 space-y-10">
+
+            <!-- REQUEST FORM -->
+            <section>
+                <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-5">
+                    <div>
+                        <span class="text-[11px] font-extrabold tracking-[0.18em] text-amberGold uppercase">Consulting</span>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-roast-950 mt-1">Request a Consultation</h2>
+                    </div>
+                </div>
+                <div class="bg-white rounded-3xl border border-roast-200 shadow-sm p-6 sm:p-8">
+                    <p class="text-xs text-roast-600 mb-6">Tell us about your needs and preferred time — our team will review and get back to you. No payment required at this stage.</p>
+                    <form id="consult-form" class="space-y-5">
+                        <div class="grid sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-[11px] font-bold text-roast-700 uppercase tracking-wider mb-1.5">Consultation Type *</label>
+                                <select id="cf-type" required class="w-full bg-roast-50 border border-roast-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-amberGold">
+                                    <option value="">Select type</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold text-roast-700 uppercase tracking-wider mb-1.5">Business / Organisation Name</label>
+                                <input id="cf-business" type="text" placeholder="e.g. Kopi Corner Sdn Bhd" class="w-full bg-roast-50 border border-roast-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-amberGold">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold text-roast-700 uppercase tracking-wider mb-1.5">Requirements / What do you need help with? *</label>
+                            <textarea id="cf-requirements" rows="3" required placeholder="Describe your situation, goals and any specific questions..." class="w-full bg-roast-50 border border-roast-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-amberGold resize-none"></textarea>
+                        </div>
+                        <div class="grid sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-[11px] font-bold text-roast-700 uppercase tracking-wider mb-1.5">Preferred Date *</label>
+                                <input id="cf-date" type="date" required class="w-full bg-roast-50 border border-roast-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-amberGold">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold text-roast-700 uppercase tracking-wider mb-1.5">Preferred Time *</label>
+                                <select id="cf-time" required class="w-full bg-roast-50 border border-roast-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-amberGold">
+                                    <option value="">Select time</option>
+                                    <option>9:00 AM</option>
+                                    <option>10:00 AM</option>
+                                    <option>11:00 AM</option>
+                                    <option>12:00 PM</option>
+                                    <option>2:00 PM</option>
+                                    <option>3:00 PM</option>
+                                    <option>4:00 PM</option>
+                                    <option>5:00 PM</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="grid sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-[11px] font-bold text-roast-700 uppercase tracking-wider mb-1.5">Contact Phone *</label>
+                                <input id="cf-phone" type="tel" required placeholder="+60 12-345 6789" class="w-full bg-roast-50 border border-roast-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-amberGold">
+                            </div>
+                        </div>
+                        <button type="submit" class="w-full sm:w-auto px-8 py-3 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl text-sm shadow-lg transition-all flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-paper-plane text-xs"></i> Submit Request
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- MY CONSULTATIONS -->
+            <section>
+                <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-5">
+                    <div>
+                        <span class="text-[11px] font-extrabold tracking-[0.18em] text-amberGold uppercase">Status Tracking</span>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-roast-950 mt-1">My Consultation Requests</h2>
+                    </div>
+                </div>
+                <div id="consult-list" class="space-y-4"></div>
+            </section>
+        </main>
+        <nav id="m-bottomnav"></nav>
+    </div>
+
+    <script src="js/nbca-config.js"></script>
+    <script src="js/nbca-data.js"></script>
+    <script src="js/billplz.js"></script>
+    <script src="js/member-shell.js"></script>
+    <script>
+    (function () {
+        const D = NBCA_DATA, u = MemberShell.user(), esc = MemberShell.esc;
+
+        // Populate type dropdown
+        const typeEl = document.getElementById('cf-type');
+        D.consultations.types.forEach(t => { const o = document.createElement('option'); o.value = t; o.textContent = t; typeEl.appendChild(o); });
+
+        // Set min date to tomorrow
+        const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 1);
+        document.getElementById('cf-date').min = tomorrow.toISOString().split('T')[0];
+
+        // Submit
+        document.getElementById('consult-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const type = document.getElementById('cf-type').value;
+            const business = document.getElementById('cf-business').value;
+            const requirements = document.getElementById('cf-requirements').value;
+            const preferredDate = document.getElementById('cf-date').value;
+            const preferredTime = document.getElementById('cf-time').value;
+            const phone = document.getElementById('cf-phone').value;
+            if (!type || !requirements || !preferredDate || !preferredTime || !phone) { showToast('Please complete all required fields.'); return; }
+            D.consultations.create({ name: u.name, email: u.email, phone, business, type, preferredDate, preferredTime, requirements });
+            showToast('Consultation request submitted!');
+            this.reset();
+            renderList();
+        });
+
+        function statusBadge(s) {
+            const map = {
+                'Pending': 'bg-amber-100 text-amber-800',
+                'Accepted': 'bg-emerald-100 text-emerald-800',
+                'Proposed': 'bg-blue-100 text-blue-800',
+                'Declined': 'bg-red-100 text-red-800'
+            };
+            return '<span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase ' + (map[s] || 'bg-roast-100 text-roast-700') + '">' + esc(s) + '</span>';
+        }
+
+        function fmtDate(d) { if (!d) return '-'; return new Date(d + 'T00:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }); }
+
+        function renderList() {
+            const list = D.consultations.byEmail(u.email);
+            const el = document.getElementById('consult-list');
+            if (!list.length) {
+                el.innerHTML = '<div class="text-center py-16 space-y-3 bg-white rounded-3xl border border-roast-200"><div class="w-14 h-14 rounded-2xl bg-blue-50 text-amberGold flex items-center justify-center mx-auto text-2xl"><i class="fa-solid fa-comments"></i></div><p class="text-sm font-bold text-roast-950">No consultation requests yet</p><p class="text-xs text-roast-600">Use the form above to submit your first enquiry.</p></div>';
+                return;
+            }
+            el.innerHTML = list.map(c => {
+                let extra = '';
+                if (c.status === 'Proposed') {
+                    extra = '<div class="mt-3 p-3 bg-blue-50 rounded-xl border border-blue-200 text-xs space-y-1">' +
+                        '<p class="font-bold text-blue-800"><i class="fa-solid fa-calendar-pen mr-1"></i> Admin proposed a different time:</p>' +
+                        '<p class="text-blue-700"><strong>' + esc(fmtDate(c.proposedDate)) + '</strong> at <strong>' + esc(c.proposedTime) + '</strong></p>' +
+                        (c.adminNote ? '<p class="text-blue-600 italic">"' + esc(c.adminNote) + '"</p>' : '') +
+                        '</div>';
+                }
+                if (c.status === 'Accepted' && c.adminNote) {
+                    extra = '<div class="mt-3 p-3 bg-emerald-50 rounded-xl border border-emerald-200 text-xs"><p class="text-emerald-700"><i class="fa-solid fa-check-circle mr-1"></i> ' + esc(c.adminNote) + '</p></div>';
+                }
+                if (c.status === 'Declined' && c.adminNote) {
+                    extra = '<div class="mt-3 p-3 bg-red-50 rounded-xl border border-red-200 text-xs"><p class="text-red-700"><i class="fa-solid fa-circle-xmark mr-1"></i> ' + esc(c.adminNote) + '</p></div>';
+                }
+                return '<div class="bg-white rounded-2xl border border-roast-200 shadow-sm p-5 space-y-3">' +
+                    '<div class="flex flex-wrap items-center justify-between gap-2">' +
+                        '<div class="flex items-center gap-3"><span class="w-10 h-10 rounded-xl bg-blue-50 text-amberGold flex items-center justify-center"><i class="fa-solid fa-comments"></i></span>' +
+                        '<div><p class="text-sm font-bold text-roast-950">' + esc(c.type) + '</p><p class="text-[10px] text-roast-500">' + esc(c.id) + ' · Submitted ' + fmtDate(c.createdAt.split('T')[0]) + '</p></div></div>' +
+                        statusBadge(c.status) +
+                    '</div>' +
+                    '<div class="grid sm:grid-cols-3 gap-3 text-xs">' +
+                        '<div><span class="text-roast-500">Preferred Date</span><p class="font-bold text-roast-950">' + fmtDate(c.preferredDate) + '</p></div>' +
+                        '<div><span class="text-roast-500">Preferred Time</span><p class="font-bold text-roast-950">' + esc(c.preferredTime) + '</p></div>' +
+                        (c.business ? '<div><span class="text-roast-500">Business</span><p class="font-bold text-roast-950">' + esc(c.business) + '</p></div>' : '') +
+                    '</div>' +
+                    '<div class="text-xs"><span class="text-roast-500">Requirements</span><p class="text-roast-800 mt-0.5 leading-relaxed">' + esc(c.requirements) + '</p></div>' +
+                    extra +
+                '</div>';
+            }).join('');
+        }
+
+        renderList();
+    })();
+    </script>
+</body>
+</html>

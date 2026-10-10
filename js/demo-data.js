@@ -107,13 +107,22 @@
         D.loyalty.adjust('member@nbca.academy', 100, 'Welcome event bonus', 'demo');
         const r = D.loyalty.redeem('zaki@demo.my', 'V-BEANS10');
         if (!r.ok) { D.loyalty.adjust('zaki@demo.my', 200, 'Demo top-up', 'demo'); D.loyalty.redeem('zaki@demo.my', 'V-BEANS10'); }
+        // ---- consultation requests ----
+        D.write(K.consultations, [
+            { id: 'CON-D001', name: 'Nana Zailani', email: 'member@nbca.academy', phone: '0123456789', business: 'Kopi Kita, Alor Setar', type: 'Cafe Setup & Planning', preferredDate: openDay(3), preferredTime: '10:00 AM', requirements: 'Looking to open a second outlet in Sungai Petani. Need help with layout planning, equipment list and workflow design for a 600 sqft space.', status: 'Pending', adminNote: '', createdAt: ago(2) },
+            { id: 'CON-D002', name: 'Lee Wei Jian', email: 'lee@demo.my', phone: '0165554444', business: 'Brew Lab Ipoh', type: 'Staff Training', preferredDate: openDay(5), preferredTime: '2:00 PM', requirements: 'We have 4 new baristas who need basic espresso and milk steaming training. Preferably on-site at our cafe in Ipoh.', status: 'Accepted', adminNote: 'Confirmed — Chef Amin will conduct the session at your cafe.', createdAt: ago(5) },
+            { id: 'CON-D003', name: 'Siti Aminah', email: 'siti@demo.my', phone: '0111222333', business: 'Warung Siti', type: 'Menu & Quality Audit', preferredDate: openDay(2), preferredTime: '11:00 AM', requirements: 'Our coffee quality has been inconsistent. Want a professional audit of our brewing process, grinder settings, and menu structure.', status: 'Proposed', proposedDate: openDay(4), proposedTime: '3:00 PM', adminNote: 'We are fully booked on your preferred date. Would this alternative work?', createdAt: ago(3) },
+            { id: 'CON-D004', name: 'Farid Hakim', email: 'farid@demo.my', phone: '0172223344', business: '', type: 'Cafe Setup & Planning', preferredDate: openDay(-1), preferredTime: '9:00 AM', requirements: 'Planning to start a small kiosk-style coffee bar. Need advice on minimal equipment and startup costs.', status: 'Declined', adminNote: 'We are unable to take on new cafe setup consultations until next month. Please resubmit after 1 Nov.', createdAt: ago(8) },
+            { id: 'CON-D005', name: 'Nurul Huda', email: 'huda@demo.my', phone: '0183334455', business: 'Huda Coffee Corner', type: 'Other', preferredDate: openDay(6), preferredTime: '4:00 PM', requirements: 'Interested in private cupping session for my staff to better understand flavour profiles and origin differences.', status: 'Pending', adminNote: '', createdAt: ago(0.5) }
+        ]);
+
         localStorage.setItem('rp_demo_seeded', String(now()));
         return { members: accounts.length, bookings: regs.length, orders: 7 };
     }
 
     // Empties business data. keepSettings=true here means "we are about to re-seed".
     function clear(quiet) {
-        [K.accounts, K.activity, K.instructors, K.assignments, K.slots, K.ledger, K.redemptions, K.regs, K.orders, K.enrolls, K.profiles, 'rp_portal_cart', 'rp_billplz_bills', 'rp_demo_seeded', K.session].forEach(k => localStorage.removeItem(k));
+        [K.accounts, K.activity, K.instructors, K.assignments, K.slots, K.ledger, K.redemptions, K.regs, K.orders, K.enrolls, K.profiles, K.consultations, 'rp_portal_cart', 'rp_billplz_bills', 'rp_demo_seeded', K.session].forEach(k => localStorage.removeItem(k));
         return true;
     }
 

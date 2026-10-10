@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultations | Nb.CA Admin</title>
+    <script>if (!localStorage.getItem('rp_admin')) { location.replace('admin-login.html'); }</script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { theme: { extend: {
+            screens: { xs: '420px' },
+            colors: { amberGold: '#2563EB', royalBlue: '#1E40AF', navy: '#172554' },
+            fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'], serif: ['Playfair Display', 'serif'] }
+        } } }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F8FAFC; }
+        h1, h2, h3, .font-serif { font-family: 'Playfair Display', serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; } .no-scrollbar { scrollbar-width: none; }
+        @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+        main > * { animation: rise .4s ease both; } main > *:nth-child(2) { animation-delay: .05s; } main > *:nth-child(3) { animation-delay: .1s; }
+        @media (prefers-reduced-motion: reduce) { main > * { animation: none; } }
+        @media print { #a-sidebar, #a-topbar, #a-bottomnav, .no-print { display: none !important; } .lg\:pl-64 { padding-left: 0 !important; } }
+    </style>
+</head>
+<body data-page="consultations" data-title="Consultations" data-sub="Review and respond to consultation requests" class="text-slate-800 antialiased selection:bg-amberGold selection:text-white">
+    <div id="a-overlay"></div>
+    <aside id="a-sidebar"></aside>
+    <div class="lg:pl-64 min-h-screen flex flex-col min-w-0 overflow-x-hidden">
+        <header id="a-topbar"></header>
+        <main class="flex-1 min-w-0 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-6 lg:py-10 pb-28 lg:pb-14 space-y-8">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+                <div>
+                    <span class="text-[11px] font-extrabold tracking-[0.18em] text-amberGold uppercase">Enquiries</span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">Consultation Requests</h2>
+                </div>
+                <div class="flex flex-wrap gap-2 self-start">
+                    <button type="button" onclick="Consult.exportCsv()" class="px-4 py-2.5 bg-white border border-slate-200 hover:border-amberGold text-slate-700 font-bold rounded-full text-xs transition-all"><i class="fa-solid fa-file-csv text-amberGold mr-1.5"></i>Export CSV</button>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <section class="space-y-3">
+                <div id="stat-chips" class="flex flex-wrap gap-2"></div>
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <div class="relative flex-1">
+                        <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                        <input id="q" oninput="Consult.render()" placeholder="Search name, email, business or type" class="w-full bg-white border border-slate-200 rounded-xl pl-10 pr-4 py-3 text-xs focus:outline-none focus:border-amberGold">
+                    </div>
+                    <select id="filter-status" onchange="Consult.render()" class="bg-white border border-slate-200 rounded-xl px-4 py-3 text-xs font-semibold focus:outline-none focus:border-amberGold">
+                        <option value="all">All statuses</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Accepted">Accepted</option>
+                        <option value="Proposed">Proposed</option>
+                        <option value="Declined">Declined</option>
+                    </select>
+                </div>
+            </section>
+
+            <!-- List -->
+            <section id="list" class="space-y-4"></section>
+        </main>
+    </div>
+    <nav id="a-bottomnav" aria-label="Primary"></nav>
+
+    <!-- ACTION MODAL -->
+    <div id="action-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+        <div class="bg-white rounded-3xl shadow-2xl border border-slate-200 w-full max-w-lg p-6 sm:p-8 space-y-5">
+            <div class="flex items-center justify-between">
+                <h3 id="modal-title" class="font-serif text-xl font-bold text-slate-900"></h3>
+                <button onclick="Consult.closeModal()" class="w-9 h-9 rounded-full hover:bg-slate-100 text-slate-500"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div id="modal-body" class="space-y-4 text-sm"></div>
+        </div>
+    </div>
+
+    <script src="js/nbca-config.js"></script>
+    <script src="js/nbca-data.js"></script>
+    <script src="js/admin/shell.js"></script>
+    <script>
+    window.Consult = (function () {
+        const D = NBCA_DATA, A = AdminShell, esc = A.esc;
+        let activeId = null;
+
+        function statusBadge(s) {
+            const map = {
+                'Pending': 'bg-amber-100 text-amber-800 border-amber-200',
+                'Accepted': 'bg-emerald-100 text-emerald-800 border-emerald-200',
+                'Proposed': 'bg-blue-100 text-blue-800 border-blue-200',
+                'Declined': 'bg-red-100 text-red-800 border-red-200'
+            };
+            return '<span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase border ' + (map[s] || 'bg-slate-100 text-slate-700 border-slate-200') + '">' + esc(s) + '</span>';
+        }
+
+        function fmtDate(d) { return A.fmtDate(d); }
+
+        function render() {
+            const all = D.consultations.list().slice().sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
+            const q = (document.getElementById('q').value || '').toLowerCase();
+            const sf = document.getElementById('filter-status').value;
+
+            // Stat chips
+            const pending = all.filter(c => c.status === 'Pending').length;
+            const accepted = all.filter(c => c.status === 'Accepted').length;
+            const proposed = all.filter(c => c.status === 'Proposed').length;
+            document.getElementById('stat-chips').innerHTML =
+                '<span class="px-3.5 py-2 rounded-full bg-amber-50 border border-amber-200 text-xs font-bold text-amber-800"><i class="fa-solid fa-clock mr-1.5"></i>' + pending + ' Pending</span>' +
+                '<span class="px-3.5 py-2 rounded-full bg-emerald-50 border border-emerald-200 text-xs font-bold text-emerald-800"><i class="fa-solid fa-check mr-1.5"></i>' + accepted + ' Accepted</span>' +
+                '<span class="px-3.5 py-2 rounded-full bg-blue-50 border border-blue-200 text-xs font-bold text-blue-800"><i class="fa-solid fa-calendar-pen mr-1.5"></i>' + proposed + ' Proposed</span>' +
+                '<span class="px-3.5 py-2 rounded-full bg-slate-50 border border-slate-200 text-xs font-bold text-slate-700"><i class="fa-solid fa-list mr-1.5"></i>' + all.length + ' Total</span>';
+
+            const filtered = all.filter(c => {
+                if (sf !== 'all' && c.status !== sf) return false;
+                if (q && ![c.name, c.email, c.business, c.type, c.id].some(v => (v || '').toLowerCase().includes(q))) return false;
+                return true;
+            });
+
+            const el = document.getElementById('list');
+            if (!filtered.length) {
+                el.innerHTML = '<div class="text-center py-16 bg-white rounded-3xl border border-slate-200"><div class="w-14 h-14 rounded-2xl bg-blue-50 text-amberGold flex items-center justify-center mx-auto text-2xl"><i class="fa-solid fa-comments"></i></div><p class="text-sm font-bold text-slate-900 mt-3">No consultation requests found</p></div>';
+                return;
+            }
+
+            el.innerHTML = filtered.map(c => {
+                const wa = A.waLink(c.phone, 'Hi ' + c.name + ', regarding your consultation request (' + c.id + ') — ');
+                return '<div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-3 hover:border-amberGold/30 transition-colors">' +
+                    '<div class="flex flex-wrap items-start justify-between gap-2">' +
+                        '<div class="flex items-center gap-3">' +
+                            '<span class="w-10 h-10 rounded-xl bg-amberGold text-white flex items-center justify-center font-bold text-sm shrink-0">' + esc(A.initials(c.name)) + '</span>' +
+                            '<div><p class="text-sm font-bold text-slate-900">' + esc(c.name) + '</p><p class="text-[10px] text-slate-500">' + esc(c.email) + ' · ' + esc(c.phone) + '</p></div>' +
+                        '</div>' +
+                        statusBadge(c.status) +
+                    '</div>' +
+                    '<div class="grid sm:grid-cols-4 gap-3 text-xs">' +
+                        '<div><span class="text-slate-500">Type</span><p class="font-bold text-slate-900">' + esc(c.type) + '</p></div>' +
+                        '<div><span class="text-slate-500">Preferred Date</span><p class="font-bold text-slate-900">' + fmtDate(c.preferredDate) + '</p></div>' +
+                        '<div><span class="text-slate-500">Preferred Time</span><p class="font-bold text-slate-900">' + esc(c.preferredTime) + '</p></div>' +
+                        (c.business ? '<div><span class="text-slate-500">Business</span><p class="font-bold text-slate-900">' + esc(c.business) + '</p></div>' : '') +
+                    '</div>' +
+                    '<div class="text-xs"><span class="text-slate-500">Requirements</span><p class="text-slate-800 mt-0.5 leading-relaxed">' + esc(c.requirements) + '</p></div>' +
+                    (c.adminNote ? '<div class="p-3 bg-slate-50 rounded-xl text-xs"><span class="text-slate-500">Admin note:</span> <span class="text-slate-800">' + esc(c.adminNote) + '</span></div>' : '') +
+                    (c.status === 'Proposed' ? '<div class="p-3 bg-blue-50 rounded-xl border border-blue-200 text-xs"><span class="text-blue-600">Proposed:</span> <strong class="text-blue-800">' + fmtDate(c.proposedDate) + ' at ' + esc(c.proposedTime) + '</strong></div>' : '') +
+                    '<div class="flex flex-wrap gap-2 pt-1">' +
+                        (c.status === 'Pending' ? '<button onclick="Consult.openAccept(\'' + c.id + '\')" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-[11px] font-bold transition-all"><i class="fa-solid fa-check mr-1"></i>Accept</button>' +
+                        '<button onclick="Consult.openPropose(\'' + c.id + '\')" class="px-3.5 py-2 bg-amberGold hover:bg-royalBlue text-white rounded-lg text-[11px] font-bold transition-all"><i class="fa-solid fa-calendar-pen mr-1"></i>Propose Time</button>' +
+                        '<button onclick="Consult.openDecline(\'' + c.id + '\')" class="px-3.5 py-2 bg-white border border-red-300 text-red-600 hover:bg-red-50 rounded-lg text-[11px] font-bold transition-all"><i class="fa-solid fa-xmark mr-1"></i>Decline</button>' : '') +
+                        (wa ? '<a href="' + wa + '" target="_blank" class="px-3.5 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-[11px] font-bold transition-all"><i class="fa-brands fa-whatsapp mr-1"></i>WhatsApp</a>' : '') +
+                    '</div>' +
+                    '<p class="text-[10px] text-slate-400">' + esc(c.id) + ' · Submitted ' + A.fmtDateTime(c.createdAt) + '</p>' +
+                '</div>';
+            }).join('');
+        }
+
+        function openAccept(id) {
+            activeId = id;
+            document.getElementById('modal-title').textContent = 'Accept Consultation';
+            document.getElementById('modal-body').innerHTML =
+                '<p class="text-slate-600">Confirm this consultation request. The customer will see the status change to <strong>Accepted</strong>.</p>' +
+                '<div><label class="block text-[11px] font-bold text-slate-700 uppercase mb-1.5">Note to customer (optional)</label>' +
+                '<textarea id="m-note" rows="2" placeholder="e.g. See you at the academy on your preferred date!" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-amberGold resize-none"></textarea></div>' +
+                '<button onclick="Consult.doAccept()" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-sm"><i class="fa-solid fa-check mr-1.5"></i>Accept</button>';
+            document.getElementById('action-modal').classList.remove('hidden');
+        }
+
+        function openPropose(id) {
+            activeId = id;
+            document.getElementById('modal-title').textContent = 'Propose Alternative Time';
+            document.getElementById('modal-body').innerHTML =
+                '<p class="text-slate-600">Suggest a different date and time for the customer.</p>' +
+                '<div class="grid sm:grid-cols-2 gap-3">' +
+                '<div><label class="block text-[11px] font-bold text-slate-700 uppercase mb-1.5">Proposed Date *</label><input id="m-date" type="date" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-amberGold"></div>' +
+                '<div><label class="block text-[11px] font-bold text-slate-700 uppercase mb-1.5">Proposed Time *</label><select id="m-time" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-amberGold"><option value="">Select</option><option>9:00 AM</option><option>10:00 AM</option><option>11:00 AM</option><option>12:00 PM</option><option>2:00 PM</option><option>3:00 PM</option><option>4:00 PM</option><option>5:00 PM</option></select></div></div>' +
+                '<div><label class="block text-[11px] font-bold text-slate-700 uppercase mb-1.5">Note to customer (optional)</label>' +
+                '<textarea id="m-note" rows="2" placeholder="e.g. We\'re fully booked on your date, but available on..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-amberGold resize-none"></textarea></div>' +
+                '<button onclick="Consult.doPropose()" class="w-full py-3 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl text-sm"><i class="fa-solid fa-calendar-pen mr-1.5"></i>Send Proposal</button>';
+            document.getElementById('action-modal').classList.remove('hidden');
+        }
+
+        function openDecline(id) {
+            activeId = id;
+            document.getElementById('modal-title').textContent = 'Decline Consultation';
+            document.getElementById('modal-body').innerHTML =
+                '<p class="text-slate-600">Decline this consultation request. Please provide a reason so the customer understands.</p>' +
+                '<div><label class="block text-[11px] font-bold text-slate-700 uppercase mb-1.5">Reason *</label>' +
+                '<textarea id="m-note" rows="2" required placeholder="e.g. Unfortunately we are unable to accommodate this request at this time." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-amberGold resize-none"></textarea></div>' +
+                '<button onclick="Consult.doDecline()" class="w-full py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl text-sm"><i class="fa-solid fa-xmark mr-1.5"></i>Decline</button>';
+            document.getElementById('action-modal').classList.remove('hidden');
+        }
+
+        function closeModal() { document.getElementById('action-modal').classList.add('hidden'); activeId = null; }
+
+        function doAccept() {
+            D.consultations.accept(activeId, (document.getElementById('m-note').value || '').trim());
+            A.toast('Consultation accepted.'); closeModal(); render();
+        }
+        function doPropose() {
+            const date = document.getElementById('m-date').value, time = document.getElementById('m-time').value;
+            if (!date || !time) { A.toast('Please set a date and time.'); return; }
+            D.consultations.propose(activeId, date, time, (document.getElementById('m-note').value || '').trim());
+            A.toast('Proposal sent.'); closeModal(); render();
+        }
+        function doDecline() {
+            const note = (document.getElementById('m-note').value || '').trim();
+            if (!note) { A.toast('Please provide a reason.'); return; }
+            D.consultations.decline(activeId, note);
+            A.toast('Consultation declined.'); closeModal(); render();
+        }
+
+        function exportCsv() {
+            const rows = [['ID', 'Name', 'Email', 'Phone', 'Business', 'Type', 'Preferred Date', 'Preferred Time', 'Requirements', 'Status', 'Admin Note', 'Submitted']];
+            D.consultations.list().forEach(c => rows.push([c.id, c.name, c.email, c.phone, c.business, c.type, c.preferredDate, c.preferredTime, c.requirements, c.status, c.adminNote, c.createdAt]));
+            A.downloadCsv('nbca-consultations.csv', rows);
+        }
+
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+        window.addEventListener('admin-ready', render);
+
+        return { render, openAccept, openPropose, openDecline, closeModal, doAccept, doPropose, doDecline, exportCsv };
+    })();
+    </script>
+</body>
+</html>

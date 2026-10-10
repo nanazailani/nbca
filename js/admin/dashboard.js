@@ -7,7 +7,7 @@
     const charts = {};
     const sod = d => { const x = new Date(d); x.setHours(0, 0, 0, 0); return x; };
     const monthStart = (y, m) => new Date(y, m, 1);
-    const SRC = ['Orders', 'Class deposits', 'Workshops'], SRC_COLOR = ['#2563EB', '#10B981', '#8B5CF6'];
+    const SRC = ['Class deposits', 'Workshops'], SRC_COLOR = ['#10B981', '#8B5CF6'];
 
     // ---- period -> {start, end, buckets[], prev:{start,end}} (end is exclusive) ----
     function buildRange() {
@@ -48,24 +48,19 @@
     }
 
     function renderKpis(r) {
-        const ev = paidEvents(), orders = S.orders(), regs = S.regs().filter(x => x.classStatus !== 'Cancelled'), enr = S.enrolls().filter(x => x.status !== 'Cancelled'), accs = D.accounts.list();
+        const ev = paidEvents(), regs = S.regs().filter(x => x.classStatus !== 'Cancelled'), enr = S.enrolls().filter(x => x.status !== 'Cancelled'), accs = D.accounts.list();
         const sum = (a, b) => ev.filter(e => within(e.t, a, b)).reduce((s, e) => s + e.amt, 0);
         const cnt = (arr, key, a, b) => arr.filter(x => within(x[key], a, b)).length;
         const rev = sum(r.start, r.end), revP = sum(r.prev.start, r.prev.end);
-        const ord = cnt(orders, 'createdAt', r.start, r.end), ordP = cnt(orders, 'createdAt', r.prev.start, r.prev.end);
         const bk = cnt(regs, 'createdAt', r.start, r.end) + cnt(enr, 'createdAt', r.start, r.end), bkP = cnt(regs, 'createdAt', r.prev.start, r.prev.end) + cnt(enr, 'createdAt', r.prev.start, r.prev.end);
         const nm = cnt(accs, 'createdAt', r.start, r.end), nmP = cnt(accs, 'createdAt', r.prev.start, r.prev.end);
         const act = activeIn(r.start, r.end).size, actP = activeIn(r.prev.start, r.prev.end).size;
-        const paidOrders = orders.filter(o => o.paymentStatus === 'Paid' && within(o.paidAt || o.createdAt, r.start, r.end));
-        const aov = paidOrders.length ? paidOrders.reduce((s, o) => s + Number(o.total), 0) / paidOrders.length : 0;
         const d = (c, p) => { const x = kpiDelta(c, p); return { sub: x.text, subTone: x.tone }; };
         $('kpis').innerHTML = [
-            { icon: 'fa-wallet', tone: 'emerald', value: money(rev), label: 'Revenue (paid)', ...d(rev, revP), href: 'admin-orders.html' },
-            { icon: 'fa-bag-shopping', tone: 'blue', value: ord, label: 'Orders placed', ...d(ord, ordP), href: 'admin-orders.html' },
+            { icon: 'fa-wallet', tone: 'emerald', value: money(rev), label: 'Revenue (paid)', ...d(rev, revP) },
             { icon: 'fa-calendar-check', tone: 'amber', value: bk, label: 'Class & workshop bookings', ...d(bk, bkP), href: 'admin-bookings.html' },
             { icon: 'fa-user-plus', tone: 'violet', value: nm, label: 'New sign-ups', ...d(nm, nmP), href: 'admin-members.html' },
-            { icon: 'fa-bolt', tone: 'rose', value: act, label: 'Active members', sub: D.activity.onlineNow(5) + ' online now', subTone: 'text-emerald-600', href: 'admin-members.html' },
-            { icon: 'fa-receipt', tone: 'blue', value: money(aov), label: 'Avg. order value', sub: paidOrders.length + ' paid order' + (paidOrders.length === 1 ? '' : 's') }
+            { icon: 'fa-bolt', tone: 'rose', value: act, label: 'Active members', sub: D.activity.onlineNow(5) + ' online now', subTone: 'text-emerald-600', href: 'admin-members.html' }
         ].map(UI.kpi).join('');
         $('period-label').innerText = r.start.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) + ' – ' + new Date(+r.end - 1).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
     }

@@ -69,8 +69,7 @@
         return {
             admit: regs().filter(r => r.depositStatus === 'Paid' && r.classStatus === 'Pending Confirmation').length,
             reschedule: regs().filter(r => r.classStatus === 'Reschedule').length,
-            ship: orders().filter(o => o.status === 'Processing').length,
-            unpaidOrders: orders().filter(o => o.status === 'Pending Payment').length,
+            pendingConsult: D.consultations.list().filter(c => c.status === 'Pending').length,
             unassigned: unassignedSessions().length
         };
     }
@@ -81,11 +80,10 @@
             { id: 'dashboard', label: 'Dashboard', icon: 'fa-chart-pie', href: 'admin-dashboard.html' },
             { id: 'bookings', label: 'Class Bookings', icon: 'fa-calendar-check', href: 'admin-bookings.html', badge: 'admit' },
             { id: 'workshops', label: 'Workshop Enrollments', icon: 'fa-chalkboard-user', href: 'admin-workshops.html' },
-            { id: 'orders', label: 'Orders', icon: 'fa-bag-shopping', href: 'admin-orders.html', badge: 'ship' }
+            { id: 'consultations', label: 'Consultations', icon: 'fa-comments', href: 'admin-consultations.html', badge: 'pendingConsult' }
         ]},
         { group: 'Programs', items: [
-            { id: 'schedule', label: 'Class Schedule', icon: 'fa-user-tie', href: 'admin-schedule.html', badge: 'unassigned' },
-            { id: 'rewards', label: 'Membership & Rewards', icon: 'fa-gift', href: 'admin-rewards.html' }
+            { id: 'schedule', label: 'Class Schedule', icon: 'fa-user-tie', href: 'admin-schedule.html', badge: 'unassigned' }
         ]},
         { group: 'People', items: [
             { id: 'members', label: 'Members', icon: 'fa-users', href: 'admin-members.html' },
@@ -93,7 +91,6 @@
         ]},
         { group: 'Content', items: [
             { id: 'm-fixed', label: 'Fixed Class Settings', icon: 'fa-sliders', href: 'admin-manage.html?tab=fixed' },
-            { id: 'm-inventory', label: 'Inventory', icon: 'fa-boxes-stacked', href: 'admin-manage.html?tab=inventory' },
             { id: 'm-blog', label: 'Announcements', icon: 'fa-bullhorn', href: 'admin-manage.html?tab=blog' },
             { id: 'website', label: 'Website & Demo', icon: 'fa-globe', href: 'admin-website.html' }
         ]}
@@ -110,7 +107,7 @@
 
     function buildSidebar(c) {
         const el = document.getElementById('a-sidebar');
-        el.className = 'fixed inset-y-0 left-0 w-64 z-40 bg-slate-900 flex flex-col -translate-x-full lg:translate-x-0 transition-transform duration-300';
+        el.className = 'fixed inset-y-0 left-0 w-64 z-40 bg-slate-900 hidden lg:flex flex-col transition-transform duration-300';
         el.innerHTML =
             '<div class="h-20 px-5 flex items-center justify-between border-b border-white/10 shrink-0"><a href="admin-dashboard.html" class="flex items-center gap-3"><span class="w-10 h-10 rounded-xl bg-white flex items-center justify-center"><img src="images/logo.png" alt="" class="w-8 h-8 object-contain"></span>' +
             '<span class="leading-tight"><span class="block font-serif text-base font-extrabold tracking-wide text-white uppercase">Nb.CA</span><span class="block text-[10px] tracking-[0.2em] text-blue-300 uppercase font-bold">Admin Console</span></span></a>' +
@@ -123,31 +120,60 @@
     }
 
     function buildTopbar(c) {
-        const el = document.getElementById('a-topbar'), attention = c.admit + c.reschedule + c.ship + c.unassigned;
+        const el = document.getElementById('a-topbar'), attention = c.admit + c.reschedule + c.pendingConsult + c.unassigned;
         el.className = 'sticky top-0 z-30 h-16 lg:h-20 bg-slate-50/85 backdrop-blur-md border-b border-slate-200 px-4 sm:px-6 lg:px-10 flex items-center justify-between gap-3';
         el.innerHTML =
-            '<div class="flex items-center gap-3 min-w-0"><button onclick="AdminShell.openMenu()" class="lg:hidden w-10 h-10 rounded-xl bg-white border border-slate-200 text-slate-800 flex items-center justify-center shadow-sm" aria-label="Open menu"><i class="fa-solid fa-bars"></i></button>' +
-            '<div class="min-w-0"><h1 class="font-serif text-lg lg:text-2xl font-extrabold text-slate-900 truncate">' + esc(document.body.dataset.title || '') + '</h1><p class="hidden sm:block text-[11px] text-slate-500 truncate">' + esc(document.body.dataset.sub || '') + '</p></div></div>' +
-            '<div class="flex items-center gap-2 sm:gap-3 shrink-0"><span class="hidden md:flex items-center gap-2 px-3.5 py-2 rounded-full bg-white border border-slate-200 text-xs font-bold text-slate-700" title="Members active in the last 5 minutes"><span class="w-2 h-2 rounded-full ' + (D.activity.onlineNow(5) ? 'bg-emerald-500 animate-pulse' : 'bg-slate-300') + '"></span>' + D.activity.onlineNow(5) + ' online</span>' +
-            '<a href="index.html?preview=1" target="_blank" rel="noopener" class="hidden sm:flex items-center gap-2 px-3.5 py-2 rounded-full bg-white border border-slate-200 text-xs font-bold text-slate-700 hover:border-amberGold transition-all"><i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-amberGold"></i> View site</a>' +
-            '<a href="admin-dashboard.html" class="relative w-10 h-10 rounded-full bg-white border border-slate-200 text-slate-700 hover:border-amberGold flex items-center justify-center" aria-label="Needs attention"><i class="fa-solid fa-bell text-sm"></i>' +
-            (attention ? '<span class="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-amber-400 text-slate-900 text-[10px] font-extrabold flex items-center justify-center">' + attention + '</span>' : '') + '</a></div>';
+            '<a href="admin-dashboard.html" class="flex items-center gap-2 min-w-0" aria-label="Nb.CA Academy admin home">' +
+                '<img src="images/logo.png" alt="Nb.CA Academy" class="w-9 h-9 object-contain shrink-0">' +
+                '<div class="leading-tight min-w-0">' +
+                    '<span class="block font-serif text-base font-extrabold tracking-wide text-slate-900">Nb.CA</span>' +
+                    '<span class="block text-[9px] tracking-[0.2em] text-slate-500 uppercase">Academy</span>' +
+                '</div>' +
+            '</a>' +
+            '<div class="flex items-center gap-2 sm:gap-3 shrink-0">' +
+            '<a href="admin-dashboard.html" class="relative w-10 h-10 rounded-full bg-slate-200/80 text-slate-700 hover:bg-slate-300 flex items-center justify-center shadow-sm" aria-label="Needs attention"><i class="fa-solid fa-bell text-sm"></i>' +
+            (attention ? '<span class="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-amber-400 text-slate-900 text-[10px] font-extrabold flex items-center justify-center">' + attention + '</span>' : '') + '</a>' +
+            '<a href="admin-manage.html?tab=admins" class="w-10 h-10 rounded-full bg-amberGold text-white font-bold text-xs flex items-center justify-center shadow-md" aria-label="Admin profile">' + esc(initials(me.name)) + '</a>' +
+            '</div>';
     }
 
     function buildBottomNav(c) {
         const el = document.getElementById('a-bottomnav');
         el.className = 'lg:hidden fixed bottom-0 inset-x-0 z-30 bg-white/95 backdrop-blur border-t border-slate-200 flex items-stretch justify-around shadow-[0_-8px_24px_rgba(15,23,42,0.08)]';
         el.style.paddingBottom = 'env(safe-area-inset-bottom)';
-        const tabs = [['dashboard', 'Home', 'fa-chart-pie', 'admin-dashboard.html', 0], ['bookings', 'Bookings', 'fa-calendar-check', 'admin-bookings.html', c.admit], ['orders', 'Orders', 'fa-bag-shopping', 'admin-orders.html', c.ship], ['members', 'Members', 'fa-users', 'admin-members.html', 0]];
-        el.innerHTML = tabs.map(t => '<a href="' + t[3] + '" class="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 ' + (t[0] === page ? 'text-amberGold' : 'text-slate-500') + '"><span class="relative"><i class="fa-solid ' + t[2] + ' text-base"></i>' + (t[4] ? '<span class="absolute -top-1.5 -right-3 min-w-[16px] h-4 px-1 rounded-full bg-amber-400 text-slate-900 text-[9px] font-extrabold flex items-center justify-center">' + t[4] + '</span>' : '') + '</span><span class="text-[10px] font-bold">' + t[1] + '</span></a>').join('') +
-            '<button onclick="AdminShell.openMenu()" class="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-slate-500"><i class="fa-solid fa-ellipsis text-base"></i><span class="text-[10px] font-bold">More</span></button>';
+        const tabs = [['dashboard', 'Home', 'fa-chart-pie', 'admin-dashboard.html', 0], ['bookings', 'Bookings', 'fa-calendar-check', 'admin-bookings.html', c.admit], ['consultations', 'Consult', 'fa-comments', 'admin-consultations.html', c.pendingConsult], ['members', 'Members', 'fa-users', 'admin-members.html', 0]];
+        const extra = NAV.flatMap(g => g.items).filter(item => !tabs.some(t => t[0] === item.id));
+        el.innerHTML =
+            '<div class="mx-auto grid w-full max-w-md grid-cols-5 gap-1 p-3">' + tabs.map(t => '<a href="' + t[3] + '" class="flex flex-col items-center justify-center gap-1.5 py-3 ' + (t[0] === page ? 'text-amberGold' : 'text-slate-500') + '"><span class="relative"><i class="fa-solid ' + t[2] + ' text-lg"></i>' + (t[4] ? '<span class="absolute -top-1.5 -right-3 min-w-[16px] h-4 px-1 rounded-full bg-amber-400 text-slate-900 text-[9px] font-extrabold flex items-center justify-center">' + t[4] + '</span>' : '') + '</span><span class="text-[11px] font-bold">' + t[1] + '</span></a>').join('') +
+            '<button type="button" aria-controls="a-more-menu" aria-expanded="false" class="flex flex-col items-center justify-center gap-1.5 py-3 text-slate-500" onclick="AdminShell.toggleMoreNav()"><i class="fa-solid fa-ellipsis text-lg"></i><span class="text-[11px] font-bold">More</span></button>' +
+            '</div>' +
+            '<div id="a-more-menu" class="hidden absolute bottom-full right-4 mb-2 w-56 max-h-[70vh] overflow-y-auto rounded-2xl border border-slate-200 bg-white p-2 shadow-xl">' +
+                '<div class="space-y-1" onclick="event.stopPropagation()">' +
+                    extra.map(item => '<a href="' + item.href + '" class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-left ' + (item.id === page ? 'bg-amberGold text-white' : 'text-slate-700 hover:bg-slate-50') + '">' +
+                        '<span class="w-8 h-8 rounded-lg flex items-center justify-center ' + (item.id === page ? 'bg-white/20 text-white' : 'bg-slate-100 text-amberGold') + '"><i class="fa-solid ' + item.icon + '"></i></span>' +
+                        '<span class="text-[12px] font-bold">' + item.label + '</span>' +
+                    '</a>').join('') +
+                    '<button type="button" onclick="AdminShell.logout()" class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-red-600 hover:bg-red-50">' +
+                        '<span class="w-8 h-8 rounded-lg flex items-center justify-center bg-red-100 text-red-600"><i class="fa-solid fa-right-from-bracket"></i></span>' +
+                        '<span class="text-[12px] font-bold">Logout</span>' +
+                    '</button>' +
+                '</div>' +
+            '</div>';
     }
 
     window.AdminShell = {
         CFG, admin, esc, money, initials, ymd, regs, orders, enrolls, update, members, counts, holdsSeat, seatsUsed, workshopSeats, openDays, instructorOf, unassignedSessions,
-        saveRegs: save(D.K.regs), saveOrders: save(D.K.orders), saveEnrolls: save(D.K.enrolls),
-        openMenu() { document.getElementById('a-sidebar').classList.remove('-translate-x-full'); document.getElementById('a-overlay').classList.remove('hidden'); },
-        closeMenu() { document.getElementById('a-sidebar').classList.add('-translate-x-full'); document.getElementById('a-overlay').classList.add('hidden'); },
+        saveRegs: save(D.K.regs), saveEnrolls: save(D.K.enrolls),
+        openMenu() { if (window.innerWidth < 1024) return; const sidebar = document.getElementById('a-sidebar'); if (sidebar) sidebar.classList.remove('hidden'); const o = document.getElementById('a-overlay'); if (o) o.classList.add('hidden'); },
+        closeMenu() { if (window.innerWidth < 1024) return; const sidebar = document.getElementById('a-sidebar'); if (sidebar) sidebar.classList.add('hidden'); const o = document.getElementById('a-overlay'); if (o) o.classList.add('hidden'); },
+        toggleMoreNav(forceOpen) {
+            const menu = document.getElementById('a-more-menu');
+            if (!menu) return;
+            const button = document.querySelector('[aria-controls="a-more-menu"]');
+            const isOpen = typeof forceOpen === 'boolean' ? forceOpen : menu.classList.contains('hidden');
+            menu.classList.toggle('hidden', !isOpen);
+            if (button) button.setAttribute('aria-expanded', String(isOpen));
+        },
         logout() { localStorage.removeItem('rp_admin'); window.location.href = 'admin-login.html'; },
         toast(msg) {
             let t = document.getElementById('a-toast');
@@ -174,6 +200,13 @@
 
     const c = counts();
     buildSidebar(c); buildTopbar(c); buildBottomNav(c);
+    document.addEventListener('click', event => {
+        const nav = document.getElementById('a-bottomnav');
+        if (nav && !nav.contains(event.target)) AdminShell.toggleMoreNav(false);
+    });
+    document.addEventListener('keydown', event => {
+        if (event.key === 'Escape') AdminShell.toggleMoreNav(false);
+    });
     const ov = document.getElementById('a-overlay');
     ov.className = 'hidden lg:hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-30'; ov.onclick = AdminShell.closeMenu;
     document.addEventListener('keydown', e => { if (e.key === 'Escape') AdminShell.closeMenu(); });

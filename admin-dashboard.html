@@ -48,7 +48,7 @@
 
             <div class="grid lg:grid-cols-3 gap-6">
 <section class="lg:col-span-2 bg-white rounded-3xl border border-slate-200 shadow-sm p-5 sm:p-6 space-y-4"><div class="flex items-center justify-between gap-3"><h3 class="font-serif text-lg font-bold text-slate-900"><i class="fa-solid fa-chart-line text-amberGold mr-2"></i>Revenue trend</h3><span class="text-[11px] text-slate-500">Paid only</span></div><div class="relative h-64"><canvas id="c-revenue"></canvas><div data-empty class="hidden absolute inset-0 flex items-center justify-center text-center text-xs text-slate-400 px-6">No data for this period yet.</div></div></section>
-<section class=" bg-white rounded-3xl border border-slate-200 shadow-sm p-5 sm:p-6 space-y-4"><div class="flex items-center justify-between gap-3"><h3 class="font-serif text-lg font-bold text-slate-900"><i class="fa-solid fa-chart-pie text-amberGold mr-2"></i>Sales mix</h3></div><div class="relative h-64"><canvas id="c-mix"></canvas><div data-empty class="hidden absolute inset-0 flex items-center justify-center text-center text-xs text-slate-400 px-6">No data for this period yet.</div></div></section>
+<section class=" bg-white rounded-3xl border border-slate-200 shadow-sm p-5 sm:p-6 space-y-4"><div class="flex items-center justify-between gap-3"><h3 class="font-serif text-lg font-bold text-slate-900"><i class="fa-solid fa-chart-pie text-amberGold mr-2"></i>Class & workshop mix</h3></div><div class="relative h-64"><canvas id="c-mix"></canvas><div data-empty class="hidden absolute inset-0 flex items-center justify-center text-center text-xs text-slate-400 px-6">No data for this period yet.</div></div></section>
             </div>
 
             <div class="grid lg:grid-cols-2 gap-6">
@@ -56,16 +56,16 @@
 <section class=" bg-white rounded-3xl border border-slate-200 shadow-sm p-5 sm:p-6 space-y-4"><div class="flex items-center justify-between gap-3"><h3 class="font-serif text-lg font-bold text-slate-900"><i class="fa-solid fa-bolt text-amberGold mr-2"></i>Active members</h3><span class="text-[11px] text-slate-500">Unique members seen per day</span></div><div class="relative h-56"><canvas id="c-active"></canvas><div data-empty class="hidden absolute inset-0 flex items-center justify-center text-center text-xs text-slate-400 px-6">No data for this period yet.</div></div></section>
             </div>
 
-            <div class="grid lg:grid-cols-3 gap-6">
+        <!-- <div class="grid lg:grid-cols-3 gap-6">
 <section class=" bg-white rounded-3xl border border-slate-200 shadow-sm p-5 sm:p-6 space-y-4"><div class="flex items-center justify-between gap-3"><h3 class="font-serif text-lg font-bold text-slate-900"><i class="fa-solid fa-box text-amberGold mr-2"></i>Order status</h3><span class="text-[11px] text-slate-500">All time</span></div><div class="relative h-52"><canvas id="c-status"></canvas><div data-empty class="hidden absolute inset-0 flex items-center justify-center text-center text-xs text-slate-400 px-6">No data for this period yet.</div></div></section>
 <section class=" bg-white rounded-3xl border border-slate-200 shadow-sm p-5 sm:p-6 space-y-4"><div class="flex items-center justify-between gap-3"><h3 class="font-serif text-lg font-bold text-slate-900"><i class="fa-solid fa-mug-hot text-amberGold mr-2"></i>Top products</h3><span class="text-[11px] text-slate-500">Units sold</span></div><div class="relative h-52"><canvas id="c-products"></canvas><div data-empty class="hidden absolute inset-0 flex items-center justify-center text-center text-xs text-slate-400 px-6">No data for this period yet.</div></div></section>
 <section class=" bg-white rounded-3xl border border-slate-200 shadow-sm p-5 sm:p-6 space-y-4"><div class="flex items-center justify-between gap-3"><h3 class="font-serif text-lg font-bold text-slate-900"><i class="fa-solid fa-crown text-amberGold mr-2"></i>Member tiers</h3></div><div class="relative h-52"><canvas id="c-tiers"></canvas><div data-empty class="hidden absolute inset-0 flex items-center justify-center text-center text-xs text-slate-400 px-6">No data for this period yet.</div></div></section>
-            </div>
+            </div>  
 
             <div class="grid lg:grid-cols-5 gap-6">
 <section class="lg:col-span-3 bg-white rounded-3xl border border-slate-200 shadow-sm p-5 sm:p-6 space-y-4"><div class="flex items-center justify-between gap-3"><h3 class="font-serif text-lg font-bold text-slate-900"><i class="fa-solid fa-bolt text-amberGold mr-2"></i>Needs your attention</h3><span id="attn-count" class="text-xs font-bold text-slate-500"></span></div><div id="attention" class="space-y-2.5"></div></section>
 <section class="lg:col-span-2 bg-white rounded-3xl border border-slate-200 shadow-sm p-5 sm:p-6 space-y-4"><div class="flex items-center justify-between gap-3"><h3 class="font-serif text-lg font-bold text-slate-900"><i class="fa-solid fa-calendar-days text-amberGold mr-2"></i>Upcoming sessions</h3><a href="admin-schedule.html" class="text-[11px] font-bold text-amberGold hover:underline">Schedule</a></div><div id="sessions" class="space-y-3"></div></section>
-            </div>
+            </div>--> 
 
 <section class=" bg-white rounded-3xl border border-slate-200 shadow-sm p-5 sm:p-6 space-y-4"><div class="flex items-center justify-between gap-3"><h3 class="font-serif text-lg font-bold text-slate-900"><i class="fa-solid fa-clock-rotate-left text-amberGold mr-2"></i>Recent activity</h3></div><div id="activity" class="grid sm:grid-cols-2 gap-x-8 gap-y-3"></div></section>
 

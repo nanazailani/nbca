@@ -488,7 +488,8 @@
         let activeStockRow = null;
 
         // ===================== TABS =====================
-        const TABS = [['fixed', 'fixedclass', 'Fixed Class Settings', 'fa-sliders'], ['inventory', 'inventory', 'Inventory', 'fa-boxes-stacked'], ['blog', 'blog', 'Announcements', 'fa-bullhorn'], ['admins', 'admins', 'Admin Accounts', 'fa-user-shield']];
+        // Inventory is kept for phase 2; hide it from the admin tabs until it is ready.
+        const TABS = [['fixed', 'fixedclass', 'Fixed Class Settings', 'fa-sliders'], ['blog', 'blog', 'Announcements', 'fa-bullhorn'], ['admins', 'admins', 'Admin Accounts', 'fa-user-shield']];
         function showTab(key) {
             const t = TABS.find(x => x[0] === key) || TABS[0];
             document.querySelectorAll('.admin-view').forEach(el => el.classList.add('hidden'));

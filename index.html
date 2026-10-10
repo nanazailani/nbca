@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+﻿<!DOCTYPE html> 
 <html lang="en" class="scroll-smooth"> 
 <head> 
     <meta charset="UTF-8"> 
@@ -201,27 +201,22 @@
                     </div> 
                 </a> 
                 <!-- Desktop Menu --> 
-                <div class="hidden md:flex items-center space-x-8 text-sm font-medium"> 
-                    <a href="#fixed-classes" class="text-roast-800 hover:text-amberGold transition-colors font-bold">Fixed Classes</a> 
-                    <a href="#classes" class="text-roast-800 hover:text-amberGold transition-colors font-bold">Workshops</a> 
-                    <a href="#coffee-beans" class="text-roast-800 hover:text-amberGold transition-colors">Coffee Beans</a> 
-                    <a href="#location" class="text-roast-800 hover:text-amberGold transition-colors">Locations</a> 
+                <div class="hidden md:flex items-center space-x-8 text-sm font-medium">
+                    <a href="#fixed-classes" class="text-roast-800 hover:text-amberGold transition-colors font-bold">Fixed Classes</a>
+                    <a href="#classes" class="text-roast-800 hover:text-amberGold transition-colors font-bold">Workshops</a>
+                    <a href="#consulting" class="text-roast-800 hover:text-amberGold transition-colors">Consulting</a>
+                    <a href="#location" class="text-roast-800 hover:text-amberGold transition-colors">Locations</a>
                 </div> 
                 <!-- Right Actions --> 
-                <div class="flex items-center gap-2 sm:gap-4"> 
-                    <!-- Cart Button (Bulat Konsisten) -->
-                    <button onclick="toggleCart()" class="relative w-10 h-10 rounded-full bg-roast-100 hover:bg-roast-200 border border-roast-200 text-roast-900 flex items-center justify-center transition-all shadow-md"> 
-                        <i class="fa-solid fa-bag-shopping text-base"></i> 
-                        <span id="cart-count" class="absolute -top-1 -right-1 bg-amberGold text-roast-50 text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow">0</span> 
-                    </button> 
-                    <!-- Login Button / User State --> 
+                <div class="flex items-center gap-2 sm:gap-4">
+                    <!-- Login Button / User State -->
                     <div id="nav-auth-container">
                         <a href="auth.html" class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full bg-roast-100 hover:bg-roast-200 border border-roast-300 text-roast-800 hover:text-amberGold text-xs font-semibold transition-all"> 
                             <i class="fa-solid fa-user"></i> Sign In 
                         </a> 
                     </div>
                     <!-- Mobile Menu Button --> 
-                    <button onclick="toggleMobileMenu()" class="md:hidden p-2 text-roast-800 hover:text-roast-950 focus:outline-none"> 
+                    <button type="button" onclick="toggleMobileMenu()" aria-controls="mobile-menu" aria-expanded="false" aria-label="Open navigation menu" class="md:hidden p-2 text-roast-800 hover:text-roast-950 focus:outline-none"> 
                         <i class="fa-solid fa-bars text-xl" id="mobile-menu-icon"></i> 
                     </button> 
                 </div> 
@@ -236,11 +231,10 @@
             </div> 
             <a href="#about" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-800 hover:text-amberGold font-medium border-b border-roast-100/50"><i class="fa-solid fa-circle-info text-amberGold text-xs"></i> About Us</a> 
             <a href="#team" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-800 hover:text-amberGold font-medium border-b border-roast-100/50"><i class="fa-solid fa-users text-amberGold text-xs"></i> Meet The Team</a> 
-            <a href="#fixed-classes" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-800 hover:text-amberGold font-bold border-b border-roast-100/50"><i class="fa-solid fa-calendar-days text-amberGold text-xs"></i> Fixed Classes</a> 
-            <a href="#classes" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-800 hover:text-amberGold font-bold border-b border-roast-100/50"><i class="fa-solid fa-chalkboard-user text-amberGold text-xs"></i> Workshops</a> 
-            <a href="#coffee-beans" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-800 hover:text-amberGold font-medium border-b border-roast-100/50"><i class="fa-solid fa-mug-hot text-amberGold text-xs"></i> Coffee Beans</a> 
-            <a href="#blog" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-800 hover:text-amberGold font-medium border-b border-roast-100/50"><i class="fa-solid fa-bullhorn text-amberGold text-xs"></i> Announcements</a> 
-            <a href="#merchandise" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-800 hover:text-amberGold font-medium border-b border-roast-100/50"><i class="fa-solid fa-shirt text-amberGold text-xs"></i> Merchandise</a> 
+            <a href="#fixed-classes" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-800 hover:text-amberGold font-bold border-b border-roast-100/50"><i class="fa-solid fa-calendar-days text-amberGold text-xs"></i> Fixed Classes</a>
+            <a href="#classes" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-800 hover:text-amberGold font-bold border-b border-roast-100/50"><i class="fa-solid fa-chalkboard-user text-amberGold text-xs"></i> Workshops</a>
+            <a href="#consulting" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-800 hover:text-amberGold font-medium border-b border-roast-100/50"><i class="fa-solid fa-comments text-amberGold text-xs"></i> Consulting Services</a>
+            <a href="#blog" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-800 hover:text-amberGold font-medium border-b border-roast-100/50"><i class="fa-solid fa-bullhorn text-amberGold text-xs"></i> Announcements</a>
             <a href="#location" onclick="toggleMobileMenu()" class="flex items-center gap-3 py-2.5 text-roast-800 hover:text-amberGold font-medium"><i class="fa-solid fa-location-dot text-amberGold text-xs"></i> Locations & Outlets</a> 
             <div class="pt-2" id="mobile-auth-container"> 
                 <a href="auth.html" class="w-full py-3 rounded-xl bg-roast-100 border border-roast-300 text-roast-800 font-bold text-xs flex items-center justify-center gap-2 shadow-md"> 
@@ -518,116 +512,73 @@
         </div> 
     </section> 
 
-    <!-- COFFEE BEANS SHOP SECTION (DE-EMPHASIZED — SECONDARY OFFERING) --> 
-    <section id="coffee-beans" class="relative overflow-hidden py-12 bg-roast-50 border-t border-roast-100"> 
-        <div class="absolute -bottom-16 -right-16 w-64 h-64 bg-blue-300/10 rounded-full blur-3xl pointer-events-none"></div> 
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10"> <i class="fa-solid fa-mug-saucer absolute -top-8 left-1/4 text-[180px] text-amberGold/[0.06] rotate-6 pointer-events-none select-none"></i> 
-        
-            <div class="reveal-up text-center mb-8"> 
-                <span class="text-[11px] font-bold tracking-widest text-roast-500 uppercase">Also Available</span> 
-                <h2 class="text-xl sm:text-2xl font-bold text-roast-800 mt-1">Coffee Beans, By The Bag</h2> 
-                <p class="text-xs text-roast-500 mt-1 font-light max-w-lg mx-auto">Take the beans we teach with home with you.</p> 
-            </div> 
-
-            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-3 sm:gap-6 max-w-6xl mx-auto reveal-stagger" id="coffee-grid"> 
-                <div class="coffee-card dark card-lift bg-roast-100/80 rounded-2xl p-3 sm:p-6 border border-roast-200 hover:border-amberGold/50 flex flex-col justify-between group overflow-hidden"> 
-                    <div> 
-                        <div class="relative h-24 sm:h-48 rounded-lg sm:rounded-xl overflow-hidden mb-2 sm:mb-4 border border-roast-200 bg-roast-50"> 
-                            <img src="https://images.unsplash.com/photo-1587734195503-904fca47e0e9?auto=format&fit=crop&w=600&q=80" alt="1st Grind HITAM MANIS Coffee Beans" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"> 
-                            <span class="absolute top-3 left-3 px-2.5 py-1 bg-amberGold text-roast-50 font-bold text-[10px] uppercase rounded-full">Free Shipping</span> 
-                        </div> 
-                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-1 sm:gap-0 mb-2 sm:mb-3"> 
-                            <span class="px-2 py-0.5 sm:px-2.5 sm:py-1 bg-roast-200 text-amberGold text-[9px] sm:text-[11px] font-bold uppercase rounded-md w-fit">1st Grind</span> 
-                            <span class="text-xs sm:text-sm font-bold text-amberGold">RM 30.00</span> 
-                        </div> 
-                        <h3 class="text-sm sm:text-xl font-bold text-roast-950 font-serif mb-1 leading-tight group-hover:text-amberGold transition-colors">1st Grind HITAM MANIS Coffee Beans</h3> 
-                        <p class="hidden sm:block text-xs text-roast-600 mb-3">Dark Roast Blend</p> 
-                        <p class="hidden sm:block text-sm text-roast-700 font-light mb-4 line-clamp-2">Bold, sweet dark roast blend — a house favourite with a rich, syrupy body.</p> 
-                        <div class="hidden sm:flex flex-wrap gap-1.5 mb-6"> 
-                            <span class="px-2 py-0.5 bg-roast-50 rounded text-[10px] text-roast-700">Bold & Sweet</span> 
-                            <span class="px-2 py-0.5 bg-roast-50 rounded text-[10px] text-roast-700">Rich Body</span> 
-                            <span class="px-2 py-0.5 bg-roast-50 rounded text-[10px] text-roast-700">Free Shipping</span> 
-                        </div> 
-                    </div> 
-                    <button onclick="openProductModal('hitam-manis')" class="btn-anim w-full py-2 sm:py-3 bg-amberGold hover:bg-royalBlue text-roast-50 font-bold rounded-lg sm:rounded-xl text-[10px] sm:text-xs transition-all shadow-md flex items-center justify-center gap-1 sm:gap-2"> 
-                        <i class="fa-solid fa-circle-info"></i> Learn More 
-                    </button> 
-                </div> 
-
-                <div class="coffee-card blend card-lift bg-roast-100/80 rounded-2xl p-3 sm:p-6 border border-roast-200 hover:border-amberGold/50 flex flex-col justify-between group overflow-hidden"> 
-                    <div> 
-                        <div class="relative h-24 sm:h-48 rounded-lg sm:rounded-xl overflow-hidden mb-2 sm:mb-4 border border-roast-200 bg-roast-50"> 
-                            <img src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?auto=format&fit=crop&w=600&q=80" alt="1st Grind Cream Beans (Blend)" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"> 
-                            <span class="absolute top-3 left-3 px-2.5 py-1 bg-amberGold text-roast-50 font-bold text-[10px] uppercase rounded-full">Free Shipping</span> 
-                        </div> 
-                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-1 sm:gap-0 mb-2 sm:mb-3"> 
-                            <span class="px-2 py-0.5 sm:px-2.5 sm:py-1 bg-roast-200 text-amberGold text-[9px] sm:text-[11px] font-bold uppercase rounded-md w-fit">1st Grind</span> 
-                            <span class="text-xs sm:text-sm font-bold text-amberGold">RM 35.00</span> 
-                        </div> 
-                        <h3 class="text-sm sm:text-xl font-bold text-roast-950 font-serif mb-1 leading-tight group-hover:text-amberGold transition-colors">1st Grind Cream Beans (Blend)</h3> 
-                        <p class="hidden sm:block text-xs text-roast-600 mb-3">Medium Roast Blend</p> 
-                        <p class="hidden sm:block text-sm text-roast-700 font-light mb-4 line-clamp-2">Smooth, creamy blend with a mellow, well-rounded finish — great for milk-based drinks.</p> 
-                        <div class="hidden sm:flex flex-wrap gap-1.5 mb-6"> 
-                            <span class="px-2 py-0.5 bg-roast-50 rounded text-[10px] text-roast-700">Creamy</span> 
-                            <span class="px-2 py-0.5 bg-roast-50 rounded text-[10px] text-roast-700">Smooth Finish</span> 
-                            <span class="px-2 py-0.5 bg-roast-50 rounded text-[10px] text-roast-700">Free Shipping</span> 
-                        </div> 
-                    </div> 
-                    <button onclick="openProductModal('cream-beans')" class="btn-anim w-full py-2 sm:py-3 bg-amberGold hover:bg-royalBlue text-roast-50 font-bold rounded-lg sm:rounded-xl text-[10px] sm:text-xs transition-all shadow-md flex items-center justify-center gap-1 sm:gap-2"> 
-                        <i class="fa-solid fa-circle-info"></i> Learn More 
-                    </button> 
-                </div> 
-
-                <div class="coffee-card blend card-lift bg-roast-100/80 rounded-2xl p-3 sm:p-6 border border-roast-200 hover:border-amberGold/50 flex flex-col justify-between group overflow-hidden"> 
-                    <div> 
-                        <div class="relative h-24 sm:h-48 rounded-lg sm:rounded-xl overflow-hidden mb-2 sm:mb-4 border border-roast-200 bg-roast-50"> 
-                            <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=600&q=80" alt="1st Grind BLACK STONE (Blend)" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"> 
-                            <span class="absolute top-3 left-3 px-2.5 py-1 bg-amberGold text-roast-50 font-bold text-[10px] uppercase rounded-full">Free Shipping</span> 
-                        </div> 
-                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-1 sm:gap-0 mb-2 sm:mb-3"> 
-                            <span class="px-2 py-0.5 sm:px-2.5 sm:py-1 bg-roast-200 text-amberGold text-[9px] sm:text-[11px] font-bold uppercase rounded-md w-fit">1st Grind</span> 
-                            <span class="text-xs sm:text-sm font-bold text-amberGold">RM 35.00</span> 
-                        </div> 
-                        <h3 class="text-sm sm:text-xl font-bold text-roast-950 font-serif mb-1 leading-tight group-hover:text-amberGold transition-colors">1st Grind BLACK STONE (Blend)</h3> 
-                        <p class="hidden sm:block text-xs text-roast-600 mb-3">Bold Blend</p> 
-                        <p class="hidden sm:block text-sm text-roast-700 font-light mb-4 line-clamp-2">A robust, punchy blend with deep cocoa notes — built for a strong daily cup.</p> 
-                        <div class="hidden sm:flex flex-wrap gap-1.5 mb-6"> 
-                            <span class="px-2 py-0.5 bg-roast-50 rounded text-[10px] text-roast-700">Deep Cocoa</span> 
-                            <span class="px-2 py-0.5 bg-roast-50 rounded text-[10px] text-roast-700">Bold</span> 
-                            <span class="px-2 py-0.5 bg-roast-50 rounded text-[10px] text-roast-700">Free Shipping</span> 
-                        </div> 
-                    </div> 
-                    <button onclick="openProductModal('black-stone')" class="btn-anim w-full py-2 sm:py-3 bg-amberGold hover:bg-royalBlue text-roast-50 font-bold rounded-lg sm:rounded-xl text-[10px] sm:text-xs transition-all shadow-md flex items-center justify-center gap-1 sm:gap-2"> 
-                        <i class="fa-solid fa-circle-info"></i> Learn More 
-                    </button> 
-                </div> 
-
-                <div class="coffee-card blend card-lift bg-roast-100/80 rounded-2xl p-3 sm:p-6 border border-roast-200 hover:border-amberGold/50 flex flex-col justify-between group overflow-hidden"> 
-                    <div> 
-                        <div class="relative h-24 sm:h-48 rounded-lg sm:rounded-xl overflow-hidden mb-2 sm:mb-4 border border-roast-200 bg-roast-50"> 
-                            <img src="https://images.unsplash.com/photo-1521302080334-4bebac2763a6?auto=format&fit=crop&w=600&q=80" alt="1st Grind SUNRISE (Blend)" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"> 
-                            <span class="absolute top-3 left-3 px-2.5 py-1 bg-amberGold text-roast-50 font-bold text-[10px] uppercase rounded-full">Free Shipping</span> 
-                        </div> 
-                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-1 sm:gap-0 mb-2 sm:mb-3"> 
-                            <span class="px-2 py-0.5 sm:px-2.5 sm:py-1 bg-roast-200 text-amberGold text-[9px] sm:text-[11px] font-bold uppercase rounded-md w-fit">1st Grind</span> 
-                            <span class="text-xs sm:text-sm font-bold text-amberGold">RM 35.00</span> 
-                        </div> 
-                        <h3 class="text-sm sm:text-xl font-bold text-roast-950 font-serif mb-1 leading-tight group-hover:text-amberGold transition-colors">1st Grind SUNRISE (Blend)</h3> 
-                        <p class="hidden sm:block text-xs text-roast-600 mb-3">Light-Medium Roast Blend</p> 
-                        <p class="hidden sm:block text-sm text-roast-700 font-light mb-4 line-clamp-2">Bright, uplifting blend with fruity, citrusy notes — a refreshing way to start the day.</p> 
-                        <div class="hidden sm:flex flex-wrap gap-1.5 mb-6"> 
-                            <span class="px-2 py-0.5 bg-roast-50 rounded text-[10px] text-roast-700">Bright & Fruity</span> 
-                            <span class="px-2 py-0.5 bg-roast-50 rounded text-[10px] text-roast-700">Citrusy</span> 
-                            <span class="px-2 py-0.5 bg-roast-50 rounded text-[10px] text-roast-700">Free Shipping</span> 
-                        </div> 
-                    </div> 
-                    <button onclick="openProductModal('sunrise')" class="btn-anim w-full py-2 sm:py-3 bg-amberGold hover:bg-royalBlue text-roast-50 font-bold rounded-lg sm:rounded-xl text-[10px] sm:text-xs transition-all shadow-md flex items-center justify-center gap-1 sm:gap-2"> 
-                        <i class="fa-solid fa-circle-info"></i> Learn More 
-                    </button> 
-                </div> 
+    <!-- SCA CLASSES (COMING SOON) --> 
+    <section id="sca-classes" class="relative overflow-hidden py-20 bg-roast-50 border-t border-roast-100">
+        <div class="absolute top-0 -left-20 w-72 h-72 bg-blue-300/12 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute bottom-0 -right-16 w-80 h-80 bg-amberGold/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="reveal-up text-center max-w-2xl mx-auto mb-12">
+                <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-100 text-amber-700 text-xs font-bold uppercase tracking-wider border border-amber-200 mb-3"><i class="fa-solid fa-certificate text-[10px]"></i> Coming Soon</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-roast-950 mt-1">SCA Certified Classes</h2>
+                <p class="text-roast-700 text-sm mt-3 font-light">Internationally recognised Specialty Coffee Association (SCA) certification courses — coming to Nb.CA Academy.</p>
             </div>
-        </div> 
-    </section> 
+            <div class="max-w-4xl mx-auto grid md:grid-cols-3 gap-6 reveal-stagger">
+                <div class="bg-white rounded-2xl border border-roast-200 p-6 text-center space-y-3 opacity-80">
+                    <div class="w-14 h-14 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center mx-auto text-2xl"><i class="fa-solid fa-flask"></i></div>
+                    <h3 class="font-serif text-lg font-bold text-roast-950">SCA Brewing Foundation</h3>
+                    <p class="text-xs text-roast-600">Understand brewing variables, extraction theory and quality standards set by the SCA.</p>
+                    <span class="inline-block px-3 py-1 bg-amber-50 border border-amber-200 text-amber-700 text-[10px] font-bold uppercase rounded-full">Coming Soon</span>
+                </div>
+                <div class="bg-white rounded-2xl border border-roast-200 p-6 text-center space-y-3 opacity-80">
+                    <div class="w-14 h-14 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center mx-auto text-2xl"><i class="fa-solid fa-mug-hot"></i></div>
+                    <h3 class="font-serif text-lg font-bold text-roast-950">SCA Barista Skills</h3>
+                    <p class="text-xs text-roast-600">Espresso preparation, milk techniques and workflow management to SCA standards.</p>
+                    <span class="inline-block px-3 py-1 bg-amber-50 border border-amber-200 text-amber-700 text-[10px] font-bold uppercase rounded-full">Coming Soon</span>
+                </div>
+                <div class="bg-white rounded-2xl border border-roast-200 p-6 text-center space-y-3 opacity-80">
+                    <div class="w-14 h-14 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center mx-auto text-2xl"><i class="fa-solid fa-leaf"></i></div>
+                    <h3 class="font-serif text-lg font-bold text-roast-950">SCA Green Coffee</h3>
+                    <p class="text-xs text-roast-600">Learn green coffee processing, grading and evaluation from origin to roaster.</p>
+                    <span class="inline-block px-3 py-1 bg-amber-50 border border-amber-200 text-amber-700 text-[10px] font-bold uppercase rounded-full">Coming Soon</span>
+                </div>
+            </div>
+            <p class="reveal-up text-center text-xs text-roast-500 mt-8">Interested? <a href="#consulting" class="text-amberGold font-bold hover:underline">Contact us</a> to register your interest and be notified when enrolment opens.</p>
+        </div>
+    </section>
+
+    <!-- CONSULTING SERVICES SECTION -->
+    <section id="consulting" class="relative overflow-hidden py-20 bg-gradient-to-b from-roast-50 to-roast-100/60 border-t border-roast-100">
+        <div class="absolute top-0 -right-24 w-80 h-80 bg-blue-300/12 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute bottom-0 -left-16 w-72 h-72 bg-amberGold/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="reveal-up text-center max-w-2xl mx-auto mb-12">
+                <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amberGold/10 text-amberGold text-xs font-bold uppercase tracking-wider border border-amberGold/20 mb-3"><i class="fa-solid fa-comments text-[10px]"></i> Consulting</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-roast-950 mt-1">Consulting Services</h2>
+                <p class="text-roast-700 text-sm mt-3 font-light">Get personalised advice from our certified instructors — whether you're starting a cafe, improving your menu, or training your team.</p>
+            </div>
+            <div class="max-w-5xl mx-auto grid md:grid-cols-3 gap-6 reveal-stagger">
+                <div class="card-lift bg-white rounded-2xl border border-roast-200 p-6 space-y-4 hover:border-amberGold/50">
+                    <div class="w-12 h-12 rounded-xl bg-blue-50 text-amberGold flex items-center justify-center text-xl"><i class="fa-solid fa-store"></i></div>
+                    <h3 class="font-serif text-lg font-bold text-roast-950">Cafe Setup & Planning</h3>
+                    <p class="text-xs text-roast-600 leading-relaxed">From concept to opening day — equipment selection, menu design, workflow planning and supplier sourcing.</p>
+                </div>
+                <div class="card-lift bg-white rounded-2xl border border-roast-200 p-6 space-y-4 hover:border-amberGold/50">
+                    <div class="w-12 h-12 rounded-xl bg-blue-50 text-amberGold flex items-center justify-center text-xl"><i class="fa-solid fa-users-gear"></i></div>
+                    <h3 class="font-serif text-lg font-bold text-roast-950">Staff Training</h3>
+                    <p class="text-xs text-roast-600 leading-relaxed">On-site or academy-based training for your baristas and team — brewing standards, service flow and quality consistency.</p>
+                </div>
+                <div class="card-lift bg-white rounded-2xl border border-roast-200 p-6 space-y-4 hover:border-amberGold/50">
+                    <div class="w-12 h-12 rounded-xl bg-blue-50 text-amberGold flex items-center justify-center text-xl"><i class="fa-solid fa-clipboard-check"></i></div>
+                    <h3 class="font-serif text-lg font-bold text-roast-950">Menu & Quality Audit</h3>
+                    <p class="text-xs text-roast-600 leading-relaxed">We review your current coffee programme and recommend improvements to recipes, equipment and workflow.</p>
+                </div>
+            </div>
+            <div class="reveal-up text-center mt-10">
+                <a href="auth.html?next=consultation.html" class="btn-anim inline-flex items-center gap-2 px-8 py-3.5 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl text-sm shadow-lg transition-all"><i class="fa-solid fa-paper-plane text-xs"></i> Request a Consultation</a>
+                <p class="text-[10px] text-roast-500 mt-3">No payment required — submit your enquiry and our team will get back to you.</p>
+            </div>
+        </div>
+    </section>
 
     <!-- BLOG SECTION --> 
     <section id="blog" class="relative overflow-hidden py-20 bg-roast-100/40 border-t border-roast-100"> 
@@ -644,69 +595,6 @@
         </div> 
     </section> 
 
-    <!-- MERCHANDISE SECTION (DE-EMPHASIZED — SECONDARY OFFERING) --> 
-    <section id="merchandise" class="relative overflow-hidden py-12 bg-roast-50 border-t border-roast-100"> 
-        <div class="absolute top-0 -left-16 w-64 h-64 bg-amberGold/10 rounded-full blur-3xl pointer-events-none"></div> 
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10"> <i class="fa-solid fa-shirt absolute bottom-0 -right-10 text-[160px] text-amberGold/[0.06] rotate-12 pointer-events-none select-none"></i> 
-        
-            <div class="reveal-up text-center max-w-2xl mx-auto mb-8"> 
-                <span class="text-[11px] font-bold tracking-widest text-roast-500 uppercase">Also Available</span> 
-                <h2 class="text-xl sm:text-2xl font-bold text-roast-800 mt-1">Academy Merchandise</h2> 
-                <p class="text-roast-500 text-xs mt-2 font-light">Collaborative apparel & lifestyle items created with local artist <strong>Sin Chan</strong>.</p> 
-            </div> 
-            <div class="grid grid-cols-2 md:grid-cols-2 gap-3 sm:gap-8 max-w-4xl mx-auto reveal-stagger"> 
-                <div class="card-lift bg-roast-100/90 rounded-2xl overflow-hidden border border-roast-200 hover:border-amberGold/50 flex flex-col justify-between group"> 
-                    <div> 
-                        <div class="relative h-28 sm:h-64 overflow-hidden bg-roast-50 border-b border-roast-200"> 
-                            <img src="https://images.unsplash.com/photo-1572375992501-4b0892d50c69?auto=format&fit=crop&w=800&q=80" alt="Nb.CA Academy Sticker Pack" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"> 
-                            <span class="absolute top-2 left-2 sm:top-4 sm:left-4 px-2 py-0.5 sm:px-3 sm:py-1 bg-amberGold text-roast-50 text-[8px] sm:text-[10px] font-bold uppercase rounded-full">Sin Chan Collab</span> 
-                        </div> 
-                        <div class="p-2.5 sm:p-6"> 
-                            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-0.5 sm:gap-0 mb-1 sm:mb-2"> 
-                                <h3 class="text-xs sm:text-xl font-bold text-roast-950 font-serif leading-tight line-clamp-2 sm:line-clamp-none group-hover:text-amberGold transition-colors">Nb.CA Academy Sticker Pack</h3> 
-                                <span class="text-xs sm:text-base text-amberGold font-bold">RM 12.00</span> 
-                            </div> 
-                            <p class="hidden sm:block text-xs text-roast-600 mb-3">Project: Collaborative Series with Sin Chan</p> 
-                            <p class="hidden sm:block text-sm text-roast-700 font-light mb-4">Includes five unique sticker designs created in partnership with local artist Sin Chan, capturing raw coffee culture and edgy art style.</p> 
-                            <div class="hidden sm:flex flex-wrap gap-1.5 mb-2"> 
-                                <span class="px-2 py-0.5 bg-roast-50 rounded text-[10px] text-roast-700">5 Unique Designs</span> 
-                                <span class="px-2 py-0.5 bg-roast-50 rounded text-[10px] text-roast-700">Vinyl Waterproof</span> 
-                                <span class="px-2 py-0.5 bg-roast-50 rounded text-[10px] text-roast-700">Limited Edition</span> 
-                            </div> 
-                        </div> 
-                    </div> 
-                    <div class="px-2.5 pb-2.5 sm:px-6 sm:pb-6"> 
-                        <button onclick="checkAuthAndExecute(() => addToCart('Nb.CA Academy Sticker Pack', 12.00))" class="btn-anim w-full py-1.5 sm:py-3 bg-roast-200 hover:bg-amberGold hover:text-roast-50 text-roast-900 font-bold rounded-lg sm:rounded-xl text-[10px] sm:text-sm transition-all"> + Add To Cart </button> 
-                    </div> 
-                </div> 
-
-                <div class="card-lift bg-roast-100/90 rounded-2xl overflow-hidden border border-roast-200 hover:border-amberGold/50 flex flex-col justify-between group"> 
-                    <div> 
-                        <div class="relative h-28 sm:h-64 overflow-hidden bg-roast-50 border-b border-roast-200"> 
-                            <img src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=800&q=80" alt="Nb.CA Academy T-Shirt" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"> 
-                            <span class="absolute top-2 left-2 sm:top-4 sm:left-4 px-2 py-0.5 sm:px-3 sm:py-1 bg-amberGold text-roast-50 text-[8px] sm:text-[10px] font-bold uppercase rounded-full">Sin Chan Collab</span> 
-                        </div> 
-                        <div class="p-2.5 sm:p-6"> 
-                            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-0.5 sm:gap-0 mb-1 sm:mb-2"> 
-                                <h3 class="text-xs sm:text-xl font-bold text-roast-950 font-serif leading-tight line-clamp-2 sm:line-clamp-none group-hover:text-amberGold transition-colors">Nb.CA Academy T-Shirt</h3> 
-                                <span class="text-xs sm:text-base text-amberGold font-bold">RM 85.00</span> 
-                            </div> 
-                            <p class="hidden sm:block text-xs text-roast-600 mb-3">Project: Collaborative Project with Sin Chan</p> 
-                            <p class="hidden sm:block text-sm text-roast-700 font-light mb-4">Fuses Nb.CA Academy's bold vision with Sin Chan's striking and edgy artistic style. Rebellious streetwear design embodying raw energy and fearless creativity.</p> 
-                            <div class="hidden sm:flex flex-wrap gap-1.5 mb-2"> 
-                                <span class="px-2 py-0.5 bg-roast-50 rounded text-[10px] text-roast-700">100% Heavyweight Cotton</span> 
-                                <span class="px-2 py-0.5 bg-roast-50 rounded text-[10px] text-roast-700">Oversized Fit</span> 
-                                <span class="px-2 py-0.5 bg-roast-50 rounded text-[10px] text-roast-700">Screen Print</span> 
-                            </div> 
-                        </div> 
-                    </div> 
-                    <div class="px-2.5 pb-2.5 sm:px-6 sm:pb-6"> 
-                        <button onclick="checkAuthAndExecute(() => addToCart('Nb.CA Academy T-Shirt', 85.00))" class="btn-anim w-full py-1.5 sm:py-3 bg-roast-200 hover:bg-amberGold hover:text-roast-50 text-roast-900 font-bold rounded-lg sm:rounded-xl text-[10px] sm:text-sm transition-all"> + Add To Cart </button> 
-                    </div> 
-                </div> 
-            </div> 
-        </div> 
-    </section> 
 
     <!-- INTERACTIVE BREW GUIDE CALCULATOR --> 
     <!-- LOCATION & CONTACT --> 
@@ -731,8 +619,6 @@
                         </div> 
                     </div> 
                     <div class="flex flex-wrap gap-4"> 
-                        <a href="https://www.tiktok.com/@nbca_academy?_r=1&_t=ZS-99HTIJx1lrw" target="_blank" class="px-6 py-3 rounded-xl bg-roast-200 hover:bg-roast-300 text-roast-950 text-xs font-bold transition-all flex items-center gap-2"> 
-                            <i class="fa-brands fa-tiktok text-amberGold"></i> TikTok Shop </a> 
                         <a href="https://wa.me/60123456789" target="_blank" class="px-6 py-3 rounded-xl bg-green-700/80 hover:bg-green-600 text-roast-950 text-xs font-bold transition-all flex items-center gap-2"> 
                             <i class="fa-brands fa-whatsapp text-lg"></i> Contact via WhatsApp </a> 
                     </div> 
@@ -766,9 +652,6 @@
                         <a href="https://www.tiktok.com/@nbca_academy?_r=1&_t=ZS-99HTIJx1lrw" target="_blank" class="w-10 h-10 rounded-full bg-white hover:bg-amberGold hover:text-white flex items-center justify-center transition-all border border-white/20 shadow-sm"> 
                             <i class="fa-brands fa-tiktok"></i> 
                         </a> 
-                        <a href="https://www.tiktok.com/@nbca_academy?_r=1&_t=ZS-99HTIJx1lrw" target="_blank" class="w-10 h-10 rounded-full bg-white hover:bg-amberGold hover:text-white flex items-center justify-center transition-all border border-white/20 shadow-sm"> 
-                            <i class="fa-solid fa-bag-shopping text-base"></i> 
-                        </a> 
                     </div> 
                     <p id="site-handle" class="text-xs text-white font-medium tracking-wide">@nbca.academy</p> 
                 </div> 
@@ -780,7 +663,7 @@
                 </div> 
             </div> 
             <div class="border-t border-white/20 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-white"> 
-                <p>© 2026 Nb.CA Academy. E-commerce Powered by Nb.CA Academy.</p> 
+                <p>© 2026 Nb.CA Academy. All rights reserved.</p> 
                 <div class="flex flex-wrap gap-6 font-medium"> 
                     <a href="#" class="hover:text-amberGold transition-colors">Terms of Service</a> 
                     <a href="#" class="hover:text-amberGold transition-colors">Privacy Policy</a> 
@@ -800,256 +683,10 @@
         </div> 
     </div> 
 
-    <!-- PRODUCT DETAIL MODAL --> 
-    <div id="product-modal" class="modal-overlay fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4"> 
-        <div class="modal-panel bg-gradient-to-b from-roast-100 to-roast-50 border border-roast-200 rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative text-left p-6 sm:p-8"> 
-            <button onclick="closeProductModal()" class="absolute top-4 right-4 z-10 bg-roast-50/80 border border-roast-300 text-roast-800 hover:text-roast-950 p-2 rounded-full w-10 h-10 flex items-center justify-center shadow transition-all"> 
-                <i class="fa-solid fa-xmark text-lg"></i> 
-            </button> 
-            <div class="text-xs text-roast-600 mb-6 flex items-center gap-2"> 
-                <a href="#coffee-beans" onclick="closeProductModal()" class="hover:text-amberGold">Home</a> 
-                <i class="fa-solid fa-chevron-right text-[9px]"></i> 
-                <a href="#coffee-beans" onclick="closeProductModal()" class="hover:text-amberGold">Shop / Coffee</a> 
-                <i class="fa-solid fa-chevron-right text-[9px]"></i> 
-                <span id="pm-breadcrumb-name" class="text-roast-950 font-medium">Brazil Santuario Sul Lot 1</span> 
-            </div> 
-            <div class="grid md:grid-cols-12 gap-8 mb-8"> 
-                <div class="md:col-span-5"> 
-                    <div class="relative h-72 sm:h-80 rounded-2xl overflow-hidden border border-roast-200 bg-roast-50 group"> 
-                        <img id="pm-image" src="" alt="Product Image" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"> 
-                        <span id="pm-badge" class="absolute top-4 left-4 px-3 py-1 bg-amberGold text-roast-50 font-bold text-xs uppercase rounded-full shadow">Single Estate</span> 
-                    </div> 
-                </div> 
-                <div class="md:col-span-7 space-y-5"> 
-                    <div> 
-                        <span id="pm-subtitle" class="text-xs font-bold text-amberGold uppercase tracking-wider">Single Origin Filter Coffee</span> 
-                        <h2 id="pm-title" class="text-2xl sm:text-3xl font-extrabold text-roast-950 font-serif mt-1">Brazil Santuario Sul Lot 1</h2> 
-                        <div class="flex items-center gap-3 mt-2"> 
-                            <div class="flex text-amberGold text-xs" id="pm-stars-preview"> 
-                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i> 
-                            </div> 
-                            <span id="pm-reviews-count-badge" class="text-xs text-roast-600">(0 customer reviews)</span> 
-                        </div> 
-                    </div> 
-                    <div class="py-2 border-y border-roast-200/80 flex items-baseline gap-3"> 
-                        <span id="pm-price" class="text-2xl sm:text-3xl font-extrabold text-amberGold font-serif">RM 80.00</span> 
-                        <span id="pm-price-range" class="text-xs text-roast-600">Price range: RM 44.00 – RM 80.00</span> 
-                    </div> 
-                    <div> 
-                        <label class="block text-xs font-semibold text-roast-700 uppercase mb-2">Weight Option:</label> 
-                        <div class="flex flex-wrap gap-2" id="pm-weight-options"></div> 
-                    </div> 
-                    <div class="flex items-center gap-4 pt-2"> 
-                        <div class="flex items-center bg-roast-50 border border-roast-300 rounded-xl px-3 py-2"> 
-                            <button onclick="adjustModalQty(-1)" class="text-roast-600 hover:text-roast-950 px-2 text-sm font-bold">-</button> 
-                            <span id="pm-qty" class="text-roast-950 font-bold text-sm px-3">1</span> 
-                            <button onclick="adjustModalQty(1)" class="text-roast-600 hover:text-roast-950 px-2 text-sm font-bold">+</button> 
-                        </div> 
-                        <button onclick="checkAuthAndExecute(addModalItemToCart)" class="btn-anim flex-1 py-3 bg-amberGold hover:bg-royalBlue text-roast-50 font-bold rounded-xl text-sm transition-all shadow-lg flex items-center justify-center gap-2"> 
-                            <i class="fa-solid fa-basket-shopping"></i> Add To Cart 
-                        </button> 
-                    </div> 
-                    <div class="text-[11px] text-roast-600 space-y-1 pt-2"> 
-                        <p>Categories: <span class="text-roast-800" id="pm-categories">Coffee, Filter, Microlot</span></p> 
-                        <p>Availability: <span class="text-green-400 font-semibold"><i class="fa-solid fa-check-circle me-1"></i> In Stock (Freshly Roasted)</span></p> 
-                    </div> 
-                </div> 
-            </div> 
-            <div class="border-t border-roast-200 pt-6"> 
-                <div class="flex border-b border-roast-200 gap-6 text-sm font-medium mb-6"> 
-                    <button onclick="switchProductTab('desc')" id="pm-tab-desc" class="pb-3 border-b-2 border-amberGold text-amberGold font-bold transition-all">Description</button> 
-                    <button onclick="switchProductTab('info')" id="pm-tab-info" class="pb-3 border-b-2 border-transparent text-roast-600 hover:text-roast-950 transition-all">Additional Information</button> 
-                    <button onclick="switchProductTab('reviews')" id="pm-tab-reviews" class="pb-3 border-b-2 border-transparent text-roast-600 hover:text-roast-950 transition-all">Reviews (<span id="pm-reviews-tab-count">0</span>)</button> 
-                </div> 
-                <div id="pm-panel-desc" class="space-y-4 text-roast-700 font-light text-sm sm:text-base leading-relaxed"></div> 
-                <div id="pm-panel-info" class="hidden"> 
-                    <div class="bg-roast-50 rounded-2xl border border-roast-200 p-4 sm:p-6 text-xs sm:text-sm"> 
-                        <table class="w-full text-left"> 
-                            <tbody id="pm-info-table-body" class="divide-y divide-roast-100"></tbody> 
-                        </table> 
-                    </div> 
-                </div> 
-                <div id="pm-panel-reviews" class="hidden space-y-8"> 
-                    <div id="pm-reviews-list" class="space-y-4"></div> 
-                    <div class="bg-roast-50/90 rounded-2xl p-6 border border-roast-200 space-y-4"> 
-                        <h4 class="text-lg font-bold font-serif text-roast-950">Be the first to review this bean</h4> 
-                        <p class="text-xs text-roast-600">Your email address will not be published. Required fields are marked *</p> 
-                        <form onsubmit="submitProductReview(event)" class="space-y-4"> 
-                            <div> 
-                                <label class="block text-xs font-semibold text-roast-700 uppercase mb-2">Your Rating *</label> 
-                                <div class="flex gap-2 text-xl text-roast-400 cursor-pointer" id="review-rating-stars"> 
-                                    <i class="fa-solid fa-star hover:text-amberGold" onclick="setReviewRating(1)"></i> 
-                                    <i class="fa-solid fa-star hover:text-amberGold" onclick="setReviewRating(2)"></i> 
-                                    <i class="fa-solid fa-star hover:text-amberGold" onclick="setReviewRating(3)"></i> 
-                                    <i class="fa-solid fa-star hover:text-amberGold" onclick="setReviewRating(4)"></i> 
-                                    <i class="fa-solid fa-star hover:text-amberGold" onclick="setReviewRating(5)"></i> 
-                                </div> 
-                                <input type="hidden" id="rev-rating-val" value="5"> 
-                            </div> 
-                            <div class="grid sm:grid-cols-2 gap-4"> 
-                                <div> 
-                                    <label class="block text-xs font-semibold text-roast-700 uppercase mb-1">Your Name *</label> 
-                                    <input type="text" id="rev-name" required placeholder="Ahmad Zaki" class="w-full bg-roast-100 border border-roast-300 text-roast-950 rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-amberGold"> 
-                                </div> 
-                                <div> 
-                                    <label class="block text-xs font-semibold text-roast-700 uppercase mb-1">Your Email *</label> 
-                                    <input type="email" id="rev-email" required placeholder="zaki@example.com" class="w-full bg-roast-100 border border-roast-300 text-roast-950 rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-amberGold"> 
-                                </div> 
-                            </div> 
-                            <div> 
-                                <label class="block text-xs font-semibold text-roast-700 uppercase mb-1">Your Review *</label> 
-                                <textarea id="rev-comment" required rows="4" placeholder="Describe the aroma, acidity, body, and taste notes..." class="w-full bg-roast-100 border border-roast-300 text-roast-950 rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-amberGold"></textarea> 
-                            </div> 
-                            <button type="submit" class="btn-anim px-6 py-3 bg-amberGold hover:bg-royalBlue text-roast-50 font-bold rounded-xl text-xs transition-all shadow-md"> Submit Review </button> 
-                        </form> 
-                    </div> 
-                </div> 
-            </div> 
-        </div> 
-    </div> 
 
     <!-- MODAL CART DRAWER --> 
-    <div id="cart-drawer" class="drawer-overlay fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden"> 
-        <div class="drawer-panel absolute right-0 top-0 bottom-0 w-full max-w-md bg-roast-100 border-l border-roast-200 p-6 flex flex-col justify-between shadow-2xl"> 
-            <div> 
-                <div class="flex justify-between items-center pb-4 border-b border-roast-200"> 
-                    <h3 class="text-lg font-bold text-roast-950 font-serif"><i class="fa-solid fa-bag-shopping text-amberGold me-2"></i> Your Order Basket</h3> 
-                    <button onclick="toggleCart()" class="text-roast-600 hover:text-roast-950 p-2"> 
-                        <i class="fa-solid fa-xmark text-xl"></i> 
-                    </button> 
-                </div> 
-                <div id="cart-items" class="py-4 space-y-3 overflow-y-auto max-h-[60vh]"> 
-                    <p class="text-center text-roast-600 text-xs py-8">Your order basket is currently empty.</p> 
-                </div> 
-            </div> 
-            <div class="border-t border-roast-200 pt-4 space-y-4"> 
-                <div class="flex justify-between items-center text-sm font-bold text-roast-950"> 
-                    <span>Total Amount:</span> 
-                    <span id="cart-total" class="text-amberGold text-lg">RM 0.00</span> 
-                </div> 
-                <button onclick="openCheckoutModal()" class="btn-anim w-full py-3.5 bg-amberGold hover:bg-royalBlue text-roast-50 font-bold rounded-xl transition-all shadow-lg text-sm flex items-center justify-center gap-2"> 
-                    <i class="fa-solid fa-credit-card"></i> Proceed To Checkout 
-                </button> 
-            </div> 
-        </div> 
-    </div> 
 
     <!-- CHECKOUT MODAL --> 
-    <div id="checkout-modal" class="modal-overlay fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-3 sm:p-6 overflow-y-auto"> 
-        <div class="modal-panel bg-gradient-to-b from-roast-100 to-roast-50 border border-roast-200 rounded-3xl max-w-5xl w-full max-h-[92vh] overflow-y-auto shadow-2xl relative text-left p-6 sm:p-10 my-auto"> 
-            <button onclick="closeCheckoutModal()" class="absolute top-5 right-5 z-10 bg-roast-50/80 border border-roast-300 text-roast-800 hover:text-roast-950 p-2 rounded-full w-10 h-10 flex items-center justify-center shadow transition-all"> 
-                <i class="fa-solid fa-xmark text-lg"></i> 
-            </button> 
-            <div class="text-xs text-roast-600 mb-4 flex items-center gap-2"> 
-                <a href="#" onclick="closeCheckoutModal()" class="hover:text-amberGold">Home</a> 
-                <i class="fa-solid fa-chevron-right text-[9px]"></i> 
-                <a href="#coffee-beans" onclick="closeCheckoutModal()" class="hover:text-amberGold">Cart</a> 
-                <i class="fa-solid fa-chevron-right text-[9px]"></i> 
-                <span class="text-roast-950 font-medium">Checkout</span> 
-            </div> 
-            <div class="mb-8 border-b border-roast-200 pb-4"> 
-                <h2 class="text-2xl sm:text-3xl font-extrabold text-roast-950 font-serif">Checkout</h2> 
-                <p class="text-xs text-roast-600 mt-1">Complete your shipping and payment details below to place your order with Nb.CA Academy.</p> 
-            </div> 
-            <form onsubmit="processOrderCheckout(event)" class="grid lg:grid-cols-12 gap-8"> 
-                <div class="lg:col-span-7 space-y-6"> 
-                    <h3 class="text-lg font-bold font-serif text-roast-950 border-b border-roast-200 pb-2">1. Billing & Shipping Details</h3> 
-                    <div class="grid sm:grid-cols-2 gap-4"> 
-                        <div> 
-                            <label class="block text-xs font-semibold text-roast-700 uppercase mb-1">First Name *</label> 
-                            <input type="text" id="chk-firstname" required placeholder="Ahmad" class="w-full bg-roast-50 border border-roast-300 text-roast-950 rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-amberGold"> 
-                        </div> 
-                        <div> 
-                            <label class="block text-xs font-semibold text-roast-700 uppercase mb-1">Last Name *</label> 
-                            <input type="text" id="chk-lastname" required placeholder="Zaki" class="w-full bg-roast-50 border border-roast-300 text-roast-950 rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-amberGold"> 
-                        </div> 
-                    </div> 
-                    <div class="grid sm:grid-cols-2 gap-4"> 
-                        <div> 
-                            <label class="block text-xs font-semibold text-roast-700 uppercase mb-1">Phone Number (WhatsApp) *</label> 
-                            <input type="tel" id="chk-phone" required placeholder="+60123456789" class="w-full bg-roast-50 border border-roast-300 text-roast-950 rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-amberGold"> 
-                        </div> 
-                        <div> 
-                            <label class="block text-xs font-semibold text-roast-700 uppercase mb-1">Email Address *</label> 
-                            <input type="email" id="chk-email" required placeholder="zaki@example.com" class="w-full bg-roast-50 border border-roast-300 text-roast-950 rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-amberGold"> 
-                        </div> 
-                    </div> 
-                    <div> 
-                        <label class="block text-xs font-semibold text-roast-700 uppercase mb-1">Street Address *</label> 
-                        <input type="text" id="chk-address" required placeholder="House No, Street Name, Taman" class="w-full bg-roast-50 border border-roast-300 text-roast-950 rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-amberGold mb-2"> 
-                        <input type="text" id="chk-address2" placeholder="Apartment, suite, unit, etc. (optional)" class="w-full bg-roast-50 border border-roast-300 text-roast-950 rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-amberGold"> 
-                    </div> 
-                    <div class="grid sm:grid-cols-3 gap-4"> 
-                        <div> 
-                            <label class="block text-xs font-semibold text-roast-700 uppercase mb-1">Town / City *</label> 
-                            <input type="text" id="chk-city" required placeholder="Sungai Petani" class="w-full bg-roast-50 border border-roast-300 text-roast-950 rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-amberGold"> 
-                        </div> 
-                        <div> 
-                            <label class="block text-xs font-semibold text-roast-700 uppercase mb-1">State *</label> 
-                            <select id="chk-state" onchange="calculateShippingFee()" class="w-full bg-roast-50 border border-roast-300 text-roast-950 rounded-xl px-3 py-2.5 text-xs focus:outline-none focus:border-amberGold"> 
-                                <option value="Kedah">Kedah</option> 
-                                <option value="Penang">Penang</option> 
-                                <option value="Perlis">Perlis</option> 
-                                <option value="Selangor">Selangor</option> 
-                                <option value="Kuala Lumpur">Kuala Lumpur</option> 
-                                <option value="Perak">Perak</option> 
-                                <option value="Johor">Johor</option> 
-                                <option value="Melaka">Melaka</option> 
-                                <option value="Negeri Sembilan">Negeri Sembilan</option> 
-                                <option value="Pahang">Pahang</option> 
-                                <option value="Terengganu">Terengganu</option> 
-                                <option value="Kelantan">Kelantan</option> 
-                                <option value="Sabah">Sabah (East MY)</option> 
-                                <option value="Sarawak">Sarawak (East MY)</option> 
-                            </select> 
-                        </div> 
-                        <div> 
-                            <label class="block text-xs font-semibold text-roast-700 uppercase mb-1">Postcode *</label> 
-                            <input type="text" id="chk-postcode" required placeholder="08000" class="w-full bg-roast-50 border border-roast-300 text-roast-950 rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-amberGold"> 
-                        </div> 
-                    </div> 
-                    <div> 
-                        <label class="block text-xs font-semibold text-roast-700 uppercase mb-1">Order Notes (Optional)</label> 
-                        <textarea id="chk-notes" rows="3" placeholder="Notes about your order, e.g. special delivery instructions or coffee roast preference." class="w-full bg-roast-50 border border-roast-300 text-roast-950 rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-amberGold"></textarea> 
-                    </div> 
-                </div> 
-
-                <div class="lg:col-span-5 space-y-6"> 
-                    <div class="bg-roast-50 p-6 rounded-2xl border border-roast-200 space-y-4"> 
-                        <h3 class="text-lg font-bold font-serif text-roast-950 border-b border-roast-200 pb-3">2. Your Order Summary</h3> 
-                        <div id="checkout-items-list" class="space-y-2.5 max-h-52 overflow-y-auto divide-y divide-roast-100 pr-1"></div> 
-                        <div class="pt-3 border-t border-roast-200 space-y-2 text-xs"> 
-                            <div class="flex justify-between text-roast-700"> 
-                                <span>Subtotal</span> 
-                                <span id="chk-subtotal" class="font-bold text-roast-950">RM 0.00</span> 
-                            </div> 
-                            <div class="flex justify-between text-roast-700 items-center"> 
-                                <span>Shipping Fee</span> 
-                                <span id="chk-shipping" class="font-bold text-amberGold">RM 8.00</span> 
-                            </div> 
-                            <div class="flex justify-between text-sm font-bold text-roast-950 pt-2 border-t border-roast-200"> 
-                                <span>Total Amount</span> 
-                                <span id="chk-total" class="text-xl text-amberGold font-serif">RM 8.00</span> 
-                            </div> 
-                        </div> 
-                        <div class="pt-4 border-t border-roast-200 space-y-3"> 
-                            <h4 class="text-xs font-bold uppercase text-roast-700 tracking-wider">3. Payment Method</h4> 
-                            <div class="p-3.5 rounded-xl bg-roast-100 border border-amberGold text-xs"> 
-                                <span class="font-bold text-roast-950 flex items-center gap-1.5 mb-1"> <i class="fa-solid fa-credit-card text-amberGold"></i> Billplz Payment Gateway (FPX / eWallet / Card) </span> 
-                                <span class="text-roast-600 text-[10px] block leading-relaxed"> Direct online banking payment via Billplz API (Maybank2u, CIMB Clicks, TNG eWallet, DuitNow, etc.) </span> 
-                            </div> 
-                        </div> 
-                        <button type="submit" id="checkout-submit-btn" class="btn-anim w-full py-4 bg-amberGold hover:bg-royalBlue text-roast-50 font-extrabold rounded-xl text-sm transition-all shadow-xl flex items-center justify-center gap-2 mt-4"> 
-                            <i class="fa-solid fa-lock"></i> Pay via Billplz Gateway 
-                        </button> 
-                        <p class="text-[10px] text-roast-600 text-center flex items-center justify-center gap-1"> 
-                            <i class="fa-solid fa-shield-halved text-amberGold"></i> Encrypted 256-bit SSL Secure Checkout 
-                        </p> 
-                    </div> 
-                </div> 
-            </form> 
-        </div> 
-    </div> 
 
     <!-- CLASS DETAIL / SLOT BOOKING MODAL --> 
     <!-- FIXED CLASS: STUDENT REGISTRATION MODAL (deposit-based, no cart) -->
@@ -1103,8 +740,8 @@
                             <span id="cm-qty" class="text-roast-950 font-bold text-sm px-3">1</span> 
                             <button onclick="adjustClassQty(1)" class="text-roast-600 hover:text-roast-950 px-2 text-sm font-bold">+</button> 
                         </div> 
-                        <button onclick="checkAuthAndExecute(addClassModalItemToCart)" class="btn-anim flex-1 py-3 bg-amberGold hover:bg-royalBlue text-roast-50 font-bold rounded-xl text-sm transition-all shadow-lg flex items-center justify-center gap-2"> 
-                            <i class="fa-solid fa-calendar-check"></i> Enroll This Slot 
+                        <button onclick="addClassModalItemToCart()" class="btn-anim flex-1 py-3 bg-amberGold hover:bg-royalBlue text-roast-50 font-bold rounded-xl text-sm transition-all shadow-lg flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-calendar-check"></i> Book via Member Portal
                         </button> 
                     </div> 
                     <div class="text-[11px] text-roast-600 space-y-1 pt-2"> 
@@ -1122,42 +759,6 @@
     </div> 
 
     <!-- ORDER SUCCESSFUL MODAL RECEIPT --> 
-    <div id="order-success-modal" class="modal-overlay fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-4"> 
-        <div class="modal-panel bg-gradient-to-b from-roast-100 to-roast-50 border border-roast-200 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl relative text-center space-y-6"> 
-            <div class="w-16 h-16 rounded-full bg-green-500/20 border border-green-500/40 text-green-400 flex items-center justify-center mx-auto"> 
-                <i class="fa-solid fa-check text-3xl"></i> 
-            </div> 
-            <div> 
-                <span class="text-xs font-bold text-amberGold uppercase tracking-widest">Order Placed Successfully!</span> 
-                <h3 class="text-2xl font-bold font-serif text-roast-950 mt-1">Thank You For Your Purchase</h3> 
-                <p class="text-xs text-roast-700 mt-1">Your order reference: <strong id="receipt-order-id" class="text-amberGold">#RP-2026-0000</strong></p> 
-            </div> 
-            <div class="bg-roast-50 p-4 rounded-2xl border border-roast-200 text-left text-xs space-y-2"> 
-                <div class="flex justify-between border-b border-roast-100 pb-2"> 
-                    <span class="text-roast-600">Customer:</span> 
-                    <span id="receipt-customer-name" class="font-bold text-roast-950">Ahmad Zaki</span> 
-                </div> 
-                <div class="flex justify-between border-b border-roast-100 pb-2"> 
-                    <span class="text-roast-600">Delivery Address:</span> 
-                    <span id="receipt-address" class="text-right font-medium text-roast-800">Sungai Petani, Kedah</span> 
-                </div> 
-                <div class="flex justify-between border-b border-roast-100 pb-2"> 
-                    <span class="text-roast-600">Payment Status:</span> 
-                    <span class="font-bold text-green-400"><i class="fa-solid fa-circle-check"></i> Confirmed & Pending Dispatch</span> 
-                </div> 
-                <div class="flex justify-between text-sm pt-1"> 
-                    <span class="font-bold text-roast-950">Total Paid:</span> 
-                    <span id="receipt-total" class="font-extrabold text-amberGold font-serif">RM 0.00</span> 
-                </div> 
-            </div> 
-            <div class="space-y-3"> 
-                <button onclick="sendReceiptToWhatsApp()" class="btn-anim w-full py-3.5 bg-green-600 hover:bg-green-500 text-roast-950 font-bold rounded-xl transition-all shadow-md text-xs flex items-center justify-center gap-2"> 
-                    <i class="fa-brands fa-whatsapp text-lg"></i> Send Order Receipt via WhatsApp 
-                </button> 
-                <button onclick="closeSuccessModal()" class="w-full py-3 bg-roast-100 hover:bg-roast-200 text-roast-800 font-bold rounded-xl transition-all text-xs border border-roast-300"> Return To Home Page </button> 
-            </div> 
-        </div> 
-    </div> 
 
     <!-- TOAST NOTIFICATION --> 
     <div id="cart-toast" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none"> 
@@ -1180,7 +781,7 @@
             </div> 
             <div> 
                 <h3 class="text-xl font-bold font-serif text-roast-950">Sign In Required</h3> 
-                <p class="text-xs text-roast-700 mt-1">Please sign in to your account first before adding items to cart or enrolling in classes.</p> 
+                <p class="text-xs text-roast-700 mt-1">Please sign in to your account first before enrolling in classes or requesting consultations.</p> 
             </div> 
             <div class="space-y-2 pt-2"> 
                 <a href="auth.html" class="block w-full py-3 bg-amberGold hover:bg-royalBlue text-roast-50 font-bold rounded-xl text-xs transition-all shadow-md"> Go To Sign In </a> 
@@ -1194,11 +795,21 @@
     <script src="js/catalog.js"></script>
     <!-- JAVASCRIPT LOGIC --> 
     <script> 
-        let cart = []; 
-        let currentShippingFee = 8.00; 
-        let currentOrderData = null; 
 
         let isLoggedIn = false; 
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const button = document.querySelector('[aria-controls="mobile-menu"]');
+            const icon = document.getElementById('mobile-menu-icon');
+            if (!menu || !button || !icon) return;
+
+            const isOpen = menu.classList.toggle('hidden') === false;
+            button.setAttribute('aria-expanded', String(isOpen));
+            button.setAttribute('aria-label', isOpen ? 'Close navigation menu' : 'Open navigation menu');
+            icon.classList.toggle('fa-bars', !isOpen);
+            icon.classList.toggle('fa-xmark', isOpen);
+        }
 
         document.addEventListener('DOMContentLoaded', () => { 
             const savedUser = localStorage.getItem('rp_logged_user'); 
@@ -1249,20 +860,6 @@
             setTimeout(() => el.classList.add('hidden'), 300); 
         } 
 
-        function openDrawer(id) { 
-            const el = document.getElementById(id); 
-            if (!el) return; 
-            el.classList.remove('hidden'); 
-            void el.offsetWidth; 
-            requestAnimationFrame(() => el.classList.add('drawer-open')); 
-        } 
-
-        function closeDrawer(id) { 
-            const el = document.getElementById(id); 
-            if (!el) return; 
-            el.classList.remove('drawer-open'); 
-            setTimeout(() => el.classList.add('hidden'), 360); 
-        } 
 
         function logoutUser() { 
             localStorage.removeItem('rp_logged_user'); 
@@ -1283,226 +880,7 @@
             closeModal('login-required-modal'); 
         } 
 
-        const productsCatalog = { 
-            'hitam-manis': { 
-                title: "1st Grind HITAM MANIS Coffee Beans", 
-                subtitle: "Dark Roast Blend", 
-                badge: "Free Shipping", 
-                priceRange: "RM 30.00", 
-                image: "https://images.unsplash.com/photo-1587734195503-904fca47e0e9?auto=format&fit=crop&w=800&q=80", 
-                categories: "Coffee, 1st Grind, Dark Roast", 
-                defaultWeight: "250g", 
-                weights: { "250g": 30.00 }, 
-                description: ` 
-                    <p class="mb-3">Our bold, sweet dark roast blend — a house favourite with a rich, syrupy body and deep roasted character.</p> 
-                    <p>Great for espresso and milk-based drinks that need a strong, punchy base.</p> 
-                `, 
-                specs: { "Brand": "1st Grind", "Roast Level": "Dark", "Flavor Notes": "Bold, Sweet, Rich Body", "Shipping": "Free Shipping" }, 
-                reviews: [] 
-            }, 
-            'cream-beans': { 
-                title: "1st Grind Cream Beans (Blend)", 
-                subtitle: "Medium Roast Blend", 
-                badge: "Free Shipping", 
-                priceRange: "RM 35.00", 
-                image: "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?auto=format&fit=crop&w=800&q=80", 
-                categories: "Coffee, 1st Grind, Blend", 
-                defaultWeight: "250g", 
-                weights: { "250g": 35.00 }, 
-                description: ` 
-                    <p class="mb-3">Smooth, creamy medium roast blend with a mellow, well-rounded finish.</p> 
-                    <p>Especially good for lattes and other milk-based coffee drinks.</p> 
-                `, 
-                specs: { "Brand": "1st Grind", "Roast Level": "Medium", "Flavor Notes": "Creamy, Smooth Finish", "Shipping": "Free Shipping" }, 
-                reviews: [] 
-            }, 
-            'black-stone': { 
-                title: "1st Grind BLACK STONE (Blend)", 
-                subtitle: "Bold Blend", 
-                badge: "Free Shipping", 
-                priceRange: "RM 35.00", 
-                image: "https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=800&q=80", 
-                categories: "Coffee, 1st Grind, Blend", 
-                defaultWeight: "250g", 
-                weights: { "250g": 35.00 }, 
-                description: ` 
-                    <p class="mb-3">A robust, punchy blend with deep cocoa notes — built for a strong daily cup.</p> 
-                `, 
-                specs: { "Brand": "1st Grind", "Roast Level": "Dark-Medium", "Flavor Notes": "Deep Cocoa, Bold", "Shipping": "Free Shipping" }, 
-                reviews: [] 
-            }, 
-            'sunrise': { 
-                title: "1st Grind SUNRISE (Blend)", 
-                subtitle: "Light-Medium Roast Blend", 
-                badge: "Free Shipping", 
-                priceRange: "RM 35.00", 
-                image: "https://images.unsplash.com/photo-1521302080334-4bebac2763a6?auto=format&fit=crop&w=800&q=80", 
-                categories: "Coffee, 1st Grind, Blend", 
-                defaultWeight: "250g", 
-                weights: { "250g": 35.00 }, 
-                description: ` 
-                    <p class="mb-3">Bright, uplifting blend with fruity, citrusy notes — a refreshing way to start the day.</p> 
-                `, 
-                specs: { "Brand": "1st Grind", "Roast Level": "Light-Medium", "Flavor Notes": "Bright & Fruity, Citrusy", "Shipping": "Free Shipping" }, 
-                reviews: [] 
-            } 
-        };
-
-        const BILLPLZ_CONFIG = { 
-            apiKey: '', 
-            collectionId: '', 
-            isSandbox: true, 
-            callbackUrl: window.location.origin + window.location.pathname, 
-            redirectUrl: window.location.origin + window.location.pathname 
-        }; 
-
-        let currentActiveProductId = null; 
-        let selectedProductWeight = null; 
-        let selectedProductPrice = 0; 
-        let productQty = 1; 
-
-        function openProductModal(productId) { 
-            const p = productsCatalog[productId]; 
-            if (!p) return; 
-            currentActiveProductId = productId; 
-            productQty = 1; 
-            document.getElementById('pm-qty').innerText = '1'; 
-            document.getElementById('pm-breadcrumb-name').innerText = p.title; 
-            document.getElementById('pm-title').innerText = p.title; 
-            document.getElementById('pm-subtitle').innerText = p.subtitle; 
-            document.getElementById('pm-badge').innerText = p.badge; 
-            document.getElementById('pm-image').src = p.image; 
-            document.getElementById('pm-categories').innerText = p.categories; 
-            document.getElementById('pm-price-range').innerText = `Price: ${p.priceRange}`; 
-
-            const weightContainer = document.getElementById('pm-weight-options'); 
-            weightContainer.innerHTML = ''; 
-            const weights = Object.keys(p.weights); 
-            selectedProductWeight = p.defaultWeight || weights[0]; 
-
-            weights.forEach(w => { 
-                const isSel = w === selectedProductWeight; 
-                const btn = document.createElement('button'); 
-                btn.className = `px-3.5 py-1.5 rounded-xl text-xs font-bold border transition-all ${ isSel ? 'bg-amberGold text-roast-50 border-amberGold shadow' : 'bg-roast-100 text-roast-700 border-roast-300 hover:text-roast-950' }`; 
-                btn.innerText = w; 
-                btn.onclick = () => selectProductWeight(w, p.weights[w], btn); 
-                weightContainer.appendChild(btn); 
-            }); 
-
-            selectedProductPrice = p.weights[selectedProductWeight]; 
-            document.getElementById('pm-price').innerText = `RM ${selectedProductPrice.toFixed(2)}`; 
-            document.getElementById('pm-panel-desc').innerHTML = p.description; 
-
-            const tableBody = document.getElementById('pm-info-table-body'); 
-            tableBody.innerHTML = Object.entries(p.specs).map(([key, val]) => ` 
-                <tr class="py-2.5"> 
-                    <td class="font-bold text-roast-700 w-1/3 py-2 border-b border-roast-100">${key}</td> 
-                    <td class="text-roast-900 py-2 border-b border-roast-100">${val}</td> 
-                </tr> 
-            `).join(''); 
-
-            renderProductReviews(p); 
-            switchProductTab('desc'); 
-            openModal('product-modal'); 
-        } 
-
-        function closeProductModal() { 
-            closeModal('product-modal'); 
-        } 
-
-        function selectProductWeight(weight, price, btnEl) { 
-            selectedProductWeight = weight; 
-            selectedProductPrice = price; 
-            document.getElementById('pm-price').innerText = `RM ${price.toFixed(2)}`; 
-            const allBtns = document.querySelectorAll('#pm-weight-options button'); 
-            allBtns.forEach(b => { 
-                b.className = 'px-3.5 py-1.5 rounded-xl text-xs font-bold border transition-all bg-roast-100 text-roast-700 border-roast-300 hover:text-roast-950'; 
-            }); 
-            btnEl.className = 'px-3.5 py-1.5 rounded-xl text-xs font-bold border transition-all bg-amberGold text-roast-50 border-amberGold shadow'; 
-        } 
-
-        function adjustModalQty(delta) { 
-            productQty = Math.max(1, productQty + delta); 
-            document.getElementById('pm-qty').innerText = productQty; 
-        } 
-
-        function addModalItemToCart() { 
-            const p = productsCatalog[currentActiveProductId]; 
-            if(!p) return; 
-            const fullItemName = `${p.title} (${selectedProductWeight})`; 
-            for(let i = 0; i < productQty; i++) { 
-                addToCart(fullItemName, selectedProductPrice); 
-            } 
-            closeProductModal(); 
-        } 
-
-        function switchProductTab(tab) { 
-            const tabs = ['desc', 'info', 'reviews']; 
-            tabs.forEach(t => { 
-                const btn = document.getElementById(`pm-tab-${t}`); 
-                const panel = document.getElementById(`pm-panel-${t}`); 
-                if(t === tab) { 
-                    btn.className = 'pb-3 border-b-2 border-amberGold text-amberGold font-bold transition-all'; 
-                    panel.classList.remove('hidden'); 
-                    panel.classList.remove('tab-fade-in'); 
-                    void panel.offsetWidth; 
-                    panel.classList.add('tab-fade-in'); 
-                } else { 
-                    btn.className = 'pb-3 border-b-2 border-transparent text-roast-600 hover:text-roast-950 transition-all'; 
-                    panel.classList.add('hidden'); 
-                } 
-            }); 
-        } 
-
-        function renderProductReviews(p) { 
-            const count = p.reviews ? p.reviews.length : 0; 
-            document.getElementById('pm-reviews-count-badge').innerText = `(${count} customer reviews)`; 
-            document.getElementById('pm-reviews-tab-count').innerText = count; 
-            const listEl = document.getElementById('pm-reviews-list'); 
-            if(!p.reviews || p.reviews.length === 0) { 
-                listEl.innerHTML = `<p class="text-xs text-roast-600 italic py-4">There are no reviews for this coffee bean yet. Be the first to share your brewing experience!</p>`; 
-            } else { 
-                listEl.innerHTML = p.reviews.map(r => ` 
-                    <div class="bg-roast-50/80 p-4 rounded-xl border border-roast-200 space-y-2"> 
-                        <div class="flex justify-between items-center"> 
-                            <span class="font-bold text-roast-950 text-xs">${r.name}</span> 
-                            <span class="text-[10px] text-roast-600">${r.date}</span> 
-                        </div> 
-                        <div class="text-amberGold text-xs"> ${Array(r.rating).fill('<i class="fa-solid fa-star"></i>').join('')} </div> 
-                        <p class="text-xs text-roast-700 font-light leading-relaxed">${r.comment}</p> 
-                    </div> 
-                `).join(''); 
-            } 
-        } 
-
-        function setReviewRating(val) { 
-            document.getElementById('rev-rating-val').value = val; 
-            const stars = document.querySelectorAll('#review-rating-stars i'); 
-            stars.forEach((s, idx) => { 
-                if(idx < val) { 
-                    s.className = 'fa-solid fa-star text-amberGold'; 
-                } else { 
-                    s.className = 'fa-solid fa-star text-roast-400'; 
-                } 
-            }); 
-        } 
-
-        function submitProductReview(e) { 
-            e.preventDefault(); 
-            const p = productsCatalog[currentActiveProductId]; 
-            if (!p) return; 
-            const name = document.getElementById('rev-name').value; 
-            const rating = parseInt(document.getElementById('rev-rating-val').value) || 5; 
-            const comment = document.getElementById('rev-comment').value; 
-            const today = new Date().toLocaleDateString('en-GB'); 
-            if(!p.reviews) p.reviews = []; 
-            p.reviews.unshift({ name, date: today, rating, comment }); 
-            renderProductReviews(p); 
-            e.target.reset(); 
-            setReviewRating(5); 
-        } 
-
-        // ===================== CLASSES CATALOG & MODAL LOGIC ===================== 
+        // ===================== CLASSES CATALOG & MODAL LOGIC =====================
         const classesCatalog = { 
             'brewing-masterclass': { 
                 title: "Coffee Brewing Masterclass", 
@@ -1658,19 +1036,9 @@
             document.getElementById('cm-qty').innerText = classQty; 
         } 
 
-        function addClassModalItemToCart() { 
-            const c = classesCatalog[currentActiveClassId]; 
-            if (!c) return; 
-            if (!selectedClassSlot) { 
-                showToastMessage('Please select an available slot first.', 'Slot Required'); 
-                return; 
-            } 
-            const modeLabel = c.modes[selectedClassMode].label; 
-            const fullItemName = `Class: ${c.title} — ${modeLabel} (${selectedClassSlot})`; 
-            for (let i = 0; i < classQty; i++) { 
-                addToCart(fullItemName, c.price); 
-            } 
-            closeClassModal(); 
+        function addClassModalItemToCart() {
+            closeClassModal();
+            window.location.href = 'auth.html?next=book-class.html';
         } 
         // ===================== END CLASSES LOGIC ===================== 
 
@@ -1953,270 +1321,6 @@
                 toast.classList.remove('translate-y-0', 'opacity-100'); 
                 toast.classList.add('translate-y-24', 'opacity-0'); 
             }, 3000); 
-        } 
-
-        function addToCart(itemName, price) { 
-            const existing = cart.find(item => item.name === itemName); 
-            if(existing) { 
-                existing.qty += 1; 
-            } else { 
-                cart.push({ name: itemName, price: price, qty: 1 }); 
-            } 
-            updateCartUI(); 
-            showToastMessage(`"${itemName}" added to your order basket.`); 
-            const badge = document.getElementById('cart-count'); 
-            if (badge) { 
-                badge.classList.remove('cart-pulse'); 
-                void badge.offsetWidth; 
-                badge.classList.add('cart-pulse'); 
-            } 
-        } 
-
-        function removeFromCart(itemName) { 
-            cart = cart.filter(item => item.name !== itemName); 
-            updateCartUI(); 
-        } 
-
-        function updateCartUI() { 
-            const cartItemsContainer = document.getElementById('cart-items'); 
-            const cartCount = document.getElementById('cart-count'); 
-            const cartTotal = document.getElementById('cart-total'); 
-            let totalQty = 0; 
-            let totalPrice = 0; 
-            if(cart.length === 0) { 
-                cartItemsContainer.innerHTML = `<p class="text-center text-roast-600 text-xs py-8">Your order basket is currently empty.</p>`; 
-            } else { 
-                cartItemsContainer.innerHTML = cart.map(item => { 
-                    totalQty += item.qty; 
-                    totalPrice += item.price * item.qty; 
-                    return ` 
-                        <div class="flex justify-between items-center bg-roast-50/80 p-3 rounded-xl border border-roast-200"> 
-                            <div> 
-                                <h4 class="text-xs font-bold text-roast-950">${item.name}</h4> 
-                                <p class="text-[11px] text-amberGold">RM ${item.price.toFixed(2)} x ${item.qty}</p> 
-                            </div> 
-                            <div class="flex items-center gap-2"> 
-                                <span class="text-xs font-bold text-roast-800">RM ${(item.price * item.qty).toFixed(2)}</span> 
-                                <button onclick="removeFromCart('${item.name}')" class="text-red-400 hover:text-red-300 p-1"> 
-                                    <i class="fa-solid fa-trash-can text-xs"></i> 
-                                </button> 
-                            </div> 
-                        </div> 
-                    `; 
-                }).join(''); 
-            } 
-            cartCount.innerText = totalQty; 
-            cartTotal.innerText = `RM ${totalPrice.toFixed(2)}`; 
-        } 
-
-        function toggleCart(forceOpen = false) { 
-            const drawer = document.getElementById('cart-drawer'); 
-            const isHidden = drawer.classList.contains('hidden'); 
-            if (forceOpen || isHidden) { 
-                openDrawer('cart-drawer'); 
-            } else { 
-                closeDrawer('cart-drawer'); 
-            } 
-        } 
-
-        function toggleMobileMenu() { 
-            const menu = document.getElementById('mobile-menu'); 
-            const icon = document.getElementById('mobile-menu-icon'); 
-            menu.classList.toggle('hidden'); 
-            if(menu.classList.contains('hidden')) { 
-                icon.className = 'fa-solid fa-bars text-xl'; 
-            } else { 
-                icon.className = 'fa-solid fa-xmark text-xl'; 
-            } 
-        } 
-
-        function openBlogModal(index) { 
-            const article = blogArticlesData[index]; 
-            if (!article) return; 
-            const modalContent = document.getElementById('blog-modal-content'); 
-            modalContent.innerHTML = ` 
-                <div class="space-y-4"> 
-                    <div class="flex items-center gap-2"> 
-                        <span class="px-3 py-1 bg-amberGold text-roast-50 text-xs font-bold uppercase rounded-full">${article.category}</span> 
-                        <span class="text-xs text-roast-600">By ${article.author} • ${article.date}</span> 
-                    </div> 
-                    <h2 class="text-2xl sm:text-3xl font-extrabold text-roast-950 font-serif leading-tight"> ${article.title} </h2> 
-                    <div class="relative h-64 sm:h-80 rounded-2xl overflow-hidden border border-roast-200 bg-roast-50"> 
-                        <img src="${article.image}" alt="${article.title}" class="w-full h-full object-cover"> 
-                    </div> 
-                    <div class="pt-4 border-t border-roast-200"> ${article.content} </div> 
-                    <div class="pt-6 flex justify-end"> 
-                        <button onclick="closeBlogModal()" class="px-6 py-2.5 bg-amberGold hover:bg-royalBlue text-roast-50 font-bold rounded-xl text-xs transition-all shadow-md"> Close Article </button> 
-                    </div> 
-                </div> 
-            `; 
-            openModal('blog-modal'); 
-        } 
-
-        function closeBlogModal() { 
-            closeModal('blog-modal'); 
-        } 
-
-        function openCheckoutModal() { 
-            if (cart.length === 0) { 
-                const cartContainer = document.getElementById('cart-items'); 
-                cartContainer.innerHTML = `<p class="text-center text-amberGold text-xs py-4 font-bold border border-amberGold/30 bg-amberGold/10 rounded-xl">Your basket is empty. Please add items to checkout.</p>`; 
-                setTimeout(updateCartUI, 2500); 
-                return; 
-            } 
-            toggleCart(false); 
-            updateCheckoutSummary(); 
-            openModal('checkout-modal'); 
-        } 
-
-        function closeCheckoutModal() { 
-            closeModal('checkout-modal'); 
-        } 
-
-        function calculateShippingFee() { 
-            const state = document.getElementById('chk-state').value; 
-            if (state === 'Sabah' || state === 'Sarawak') { 
-                currentShippingFee = 15.00; 
-            } else { 
-                currentShippingFee = 8.00; 
-            } 
-            updateCheckoutSummary(); 
-        } 
-
-        function updateCheckoutSummary() { 
-            const listEl = document.getElementById('checkout-items-list'); 
-            let subtotal = 0; 
-            listEl.innerHTML = cart.map(item => { 
-                const itemTotal = item.price * item.qty; 
-                subtotal += itemTotal; 
-                return ` 
-                    <div class="flex justify-between items-center text-xs py-1.5"> 
-                        <div> 
-                            <span class="font-bold text-roast-950 block">${item.name}</span> 
-                            <span class="text-[11px] text-roast-600">RM ${item.price.toFixed(2)} × ${item.qty}</span> 
-                        </div> 
-                        <span class="font-bold text-amberGold">RM ${itemTotal.toFixed(2)}</span> 
-                    </div> 
-                `; 
-            }).join(''); 
-            const total = subtotal + currentShippingFee; 
-            document.getElementById('chk-subtotal').innerText = `RM ${subtotal.toFixed(2)}`; 
-            document.getElementById('chk-shipping').innerText = `RM ${currentShippingFee.toFixed(2)}`; 
-            document.getElementById('chk-total').innerText = `RM ${total.toFixed(2)}`; 
-        } 
-
-        function processOrderCheckout(e) { 
-            e.preventDefault(); 
-            const firstName = document.getElementById('chk-firstname').value; 
-            const lastName = document.getElementById('chk-lastname').value; 
-            const phone = document.getElementById('chk-phone').value; 
-            const email = document.getElementById('chk-email').value; 
-            const address = document.getElementById('chk-address').value; 
-            const city = document.getElementById('chk-city').value; 
-            const state = document.getElementById('chk-state').value; 
-            const postcode = document.getElementById('chk-postcode').value; 
-            const notes = document.getElementById('chk-notes').value; 
-            const paymentMethod = 'billplz'; 
-            const orderId = '#RP-' + Math.floor(100000 + Math.random() * 900000); 
-            let subtotal = 0; 
-            cart.forEach(i => subtotal += (i.price * i.qty)); 
-            const total = subtotal + currentShippingFee; 
-            currentOrderData = { 
-                orderId: orderId, 
-                customerName: `${firstName} ${lastName}`, 
-                phone: phone, 
-                email: email, 
-                address: `${address}, ${postcode} ${city}, ${state}`, 
-                notes: notes, 
-                paymentMethod: paymentMethod, 
-                items: [...cart], 
-                subtotal: subtotal, 
-                shippingFee: currentShippingFee, 
-                total: total 
-            }; 
-            createBillplzBill(currentOrderData); 
-        } 
-
-        async function createBillplzBill(orderData) { 
-            const submitBtn = document.getElementById('checkout-submit-btn'); 
-            if (submitBtn) { 
-                submitBtn.disabled = true; 
-                submitBtn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin me-2"></i> Connecting to Billplz API...`; 
-            } 
-            const amountInCents = Math.round(orderData.total * 100); 
-            const endpoint = BILLPLZ_CONFIG.isSandbox ? 'https://www.billplz-sandbox.com/api/v3/bills' : 'https://www.billplz.com/api/v3/bills'; 
-            const payload = new URLSearchParams(); 
-            payload.append('collection_id', BILLPLZ_CONFIG.collectionId || 'demo_collection'); 
-            payload.append('email', orderData.email); 
-            payload.append('mobile', orderData.phone); 
-            payload.append('name', orderData.customerName); 
-            payload.append('amount', amountInCents.toString()); 
-            payload.append('callback_url', BILLPLZ_CONFIG.callbackUrl); 
-            payload.append('redirect_url', BILLPLZ_CONFIG.redirectUrl); 
-            payload.append('description', `Order ${orderData.orderId} - Nb.CA Academy`); 
-            try { 
-                if (BILLPLZ_CONFIG.apiKey && BILLPLZ_CONFIG.collectionId) { 
-                    const response = await fetch(endpoint, { 
-                        method: 'POST', 
-                        headers: { 
-                            'Authorization': 'Basic ' + btoa(BILLPLZ_CONFIG.apiKey + ':'), 
-                            'Content-Type': 'application/x-www-form-urlencoded' 
-                        }, 
-                        body: payload.toString() 
-                    }); 
-                    const result = await response.json(); 
-                    if (result && result.url) { 
-                        window.location.href = result.url; 
-                        return; 
-                    } 
-                } 
-            } catch (err) { 
-                console.warn('Billplz API call fallback engaged for environment:', err); 
-            } 
-            setTimeout(() => { 
-                closeCheckoutModal(); 
-                if (submitBtn) { 
-                    submitBtn.disabled = false; 
-                    submitBtn.innerHTML = `<i class="fa-solid fa-lock"></i> Pay via Billplz Gateway`; 
-                } 
-                showBillplzGatewayModal(orderData); 
-            }, 1000); 
-        } 
-
-        function showBillplzGatewayModal(orderData) { 
-            openModal('order-success-modal'); 
-            document.getElementById('receipt-order-id').innerText = orderData.orderId + ' (Billplz Paid)'; 
-            document.getElementById('receipt-customer-name').innerText = orderData.customerName; 
-            document.getElementById('receipt-address').innerText = `${orderData.address}`; 
-            document.getElementById('receipt-total').innerText = `RM ${orderData.total.toFixed(2)}`; 
-            cart = []; 
-            updateCartUI(); 
-        } 
-
-        function sendReceiptToWhatsApp() { 
-            if (!currentOrderData) return; 
-            let msg = `*NB.CA ACADEMY ORDER RECEIPT*\n`; 
-            msg += `Order Reference: ${currentOrderData.orderId}\n`; 
-            msg += `Customer: ${currentOrderData.customerName}\n`; 
-            msg += `Phone: ${currentOrderData.phone}\n`; 
-            msg += `Address: ${currentOrderData.address}\n\n`; 
-            msg += `*Order Items:*\n`; 
-            currentOrderData.items.forEach(i => { 
-                msg += `- ${i.name} (x${i.qty}): RM ${(i.price * i.qty).toFixed(2)}\n`; 
-            }); 
-            msg += `\nSubtotal: RM ${currentOrderData.subtotal.toFixed(2)}`; 
-            msg += `\nShipping Fee: RM ${currentOrderData.shippingFee.toFixed(2)}`; 
-            msg += `\n*TOTAL PAID: RM ${currentOrderData.total.toFixed(2)}*`; 
-            msg += `\nPayment Method: ${currentOrderData.paymentMethod.toUpperCase()}`; 
-            if(currentOrderData.notes) { 
-                msg += `\nNotes: ${currentOrderData.notes}`; 
-            } 
-            const encoded = encodeURIComponent(msg); 
-            window.open(`https://wa.me/${NBCA_DATA.site.get().whatsapp}?text=${encoded}`, '_blank'); 
-        } 
-
-        function closeSuccessModal() { 
-            closeModal('order-success-modal'); 
         } 
 
         function updateAuthNavbarUI() {
