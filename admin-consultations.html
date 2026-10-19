@@ -53,10 +53,12 @@
                     </div>
                     <select id="filter-status" onchange="Consult.render()" class="bg-white border border-slate-200 rounded-xl px-4 py-3 text-xs font-semibold focus:outline-none focus:border-amberGold">
                         <option value="all">All statuses</option>
-                        <option value="Pending">Pending</option>
+                        <option value="Pending">Requested</option>
+                        <option value="Proposed">Alternative Proposed</option>
                         <option value="Accepted">Accepted</option>
-                        <option value="Proposed">Proposed</option>
+                        <option value="Completed">Completed</option>
                         <option value="Declined">Declined</option>
+                        <option value="Cancelled">Cancelled</option>
                     </select>
                 </div>
             </section>
@@ -81,22 +83,37 @@
     <script src="js/nbca-config.js"></script>
     <script src="js/nbca-data.js"></script>
     <script src="js/admin/shell.js"></script>
+    <script src="js/admin/ui.js"></script>
     <script>
     window.Consult = (function () {
         const D = NBCA_DATA, A = AdminShell, esc = A.esc;
         let activeId = null;
 
+        // SRS wording: internal 'Pending' is shown as "Requested", 'Proposed' as "Alternative Proposed".
+        function statusLabel(s) { return ({ 'Pending': 'Requested', 'Proposed': 'Alternative Proposed' }[s]) || s; }
         function statusBadge(s) {
             const map = {
                 'Pending': 'bg-amber-100 text-amber-800 border-amber-200',
                 'Accepted': 'bg-emerald-100 text-emerald-800 border-emerald-200',
                 'Proposed': 'bg-blue-100 text-blue-800 border-blue-200',
-                'Declined': 'bg-red-100 text-red-800 border-red-200'
+                'Completed': 'bg-indigo-100 text-indigo-800 border-indigo-200',
+                'Declined': 'bg-red-100 text-red-800 border-red-200',
+                'Cancelled': 'bg-slate-200 text-slate-700 border-slate-300'
             };
-            return '<span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase border ' + (map[s] || 'bg-slate-100 text-slate-700 border-slate-200') + '">' + esc(s) + '</span>';
+            return '<span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase border ' + (map[s] || 'bg-slate-100 text-slate-700 border-slate-200') + '">' + esc(statusLabel(s)) + '</span>';
         }
 
         function fmtDate(d) { return A.fmtDate(d); }
+
+        // UC-400 / REQ-409: short history log shown as a timeline.
+        function historyHtml(c) {
+            const h = (c.history || []);
+            if (!h.length) return '';
+            const rows = h.slice().reverse().map(e =>
+                '<li class="flex gap-2"><span class="text-slate-400 shrink-0">' + A.fmtDateTime(e.at) + '</span>' +
+                '<span class="text-slate-700"><strong class="capitalize">' + esc(e.by || 'system') + '</strong> · ' + esc(e.action) + '</span></li>').join('');
+            return '<details class="text-[11px] bg-slate-50 rounded-xl border border-slate-200 p-3"><summary class="cursor-pointer font-bold text-slate-600"><i class="fa-solid fa-clock-rotate-left mr-1.5 text-amberGold"></i>History (' + h.length + ')</summary><ul class="mt-2 space-y-1">' + rows + '</ul></details>';
+        }
 
         function render() {
             const all = D.consultations.list().slice().sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
@@ -107,10 +124,12 @@
             const pending = all.filter(c => c.status === 'Pending').length;
             const accepted = all.filter(c => c.status === 'Accepted').length;
             const proposed = all.filter(c => c.status === 'Proposed').length;
+            const completed = all.filter(c => c.status === 'Completed').length;
             document.getElementById('stat-chips').innerHTML =
-                '<span class="px-3.5 py-2 rounded-full bg-amber-50 border border-amber-200 text-xs font-bold text-amber-800"><i class="fa-solid fa-clock mr-1.5"></i>' + pending + ' Pending</span>' +
+                '<span class="px-3.5 py-2 rounded-full bg-amber-50 border border-amber-200 text-xs font-bold text-amber-800"><i class="fa-solid fa-clock mr-1.5"></i>' + pending + ' Requested</span>' +
                 '<span class="px-3.5 py-2 rounded-full bg-emerald-50 border border-emerald-200 text-xs font-bold text-emerald-800"><i class="fa-solid fa-check mr-1.5"></i>' + accepted + ' Accepted</span>' +
                 '<span class="px-3.5 py-2 rounded-full bg-blue-50 border border-blue-200 text-xs font-bold text-blue-800"><i class="fa-solid fa-calendar-pen mr-1.5"></i>' + proposed + ' Proposed</span>' +
+                '<span class="px-3.5 py-2 rounded-full bg-indigo-50 border border-indigo-200 text-xs font-bold text-indigo-800"><i class="fa-solid fa-circle-check mr-1.5"></i>' + completed + ' Completed</span>' +
                 '<span class="px-3.5 py-2 rounded-full bg-slate-50 border border-slate-200 text-xs font-bold text-slate-700"><i class="fa-solid fa-list mr-1.5"></i>' + all.length + ' Total</span>';
 
             const filtered = all.filter(c => {
@@ -137,17 +156,22 @@
                     '</div>' +
                     '<div class="grid sm:grid-cols-4 gap-3 text-xs">' +
                         '<div><span class="text-slate-500">Type</span><p class="font-bold text-slate-900">' + esc(c.type) + '</p></div>' +
-                        '<div><span class="text-slate-500">Preferred Date</span><p class="font-bold text-slate-900">' + fmtDate(c.preferredDate) + '</p></div>' +
-                        '<div><span class="text-slate-500">Preferred Time</span><p class="font-bold text-slate-900">' + esc(c.preferredTime) + '</p></div>' +
+                        '<div><span class="text-slate-500">Preferred</span><p class="font-bold text-slate-900">' + fmtDate(c.preferredDate) + (c.preferredTime ? ' · ' + esc(c.preferredTime) : '') + '</p></div>' +
+                        '<div><span class="text-slate-500">Backup time</span><p class="font-bold text-slate-900">' + (c.backupDate || c.backupTime ? fmtDate(c.backupDate) + (c.backupTime ? ' · ' + esc(c.backupTime) : '') : '<span class="text-slate-400 font-normal">None</span>') + '</p></div>' +
+                        '<div><span class="text-slate-500">Meeting mode</span><p class="font-bold text-slate-900">' + (c.meetingMode ? esc(c.meetingMode) : '<span class="text-slate-400 font-normal">—</span>') + '</p></div>' +
                         (c.business ? '<div><span class="text-slate-500">Business</span><p class="font-bold text-slate-900">' + esc(c.business) + '</p></div>' : '') +
                     '</div>' +
                     '<div class="text-xs"><span class="text-slate-500">Requirements</span><p class="text-slate-800 mt-0.5 leading-relaxed">' + esc(c.requirements) + '</p></div>' +
                     (c.adminNote ? '<div class="p-3 bg-slate-50 rounded-xl text-xs"><span class="text-slate-500">Admin note:</span> <span class="text-slate-800">' + esc(c.adminNote) + '</span></div>' : '') +
-                    (c.status === 'Proposed' ? '<div class="p-3 bg-blue-50 rounded-xl border border-blue-200 text-xs"><span class="text-blue-600">Proposed:</span> <strong class="text-blue-800">' + fmtDate(c.proposedDate) + ' at ' + esc(c.proposedTime) + '</strong></div>' : '') +
+                    (c.status === 'Proposed' ? '<div class="p-3 bg-blue-50 rounded-xl border border-blue-200 text-xs"><span class="text-blue-600">Proposed:</span> <strong class="text-blue-800">' + fmtDate(c.proposedDate) + ' at ' + esc(c.proposedTime) + '</strong> <span class="text-blue-500">— waiting for the customer to accept or reject.</span></div>' : '') +
+                    historyHtml(c) +
                     '<div class="flex flex-wrap gap-2 pt-1">' +
                         (c.status === 'Pending' ? '<button onclick="Consult.openAccept(\'' + c.id + '\')" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-[11px] font-bold transition-all"><i class="fa-solid fa-check mr-1"></i>Accept</button>' +
                         '<button onclick="Consult.openPropose(\'' + c.id + '\')" class="px-3.5 py-2 bg-amberGold hover:bg-royalBlue text-white rounded-lg text-[11px] font-bold transition-all"><i class="fa-solid fa-calendar-pen mr-1"></i>Propose Time</button>' +
                         '<button onclick="Consult.openDecline(\'' + c.id + '\')" class="px-3.5 py-2 bg-white border border-red-300 text-red-600 hover:bg-red-50 rounded-lg text-[11px] font-bold transition-all"><i class="fa-solid fa-xmark mr-1"></i>Decline</button>' : '') +
+                        (c.status === 'Proposed' ? '<button onclick="Consult.openAccept(\'' + c.id + '\')" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-[11px] font-bold transition-all"><i class="fa-solid fa-check mr-1"></i>Accept on their behalf</button>' : '') +
+                        (c.status === 'Accepted' ? '<button onclick="Consult.openComplete(\'' + c.id + '\')" class="px-3.5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-[11px] font-bold transition-all"><i class="fa-solid fa-circle-check mr-1"></i>Mark Completed</button>' : '') +
+                        (['Pending', 'Proposed', 'Accepted'].includes(c.status) ? '<button onclick="Consult.cancelReq(\'' + c.id + '\')" class="px-3.5 py-2 bg-white border border-slate-300 text-slate-600 hover:bg-slate-50 rounded-lg text-[11px] font-bold transition-all"><i class="fa-solid fa-ban mr-1"></i>Cancel</button>' : '') +
                         (wa ? '<a href="' + wa + '" target="_blank" class="px-3.5 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-[11px] font-bold transition-all"><i class="fa-brands fa-whatsapp mr-1"></i>WhatsApp</a>' : '') +
                     '</div>' +
                     '<p class="text-[10px] text-slate-400">' + esc(c.id) + ' · Submitted ' + A.fmtDateTime(c.createdAt) + '</p>' +
@@ -191,6 +215,17 @@
             document.getElementById('action-modal').classList.remove('hidden');
         }
 
+        function openComplete(id) {
+            activeId = id;
+            document.getElementById('modal-title').textContent = 'Mark as Completed';
+            document.getElementById('modal-body').innerHTML =
+                '<p class="text-slate-600">Confirm the consultation session has taken place. The status changes to <strong>Completed</strong>.</p>' +
+                '<div><label class="block text-[11px] font-bold text-slate-700 uppercase mb-1.5">Note (optional)</label>' +
+                '<textarea id="m-note" rows="2" placeholder="e.g. Covered cafe layout and equipment list." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-amberGold resize-none"></textarea></div>' +
+                '<button onclick="Consult.doComplete()" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-sm"><i class="fa-solid fa-circle-check mr-1.5"></i>Mark Completed</button>';
+            document.getElementById('action-modal').classList.remove('hidden');
+        }
+
         function closeModal() { document.getElementById('action-modal').classList.add('hidden'); activeId = null; }
 
         function doAccept() {
@@ -209,17 +244,27 @@
             D.consultations.decline(activeId, note);
             A.toast('Consultation declined.'); closeModal(); render();
         }
+        function doComplete() {
+            D.consultations.complete(activeId, (document.getElementById('m-note').value || '').trim());
+            A.toast('Consultation marked completed.'); closeModal(); render();
+        }
+        async function cancelReq(id) {
+            const c = D.consultations.get(id);
+            if (await UI.confirm({ title: 'Cancel this request?', message: 'The consultation for ' + c.name + ' will be cancelled. This cannot be acted on further.', ok: 'Cancel request', danger: true })) {
+                D.consultations.cancel(id, 'admin'); A.toast('Consultation cancelled.'); render();
+            }
+        }
 
         function exportCsv() {
-            const rows = [['ID', 'Name', 'Email', 'Phone', 'Business', 'Type', 'Preferred Date', 'Preferred Time', 'Requirements', 'Status', 'Admin Note', 'Submitted']];
-            D.consultations.list().forEach(c => rows.push([c.id, c.name, c.email, c.phone, c.business, c.type, c.preferredDate, c.preferredTime, c.requirements, c.status, c.adminNote, c.createdAt]));
+            const rows = [['ID', 'Name', 'Email', 'Phone', 'Business', 'Type', 'Preferred Date', 'Preferred Time', 'Backup Date', 'Backup Time', 'Meeting Mode', 'Requirements', 'Status', 'Admin Note', 'Submitted']];
+            D.consultations.list().forEach(c => rows.push([c.id, c.name, c.email, c.phone, c.business, c.type, c.preferredDate, c.preferredTime, c.backupDate || '', c.backupTime || '', c.meetingMode || '', c.requirements, statusLabel(c.status), c.adminNote, c.createdAt]));
             A.downloadCsv('nbca-consultations.csv', rows);
         }
 
         document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
         window.addEventListener('admin-ready', render);
 
-        return { render, openAccept, openPropose, openDecline, closeModal, doAccept, doPropose, doDecline, exportCsv };
+        return { render, openAccept, openPropose, openDecline, openComplete, closeModal, doAccept, doPropose, doDecline, doComplete, cancelReq, exportCsv };
     })();
     </script>
 </body>

@@ -237,12 +237,20 @@
 
                         <div class="bg-adminCard rounded-3xl border border-adminBorder p-6 sm:p-8 shadow-xl space-y-5">
                             <h4 class="text-sm font-bold text-roast-950 uppercase tracking-wider border-b border-adminBorder pb-3">Pricing & Deposit</h4>
+                            <div>
+                                <label class="block font-semibold text-roast-300 uppercase mb-1">Payment Mode</label>
+                                <select id="fcs-payment-mode" onchange="updateFixedClassPreview()" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
+                                    <option value="deposit">Deposit (pay part now, balance on the day)</option>
+                                    <option value="full">Full payment (pay the whole fee now)</option>
+                                </select>
+                                <p class="text-[10px] text-roast-400 mt-1">Full payment hides the deposit percentage and asks the customer for the whole fee.</p>
+                            </div>
                             <div class="grid sm:grid-cols-2 gap-4">
                                 <div>
                                     <label class="block font-semibold text-roast-300 uppercase mb-1">Class Fee (RM)</label>
                                     <input type="number" step="0.01" id="fcs-fee" required oninput="updateFixedClassPreview()" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
                                 </div>
-                                <div>
+                                <div id="fcs-deposit-pct-wrap">
                                     <label class="block font-semibold text-roast-300 uppercase mb-1">Deposit Required (%)</label>
                                     <input type="number" min="0" max="100" id="fcs-deposit-pct" required oninput="updateFixedClassPreview()" class="w-full bg-adminBg border border-adminBorder text-roast-950 rounded-xl px-4 py-3 focus:outline-none focus:border-amberGold">
                                 </div>
@@ -292,6 +300,45 @@
                         </div>
                     </div>
                 </form>
+            </div>
+
+            <!-- TAB: PAYMENT SETTINGS (UC-300 / REQ-301) -->
+            <div id="view-payment" class="admin-view space-y-6 hidden">
+                <div><span class="text-[11px] font-extrabold tracking-[0.18em] text-amberGold uppercase">Manual Payment</span><h3 class="text-2xl font-extrabold text-slate-900 font-serif mt-1">DuitNow QR &amp; Bank Details</h3><p class="text-xs text-slate-500 mt-1">The company QR and bank account customers pay to. Shown on the payment screen with the exact amount due. Phase 1 has no online gateway — every payment is verified by you against the uploaded receipt.</p></div>
+                <div id="pay-status"></div>
+                <form onsubmit="savePaymentSettings(event)" class="grid lg:grid-cols-2 gap-6">
+                    <section class="bg-white rounded-3xl border border-slate-200 shadow-sm p-5 sm:p-6 space-y-4">
+                        <h4 class="font-serif text-lg font-bold text-slate-900"><i class="fa-solid fa-qrcode text-amberGold mr-2"></i>Company DuitNow QR</h4>
+                        <p class="text-[11px] text-slate-500">Upload the DuitNow QR registered in the company's name. Customers scan this to pay.</p>
+                        <div class="flex items-start gap-4">
+                            <div class="w-32 h-32 shrink-0 rounded-2xl border border-slate-200 bg-slate-50 flex items-center justify-center overflow-hidden">
+                                <img id="pay-qr-preview" src="" alt="DuitNow QR preview" class="w-full h-full object-contain hidden">
+                                <span id="pay-qr-placeholder" class="text-[10px] text-slate-400 text-center px-2">No QR uploaded yet</span>
+                            </div>
+                            <div class="flex-1 space-y-2">
+                                <label for="pay-qr-file" class="cursor-pointer inline-flex items-center gap-2 px-3.5 py-2.5 bg-white border border-dashed border-slate-300 rounded-xl text-xs font-bold text-slate-600 hover:border-amberGold hover:text-amberGold transition-all"><i class="fa-solid fa-cloud-arrow-up"></i> Upload QR image</label>
+                                <input type="file" id="pay-qr-file" accept="image/*" class="hidden" onchange="handlePaymentQrUpload(event)">
+                                <input type="hidden" id="pay-qr">
+                                <p class="text-[10px] text-slate-500">PNG or JPG. Resized automatically. <button type="button" onclick="clearPaymentQr()" class="text-red-500 font-bold hover:underline">Remove</button></p>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="bg-white rounded-3xl border border-slate-200 shadow-sm p-5 sm:p-6 space-y-4">
+                        <h4 class="font-serif text-lg font-bold text-slate-900"><i class="fa-solid fa-building-columns text-amberGold mr-2"></i>Bank transfer details</h4>
+                        <div><label class="block text-[11px] font-semibold text-slate-600 uppercase tracking-wide mb-1">Bank name</label><input id="pay-bank" placeholder="e.g. Maybank" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-amberGold"></div>
+                        <div><label class="block text-[11px] font-semibold text-slate-600 uppercase tracking-wide mb-1">Account name</label><input id="pay-acc-name" placeholder="NB.CA Academy Sdn Bhd" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-amberGold"></div>
+                        <div><label class="block text-[11px] font-semibold text-slate-600 uppercase tracking-wide mb-1">Account number</label><input id="pay-acc-no" inputmode="numeric" placeholder="e.g. 5123 4567 8901" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-amberGold"></div>
+                    </section>
+                    <section class="lg:col-span-2 bg-white rounded-3xl border border-slate-200 shadow-sm p-5 sm:p-6 space-y-3">
+                        <h4 class="font-serif text-lg font-bold text-slate-900"><i class="fa-solid fa-circle-info text-amberGold mr-2"></i>Payment instructions</h4>
+                        <textarea id="pay-note" rows="2" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-amberGold" placeholder="Shown to the customer under the QR."></textarea>
+                    </section>
+                    <div class="lg:col-span-2 flex flex-wrap gap-3">
+                        <button class="px-6 py-3 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl text-xs shadow transition-all">Save payment details</button>
+                        <button type="button" onclick="resetPaymentSettings()" class="px-6 py-3 bg-white border border-slate-200 text-slate-700 font-bold rounded-xl text-xs hover:border-amberGold transition-all">Reset to defaults</button>
+                    </div>
+                </form>
+                <div class="rounded-2xl bg-blue-50 border border-blue-200 text-blue-900 text-xs p-4 flex gap-3"><i class="fa-solid fa-lock mt-0.5"></i><span>The DuitNow QR and bank account must be registered in the company's name. The system never confirms a payment on its own — you review each receipt under <a href="admin-bookings.html" class="font-bold underline">Class Bookings</a> before approving.</span></div>
             </div>
 
             <!-- TAB 5: MANAGE BLOG -->
@@ -489,14 +536,74 @@
 
         // ===================== TABS =====================
         // Inventory is kept for phase 2; hide it from the admin tabs until it is ready.
-        const TABS = [['fixed', 'fixedclass', 'Fixed Class Settings', 'fa-sliders'], ['blog', 'blog', 'Announcements', 'fa-bullhorn'], ['admins', 'admins', 'Admin Accounts', 'fa-user-shield']];
+        const TABS = [['fixed', 'fixedclass', 'Fixed Class Settings', 'fa-sliders'], ['payment', 'payment', 'Payment Settings', 'fa-qrcode'], ['blog', 'blog', 'Announcements', 'fa-bullhorn'], ['admins', 'admins', 'Admin Accounts', 'fa-user-shield']];
         function showTab(key) {
             const t = TABS.find(x => x[0] === key) || TABS[0];
             document.querySelectorAll('.admin-view').forEach(el => el.classList.add('hidden'));
             document.getElementById('view-' + t[1]).classList.remove('hidden');
             document.getElementById('manage-tabs').innerHTML = TABS.map(x => '<a href="admin-manage.html?tab=' + x[0] + '" class="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all ' + (x[0] === t[0] ? 'bg-amberGold text-white shadow' : 'text-slate-600 hover:bg-slate-100') + '"><i class="fa-solid ' + x[3] + '"></i>' + x[2] + '</a>').join('');
             if (t[0] === 'fixed') loadFixedClassSettingsIntoForm();
+            if (t[0] === 'payment') loadPaymentSettingsIntoForm();
             if (t[0] === 'admins') renderAdmins();
+        }
+
+        // ===================== PAYMENT SETTINGS (UC-300 / REQ-301) =====================
+        function loadPaymentSettingsIntoForm() {
+            const p = NBCA_DATA.payment.get();
+            document.getElementById('pay-qr').value = p.qrImage || '';
+            document.getElementById('pay-bank').value = p.bankName || '';
+            document.getElementById('pay-acc-name').value = p.accountName || '';
+            document.getElementById('pay-acc-no').value = p.accountNumber || '';
+            document.getElementById('pay-note').value = p.note || '';
+            paintPaymentQr(p.qrImage);
+            paintPaymentStatus();
+        }
+        function paintPaymentQr(src) {
+            const img = document.getElementById('pay-qr-preview'), ph = document.getElementById('pay-qr-placeholder');
+            if (src) { img.src = src; img.classList.remove('hidden'); ph.classList.add('hidden'); }
+            else { img.src = ''; img.classList.add('hidden'); ph.classList.remove('hidden'); }
+        }
+        function paintPaymentStatus() {
+            const ok = NBCA_DATA.payment.configured(), el = document.getElementById('pay-status');
+            el.innerHTML = ok
+                ? '<div class="rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs p-4 flex gap-3"><i class="fa-solid fa-circle-check mt-0.5"></i><span><strong>Payment details are set.</strong> Customers can see the QR and bank details at checkout.</span></div>'
+                : '<div class="rounded-2xl bg-amber-50 border border-amber-200 text-amber-800 text-xs p-4 flex gap-3"><i class="fa-solid fa-triangle-exclamation mt-0.5"></i><span><strong>Not set up yet.</strong> Upload a DuitNow QR or enter the bank account so customers have somewhere to pay.</span></div>';
+        }
+        function handlePaymentQrUpload(event) {
+            const file = event.target.files[0];
+            if (!file || !file.type.startsWith('image/')) { AdminShell.toast('Please choose a valid image file.'); event.target.value = ''; return; }
+            const r = new FileReader();
+            r.onload = () => {
+                const img = new Image();
+                img.onload = () => {
+                    const max = 600, k = Math.min(1, max / Math.max(img.width, img.height)), c = document.createElement('canvas');
+                    c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+                    c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+                    const data = c.toDataURL('image/jpeg', 0.85);
+                    document.getElementById('pay-qr').value = data; paintPaymentQr(data);
+                };
+                img.src = r.result;
+            };
+            r.readAsDataURL(file);
+        }
+        function clearPaymentQr() { document.getElementById('pay-qr').value = ''; document.getElementById('pay-qr-file').value = ''; paintPaymentQr(''); }
+        function savePaymentSettings(e) {
+            e.preventDefault();
+            try {
+                NBCA_DATA.payment.save({
+                    qrImage: document.getElementById('pay-qr').value,
+                    bankName: document.getElementById('pay-bank').value.trim(),
+                    accountName: document.getElementById('pay-acc-name').value.trim(),
+                    accountNumber: document.getElementById('pay-acc-no').value.trim(),
+                    note: document.getElementById('pay-note').value.trim()
+                });
+            } catch (err) { AdminShell.toast('That QR image is too large to save. Please try a smaller one.'); return; }
+            paintPaymentStatus(); AdminShell.toast('Payment details saved.');
+        }
+        async function resetPaymentSettings() {
+            if (await UI.confirm({ title: 'Reset payment details?', message: 'The QR and bank details go back to empty defaults.', ok: 'Reset', danger: true })) {
+                NBCA_DATA.payment.reset(); loadPaymentSettingsIntoForm(); AdminShell.toast('Payment details reset.');
+            }
         }
         function showAdminToast(msg) { AdminShell.toast(msg); }
 
@@ -544,7 +651,8 @@
             afternoonSession: '2:00 PM – 4:00 PM',
             closedDay: 5,
             fee: 150.00,
-            depositPct: 50
+            depositPct: 50,
+            paymentMode: 'deposit'
         };
 
         function loadFixedClassSettings() {
@@ -570,6 +678,7 @@
             const cd = document.getElementById('fcs-closed-day'); cd.disabled = true; cd.classList.add('opacity-70', 'cursor-not-allowed');
             document.getElementById('fcs-fee').value = s.fee;
             document.getElementById('fcs-deposit-pct').value = s.depositPct;
+            document.getElementById('fcs-payment-mode').value = s.paymentMode || 'deposit';
             updateFixedClassPreview();
         }
 
@@ -603,8 +712,13 @@
             const afternoon = document.getElementById('fcs-afternoon').value || '2:00 PM – 4:00 PM';
             const closedDay = 'Friday & Saturday';
             const fee = parseFloat(document.getElementById('fcs-fee').value) || 0;
-            const pct = parseFloat(document.getElementById('fcs-deposit-pct').value) || 0;
+            const mode = document.getElementById('fcs-payment-mode').value;
+            const full = mode === 'full';
+            const pct = full ? 100 : (parseFloat(document.getElementById('fcs-deposit-pct').value) || 0);
             const deposit = (fee * pct / 100);
+            // Full payment hides the deposit-% input; the "deposit due" is the whole fee.
+            document.getElementById('fcs-deposit-pct-wrap').classList.toggle('opacity-50', full);
+            document.getElementById('fcs-deposit-pct').disabled = full;
 
             document.getElementById('fcs-deposit-preview').innerText = `RM ${deposit.toFixed(2)}`;
 
@@ -633,7 +747,8 @@
                 afternoonSession: document.getElementById('fcs-afternoon').value.trim(),
                 closedDay: parseInt(document.getElementById('fcs-closed-day').value),
                 fee: parseFloat(document.getElementById('fcs-fee').value) || 0,
-                depositPct: parseFloat(document.getElementById('fcs-deposit-pct').value) || 0
+                depositPct: document.getElementById('fcs-payment-mode').value === 'full' ? 100 : (parseFloat(document.getElementById('fcs-deposit-pct').value) || 0),
+                paymentMode: document.getElementById('fcs-payment-mode').value
             };
             try {
                 localStorage.setItem('rp_fixed_class_settings', JSON.stringify(settings));

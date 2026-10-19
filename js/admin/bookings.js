@@ -4,8 +4,9 @@
     let statusF = UI.param('status') || 'all', view = UI.param('view') === 'capacity' ? 'capacity' : 'list';
     let slot = UI.param('date') ? { date: UI.param('date'), session: UI.param('session') || '' } : null;
 
-    const STATUS = { awaiting: ['Awaiting payment', 'warn'], confirm: ['Needs confirmation', 'info'], admitted: ['Admitted', 'good'], reschedule: ['Reschedule', 'bad'], cancelled: ['Cancelled', 'muted'] };
-    const statusOf = r => r.classStatus === 'Cancelled' ? 'cancelled' : r.classStatus === 'Reschedule' ? 'reschedule' : r.classStatus === 'Admitted' ? 'admitted' : r.depositStatus === 'Paid' ? 'confirm' : 'awaiting';
+    const STATUS = { awaiting: ['Awaiting payment', 'warn'], verify: ['Needs verification', 'info'], confirm: ['Needs confirmation', 'info'], admitted: ['Admitted', 'good'], reschedule: ['Reschedule', 'bad'], cancelled: ['Cancelled', 'muted'] };
+    // A receipt the customer uploaded but the admin has not approved yet (UC-300 / REQ-306) sits in "verify".
+    const statusOf = r => r.classStatus === 'Cancelled' ? 'cancelled' : r.classStatus === 'Reschedule' ? 'reschedule' : r.classStatus === 'Admitted' ? 'admitted' : r.depositStatus === 'Paid' ? 'confirm' : (r.proofImage && r.paymentStatus === 'Submitted') ? 'verify' : 'awaiting';
     const todayStr = D.dayOf();
     const find = id => S.regs().find(r => r.id === id);
     const upd = (id, patch) => { S.update(D.K.regs, id, patch); render(); };
@@ -34,17 +35,24 @@
         const st = statusOf(r), paid = r.depositStatus === 'Paid', ins = S.instructorOf(r.preferredDate, r.session);
         const wa = S.waLink(r.phone, 'Hi ' + r.name + ', regarding your Nb.CA Academy class on ' + r.preferredDate + ' (' + r.session + '). ');
         const actions = [];
+        if (st === 'verify') { actions.push(UI.btn('<i class="fa-solid fa-circle-check mr-1.5"></i>Approve payment', "Bookings.approveProof('" + r.id + "')", 'good')); actions.push(UI.btn('<i class="fa-solid fa-xmark mr-1.5"></i>Reject', "Bookings.rejectProof('" + r.id + "')", 'danger')); }
         if (st === 'confirm') actions.push(UI.btn('<i class="fa-solid fa-check mr-1.5"></i>Admit', "Bookings.admit('" + r.id + "')", 'good'));
-        if (!paid && st !== 'cancelled') actions.push(UI.btn('Mark deposit paid', "Bookings.markPaid('" + r.id + "')", 'primary'));
+        if (!paid && st !== 'cancelled' && st !== 'verify') actions.push(UI.btn('Mark deposit paid', "Bookings.markPaid('" + r.id + "')", 'primary'));
         if (st !== 'cancelled' && st !== 'reschedule') actions.push(UI.btn('Reschedule', "Bookings.reschedule('" + r.id + "')", 'ghost'));
         if (st === 'reschedule' || st === 'cancelled') actions.push(UI.btn('Reopen', "Bookings.reopen('" + r.id + "')", 'ghost'));
         if (st !== 'cancelled') actions.push(UI.btn('Cancel', "Bookings.cancel('" + r.id + "')", 'danger'));
+        const rejected = r.paymentStatus === 'Rejected' && r.paymentRejectReason;
+        const proofBlock = r.proofImage ? '<div class="mt-4 rounded-2xl border ' + (st === 'verify' ? 'border-blue-200 bg-blue-50/60' : rejected ? 'border-red-200 bg-red-50/60' : 'border-slate-200 bg-slate-50') + ' p-3 flex items-center gap-3">' +
+            '<a href="' + r.proofImage + '" target="_blank" rel="noopener" class="w-14 h-14 rounded-xl overflow-hidden border border-slate-200 bg-white shrink-0"><img src="' + r.proofImage + '" alt="Payment receipt" class="w-full h-full object-cover"></a>' +
+            '<div class="min-w-0 text-xs flex-1"><p class="font-bold text-slate-900"><i class="fa-solid fa-receipt text-amberGold mr-1.5"></i>Payment receipt' + (r.proofUploadedAt ? ' · ' + esc(S.ago(r.proofUploadedAt)) : '') + '</p><p class="text-slate-500">Tap the image to check it against your bank statement before approving.</p>' +
+            (rejected ? '<p class="mt-1 text-red-600 font-semibold"><i class="fa-solid fa-circle-xmark mr-1"></i>You rejected this: ' + esc(r.paymentRejectReason) + '</p>' : '') + '</div></div>' : '';
         return '<article class="bg-white rounded-3xl border border-slate-200 shadow-sm p-5 sm:p-6 hover:shadow-md transition-all"><div class="flex flex-col lg:flex-row lg:items-start gap-5">' +
             '<div class="flex items-start gap-4 flex-1 min-w-0">' + UI.avatar(r.name) + '<div class="min-w-0 space-y-1.5"><div class="flex flex-wrap items-center gap-2"><strong class="text-slate-900 text-base">' + esc(r.name) + '</strong>' + UI.pill(STATUS[st][0], STATUS[st][1]) + UI.pill(paid ? 'Deposit paid' : 'Deposit unpaid', paid ? 'good' : 'warn') + (r.voucher ? UI.pill('Voucher ' + r.voucher.code, 'info') : '') + '</div>' +
             '<div class="flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-slate-500"><span><i class="fa-solid fa-id-card mr-1.5 text-slate-400"></i>' + esc(r.ic || '-') + '</span><span><i class="fa-solid fa-phone mr-1.5 text-slate-400"></i>' + esc(r.phone || '-') + '</span><span><i class="fa-solid fa-envelope mr-1.5 text-slate-400"></i>' + esc(r.email) + '</span>' + (r.from ? '<span><i class="fa-solid fa-location-dot mr-1.5 text-slate-400"></i>' + esc(r.from) + '</span>' : '') + (r.cafe ? '<span><i class="fa-solid fa-mug-hot mr-1.5 text-slate-400"></i>' + esc(r.cafe) + '</span>' : '') + '</div></div></div>' +
             '<div class="lg:w-72 shrink-0 rounded-2xl bg-slate-50 border border-slate-200 p-4 space-y-1 text-xs"><div class="flex items-center gap-2 font-bold text-slate-900"><i class="fa-solid fa-calendar-day text-amberGold"></i>' + S.fmtDate(r.preferredDate, { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }) + '</div><div class="text-slate-600"><i class="fa-solid fa-clock text-slate-400 mr-1.5"></i>' + esc(r.session) + '</div>' +
             '<div class="text-slate-600"><i class="fa-solid fa-user-tie text-slate-400 mr-1.5"></i>' + (ins ? esc(ins.name) : '<a href="admin-schedule.html" class="text-amber-600 font-semibold hover:underline">No instructor assigned</a>') + '</div>' +
-            '<div class="text-slate-500 pt-1 border-t border-slate-200 mt-2">Deposit ' + money(r.deposit) + ' of ' + money(r.classFee) + '</div></div></div>' +
+            '<div class="text-slate-500 pt-1 border-t border-slate-200 mt-2">' + (r.paymentMode === 'full' ? 'Full payment ' + money(r.deposit) : 'Deposit ' + money(r.deposit) + ' of ' + money(r.classFee)) + '</div></div></div>' +
+            proofBlock +
             '<div class="flex flex-wrap items-center gap-2 mt-4 pt-4 border-t border-slate-100">' + actions.join('') + '<span class="ml-auto flex flex-wrap gap-2">' + UI.btn('<i class="fa-solid fa-copy mr-1.5"></i>Copy name &amp; IC', "Bookings.copyId('" + r.id + "')", 'ghost') + (wa ? '<a href="' + wa + '" target="_blank" rel="noopener" class="px-3.5 py-2 rounded-xl text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 transition-all"><i class="fa-brands fa-whatsapp mr-1.5"></i>WhatsApp</a>' : '') + '</span></div></article>';
     }
 
@@ -72,6 +80,20 @@
         async markPaid(id) {
             const r = find(id);
             if (await UI.confirm({ title: 'Mark deposit as paid?', message: 'Use this only if you received ' + money(r.deposit) + ' from ' + r.name + ' outside the gateway (e.g. bank transfer).', ok: 'Mark as paid' })) { upd(id, { depositStatus: 'Paid', paidAt: new Date().toISOString(), classStatus: r.classStatus === 'Awaiting Payment' ? 'Pending Confirmation' : r.classStatus }); S.toast('Deposit marked as paid.'); }
+        },
+        // UC-300 REQ-306/307: admin verifies the uploaded receipt against the bank statement.
+        async approveProof(id) {
+            const r = find(id);
+            const label = r.paymentMode === 'full' ? 'Paid in full' : 'Deposit paid';
+            if (await UI.confirm({ title: 'Approve this payment?', message: 'Confirm you have checked ' + r.name + "'s receipt of " + money(r.deposit) + ' against your bank statement. The booking becomes ' + label + ' and moves to Needs confirmation.', ok: 'Approve payment' })) {
+                upd(id, { depositStatus: 'Paid', paymentStatus: 'Approved', paymentRejectReason: '', paidAt: new Date().toISOString(), classStatus: r.classStatus === 'Awaiting Payment' ? 'Pending Confirmation' : r.classStatus });
+                S.toast('Payment approved.');
+            }
+        },
+        async rejectProof(id) {
+            const r = find(id);
+            const v = await UI.form({ title: 'Reject payment proof', description: 'The customer sees this reason in their account and can upload a new receipt.', submit: 'Reject proof', fields: [{ id: 'reason', label: 'Reason for rejection', type: 'textarea', required: true, placeholder: 'e.g. The amount does not match, or the receipt is unclear.' }] });
+            if (v) { upd(id, { paymentStatus: 'Rejected', paymentRejectReason: v.reason, depositStatus: 'Pending' }); S.toast('Proof rejected. The customer can upload a new one.'); }
         },
         async reschedule(id) {
             const r = find(id);

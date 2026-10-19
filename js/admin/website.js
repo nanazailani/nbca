@@ -14,6 +14,8 @@
             { icon: 'fa-calendar-days', title: 'Daily class card', desc: 'Name, photo, description, fee and deposit of the daily class.', meta: fx ? 'RM ' + Number(fx.fee).toFixed(0) + ' · ' + fx.depositPct + '% deposit' : 'Using defaults', href: 'admin-manage.html?tab=fixed', label: 'Fixed Class Settings', anchor: '#fixed-classes', ok: true },
             { icon: 'fa-chalkboard-user', title: 'Workshops & sessions', desc: 'Sessions you add appear on the workshop cards straight away.', meta: extras + ' session' + (extras === 1 ? '' : 's') + ' added by you', href: 'admin-schedule.html?tab=workshops', label: 'Class Schedule > Workshops', anchor: '#classes', ok: true },
             { icon: 'fa-bullhorn', title: 'Announcements', desc: 'News and updates shown in the announcements section.', meta: posts ? posts + ' post' + (posts > 1 ? 's' : '') : 'Default posts', href: 'admin-manage.html?tab=blog', label: 'Announcements', anchor: '#blog', ok: true },
+            { icon: 'fa-handshake', title: 'Consulting Services', desc: 'Headline and intro on the one-to-one consulting page.', href: 'admin-website.html?tab=content', label: 'Website > Contact & highlights', anchor: '#consulting', ok: true },
+            { icon: 'fa-certificate', title: 'SCA — Coming Soon', desc: 'The "Coming Soon" copy for the SCA certified courses (not bookable in Phase 1).', href: 'admin-website.html?tab=content', label: 'Website > Contact & highlights', anchor: '#classes', ok: true },
             { icon: 'fa-location-dot', title: 'Contact & social', desc: 'WhatsApp number, address, map and TikTok.', href: 'admin-website.html?tab=content', label: 'Website > Contact & highlights', anchor: '#location', ok: true },
             { icon: 'fa-mug-hot', title: 'Coffee beans & merchandise', desc: 'Products, prices and photos are still set in the code. Ask the developer to change them.', href: '', anchor: '#coffee-beans', ok: false },
             { icon: 'fa-circle-info', title: 'About us text', desc: 'The story, vision and mission copy is set in the code.', href: '', anchor: '#about', ok: false }
@@ -26,10 +28,15 @@
 
     function content() {
         const s = D.site.get(), inp = (id, label, val, extra, hint) => '<div><label class="block text-[11px] font-semibold text-slate-600 uppercase tracking-wide mb-1">' + label + '</label><input id="' + id + '" value="' + esc(val) + '" ' + (extra || '') + ' class="' + UI.INPUT + '">' + (hint ? '<p class="text-[10px] text-slate-500 mt-1">' + hint + '</p>' : '') + '</div>';
+        const ta = (id, label, val, rows, hint) => '<div><label class="block text-[11px] font-semibold text-slate-600 uppercase tracking-wide mb-1">' + label + '</label><textarea id="' + id + '" rows="' + (rows || 2) + '" class="' + UI.INPUT + '">' + esc(val) + '</textarea>' + (hint ? '<p class="text-[10px] text-slate-500 mt-1">' + hint + '</p>' : '') + '</div>';
         const stats = [0, 1, 2].map(i => { const t = s.stats[i] || { value: '', label: '' }; return '<div class="grid grid-cols-3 gap-3">' + inp('st-v' + i, 'Figure ' + (i + 1), t.value, 'placeholder="500+"') + '<div class="col-span-2">' + inp('st-l' + i, 'Label', t.label, 'placeholder="Students Trained"') + '</div></div>'; }).join('');
         return '<form onsubmit="Website.saveContent(event)" class="grid lg:grid-cols-2 gap-6"><section class="bg-white rounded-3xl border border-slate-200 shadow-sm p-5 sm:p-6 space-y-4"><h3 class="font-serif text-lg font-bold text-slate-900"><i class="fa-solid fa-location-dot text-amberGold mr-2"></i>Contact & social</h3>' +
             inp('wa', 'WhatsApp number', s.whatsapp, 'inputmode="tel"', 'With country code, digits only (e.g. 60123456789). Used by every WhatsApp button on the homepage.') + inp('addr', 'Address', s.address, '', 'Also updates the map on the homepage.') + inp('tt', 'TikTok link', s.tiktok, 'type="url"') + inp('hd', 'Social handle', s.handle, '', 'Shown in the footer.') + '</section>' +
             '<section class="bg-white rounded-3xl border border-slate-200 shadow-sm p-5 sm:p-6 space-y-4"><h3 class="font-serif text-lg font-bold text-slate-900"><i class="fa-solid fa-star text-amberGold mr-2"></i>Hero highlights</h3><p class="text-[11px] text-slate-500">Up to three figures under the main headline. Leave a row empty to hide it.</p>' + stats + '</section>' +
+            '<section class="bg-white rounded-3xl border border-slate-200 shadow-sm p-5 sm:p-6 space-y-4"><h3 class="font-serif text-lg font-bold text-slate-900"><i class="fa-solid fa-handshake text-amberGold mr-2"></i>Consulting Services page</h3><p class="text-[11px] text-slate-500">Shown on the Consulting Services page where members request a one-to-one consultation.</p>' +
+            inp('cons-h', 'Headline', s.consultingHeadline) + ta('cons-i', 'Intro text', s.consultingIntro, 3) + '</section>' +
+            '<section class="bg-white rounded-3xl border border-slate-200 shadow-sm p-5 sm:p-6 space-y-4"><h3 class="font-serif text-lg font-bold text-slate-900"><i class="fa-solid fa-certificate text-amberGold mr-2"></i>SCA Classes — Coming Soon</h3><p class="text-[11px] text-slate-500">The "Coming Soon" copy for the SCA certified courses. Not bookable in Phase 1.</p>' +
+            inp('sca-h', 'Headline', s.scaHeadline) + ta('sca-b', 'Body text', s.scaBody, 3) + '</section>' +
             '<div class="lg:col-span-2 flex flex-wrap gap-3"><button class="px-6 py-3 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl text-xs shadow transition-all">Save changes</button><a href="' + preview('') + '" target="_blank" rel="noopener" class="px-6 py-3 bg-white border border-slate-200 text-slate-700 font-bold rounded-xl text-xs hover:border-amberGold transition-all">Preview homepage</a>' + UI.btn('Reset to defaults', 'Website.resetContent()', 'ghost') + '</div></form>';
     }
 
@@ -58,7 +65,11 @@
             if (tt && !/^https?:\/\//i.test(tt)) { S.toast('The TikTok link must start with https://'); return; }
             const stats = [0, 1, 2].map(i => ({ value: v('st-v' + i), label: v('st-l' + i) })).filter(x => x.value || x.label);
             if (stats.some(x => !x.value || !x.label)) { S.toast('Each highlight needs both a figure and a label.'); return; }
-            D.site.save({ whatsapp: wa, address: v('addr'), tiktok: tt || D.site.defaults.tiktok, handle: v('hd'), stats });
+            D.site.save({
+                whatsapp: wa, address: v('addr'), tiktok: tt || D.site.defaults.tiktok, handle: v('hd'), stats,
+                consultingHeadline: v('cons-h') || D.site.defaults.consultingHeadline, consultingIntro: v('cons-i') || D.site.defaults.consultingIntro,
+                scaHeadline: v('sca-h') || D.site.defaults.scaHeadline, scaBody: v('sca-b') || D.site.defaults.scaBody
+            });
             S.toast('Saved. The homepage now shows the new details.'); render();
         },
         async resetContent() { if (await UI.confirm({ title: 'Reset to the original details?', message: 'WhatsApp, address, social and highlights go back to the defaults.', ok: 'Reset' })) { localStorage.removeItem(D.K.site); S.toast('Reset to defaults.'); render(); } },

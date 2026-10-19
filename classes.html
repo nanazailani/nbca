@@ -194,14 +194,23 @@
                 box.innerHTML = '<div class="md:col-span-2 bg-white rounded-3xl border border-dashed border-roast-300 p-8 text-center space-y-2"><p class="text-sm font-bold text-roast-950">No workshop tickets yet</p><p class="text-xs text-roast-500">Enroll in a brewing, latte art or cupping workshop and your e-ticket shows up here.</p></div>';
                 return;
             }
-            box.innerHTML = list.map((w, i) =>
-                '<div class="bg-white rounded-3xl p-6 border border-roast-200 shadow-sm space-y-4 hover:shadow-lg hover:border-amberGold/40 transition-all">' +
-                '<div class="flex justify-between items-center"><span class="px-3 py-1 bg-blue-500/10 text-blue-600 text-[10px] font-bold rounded-full uppercase tracking-wider">' + MemberShell.esc(w.status) + '</span><span class="text-xs font-bold text-amberGold">RM ' + Number(w.price).toFixed(2) + '</span></div>' +
+            box.innerHTML = list.map((w, i) => {
+                const submitted = w.status === 'Pending Payment' && w.paymentStatus === 'Submitted';
+                const rejected = w.status === 'Pending Payment' && w.paymentStatus === 'Rejected';
+                const bd = w.status === 'Confirmed' ? ['Confirmed', 'bg-emerald-500/10 text-emerald-600'] : w.status === 'Cancelled' ? ['Cancelled', 'bg-slate-500/10 text-slate-600'] : rejected ? ['Receipt rejected', 'bg-red-500/10 text-red-600'] : submitted ? ['Verifying payment', 'bg-blue-500/10 text-blue-600'] : ['Payment pending', 'bg-amber-500/10 text-amber-600'];
+                const footer = w.status === 'Confirmed'
+                    ? '<button onclick="openETicketModal(' + i + ')" class="w-full py-2.5 bg-roast-100 hover:bg-amberGold hover:text-white text-roast-900 font-bold rounded-xl text-xs transition-all border border-roast-200"><i class="fa-solid fa-qrcode mr-1"></i> View e-ticket</button>'
+                    : w.status === 'Cancelled' ? '<p class="text-xs text-slate-500 text-center py-2">This enrollment was cancelled.</p>'
+                    : submitted ? '<div class="rounded-xl bg-blue-50 border border-blue-200 text-blue-800 text-xs p-3 flex gap-2"><i class="fa-solid fa-hourglass-half mt-0.5"></i><span>We received your receipt and are verifying it. Your seat is held in the meantime.</span></div>'
+                    : '<div class="rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs p-3 space-y-2">' +
+                        (rejected ? '<p class="flex gap-2 text-red-700"><i class="fa-solid fa-circle-xmark mt-0.5"></i><span><strong>Receipt not accepted.</strong> ' + MemberShell.esc(w.paymentRejectReason || '') + ' Please upload a new one.</span></p>' : '<p>Upload your DuitNow or bank receipt to secure your seat (RM ' + Number(w.price).toFixed(2) + ').</p>') +
+                        '<label class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-amber-300 rounded-lg font-bold cursor-pointer hover:border-amberGold whitespace-nowrap"><i class="fa-solid fa-cloud-arrow-up"></i>Upload receipt<input type="file" accept="image/*,application/pdf" class="hidden" onchange="reuploadWsProof(\'' + w.id + '\', this)"></label></div>';
+                return '<div class="bg-white rounded-3xl p-6 border border-roast-200 shadow-sm space-y-4 hover:shadow-lg hover:border-amberGold/40 transition-all">' +
+                '<div class="flex justify-between items-center"><span class="px-3 py-1 text-[10px] font-bold rounded-full uppercase tracking-wider ' + bd[1] + '">' + bd[0] + '</span><span class="text-xs font-bold text-amberGold">RM ' + Number(w.price).toFixed(2) + '</span></div>' +
                 '<h3 class="font-serif text-xl font-bold text-roast-950">' + MemberShell.esc(w.title) + '</h3>' +
                 '<div class="bg-roast-50 p-4 rounded-2xl border border-roast-200 space-y-2 text-xs text-roast-700"><div class="flex justify-between gap-3"><span>Slot</span><strong class="text-roast-950 text-right">' + MemberShell.esc(w.slot) + '</strong></div><div class="flex justify-between gap-3"><span>Mode</span><strong class="text-roast-950">' + MemberShell.esc(w.modeLabel) + '</strong></div><div class="flex justify-between gap-3"><span>Location</span><strong class="text-roast-950 text-right">' + MemberShell.esc(w.location) + '</strong></div><div class="flex justify-between gap-3"><span>Instructor</span><strong class="text-roast-950 text-right">' + instructorName(NBCA_DATA.assign.get(NBCA_DATA.assign.wsKey(w.workshopId, w.slot))) + '</strong></div></div>' +
-                (w.status === 'Confirmed'
-                    ? '<button onclick="openETicketModal(' + i + ')" class="w-full py-2.5 bg-roast-100 hover:bg-amberGold hover:text-white text-roast-900 font-bold rounded-xl text-xs transition-all border border-roast-200"><i class="fa-solid fa-qrcode mr-1"></i> View e-ticket</button>'
-                    : w.status === 'Cancelled' ? '<p class="text-xs text-slate-500 text-center py-2">This enrollment was cancelled.</p>' : '<button onclick="payNow(\'workshop\', \'' + w.id + '\')" class="w-full py-2.5 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl text-xs shadow"><i class="fa-solid fa-lock mr-1"></i> Pay RM ' + Number(w.price).toFixed(2) + ' with Billplz</button>') + '</div>').join('');
+                footer + '</div>';
+            }).join('');
         }
         function closeETicketModal() { document.getElementById('eticket-modal').classList.add('hidden'); }
 
@@ -227,9 +236,11 @@
                 const paid = r.depositStatus === 'Paid';
                 const admitted = r.classStatus === 'Admitted';
                 const resched = r.classStatus === 'Reschedule';
+                const submitted = !paid && r.paymentStatus === 'Submitted';
+                const rejected = !paid && r.paymentStatus === 'Rejected';
                 const d = new Date(r.preferredDate + 'T00:00:00');
                 const balance = (Number(r.classFee) - Number(r.deposit)).toFixed(2);
-                const badge = r.classStatus === 'Cancelled' ? ['Cancelled', 'bg-slate-500/10 text-slate-600'] : !paid ? ['Payment pending', 'bg-amber-500/10 text-amber-600'] : admitted ? ['Confirmed', 'bg-emerald-500/10 text-emerald-600'] : resched ? ['Reschedule needed', 'bg-red-500/10 text-red-600'] : ['Awaiting confirmation', 'bg-blue-500/10 text-blue-600'];
+                const badge = r.classStatus === 'Cancelled' ? ['Cancelled', 'bg-slate-500/10 text-slate-600'] : rejected ? ['Receipt rejected', 'bg-red-500/10 text-red-600'] : submitted ? ['Verifying payment', 'bg-blue-500/10 text-blue-600'] : !paid ? ['Payment pending', 'bg-amber-500/10 text-amber-600'] : admitted ? ['Confirmed', 'bg-emerald-500/10 text-emerald-600'] : resched ? ['Reschedule needed', 'bg-red-500/10 text-red-600'] : ['Awaiting confirmation', 'bg-blue-500/10 text-blue-600'];
                 return '<article class="bg-white rounded-3xl border border-roast-200 shadow-sm overflow-hidden">' +
                     '<div class="p-5 sm:p-6 grid sm:grid-cols-12 gap-5">' +
                         '<div class="sm:col-span-3 flex sm:flex-col items-center sm:items-start gap-3">' +
@@ -241,7 +252,12 @@
                             '<span class="px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider ' + badge[1] + '">' + badge[0] + '</span></div>' +
                             '<div class="flex items-start justify-between max-w-md">' + stepDot(true, false, 'fa-pen', 'Registered') + bar(paid) + stepDot(paid, !paid, 'fa-credit-card', 'Deposit paid') + bar(admitted) + stepDot(admitted, paid && !admitted && !resched, 'fa-circle-check', 'Seat confirmed') + '</div>' +
                             (resched ? '<div class="rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs p-3 flex gap-2"><i class="fa-solid fa-triangle-exclamation mt-0.5"></i><span>We need to move your session. Our team will contact you on <strong>' + MemberShell.esc(r.phone || 'your phone') + '</strong> to agree a new date.</span></div>' : '') +
-                            (!paid && r.classStatus !== 'Cancelled' ? '<div class="rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs p-3 flex flex-wrap items-center justify-between gap-3"><span>Pay the deposit to secure your seat.</span><button onclick="payNow(\'fixed\', \'' + r.id + '\')" class="px-4 py-2 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-lg whitespace-nowrap">Pay RM ' + Number(r.deposit).toFixed(2) + ' with Billplz</button></div>' : '') +
+                            (!paid && r.classStatus !== 'Cancelled' ? (
+                                submitted ? '<div class="rounded-xl bg-blue-50 border border-blue-200 text-blue-800 text-xs p-3 flex gap-2"><i class="fa-solid fa-hourglass-half mt-0.5"></i><span>We received your receipt and are verifying it against our bank statement. Your seat is held in the meantime.</span></div>'
+                                : '<div class="rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs p-3 space-y-2">' +
+                                    (rejected ? '<p class="flex gap-2 text-red-700"><i class="fa-solid fa-circle-xmark mt-0.5"></i><span><strong>Receipt not accepted.</strong> ' + MemberShell.esc(r.paymentRejectReason || '') + ' Please upload a new one.</span></p>' : '<p>Upload your DuitNow or bank receipt to secure your seat (RM ' + Number(r.deposit).toFixed(2) + ').</p>') +
+                                    '<label class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-amber-300 rounded-lg font-bold cursor-pointer hover:border-amberGold whitespace-nowrap"><i class="fa-solid fa-cloud-arrow-up"></i>Upload receipt<input type="file" accept="image/*,application/pdf" class="hidden" onchange="reuploadProof(\'' + r.id + '\', this)"></label></div>'
+                            ) : '') +
                             '<p class="text-xs text-roast-600"><i class="fa-solid fa-chalkboard-user text-amberGold mr-1.5"></i>Instructor: ' + instructorName(NBCA_DATA.assign.get(NBCA_DATA.assign.fixedKey(r.preferredDate, r.session))) + '</p>' +
                             '<div class="grid grid-cols-3 gap-3 text-xs bg-roast-50 border border-roast-200 rounded-2xl p-3.5">' +
                                 '<div><span class="block text-[10px] text-roast-500 uppercase">Class fee</span><strong class="text-roast-950">RM ' + Number(r.classFee).toFixed(2) + '</strong></div>' +
@@ -252,6 +268,60 @@
                     '</div></article>';
             }).join('');
         }
+        // UC-300 / REQ-305: member uploads a new receipt after a rejection (or for an unpaid booking).
+        function reuploadProof(id, input) {
+            const file = input.files[0];
+            if (!file) return;
+            if (file.size > 5 * 1024 * 1024) { alert('That file is larger than 5 MB. Please choose a smaller one.'); input.value = ''; return; }
+            if (!(file.type.startsWith('image/') || file.type === 'application/pdf')) { alert('Please upload a JPG, PNG or PDF receipt.'); input.value = ''; return; }
+            const r = new FileReader();
+            r.onload = () => {
+                if (file.type.startsWith('image/')) {
+                    const img = new Image();
+                    img.onload = () => {
+                        const max = 1000, k = Math.min(1, max / Math.max(img.width, img.height)), c = document.createElement('canvas');
+                        c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+                        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+                        saveProof(id, c.toDataURL('image/jpeg', 0.85));
+                    };
+                    img.src = r.result;
+                } else saveProof(id, r.result);
+            };
+            r.readAsDataURL(file);
+        }
+        function saveProof(id, data) {
+            try {
+                const K = 'rp_fixed_class_students';
+                const regs = JSON.parse(localStorage.getItem(K) || '[]').map(x => x.id === id ? Object.assign({}, x, { proofImage: data, paymentStatus: 'Submitted', proofUploadedAt: new Date().toISOString(), paymentRejectReason: '' }) : x);
+                localStorage.setItem(K, JSON.stringify(regs));
+            } catch (e) { alert('That receipt is too large to save. Please try a smaller file.'); return; }
+            renderRegistrations();
+        }
+        // Same re-upload flow for workshop enrollments (UC-300 / REQ-305).
+        function reuploadWsProof(id, input) {
+            const file = input.files[0];
+            if (!file) return;
+            if (file.size > 5 * 1024 * 1024) { alert('That file is larger than 5 MB. Please choose a smaller one.'); input.value = ''; return; }
+            if (!(file.type.startsWith('image/') || file.type === 'application/pdf')) { alert('Please upload a JPG, PNG or PDF receipt.'); input.value = ''; return; }
+            const r = new FileReader();
+            r.onload = () => {
+                if (file.type.startsWith('image/')) {
+                    const img = new Image();
+                    img.onload = () => { const max = 1000, k = Math.min(1, max / Math.max(img.width, img.height)), c = document.createElement('canvas'); c.width = Math.round(img.width * k); c.height = Math.round(img.height * k); c.getContext('2d').drawImage(img, 0, 0, c.width, c.height); saveWsProof(id, c.toDataURL('image/jpeg', 0.85)); };
+                    img.src = r.result;
+                } else saveWsProof(id, r.result);
+            };
+            r.readAsDataURL(file);
+        }
+        function saveWsProof(id, data) {
+            try {
+                const K = 'rp_workshop_enrollments';
+                const rows = JSON.parse(localStorage.getItem(K) || '[]').map(x => x.id === id ? Object.assign({}, x, { proofImage: data, paymentStatus: 'Submitted', proofUploadedAt: new Date().toISOString(), paymentRejectReason: '' }) : x);
+                localStorage.setItem(K, JSON.stringify(rows));
+            } catch (e) { alert('That receipt is too large to save. Please try a smaller file.'); return; }
+            renderWorkshops();
+        }
+
         window.addEventListener('member-ready', () => { renderRegistrations(); renderWorkshops(); });
 
     </script>

@@ -68,6 +68,8 @@
     function counts() {
         return {
             admit: regs().filter(r => r.depositStatus === 'Paid' && r.classStatus === 'Pending Confirmation').length,
+            verify: regs().filter(r => r.proofImage && r.paymentStatus === 'Submitted' && r.depositStatus !== 'Paid' && !['Cancelled', 'Reschedule'].includes(r.classStatus)).length,
+            wsVerify: enrolls().filter(w => w.status === 'Pending Payment' && w.proofImage && w.paymentStatus === 'Submitted').length,
             reschedule: regs().filter(r => r.classStatus === 'Reschedule').length,
             pendingConsult: D.consultations.list().filter(c => c.status === 'Pending').length,
             unassigned: unassignedSessions().length
@@ -91,6 +93,7 @@
         ]},
         { group: 'Content', items: [
             { id: 'm-fixed', label: 'Fixed Class Settings', icon: 'fa-sliders', href: 'admin-manage.html?tab=fixed' },
+            { id: 'm-payment', label: 'Payment Settings', icon: 'fa-qrcode', href: 'admin-manage.html?tab=payment' },
             { id: 'm-blog', label: 'Announcements', icon: 'fa-bullhorn', href: 'admin-manage.html?tab=blog' },
             { id: 'website', label: 'Website & Demo', icon: 'fa-globe', href: 'admin-website.html' }
         ]}

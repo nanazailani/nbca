@@ -67,7 +67,9 @@
 
     // ---- chart helpers ----
     function draw(id, config, isEmpty) {
-        const canvas = $(id), wrap = canvas.parentElement, note = wrap.querySelector('[data-empty]');
+        const canvas = $(id);
+        if (!canvas) return;   // chart section may be hidden/removed (e.g. shop charts are Phase 2)
+        const wrap = canvas.parentElement, note = wrap.querySelector('[data-empty]');
         if (charts[id]) { charts[id].destroy(); delete charts[id]; }
         if (note) note.classList.toggle('hidden', !isEmpty);
         canvas.classList.toggle('invisible', !!isEmpty);
@@ -122,6 +124,9 @@
         const c = S.counts(), now = Date.now();
         const dayOld = S.orders().filter(o => o.status === 'Pending Payment' && now - new Date(o.createdAt) > DAY).length;
         const items = [];
+        if (c.verify) items.push(['fa-receipt', 'bg-blue-100 text-amberGold', c.verify + ' class payment' + (c.verify > 1 ? 's' : '') + ' to verify', 'Members uploaded a receipt. Check it against the bank statement and approve.', 'admin-bookings.html?status=verify', 'Verify']);
+        if (c.wsVerify) items.push(['fa-receipt', 'bg-blue-100 text-amberGold', c.wsVerify + ' workshop payment' + (c.wsVerify > 1 ? 's' : '') + ' to verify', 'Members uploaded a receipt for a workshop. Review and approve.', 'admin-workshops.html?status=verify', 'Verify']);
+        if (c.pendingConsult) items.push(['fa-comments', 'bg-violet-100 text-violet-600', c.pendingConsult + ' new consultation request' + (c.pendingConsult > 1 ? 's' : ''), 'Accept, propose another time or decline.', 'admin-consultations.html', 'Review']);
         if (c.admit) items.push(['fa-circle-check', 'bg-emerald-100 text-emerald-600', c.admit + ' paid deposit' + (c.admit > 1 ? 's' : '') + ' waiting for confirmation', 'Admit the student so they get a confirmed seat.', 'admin-bookings.html?status=confirm', 'Review']);
         if (c.unassigned) items.push(['fa-user-tie', 'bg-violet-100 text-violet-600', c.unassigned + ' session' + (c.unassigned > 1 ? 's' : '') + ' without an instructor', 'Students are booked but nobody is assigned to teach.', 'admin-schedule.html', 'Assign']);
         if (c.reschedule) items.push(['fa-rotate', 'bg-red-100 text-red-600', c.reschedule + ' booking' + (c.reschedule > 1 ? 's' : '') + ' flagged for reschedule', 'Contact the member to agree a new date.', 'admin-bookings.html?status=reschedule', 'Open']);

@@ -124,11 +124,22 @@
                             <div class="flex justify-between text-amberGold font-bold"><span>Deposit due now</span><span id="fc-sum-deposit"></span></div>
                             <div class="flex justify-between text-roast-500"><span>Balance on class day</span><span id="fc-sum-balance"></span></div>
                         </div>
-                        <div class="rounded-xl border border-amberGold bg-blue-50 p-3.5 text-xs"><p class="font-bold text-roast-950"><i class="fa-solid fa-credit-card text-amberGold mr-1.5"></i>Billplz Payment Gateway</p><p class="text-[10px] text-roast-600 mt-0.5">Online banking (FPX), e-wallet or card. Your seat is held for 30 minutes while you pay.</p></div>
-                        <p class="text-[10px] text-roast-500 text-center">After payment our team reviews it and confirms your seat, or contacts you to reschedule if needed.</p>
+                        <div class="rounded-xl border border-amberGold bg-blue-50 p-4 text-xs space-y-3">
+                            <p class="font-bold text-roast-950"><i class="fa-solid fa-qrcode text-amberGold mr-1.5"></i>Pay by DuitNow QR or bank transfer</p>
+                            <div id="fc-pay-details" class="space-y-3"></div>
+                            <p class="text-[10px] text-roast-600">Pay the exact amount above, then upload your receipt. Your seat is held for 30 minutes.</p>
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-roast-600 uppercase mb-1 text-xs">Upload payment receipt *</label>
+                            <label for="fc-proof-file" class="cursor-pointer flex items-center gap-2 px-4 py-3 bg-white border border-dashed border-roast-300 rounded-xl text-roast-500 hover:border-amberGold hover:text-amberGold transition-all"><i class="fa-solid fa-cloud-arrow-up"></i><span id="fc-proof-name" class="truncate">Choose receipt (JPG, PNG or PDF, up to 5 MB)</span></label>
+                            <input type="file" id="fc-proof-file" accept="image/*,application/pdf" class="hidden" onchange="fcHandleProof(event)">
+                            <input type="hidden" id="fc-proof-data">
+                            <img id="fc-proof-preview" class="hidden mt-2 w-24 h-24 object-cover rounded-xl border border-roast-200" alt="Receipt preview">
+                        </div>
+                        <p class="text-[10px] text-roast-500 text-center">After you submit, our team verifies your receipt against the bank statement and confirms your seat, or contacts you if there is a problem.</p>
                         <div class="flex gap-3">
                             <button type="button" onclick="fcShowStep(2)" class="flex-1 py-3 bg-roast-100 hover:bg-roast-200 text-roast-700 font-bold rounded-xl border border-roast-200">Back</button>
-                            <button type="button" onclick="fcPayDeposit()" class="flex-[2] py-3 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl uppercase tracking-wider"><i class="fa-solid fa-lock text-[10px] mr-1"></i> Pay deposit with Billplz</button>
+                            <button type="button" onclick="fcSubmitProof()" class="flex-[2] py-3 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl uppercase tracking-wider"><i class="fa-solid fa-paper-plane text-[10px] mr-1"></i> Submit payment proof</button>
                         </div>
                     </div>
 
@@ -303,18 +314,67 @@
             document.getElementById('fc-sum-fee').innerText = (P.discount ? 'RM ' + P.list.toFixed(2) + ' - RM ' + P.discount.toFixed(2) + ' = ' : '') + 'RM ' + fee.toFixed(2);
             document.getElementById('fc-sum-deposit').innerText = 'RM ' + deposit.toFixed(2);
             document.getElementById('fc-sum-balance').innerText = 'RM ' + (fee - deposit).toFixed(2);
+            fcRenderPayDetails(deposit);
             fcShowStep(3);
         }
 
-        // Saves the booking as "Awaiting Payment", then sends the member to Billplz for the deposit.
-        // Billplz settlement (js/billplz.js) flips it to Paid / Pending Confirmation.
-        function fcPayDeposit() {
+        // Shows the company DuitNow QR + bank details the admin configured (UC-300 / REQ-303).
+        function fcRenderPayDetails(amount) {
+            const p = NBCA_DATA.payment.get();
+            const box = document.getElementById('fc-pay-details');
+            const qr = p.qrImage ? '<div class="flex justify-center"><img src="' + p.qrImage + '" alt="DuitNow QR" class="w-40 h-40 object-contain rounded-xl bg-white border border-roast-200 p-2"></div>' : '';
+            const bank = (p.bankName || p.accountNumber)
+                ? '<div class="bg-white rounded-xl border border-roast-200 p-3 space-y-1"><div class="flex justify-between"><span class="text-roast-500">Bank</span><strong class="text-roast-950">' + (p.bankName || '-') + '</strong></div><div class="flex justify-between"><span class="text-roast-500">Account name</span><strong class="text-roast-950">' + (p.accountName || '-') + '</strong></div><div class="flex justify-between"><span class="text-roast-500">Account no.</span><strong class="text-roast-950">' + (p.accountNumber || '-') + '</strong></div></div>'
+                : '';
+            const none = (!qr && !bank) ? '<p class="text-[11px] text-amber-700 bg-amber-50 border border-amber-200 rounded-lg p-2">Payment details are not set up yet. Please contact us on WhatsApp to pay.</p>' : '';
+            box.innerHTML = qr + bank + none +
+                '<div class="flex justify-between items-center bg-amberGold/10 rounded-xl px-3 py-2"><span class="text-roast-700 font-semibold">Amount to pay now</span><strong class="text-amberGold text-sm">RM ' + Number(amount).toFixed(2) + '</strong></div>' +
+                (p.note ? '<p class="text-[10px] text-roast-500">' + p.note + '</p>' : '');
+        }
+
+        // Reads the uploaded receipt (UC-300 / REQ-304). Images are resized; PDFs are stored as-is.
+        function fcHandleProof(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            if (file.size > 5 * 1024 * 1024) { alert('That file is larger than 5 MB. Please choose a smaller one.'); event.target.value = ''; return; }
+            const ok = file.type.startsWith('image/') || file.type === 'application/pdf';
+            if (!ok) { alert('Please upload a JPG, PNG or PDF receipt.'); event.target.value = ''; return; }
+            document.getElementById('fc-proof-name').innerText = file.name;
+            const preview = document.getElementById('fc-proof-preview');
+            const r = new FileReader();
+            r.onload = () => {
+                if (file.type.startsWith('image/')) {
+                    const img = new Image();
+                    img.onload = () => {
+                        const max = 1000, k = Math.min(1, max / Math.max(img.width, img.height)), c = document.createElement('canvas');
+                        c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+                        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+                        const data = c.toDataURL('image/jpeg', 0.85);
+                        document.getElementById('fc-proof-data').value = data;
+                        preview.src = data; preview.classList.remove('hidden');
+                    };
+                    img.src = r.result;
+                } else {
+                    document.getElementById('fc-proof-data').value = r.result;
+                    preview.classList.add('hidden');
+                }
+            };
+            r.readAsDataURL(file);
+        }
+
+        // Saves the booking with the uploaded receipt as "Awaiting Payment" / proof "Submitted".
+        // The admin verifies it under Class Bookings before the seat is confirmed (UC-300 / REQ-306).
+        function fcSubmitProof() {
+            const proof = document.getElementById('fc-proof-data').value;
+            if (!proof) { alert('Please upload your payment receipt first.'); return; }
             if (fcBookedCount(fcPicked.date, fcPicked.session) >= FC_CAPACITY) {
                 alert('Sorry, that session just became fully booked. Please choose another.');
                 fcShowStep(2);
                 return;
             }
             const P = fcPricing(), fee = P.fee, deposit = P.deposit;
+            let paymentMode = 'deposit';
+            try { const fx = JSON.parse(localStorage.getItem('rp_fixed_class_settings') || 'null'); if (fx && fx.paymentMode) paymentMode = fx.paymentMode; } catch (e) {}
             const regs = fcLoadRegistrations();
             const rec = {
                 id: 'FC-' + Date.now(),
@@ -331,14 +391,24 @@
                 discount: P.discount,
                 voucher: P.voucher ? { code: P.voucher.code, title: P.voucher.title } : null,
                 deposit: deposit,
+                paymentMode: paymentMode,
                 depositStatus: 'Pending',
                 classStatus: 'Awaiting Payment',
+                proofImage: proof,
+                paymentStatus: 'Submitted',
+                proofUploadedAt: new Date().toISOString(),
                 createdAt: new Date().toISOString()
             };
             regs.push(rec);
-            localStorage.setItem('rp_fixed_class_students', JSON.stringify(regs));
+            try {
+                localStorage.setItem('rp_fixed_class_students', JSON.stringify(regs));
+            } catch (err) {
+                alert('That receipt image is too large to save. Please try a smaller file.');
+                return;
+            }
             if (P.voucher) NBCA_DATA.loyalty.use(P.voucher.code, rec.id);
-            NBCA_PAY.checkout({ type: 'fixed', refId: rec.id, amount: deposit, description: 'Class deposit ' + rec.preferredDate + ' - Nb.CA Academy', name: rec.name, email: rec.email, phone: rec.phone, returnTo: 'classes.html' });
+            document.getElementById('fc-done-text').innerText = 'Thank you, ' + rec.name + '. Your receipt for ' + ('RM ' + deposit.toFixed(2)) + ' has been submitted. Our team will verify it and confirm your seat shortly. You can track the status under My Classes.';
+            fcShowStep(4);
         }
 
         window.addEventListener('member-ready', () => {

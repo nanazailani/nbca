@@ -18,7 +18,7 @@
         instructors: 'rp_instructors', site: 'rp_site_settings', assignments: 'rp_assignments', slots: 'rp_workshop_slots_extra',
         ledger: 'rp_points_ledger', loyalty: 'rp_loyalty_settings', vouchers: 'rp_vouchers', redemptions: 'rp_redemptions',
         regs: 'rp_fixed_class_students', orders: 'rp_member_orders', enrolls: 'rp_workshop_enrollments', profiles: 'rp_member_profiles',
-        consultations: 'rp_consultations'
+        consultations: 'rp_consultations', payment: 'rp_payment_settings'
     };
     const read = (k, fallback) => { try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? fallback : v; } catch (e) { return fallback; } };
     const write = (k, v) => localStorage.setItem(k, JSON.stringify(v));
@@ -219,29 +219,44 @@
 
     // ============================ CONSULTATIONS ============================
     const CONSULT_TYPES = ['Cafe Setup & Planning', 'Staff Training', 'Menu & Quality Audit', 'Other'];
+    // SRS statuses: Requested (internal 'Pending'), Proposed (Alternative Proposed), Accepted, Completed, Declined, Cancelled.
+    const CONSULT_OPEN = ['Pending', 'Proposed', 'Accepted'];   // can still be acted on
+    const histEntry = (action, by) => ({ at: nowIso(), by: by || 'admin', action });
     const consultations = {
         list() { return read(K.consultations, []); },
         get(id) { return consultations.list().find(c => c.id === id) || null; },
         byEmail(email) { const e = norm(email); return consultations.list().filter(c => c.email === e).sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || '')); },
-        create({ name, email, phone, business, type, preferredDate, preferredTime, requirements }) {
+        create({ name, email, phone, business, type, preferredDate, preferredTime, backupDate, backupTime, meetingMode, requirements }) {
             const c = {
                 id: uid('CON'), name: name.trim(), email: norm(email), phone: phone || '', business: (business || '').trim(),
                 type: type || 'Other', preferredDate: preferredDate || '', preferredTime: preferredTime || '',
+                backupDate: backupDate || '', backupTime: backupTime || '', meetingMode: meetingMode || '',
                 requirements: (requirements || '').trim(),
                 status: 'Pending', adminNote: '', proposedDate: '', proposedTime: '',
+                history: [histEntry('Requested', 'customer')],
                 createdAt: nowIso(), updatedAt: nowIso()
             };
             write(K.consultations, consultations.list().concat(c));
             return c;
         },
-        update(id, patch) {
+        update(id, patch, logAction, logBy) {
             let out = null;
-            write(K.consultations, consultations.list().map(c => c.id === id ? (out = { ...c, ...patch, id, updatedAt: nowIso() }) : c));
+            write(K.consultations, consultations.list().map(c => {
+                if (c.id !== id) return c;
+                const history = logAction ? (c.history || []).concat(histEntry(logAction, logBy)) : c.history;
+                return (out = { ...c, ...patch, history, id, updatedAt: nowIso() });
+            }));
             return out;
         },
-        accept(id, note) { return consultations.update(id, { status: 'Accepted', adminNote: note || '' }); },
-        decline(id, note) { return consultations.update(id, { status: 'Declined', adminNote: note || '' }); },
-        propose(id, date, time, note) { return consultations.update(id, { status: 'Proposed', proposedDate: date, proposedTime: time, adminNote: note || '' }); },
+        accept(id, note) { return consultations.update(id, { status: 'Accepted', adminNote: note || '' }, 'Accepted' + (note ? ' — ' + note : ''), 'admin'); },
+        decline(id, note) { return consultations.update(id, { status: 'Declined', adminNote: note || '' }, 'Declined' + (note ? ' — ' + note : ''), 'admin'); },
+        propose(id, date, time, note) { return consultations.update(id, { status: 'Proposed', proposedDate: date, proposedTime: time, adminNote: note || '' }, 'Proposed ' + date + ' ' + time + (note ? ' — ' + note : ''), 'admin'); },
+        complete(id, note) { return consultations.update(id, { status: 'Completed', adminNote: note || '' }, 'Marked completed' + (note ? ' — ' + note : ''), 'admin'); },
+        cancel(id, by) { return consultations.update(id, { status: 'Cancelled' }, 'Cancelled', by || 'customer'); },
+        // customer responds to a proposed time
+        acceptProposed(id) { return consultations.update(id, { status: 'Accepted' }, 'Customer accepted proposed time', 'customer'); },
+        rejectProposed(id) { return consultations.update(id, { status: 'Declined' }, 'Customer rejected proposed time', 'customer'); },
+        isOpen(c) { return CONSULT_OPEN.includes(c && c.status); },
         remove(id) { write(K.consultations, consultations.list().filter(c => c.id !== id)); },
         types: CONSULT_TYPES
     };
@@ -252,14 +267,37 @@
         address: '10, Lengkok Cempaka 1, Bandar Amanjaya, 08000 Sungai Petani, Kedah, Malaysia',
         tiktok: 'https://www.tiktok.com/@nbca_academy',
         handle: '@nbca.academy',
-        stats: [{ value: '500+', label: 'Students Trained' }, { value: '3', label: 'Expert-Led Classes' }, { value: '4.9★', label: 'Average Rating' }]
+        stats: [{ value: '500+', label: 'Students Trained' }, { value: '3', label: 'Expert-Led Classes' }, { value: '4.9★', label: 'Average Rating' }],
+        // Consulting Services page (UC-500 / REQ-504)
+        consultingHeadline: 'One-to-one Coffee Consulting',
+        consultingIntro: 'Work directly with our specialists on cafe setup, staff training and menu or quality audits. Tell us what you need and we will propose a time.',
+        // SCA Coming Soon class page (UC-500 / REQ-503)
+        scaHeadline: 'SCA Certified Courses',
+        scaBody: 'Specialty Coffee Association (SCA) certified modules are coming soon to NB.CA Academy. Register your interest and we will notify you when enrolment opens.'
     };
     const site = {
         get() { const s = read(K.site, {}); return { ...DEFAULT_SITE, ...s, stats: Array.isArray(s.stats) && s.stats.length ? s.stats : DEFAULT_SITE.stats }; },
-        save(s) { write(K.site, s); },
+        save(s) { write(K.site, { ...site.get(), ...s }); },
         defaults: DEFAULT_SITE
     };
 
+    // ============================ MANUAL PAYMENT (DuitNow QR + bank, UC-300 / REQ-301) ============================
+    const DEFAULT_PAYMENT = {
+        qrImage: '',                       // data URL of the company DuitNow QR
+        bankName: '',
+        accountName: 'NB.CA Academy Sdn Bhd',
+        accountNumber: '',
+        note: 'Scan the DuitNow QR or transfer to the bank account above, then upload your receipt. Your seat is held while we verify it.'
+    };
+    const payment = {
+        get() { return { ...DEFAULT_PAYMENT, ...read(K.payment, {}) }; },
+        save(p) { write(K.payment, { ...payment.get(), ...p }); },
+        // true once the admin has given something a customer can actually pay to
+        configured() { const p = payment.get(); return !!(p.qrImage || (p.bankName && p.accountNumber)); },
+        reset() { localStorage.removeItem(K.payment); },
+        defaults: DEFAULT_PAYMENT
+    };
+
     accounts.migrate();
-    window.NBCA_DATA = { K, read, write, uid, norm, dayOf, accounts, session, activity, instructors, assign, slots, loyalty, consultations, site };
+    window.NBCA_DATA = { K, read, write, uid, norm, dayOf, accounts, session, activity, instructors, assign, slots, loyalty, consultations, site, payment };
 })();

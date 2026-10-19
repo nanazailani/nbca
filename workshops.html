@@ -77,7 +77,7 @@
     <script>
 
         const C = window.NBCA_CATALOG.workshops;
-        let cur = null, curMode = null, curSlot = null, curVoucher = null;
+        let cur = null, curMode = null, curSlot = null, curVoucher = null, payStep = false, wsProof = '';
         const esc = MemberShell.esc;
 
         const seatsUsed = (w, slot) => JSON.parse(localStorage.getItem('rp_workshop_enrollments') || '[]').filter(x => x.workshopId === w.id && x.slot === slot && x.status !== 'Cancelled').length;
@@ -94,7 +94,7 @@
         function openWorkshop(id) {
             cur = C.find(w => w.id === id);
             curMode = Object.keys(cur.modes)[0];
-            curSlot = null; curVoucher = null;
+            curSlot = null; curVoucher = null; payStep = false; wsProof = '';
             renderModal();
             document.getElementById('ws-modal').classList.remove('hidden');
         }
@@ -108,6 +108,7 @@
 
         function renderModal() {
             const w = cur, cap = NBCA_DATA.slots.capacity(w), P = pricing();
+            if (payStep && curSlot) { renderPayPanel(); return; }
             const mine = NBCA_DATA.loyalty.available((MemberShell.user() || {}).email, 'class');
             const modes = Object.keys(w.modes).map(k => '<button onclick="pickMode(\'' + k + '\')" class="px-4 py-2.5 rounded-xl text-xs font-bold border transition-all ' + (k === curMode ? 'bg-amberGold text-white border-amberGold shadow' : 'bg-roast-50 text-roast-700 border-roast-200 hover:border-amberGold') + '">' + esc(w.modes[k].label) + '</button>').join('');
             const slots = slotList().map((s, i) => {
@@ -125,23 +126,59 @@
                     '<div class="space-y-2"><p class="text-[11px] font-bold uppercase text-roast-500">Choose a slot</p><div class="grid sm:grid-cols-2 gap-2">' + slots + '</div></div>' +
                     voucherBox +
                     '<div class="flex items-center justify-between pt-4 border-t border-roast-100"><div><span class="block text-[10px] uppercase text-roast-500">Fee</span><strong class="font-serif text-2xl text-amberGold">RM ' + P.price.toFixed(2) + '</strong>' + (P.discount ? '<span class="ml-2 text-xs text-roast-400 line-through">RM ' + P.list.toFixed(2) + '</span>' : '') + '</div>' +
-                    '<button onclick="enroll()" ' + (curSlot ? '' : 'disabled') + ' class="px-6 py-3 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl text-xs shadow-lg disabled:opacity-40 disabled:cursor-not-allowed">Enroll &amp; pay with Billplz</button></div>' +
+                    '<button onclick="goPay()" ' + (curSlot ? '' : 'disabled') + ' class="px-6 py-3 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl text-xs shadow-lg disabled:opacity-40 disabled:cursor-not-allowed">Continue to payment</button></div>' +
                 '</div></div>';
+        }
+
+        // Phase-1 manual payment: show the DuitNow QR + bank details and take a receipt upload (UC-300).
+        function renderPayPanel() {
+            const w = cur, P = pricing(), pay = NBCA_DATA.payment.get();
+            const qr = pay.qrImage ? '<div class="flex justify-center"><img src="' + esc(pay.qrImage) + '" alt="DuitNow QR" class="w-40 h-40 object-contain rounded-xl bg-white border border-roast-200 p-2"></div>' : '';
+            const bank = (pay.bankName || pay.accountNumber) ? '<div class="bg-white rounded-xl border border-roast-200 p-3 space-y-1 text-xs"><div class="flex justify-between"><span class="text-roast-500">Bank</span><strong class="text-roast-950">' + esc(pay.bankName || '-') + '</strong></div><div class="flex justify-between"><span class="text-roast-500">Account name</span><strong class="text-roast-950">' + esc(pay.accountName || '-') + '</strong></div><div class="flex justify-between"><span class="text-roast-500">Account no.</span><strong class="text-roast-950">' + esc(pay.accountNumber || '-') + '</strong></div></div>' : '';
+            const none = (!qr && !bank) ? '<p class="text-[11px] text-amber-700 bg-amber-50 border border-amber-200 rounded-lg p-2">Payment details are not set up yet. Please contact us on WhatsApp to pay.</p>' : '';
+            document.getElementById('ws-modal-body').innerHTML =
+                '<div class="p-6 sm:p-8 space-y-5">' +
+                    '<div class="flex items-start justify-between gap-3"><div><span class="text-[10px] font-extrabold tracking-widest text-amberGold uppercase">Payment</span><h3 class="font-serif text-xl font-extrabold text-roast-950 mt-1">' + esc(w.title) + '</h3></div></div>' +
+                    '<div class="bg-roast-50 rounded-xl p-4 border border-roast-200 space-y-1.5 text-xs"><div class="flex justify-between"><span class="text-roast-600">Slot</span><strong class="text-roast-950">' + esc(curSlot) + '</strong></div><div class="flex justify-between"><span class="text-roast-600">Mode</span><strong class="text-roast-950">' + esc(w.modes[curMode].label) + '</strong></div><div class="flex justify-between text-amberGold font-bold"><span>Amount to pay now</span><span>RM ' + P.price.toFixed(2) + '</span></div></div>' +
+                    '<div class="rounded-xl border border-amberGold bg-blue-50 p-4 text-xs space-y-3"><p class="font-bold text-roast-950"><i class="fa-solid fa-qrcode text-amberGold mr-1.5"></i>Pay by DuitNow QR or bank transfer</p>' + qr + bank + none + (pay.note ? '<p class="text-[10px] text-roast-600">' + esc(pay.note) + '</p>' : '') + '</div>' +
+                    '<div><label class="block text-[11px] font-bold uppercase text-roast-500 mb-1">Upload payment receipt *</label><label for="ws-proof-file" class="cursor-pointer flex items-center gap-2 px-4 py-3 bg-white border border-dashed border-roast-300 rounded-xl text-roast-500 hover:border-amberGold hover:text-amberGold transition-all"><i class="fa-solid fa-cloud-arrow-up"></i><span id="ws-proof-name" class="truncate">' + (wsProof ? 'Receipt ready' : 'Choose receipt (JPG, PNG or PDF, up to 5 MB)') + '</span></label><input type="file" id="ws-proof-file" accept="image/*,application/pdf" class="hidden" onchange="wsHandleProof(event)">' + (wsProof ? '<img src="' + esc(wsProof) + '" class="mt-2 w-24 h-24 object-cover rounded-xl border border-roast-200" alt="Receipt preview">' : '') + '</div>' +
+                    '<p class="text-[10px] text-roast-500 text-center">After you submit, our team verifies your receipt and confirms your seat.</p>' +
+                    '<div class="flex gap-3"><button type="button" onclick="backToSelect()" class="flex-1 py-3 bg-roast-100 hover:bg-roast-200 text-roast-700 font-bold rounded-xl text-xs border border-roast-200">Back</button>' +
+                    '<button type="button" onclick="wsSubmitProof()" class="flex-[2] py-3 bg-amberGold hover:bg-royalBlue text-white font-bold rounded-xl text-xs shadow-lg"><i class="fa-solid fa-paper-plane mr-1"></i> Submit payment proof</button></div>' +
+                '</div>';
+        }
+        function goPay() { if (!curSlot) return; payStep = true; renderModal(); }
+        function backToSelect() { payStep = false; renderModal(); }
+        function wsHandleProof(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            if (file.size > 5 * 1024 * 1024) { showToast('That file is larger than 5 MB.'); event.target.value = ''; return; }
+            if (!(file.type.startsWith('image/') || file.type === 'application/pdf')) { showToast('Please upload a JPG, PNG or PDF receipt.'); event.target.value = ''; return; }
+            const r = new FileReader();
+            r.onload = () => {
+                if (file.type.startsWith('image/')) {
+                    const img = new Image();
+                    img.onload = () => { const max = 1000, k = Math.min(1, max / Math.max(img.width, img.height)), c = document.createElement('canvas'); c.width = Math.round(img.width * k); c.height = Math.round(img.height * k); c.getContext('2d').drawImage(img, 0, 0, c.width, c.height); wsProof = c.toDataURL('image/jpeg', 0.85); renderModal(); };
+                    img.src = r.result;
+                } else { wsProof = r.result; renderModal(); }
+            };
+            r.readAsDataURL(file);
         }
         function pickMode(k) { curMode = k; curSlot = null; renderModal(); }
         function pickSlot(i) { curSlot = slotList()[i]; renderModal(); }
         function pickVoucher(code) { curVoucher = code || null; renderModal(); }
 
-        // Creates the enrolment as "Pending Payment", then sends the member to Billplz. Paid = Confirmed.
-        function enroll() {
+        // Saves the enrolment with the uploaded receipt (Phase-1 manual payment). The admin verifies it before confirming.
+        function wsSubmitProof() {
             if (!curSlot) return;
+            if (!wsProof) { showToast('Please upload your payment receipt first.'); return; }
             const u = MemberShell.user() || {};
             const all = (() => { try { return JSON.parse(localStorage.getItem('rp_workshop_enrollments') || '[]'); } catch (e) { return []; } })();
             if (all.some(x => (x.email || '').toLowerCase() === (u.email || '').toLowerCase() && x.workshopId === cur.id && x.slot === curSlot && x.status !== 'Cancelled')) {
                 showToast('You already have this slot. Check My Classes.');
                 return;
             }
-            if (seatsUsed(cur, curSlot) >= NBCA_DATA.slots.capacity(cur)) { showToast('Sorry, that slot just filled up.'); renderModal(); return; }
+            if (seatsUsed(cur, curSlot) >= NBCA_DATA.slots.capacity(cur)) { showToast('Sorry, that slot just filled up.'); payStep = false; renderModal(); return; }
             const P = pricing();
             const rec = {
                 id: 'WS-' + Date.now(), ref: 'RP-WS-' + String(Date.now()).slice(-6),
@@ -149,12 +186,15 @@
                 mode: curMode, modeLabel: cur.modes[curMode].label, location: cur.modes[curMode].location,
                 slot: curSlot, price: P.price, listPrice: P.list, discount: P.discount,
                 voucher: P.voucher ? { code: P.voucher.code, title: P.voucher.title } : null,
-                status: 'Pending Payment', paymentStatus: 'Unpaid', createdAt: new Date().toISOString()
+                status: 'Pending Payment', paymentStatus: 'Submitted', proofImage: wsProof, proofUploadedAt: new Date().toISOString(),
+                createdAt: new Date().toISOString()
             };
             all.push(rec);
-            localStorage.setItem('rp_workshop_enrollments', JSON.stringify(all));
+            try { localStorage.setItem('rp_workshop_enrollments', JSON.stringify(all)); }
+            catch (e) { showToast('That receipt is too large to save. Please try a smaller file.'); return; }
             if (P.voucher) NBCA_DATA.loyalty.use(P.voucher.code, rec.id);
-            NBCA_PAY.checkout({ type: 'workshop', refId: rec.id, amount: rec.price, description: rec.title + ' - Nb.CA Academy', name: rec.name, email: rec.email, phone: MemberShell.getProfile().phone, returnTo: 'classes.html' });
+            closeWorkshop();
+            showToast('Receipt submitted. We will verify it and confirm your seat shortly.');
         }
         renderGrid();
     </script>
